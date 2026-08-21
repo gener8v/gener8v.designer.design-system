@@ -1,16 +1,34 @@
 {
   "name": "@gener8v/tokens",
   "version": "0.1.0",
-  "description": "GENER8V design tokens — one source, generated to CSS, TypeScript, Tailwind and DTCG.",
+  "description": "GENER8V design tokens \u2014 one source, generated to CSS, TypeScript, Tailwind and DTCG.",
   "type": "module",
   "license": "MIT",
   "author": "GENER8V",
-  "publishConfig": { "access": "public" },
   "exports": {
-    ".": { "types": "./dist/tokens.d.ts", "default": "./dist/tokens.mjs" },
+    ".": {
+      "types": "./dist/tokens.d.ts",
+      "default": "./dist/tokens.mjs"
+    },
     "./tokens.json": "./dist/tokens.json",
     "./styles.css": "./styles.css"
   },
-  "files": ["dist", "styles.css", "README.md"],
-  "scripts": { "build": "node build.mjs && node build-pages.mjs" }
+  "files": [
+    "dist",
+    "styles.css",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node build.mjs && node build-pages.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gener8v/gener8v.designer.design-system.git",
+    "directory": "packages/tokens"
+  },
+  "homepage": "https://github.com/gener8v/gener8v.designer.design-system#readme",
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

@@ -1,0 +1,45 @@
+name: release
+
+# Manual only. A tag push publishing automatically means a mistyped tag ships a
+# version, and npm versions cannot be reused.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish, e.g. 0.2.0"
+        required: true
+      dry_run:
+        description: "Verify and pack without publishing"
+        type: boolean
+        default: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+          # Writes the .npmrc that reads NODE_AUTH_TOKEN below. The token is
+          # never written to a file in the repository.
+          registry-url: https://registry.npmjs.org
+          scope: '@gener8v'
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Release
+        run: node scripts/release.mjs "${{ inputs.version }}" ${{ inputs.dry_run && '--dry' || '' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push the version commit and tag
+        if: ${{ !inputs.dry_run }}
+        run: git push origin HEAD:main --follow-tags

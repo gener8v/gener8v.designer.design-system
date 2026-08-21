@@ -7,3 +7,6 @@ dist/
 .env.local
 design/_ds_manifest.json
 packages/tokens/styles.css
+
+# Never commit a registry token
+.npmrc

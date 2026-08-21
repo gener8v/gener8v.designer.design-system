@@ -5,7 +5,21 @@
   "type": "module",
   "license": "MIT",
   "author": "GENER8V",
-  "publishConfig": { "access": "public" },
-  "exports": { "./theme.css": "./theme.css" },
-  "files": ["theme.css", "README.md"]
+  "exports": {
+    "./theme.css": "./theme.css"
+  },
+  "files": [
+    "theme.css",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gener8v/gener8v.designer.design-system.git",
+    "directory": "packages/tailwind-preset"
+  },
+  "homepage": "https://github.com/gener8v/gener8v.designer.design-system#readme",
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
+  }
 }

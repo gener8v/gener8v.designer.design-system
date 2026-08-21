@@ -58,6 +58,35 @@ Nothing below `design/` is hand-edited. `git diff --exit-code design/` proves it
 Plus a responsive harness (`design/_responsive.html`) that measures every page at a true
 375px viewport inside an iframe, because Chrome will not size a window that narrow.
 
+## Releasing
+
+The four packages are **one system on one version** — a component change usually
+touches tokens, the stylesheet and the React layer at once, and independent semver
+would leave a consumer working out which `@gener8v/ui` pairs with which
+`@gener8v/tokens`.
+
+```bash
+pnpm release 0.2.0 --dry     # verify, pack, revert — publishes nothing
+pnpm release 0.2.0           # gates, bump, publish, commit, tag
+```
+
+Or run the **release** workflow in Actions (manual dispatch, dry-run by default).
+
+All four carry `publishConfig.access: "restricted"`. That is deliberate rather than
+relying on npm's default for scoped packages: a stray `--access public` overrides a
+default, and publishing brand IP to the public registry is not undoable.
+
+### Where the token goes
+
+**Never in this repository.** `.npmrc` is gitignored so a local one cannot be committed.
+
+| Where | How |
+| --- | --- |
+| Your machine | `npm config set //registry.npmjs.org/:_authToken=<token>` — writes `~/.npmrc`, outside any repo. Or `npm login --scope=@gener8v`. |
+| GitHub Actions | `gh secret set NPM_TOKEN` — the release workflow reads it as `NODE_AUTH_TOKEN`; `actions/setup-node` generates the `.npmrc` at runtime. |
+
+Use an **Automation** token for CI (it bypasses 2FA); a Publish token is fine locally.
+
 ## Using it in an engagement
 
 ```bash
