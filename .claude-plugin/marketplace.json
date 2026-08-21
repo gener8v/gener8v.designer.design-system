@@ -1,0 +1,17 @@
+{
+  "name": "gener8v-design-system",
+  "owner": { "name": "gener8v" },
+  "metadata": {
+    "description": "A light, airy design system for delivering AI in regulated, governed and auditable environments. Tokens, a component library, and the rules that keep generated UI on-brand.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "gener8v-design-system",
+      "source": "./",
+      "description": "The GENER8V design system: tokens, components and the rules that keep generated UI on-brand and accessible.",
+      "version": "0.1.0",
+      "strict": true
+    }
+  ]
+}

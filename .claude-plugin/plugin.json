@@ -1,0 +1,6 @@
+{
+  "name": "gener8v-design-system",
+  "description": "The GENER8V design system: tokens, components and the rules that keep generated UI on-brand and accessible.",
+  "version": "0.1.0",
+  "author": { "name": "gener8v" }
+}

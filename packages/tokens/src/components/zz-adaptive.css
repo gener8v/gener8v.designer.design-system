@@ -1,0 +1,100 @@
+/* --------------------------------------------------- forced colours & print */
+/* Loaded last so these overrides win. Named zz- for that reason. */
+
+/* --- Windows High Contrast / forced-colors ---------------------------- */
+
+/* In forced-colors the OS replaces every colour. Anything that conveyed
+   meaning through background alone becomes invisible, so state has to be
+   re-expressed with borders and system colours. This matters more than usual
+   here: forced-colors use is concentrated in exactly the government and
+   accessibility-audited environments this system is built for. */
+
+@media (forced-colors: active) {
+  /* Surfaces lose their tint — give them an edge so they remain objects. */
+  .card, .panel, .dialog, .toast, .alert, .drawer-panel, .tooltip {
+    border: 1px solid CanvasText;
+  }
+
+  /* Solid buttons are indistinguishable from ghost ones without a border. */
+  .btn { border: 1px solid ButtonBorder; }
+  .btn-primary, .btn-destructive { background: ButtonFace; color: ButtonText; }
+  .btn:hover:not([disabled]) { background: Highlight; color: HighlightText; }
+  .btn[disabled], [disabled], .is-disabled { color: GrayText; opacity: 1; }
+
+  /* The focus ring is the one thing that must never be lost. */
+  :focus-visible { outline: 2px solid Highlight; outline-offset: 2px; }
+  .input:focus, .select:focus, .textarea:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 1px;
+    box-shadow: none;
+  }
+
+  /* Selected / current state is a tint everywhere; make it a real mark. */
+  .nav-item[aria-current], .sidebar-item[aria-current],
+  .pagination-item[aria-current], .table tbody tr[aria-selected="true"] td {
+    background: Highlight;
+    color: HighlightText;
+    forced-color-adjust: none;
+  }
+  .tab[aria-selected="true"]::after, .tab[aria-current]::after { background: Highlight; }
+
+  /* Tags read only by fill — they need an outline to survive. */
+  .tag { border: 1px solid CanvasText; }
+
+  /* Progress and steps are pure colour; Highlight is the only signal left. */
+  .progress { border: 1px solid CanvasText; }
+  .progress-bar, .switch:checked, .checkbox:checked, .radio:checked,
+  .step[data-state="complete"] .step-marker, .timeline-item[data-state="current"] .timeline-marker {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+  .progress-ring { forced-color-adjust: none; }
+  .step-marker { border: 1px solid CanvasText; }
+
+  /* Decoration carries no meaning and only adds noise here. */
+  .bg-dot-grid, .bg-noise { background-image: none; }
+  .section-band { background: Canvas; color: CanvasText; border: 1px solid CanvasText; }
+  .skeleton { animation: none; background: Canvas; border: 1px solid GrayText; }
+}
+
+/* --- print ------------------------------------------------------------ */
+
+/* Consulting output gets printed and attached to documents. A design system
+   that has never been printed produces deliverables with black page-wide
+   headers and invisible link targets. */
+
+@media print {
+  :root { --color-bg: #fff; --color-surface: #fff; }
+
+  body { background: #fff; color: #000; }
+
+  /* Interface chrome is not part of a document. */
+  .nav, .sidebar, .hamburger, .drawer-scrim, .drawer-panel,
+  .toast-region, .pagination, .flow-footer, .skeleton, .spinner {
+    display: none !important;
+  }
+
+  /* Elevation and tint do not survive a printer; an edge does. */
+  .card, .panel, .dialog, .alert, .toast {
+    box-shadow: none;
+    border: 1px solid #999;
+    background: #fff;
+  }
+  .section-band { background: #fff; color: #000; border: 1px solid #999; }
+  .section-band h1, .section-band h2, .section-band h3, .section-band p { color: #000; }
+  .bg-dot-grid, .bg-noise { background-image: none; }
+
+  /* Do not split an object across a page boundary. */
+  .card, .panel, .state, .timeline-item, .alert, tr, .step { break-inside: avoid; }
+  h1, h2, h3, h4, .card-title, .panel-title { break-after: avoid; }
+
+  /* A long table must repeat its header on each page. */
+  thead { display: table-header-group; }
+  .table-wrap { overflow: visible; }
+
+  /* A printed link whose target is invisible is a dead reference. */
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #555; }
+  a[href^="#"]::after, .btn::after, .nav-brand::after { content: none; }
+
+  @page { margin: 18mm; }
+}

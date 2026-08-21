@@ -1,0 +1,115 @@
+<!-- @dsCard group="Components" name="Forms" subtitle="Native controls on the shared control-height scale, so fields and buttons line up" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Forms</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.inline { display: flex; gap: var(--space-3); align-items: flex-end; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Field</p>
+  <div class="field">
+    <label class="field-label" for="org">Client organisation</label>
+    <input class="input" id="org" type="text" placeholder="Commonwealth of Virginia" />
+    <span class="field-hint">The contracting entity, as it appears on the SOW.</span>
+  </div>
+
+  <p class="demo-head label">Optional, read-only, disabled</p>
+  <div class="grid-2">
+    <div class="field">
+      <label class="field-label" for="code" data-optional>Project code</label>
+      <input class="input" id="code" type="text" placeholder="G8V-2026-014" />
+    </div>
+    <div class="field">
+      <label class="field-label" for="ref">Reference</label>
+      <input class="input" id="ref" type="text" value="Locked by procurement" readonly />
+    </div>
+  </div>
+  <div class="field" style="margin-top:var(--space-4)">
+    <label class="field-label" for="dis">Disabled</label>
+    <input class="input" id="dis" type="text" value="Not editable" disabled />
+  </div>
+
+  <p class="demo-head label">Invalid</p>
+  <div class="field">
+    <label class="field-label" for="email">Contact email</label>
+    <input class="input" id="email" type="email" value="not-an-address" aria-invalid="true" aria-describedby="email-err" />
+    <span class="field-error" id="email-err">Enter a valid email address.</span>
+  </div>
+
+  <p class="demo-head label">Select and textarea</p>
+  <div class="field">
+    <label class="field-label" for="sector">Sector</label>
+    <span class="select-wrap">
+      <select class="select" id="sector">
+        <option>Federal government</option>
+        <option>Healthcare</option>
+        <option>Financial services</option>
+      </select>
+    </span>
+  </div>
+  <div class="field" style="margin-top:var(--space-4)">
+    <label class="field-label" for="scope">Scope</label>
+    <textarea class="textarea" id="scope" placeholder="What is slowing the business down?"></textarea>
+  </div>
+
+  <p class="demo-head label">Sizes — and a button on the same scale</p>
+  <div class="field"><input class="input input-sm" type="text" placeholder="Small — 36px" /></div>
+  <div class="field" style="margin-top:var(--space-3)"><input class="input" type="text" placeholder="Medium — 44px" /></div>
+  <div class="field" style="margin-top:var(--space-3)"><input class="input input-lg" type="text" placeholder="Large — 52px" /></div>
+  <div class="inline" style="margin-top:var(--space-4)">
+    <input class="input" type="search" placeholder="Search engagements" />
+    <button type="button" class="btn btn-primary">Search</button>
+  </div>
+
+  <p class="demo-head label">Choice</p>
+  <label class="choice">
+    <input class="checkbox" type="checkbox" checked />
+    <span>Requires an audit trail<span class="choice-hint">Every model decision is logged and replayable.</span></span>
+  </label>
+  <label class="choice">
+    <input class="checkbox" type="checkbox" />
+    <span>FedRAMP boundary</span>
+  </label>
+  <label class="choice">
+    <input class="checkbox" type="checkbox" disabled />
+    <span>Air-gapped deployment</span>
+  </label>
+
+  <div style="margin-top:var(--space-4)">
+    <label class="choice"><input class="radio" type="radio" name="tier" checked /><span>Advisory</span></label>
+    <label class="choice"><input class="radio" type="radio" name="tier" /><span>Build</span></label>
+    <label class="choice"><input class="radio" type="radio" name="tier" /><span>Managed</span></label>
+  </div>
+
+  <p class="demo-head label">Switch</p>
+  <label class="choice">
+    <input class="switch" type="checkbox" role="switch" checked />
+    <span>Send weekly status<span class="choice-hint">A digest every Friday to the engagement lead.</span></span>
+  </label>
+  <label class="choice">
+    <input class="switch" type="checkbox" role="switch" />
+    <span>Notify on model drift</span>
+  </label>
+
+  <p class="note">Every text control sits on the same <code>--control-h-*</code> scale as
+  <code>.btn</code>, so a field and the button beside it line up without a per-page nudge. Focus here
+  is <code>:focus</code> rather than <code>:focus-visible</code> — clicking into a field should show
+  the ring. Invalid state is driven by <code>aria-invalid</code>, so the styling and the accessibility
+  tree can never disagree.</p>
+
+</main>
+</body>
+</html>

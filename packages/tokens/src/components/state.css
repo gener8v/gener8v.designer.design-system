@@ -1,0 +1,48 @@
+/* ------------------------------------------------------------------- state */
+
+/* The six states every flow passes through. Most systems ship only the happy
+   path, so a client app invents the other five badly and inconsistently.
+   Tone is an attribute, not five near-identical classes. */
+
+.state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding: var(--space-16) var(--space-6);
+  text-align: center;
+}
+.state-tight { padding: var(--space-10) var(--space-6); }
+
+.state-icon {
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-12);
+  block-size: var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-600);
+  margin-block-end: var(--space-1);
+}
+.state-icon svg { inline-size: var(--space-6); block-size: var(--space-6); }
+
+.state[data-tone="accent"]  .state-icon { background: var(--color-accent-100);  color: var(--color-action); }
+.state[data-tone="success"] .state-icon { background: var(--color-success-100); color: var(--color-success-700); }
+.state[data-tone="warning"] .state-icon { background: var(--color-warning-100); color: var(--color-warning-700); }
+.state[data-tone="danger"]  .state-icon { background: var(--color-danger-100);  color: var(--color-danger-700); }
+
+.state-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--text-lg);
+  color: var(--color-neutral-900);
+}
+.state-body { font-size: var(--text-sm); color: var(--color-neutral-700); max-inline-size: 46ch; }
+.state-actions { display: flex; gap: var(--space-3); margin-block-start: var(--space-3); flex-wrap: wrap; justify-content: center; }
+
+/* Detail a support engineer needs and a user should not have to read. */
+.state-detail {
+  margin-block-start: var(--space-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}

@@ -1,0 +1,82 @@
+<!-- @dsCard group="Components" name="Cards & tags" subtitle="Hairline surfaces with a mono kicker; tags carry status, never decoration" viewport="640x900" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Cards &amp; tags</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.swatch-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-4); }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Card</p>
+  <div class="card">
+    <p class="card-kicker">01 / Capability</p>
+    <p class="card-title">Regulated AI delivery</p>
+    <p class="card-body">Model deployment inside environments that must produce an audit trail —
+      federal, healthcare and financial services. Every decision path is traceable.</p>
+    <div class="card-meta">
+      <span class="tag tag-success tag-dot">Live</span>
+      <span>Richmond, VA</span>
+    </div>
+  </div>
+
+  <p class="demo-head label">Variants</p>
+  <div class="grid-2">
+    <div class="card card-quiet card-pad-sm">
+      <p class="card-kicker">Quiet</p>
+      <p class="card-body">Sits on the surface tint with no border. For cards inside a card.</p>
+    </div>
+    <a href="#" class="card card-interactive card-pad-sm">
+      <p class="card-kicker">Interactive</p>
+      <p class="card-body">A whole card that is one link target. Borders on hover, never lifts far.</p>
+    </a>
+  </div>
+
+  <p class="demo-head label">Panel</p>
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Engagements</span>
+      <button type="button" class="btn btn-secondary btn-sm">Export</button>
+    </div>
+    <div class="panel-body">
+      <p class="card-body">A panel hosts a region — a table, a form, a list. The header carries the
+        title and at most one action.</p>
+    </div>
+  </div>
+
+  <p class="demo-head label">Tags — every variant maps to a meaning</p>
+  <div class="swatch-row">
+    <span class="tag tag-neutral">Draft</span>
+    <span class="tag tag-accent">In review</span>
+    <span class="tag tag-success">Approved</span>
+    <span class="tag tag-warning">Blocked</span>
+    <span class="tag tag-danger">Failed</span>
+    <span class="tag tag-outline">Archived</span>
+  </div>
+
+  <p class="demo-head label">With a status dot</p>
+  <div class="swatch-row">
+    <span class="tag tag-success tag-dot">Live</span>
+    <span class="tag tag-warning tag-dot">Degraded</span>
+    <span class="tag tag-danger tag-dot">Down</span>
+    <span class="tag tag-neutral tag-dot">Idle</span>
+  </div>
+
+  <p class="note">A card separates with a hairline, not a shadow — on a light ground the border does
+  the work and elevation is reserved for things that genuinely float. The kicker is the mono voice;
+  use it for a section marker or a classification, not as a subtitle.</p>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Create work item</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { block-size: 100%; }
+  body { display: grid; }
+  .create-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 260px); gap: var(--space-8); align-items: start; }
+  .side-field { display: grid; gap: var(--space-5); }
+  @media (max-width: 860px) { .create-cols { grid-template-columns: minmax(0, 1fr); } }
+</style>
+</head>
+<body>
+<div class="flow">
+
+  <aside class="flow-rail">
+    <p class="flow-rail-title">New work item</p>
+    <div class="stepper stepper-vertical">
+      <div class="step" aria-current="step"><span class="step-marker">1</span><span class="step-label">Describe</span></div>
+      <div class="step"><span class="step-marker">2</span><span class="step-label">Link evidence</span></div>
+      <div class="step"><span class="step-marker">3</span><span class="step-label">Assign</span></div>
+    </div>
+    <hr class="hr" style="margin-block:var(--space-6)" />
+    <p class="flow-rail-title">Context</p>
+    <dl class="dl dl-stacked" style="font-size:var(--text-xs)">
+      <dt>Engagement</dt><dd class="mono">G8V-2026-014</dd>
+      <dt>Framework</dt><dd>NIST SP 800-53 Rev. 5</dd>
+    </dl>
+  </aside>
+
+  <main class="flow-main">
+    <header class="flow-header">
+      <p class="flow-step-of">Step 1 of 3</p>
+      <h1 class="flow-title">Describe the work</h1>
+      <p class="flow-lede">A work item that cannot be traced to a control is not auditable. Link it
+        now, or it records as unattributed.</p>
+    </header>
+
+    <div class="flow-content">
+      <div class="create-cols">
+
+        <div class="flow-fields" style="max-inline-size:none">
+          <div class="field">
+            <label class="field-label" for="wi-title">Title</label>
+            <input class="input input-lg" id="wi-title" type="text" value="Access review evidence is not being captured for service accounts" />
+            <span class="field-hint">Say what is wrong, not what to do about it — the fix belongs in the resolution.</span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="wi-desc">Detail</label>
+            <textarea class="textarea" id="wi-desc" style="min-block-size:calc(var(--control-h-md) * 3)">Quarterly access reviews cover named users but skip service accounts. AU-6 requires review of all account types, so the current evidence set is incomplete.</textarea>
+          </div>
+
+          <div class="field">
+            <span class="field-label" id="wi-labels-label">Labels</span>
+            <div class="token-input" role="group" aria-labelledby="wi-labels-label">
+              <span class="tag tag-accent">AU-6<button type="button" class="tag-remove" aria-label="Remove AU-6"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></span>
+              <span class="tag tag-warning">gap<button type="button" class="tag-remove" aria-label="Remove gap"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></span>
+              <span class="tag tag-neutral">service-accounts<button type="button" class="tag-remove" aria-label="Remove service-accounts"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg></button></span>
+              <input class="token-input-field" type="text" aria-label="Add a label" />
+            </div>
+            <span class="field-hint">Enter to add · Backspace on an empty field removes the last.</span>
+          </div>
+
+          <div class="field">
+            <span class="field-label">Attachments</span>
+            <label class="dropzone">
+              <span class="dropzone-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,85.66,120,59.31V152a8,8,0,0,0,16,0V59.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,85.66Z"/></svg></span>
+              <span class="dropzone-title">Drop supporting evidence, or browse</span>
+              <span class="dropzone-hint">Screenshots, exports or logs · up to 25 MB each</span>
+              <input type="file" class="sr-only" multiple />
+            </label>
+          </div>
+        </div>
+
+        <div class="side-field">
+          <div class="field">
+            <span class="field-label">Type</span>
+            <div class="segmented" role="radiogroup" aria-label="Type">
+              <button type="button" class="segmented-item" role="radio" aria-checked="false">Task</button>
+              <button type="button" class="segmented-item" role="radio" aria-checked="true">Finding</button>
+              <button type="button" class="segmented-item" role="radio" aria-checked="false">Risk</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="wi-pri">Priority</label>
+            <span class="select-wrap">
+              <select class="select" id="wi-pri">
+                <option>High — blocks the assessment</option>
+                <option selected>Medium — needed before sign-off</option>
+                <option>Low</option>
+              </select>
+            </span>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="wi-owner">Owner</label>
+            <div class="combobox">
+              <input class="input" id="wi-owner" type="text" role="combobox" aria-expanded="false"
+                aria-autocomplete="list" value="Platform" />
+              <button type="button" class="combobox-trigger" tabindex="-1" aria-label="Show suggestions">
+                <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="wi-due" data-optional>Due</label>
+            <input class="input" id="wi-due" type="text" value="4 Sept 2026" />
+          </div>
+
+          <div class="field">
+            <span class="field-label">Linked control</span>
+            <div class="card card-quiet card-pad-sm">
+              <p class="card-kicker mono">AU-6</p>
+              <p class="card-body" style="margin-top:var(--space-1)">Audit record review, analysis and reporting</p>
+              <button type="button" class="btn btn-link" style="margin-top:var(--space-2)">Change</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="flow-footer">
+      <button type="button" class="btn btn-ghost">Discard</button>
+      <span class="flow-footer-status">Draft saved</span>
+      <button type="button" class="btn btn-secondary">Save draft</button>
+      <button type="button" class="btn btn-primary">Continue<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,202 @@
+/* --------------------------------------------------------------------- nav */
+
+/* Active state keys off aria-current, so the styling and the accessibility
+   tree can never disagree — the same principle as aria-invalid on fields. */
+
+.nav {
+  display: flex;
+  white-space: nowrap;
+  align-items: center;
+  gap: var(--space-6);
+  min-block-size: var(--space-16);
+  padding-inline: var(--space-6);
+  background: var(--color-bg);
+  border-block-end: 1px solid var(--color-neutral-200);
+}
+
+.nav-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--text-base);
+  letter-spacing: 0.02em;
+  color: var(--color-neutral-900);
+  text-decoration: none;
+  white-space: nowrap;
+  flex: none;
+  margin-inline-end: auto;
+}
+.nav-brand img { block-size: var(--space-8); inline-size: auto; }
+
+.nav-links { display: flex; align-items: center; gap: var(--space-1); flex: none; }
+
+/* Shown only once the link row collapses. Hiding the links without providing
+   this leaves a header with no navigation at all. */
+.nav-burger { display: none; }
+
+/* A full link row plus a call to action does not fit a phone, and shrinking
+   both just makes each unusable. Below this the row collapses and the
+   hamburger carries navigation. */
+@media (max-width: 720px) {
+  .nav-links { display: none; }
+  .nav-burger { display: inline-grid; }
+  .nav { gap: var(--space-3); padding-inline: var(--space-4); }
+}
+
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.nav-item:hover { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.nav-item[aria-current] { color: var(--color-action); background: var(--color-accent-100); }
+
+/* --- hamburger ------------------------------------------------------ */
+
+.hamburger {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--control-h-md);
+  block-size: var(--control-h-md);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-neutral-800);
+  cursor: pointer;
+}
+.hamburger:hover { background: var(--color-neutral-100); }
+
+.hamburger-box { position: relative; inline-size: var(--space-5); block-size: var(--space-3); }
+.hamburger-bar {
+  position: absolute;
+  inset-inline: 0;
+  block-size: 1.5px;
+  border-radius: var(--radius-full);
+  background: currentColor;
+  transition: transform var(--dur-base) var(--ease-out),
+              opacity var(--dur-fast) var(--ease-out),
+              top var(--dur-base) var(--ease-out),
+              bottom var(--dur-base) var(--ease-out);
+}
+.hamburger-bar:nth-child(1) { top: 0; }
+.hamburger-bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.hamburger-bar:nth-child(3) { bottom: 0; }
+
+.hamburger[aria-expanded="true"] .hamburger-bar:nth-child(1) { top: 50%; transform: translateY(-50%) rotate(45deg); }
+.hamburger[aria-expanded="true"] .hamburger-bar:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] .hamburger-bar:nth-child(3) { bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+
+/* --- drawer --------------------------------------------------------- */
+
+.drawer-scrim {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-neutral-900) 32%, transparent);
+}
+.drawer-panel {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: min(320px, 82%);
+  padding: var(--space-6);
+  background: var(--color-bg);
+  border-inline-start: 1px solid var(--color-neutral-200);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+.drawer-panel .nav-item { padding-block: var(--space-3); font-size: var(--text-base); }
+
+/* --- sidebar -------------------------------------------------------- */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  inline-size: 240px;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border-inline-end: 1px solid var(--color-neutral-200);
+}
+.sidebar-group {
+  margin-block-start: var(--space-4);
+  padding-inline: var(--space-3);
+  padding-block-end: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.sidebar-group:first-child { margin-block-start: 0; }
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  text-decoration: none;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.sidebar-item:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
+.sidebar-item[aria-current] { background: var(--color-bg); color: var(--color-action); font-weight: 500; box-shadow: var(--shadow-sm); }
+.sidebar-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; }
+.sidebar-count { margin-inline-start: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-neutral-600); }
+
+/* --- breadcrumbs ---------------------------------------------------- */
+
+.breadcrumbs { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); white-space: nowrap; }
+.breadcrumbs a { color: var(--color-neutral-600); text-decoration: none; }
+.breadcrumbs a:hover { color: var(--color-neutral-900); text-decoration: underline; }
+.breadcrumbs [aria-current] { color: var(--color-neutral-900); font-weight: 500; }
+.breadcrumb-sep { color: var(--color-neutral-400); user-select: none; }
+
+/* --- tabs ----------------------------------------------------------- */
+
+/* A 1px rule under the strip, with the active tab drawing over it. */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  border-block-end: 1px solid var(--color-neutral-200);
+}
+.tab {
+  position: relative;
+  padding-block: var(--space-3);
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-600);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+.tab:hover { color: var(--color-neutral-900); }
+.tab[aria-selected="true"], .tab[aria-current] { color: var(--color-action); }
+.tab[aria-selected="true"]::after, .tab[aria-current]::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: -1px;
+  block-size: 2px;
+  background: var(--color-action);
+}

@@ -1,0 +1,83 @@
+<!-- @dsCard group="Components" name="Data display" subtitle="Stats, meters, description lists and avatars — tabular figures throughout" viewport="640x820" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Data display</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: var(--space-4); }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Stats</p>
+  <div class="grid-3">
+    <div class="card card-pad-sm"><div class="stat">
+      <p class="stat-label">Engagements</p><p class="stat-value">14</p>
+      <p class="stat-delta" data-dir="up">+3 this quarter</p>
+    </div></div>
+    <div class="card card-pad-sm"><div class="stat">
+      <p class="stat-label">Cost avoided</p><p class="stat-value">$3.0M</p>
+      <p class="stat-note">Trailing twelve months</p>
+    </div></div>
+    <div class="card card-pad-sm"><div class="stat">
+      <p class="stat-label">Open findings</p><p class="stat-value">2</p>
+      <p class="stat-delta" data-dir="down">−5 since June</p>
+    </div></div>
+  </div>
+
+  <p class="demo-head label">Meters</p>
+  <div class="stack" style="gap:var(--space-5)">
+    <div class="meter" role="meter" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Auditability">
+      <div class="meter-head"><span class="meter-label">Auditability</span><span class="meter-value">91%</span></div>
+      <div class="meter-track"><div class="meter-fill" style="inline-size:91%"></div></div>
+    </div>
+    <div class="meter" data-tone="warning" role="meter" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Control coverage">
+      <div class="meter-head"><span class="meter-label">Control coverage</span><span class="meter-value">62%</span></div>
+      <div class="meter-track"><div class="meter-fill" style="inline-size:62%"></div></div>
+    </div>
+    <div class="meter" data-tone="danger" role="meter" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="Evidence attached">
+      <div class="meter-head"><span class="meter-label">Evidence attached</span><span class="meter-value">24%</span></div>
+      <div class="meter-track"><div class="meter-fill" style="inline-size:24%"></div></div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Description list</p>
+  <div class="card">
+    <dl class="dl">
+      <dt>Code</dt><dd class="mono">G8V-2026-014</dd>
+      <dt>Client</dt><dd>Commonwealth of Virginia</dd>
+      <dt>Framework</dt><dd>NIST SP 800-53 Rev. 5</dd>
+      <dt>Status</dt><dd><span class="tag tag-success tag-dot">Live</span></dd>
+      <dt>Signed</dt><dd class="num">16 Aug 2026</dd>
+    </dl>
+  </div>
+
+  <p class="demo-head label">Avatars</p>
+  <div class="row" style="gap:var(--space-6)">
+    <span class="avatar avatar-sm">TE</span>
+    <span class="avatar">TE</span>
+    <span class="avatar avatar-lg">TE</span>
+    <span class="avatar-group">
+      <span class="avatar avatar-sm">TE</span>
+      <span class="avatar avatar-sm">JR</span>
+      <span class="avatar avatar-sm">MK</span>
+      <span class="avatar avatar-sm">+4</span>
+    </span>
+  </div>
+
+  <p class="note">A <strong>meter</strong> reports a level that is simply true; <code>.progress</code>
+  reports a task advancing. Different meaning, different role — do not swap them. Every figure is
+  tabular so digits line up down a column.</p>
+
+</main>
+</body>
+</html>

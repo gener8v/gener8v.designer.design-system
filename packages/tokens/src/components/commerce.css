@@ -1,0 +1,110 @@
+/* ---------------------------------------------------- gap-fill: transaction */
+/* Components the three example workflows needed and the system did not have. */
+
+/* --- card media slot ------------------------------------------------- */
+
+/* Card is padded; media must bleed to its edges, so it cancels the padding
+   with a negative margin rather than the card losing its padding. */
+.card-media {
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) 0;
+  border-start-start-radius: calc(var(--radius-lg) - 1px);
+  border-start-end-radius: calc(var(--radius-lg) - 1px);
+  overflow: hidden;
+  background: var(--color-neutral-100);
+  aspect-ratio: 16 / 10;
+}
+.card-pad-sm > .card-media { margin: calc(var(--space-4) * -1) calc(var(--space-4) * -1) 0; }
+.card-media img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+/* --- quantity stepper ------------------------------------------------ */
+
+.qty {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  block-size: var(--control-h-md);
+}
+.qty-btn {
+  inline-size: var(--control-h-md);
+  border: 0;
+  background: var(--color-bg);
+  color: var(--color-neutral-700);
+  font-size: var(--text-base);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+.qty-btn:hover:not(:disabled) { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.qty-btn:disabled { color: var(--color-neutral-300); cursor: not-allowed; }
+.qty-input {
+  inline-size: var(--space-12);
+  border: 0;
+  border-inline: 1px solid var(--color-neutral-300);
+  background: var(--color-bg);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-900);
+  -moz-appearance: textfield;
+}
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button { appearance: none; margin: 0; }
+
+/* --- radio card ------------------------------------------------------ */
+
+/* A choice big enough to carry a description and a price. The whole card is
+   the hit target, so the radio itself is only a marker. */
+.radio-cards { display: grid; gap: var(--space-3); }
+.radio-card {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              background-color var(--dur-fast) var(--ease-out);
+}
+.radio-card:hover { border-color: var(--color-neutral-300); }
+.radio-card:has(:checked) { border-color: var(--color-action); background: var(--color-accent-100); }
+.radio-card:has(:focus-visible) { outline: var(--ring-width) solid var(--ring-color); outline-offset: var(--ring-offset); }
+.radio-card-body { flex: 1; min-inline-size: 0; }
+.radio-card-title { font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-900); }
+.radio-card-note { font-size: var(--text-xs); color: var(--color-neutral-600); margin-block-start: var(--space-1); }
+.radio-card-meta {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-900);
+  flex: none;
+}
+
+/* --- summary --------------------------------------------------------- */
+
+.summary { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
+.summary-row { display: flex; align-items: baseline; gap: var(--space-4); }
+.summary-row dt, .summary-label { color: var(--color-neutral-700); }
+.summary-row dd, .summary-value {
+  margin: 0;
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-900);
+}
+.summary-total {
+  margin-block-start: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--color-neutral-200);
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+.summary-total dd, .summary-total .summary-value {
+  font-family: var(--font-heading);
+  font-size: var(--text-xl);
+}
+.summary-note { font-size: var(--text-xs); color: var(--color-neutral-600); }

@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Engagement intake</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { block-size: 100%; }
+  body { display: grid; }
+</style>
+</head>
+<body>
+<div class="flow">
+
+  <aside class="flow-rail">
+    <p class="flow-rail-title">Engagement intake</p>
+    <div class="stepper stepper-vertical">
+      <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Scope</span></div>
+      <div class="step" data-state="complete"><span class="step-marker">2</span><span class="step-label">Controls</span></div>
+      <div class="step" aria-current="step"><span class="step-marker">3</span><span class="step-label">Review</span></div>
+      <div class="step"><span class="step-marker">4</span><span class="step-label">Sign</span></div>
+    </div>
+  </aside>
+
+  <main class="flow-main">
+    <header class="flow-header">
+      <p class="flow-step-of">Step 3 of 4</p>
+      <h1 class="flow-title">Review the control set</h1>
+      <p class="flow-lede">Confirm the controls this engagement will be audited against. Anything
+        left unanswered is recorded as an unknown rather than assumed compliant.</p>
+    </header>
+
+    <div class="flow-content">
+      <div class="flow-fields">
+        <div class="field">
+          <label class="field-label" for="framework">Control framework</label>
+          <span class="select-wrap">
+            <select class="select" id="framework">
+              <option>NIST SP 800-53 Rev. 5</option>
+              <option>FedRAMP Moderate</option>
+              <option>HIPAA Security Rule</option>
+            </select>
+          </span>
+          <span class="field-hint">Determines which controls appear in the audit log.</span>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="owner">Control owner</label>
+          <input class="input" id="owner" type="text" value="Delivery lead" />
+        </div>
+
+        <div>
+          <label class="choice">
+            <input class="checkbox" type="checkbox" checked />
+            <span>Every model decision is logged<span class="choice-hint">Required for AU-6 audit review.</span></span>
+          </label>
+          <label class="choice">
+            <input class="checkbox" type="checkbox" checked />
+            <span>Data stays inside the client boundary</span>
+          </label>
+          <label class="choice">
+            <input class="checkbox" type="checkbox" />
+            <span>Air-gapped deployment<span class="choice-hint">Leave unchecked if unconfirmed — it records as an unknown.</span></span>
+          </label>
+        </div>
+
+        <div class="card card-quiet card-pad-sm">
+          <p class="card-kicker">Coverage</p>
+          <div class="row" style="gap:var(--space-5);margin-top:var(--space-2)">
+            <div class="progress-ring" style="--progress:62" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Controls answered">
+              <span class="progress-ring-value">62%</span>
+            </div>
+            <p class="card-body">18 of 29 controls answered. The remaining 11 will be recorded as
+              unknowns in the current-state assessment.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="flow-footer">
+      <button type="button" class="btn btn-secondary">Back</button>
+      <span class="flow-footer-status">Saved just now</span>
+      <button type="button" class="btn btn-primary">Continue<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>

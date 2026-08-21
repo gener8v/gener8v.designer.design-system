@@ -1,0 +1,43 @@
+<!-- @dsCard group="Components" name="Document library" subtitle="Browsing MD, PDF, XLSX and CSV — list, grid and preview panes" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Document library</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 660px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+.pane { block-size: calc(var(--space-32) * 1.9); }
+.stack-4 { display: grid; gap: var(--space-4); }</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">List</p>
+  <ul class="doc-list"><li><button type="button" class="doc-row"><span data-kind="folder" aria-hidden="true" class="doc-type"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,72H131.31L104,44.69A15.86,15.86,0,0,0,92.69,40H40A16,16,0,0,0,24,56V200.62A15.4,15.4,0,0,0,39.38,216H216.89A15.13,15.13,0,0,0,232,200.89V88A16,16,0,0,0,216,72ZM40,56H92.69l16,16H40Zm176,144H40V88H216Z"></path></svg></span><span class="doc-name">Evidence<span class="doc-sub">24 files</span></span><span class="doc-meta">21 Aug</span></button></li><li><button type="button" aria-selected="true" class="doc-row"><span data-kind="md" aria-hidden="true" class="doc-type">MD</span><span class="doc-name">Current-state assessment.md<span class="doc-sub">Delivery / G8V-2026-014</span></span><span class="doc-meta">47 KB</span><span class="doc-meta">21 Aug</span></button></li><li><button type="button" aria-selected="false" class="doc-row"><span data-kind="xlsx" aria-hidden="true" class="doc-type">XLSX</span><span class="doc-name">AU-6 evidence.xlsx<span class="doc-sub">Control evidence</span></span><span class="doc-meta">1.4 MB</span><span class="doc-meta">21 Aug</span></button></li><li><button type="button" aria-selected="false" class="doc-row"><span data-kind="csv" aria-hidden="true" class="doc-type">CSV</span><span class="doc-name">access-review-2026-Q3.csv<span class="doc-sub">Exports</span></span><span class="doc-meta">402 KB</span><span class="doc-meta">20 Aug</span></button></li><li><button type="button" aria-selected="false" class="doc-row"><span data-kind="pdf" aria-hidden="true" class="doc-type">PDF</span><span class="doc-name">Statement of work.pdf<span class="doc-sub">Contracts · countersigned</span></span><span class="doc-meta">282 KB</span><span class="doc-meta">16 Aug</span></button></li><li><button type="button" aria-selected="false" class="doc-row"><span data-kind="img" aria-hidden="true" class="doc-type">IMG</span><span class="doc-name">architecture.png<span class="doc-sub">Diagrams</span></span><span class="doc-meta">92 KB</span><span class="doc-meta">14 Aug</span></button></li></ul>
+
+  <p class="demo-head label">Grid</p>
+  <div class="doc-grid"><button type="button" class="doc-card"><span class="doc-thumb"><span data-kind="md" aria-hidden="true" class="doc-type">MD</span></span><span class="doc-name">Current-state assessment.md<span class="doc-sub">21 Aug</span></span></button><button type="button" class="doc-card"><span class="doc-thumb"><span data-kind="xlsx" aria-hidden="true" class="doc-type">XLSX</span></span><span class="doc-name">AU-6 evidence.xlsx<span class="doc-sub">21 Aug</span></span></button><button type="button" class="doc-card"><span class="doc-thumb"><span data-kind="csv" aria-hidden="true" class="doc-type">CSV</span></span><span class="doc-name">access-review-2026-Q3.csv<span class="doc-sub">20 Aug</span></span></button><button type="button" class="doc-card"><span class="doc-thumb"><span data-kind="pdf" aria-hidden="true" class="doc-type">PDF</span></span><span class="doc-name">Statement of work.pdf<span class="doc-sub">16 Aug</span></span></button></div>
+
+  <p class="demo-head label">Preview — rendered markdown</p>
+  <div class="pane">
+  <div class="doc-preview"><div class="doc-preview-head"><span data-kind="md" aria-hidden="true" class="doc-type">MD</span><span class="doc-preview-title">Current-state assessment.md</span><div class="doc-preview-actions"><button type="button" class="btn btn-ghost btn-sm">Raw</button><button type="button" class="btn btn-secondary btn-sm">Download</button></div></div><div class="doc-preview-body"><div class="reader"><h2>Where the evidence is today</h2><p>Three of five sources are evidenced. Access logs, key rotation and the runbook are captured and replayable; the incident record and the vendor attestation are asserted in prose with no artifact behind them.</p><h3>Gaps</h3><ul><li><code>AU-6</code> — service accounts excluded from quarterly review</li><li><code>IR-4</code> — incident record is prose, not artifact</li></ul><blockquote>An unanswered control is evidence of a gap in the assessment, not evidence of compliance.</blockquote></div></div></div>
+  </div>
+
+  <p class="demo-head label">Preview — spreadsheet</p>
+  <div class="pane" style="block-size:auto">
+  <div class="doc-preview"><div class="doc-preview-head"><span data-kind="xlsx" aria-hidden="true" class="doc-type">XLSX</span><span class="doc-preview-title">AU-6 evidence.xlsx</span><div class="doc-preview-actions"><button type="button" class="btn btn-secondary btn-sm">Open</button></div></div><div class="doc-preview-body"><table class="sheet"><thead><tr><th></th><th>A</th><th>B</th><th>C</th><th>D</th></tr></thead><tbody><tr><th scope="row">1</th><td>Account</td><td>Type</td><td>Reviewed</td><td>Findings</td></tr><tr><th scope="row">2</th><td>svc-ingest</td><td>Service</td><td>2026-08-21</td><td>0</td></tr><tr><th scope="row">3</th><td>svc-export</td><td>Service</td><td>2026-08-21</td><td>2</td></tr><tr><th scope="row">4</th><td>t.eaves</td><td>Named</td><td>2026-08-19</td><td>0</td></tr></tbody></table></div></div>
+  </div>
+
+  <p class="note">File type is a mono badge and a glyph, never a coloured chip — a dozen tinted
+  extensions is the wall of colour this system exists to avoid, and colour-coding by extension fails
+  anyone who cannot separate the hues. Folders are the one exception, because they are navigation
+  rather than content. The reader caps its measure at 72ch; a document pane stretched across a
+  27-inch monitor is unreadable.</p>
+</main>
+</body>
+</html>

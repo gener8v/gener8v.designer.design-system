@@ -1,0 +1,91 @@
+<!-- @dsCard group="Components" name="Feedback" subtitle="Dialog, alerts, toast, tooltip and callout — one tone vocabulary shared with states" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Feedback</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.stage { position: relative; height: calc(var(--space-32) * 2); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); }
+/* The dialog and toast are position:fixed in the real system; pinned to the
+   frame here so the card renders deterministically. */
+.stage .dialog-backdrop, .stage .toast-region { position: absolute; }
+.stack-4 { display: grid; gap: var(--space-4); }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Dialog</p>
+  <div class="stage">
+    <div class="dialog-backdrop">
+      <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlg">
+        <p class="dialog-title" id="dlg">Archive this engagement?</p>
+        <div class="dialog-body">G8V-2025-190 will move to the archive. The audit trail is retained
+          and stays readable; nothing is deleted.</div>
+        <div class="dialog-actions">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="button" class="btn btn-primary">Archive</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Alerts</p>
+  <div class="stack-4">
+    <div class="alert" data-tone="accent">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>
+      <div><p class="alert-title">Control set updated</p><p class="alert-body">NIST SP 800-53 moved to Rev. 5. Eleven controls changed.</p></div>
+    </div>
+    <div class="alert" data-tone="warning">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+      <div><p class="alert-title">Eleven controls unanswered</p><p class="alert-body">They will be recorded as unknowns rather than assumed compliant.</p>
+        <div class="alert-actions"><button type="button" class="btn btn-secondary btn-sm">Review them</button></div></div>
+    </div>
+    <div class="alert" data-tone="danger" role="alert">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+      <div><p class="alert-title">The audit service is unreachable</p><p class="alert-body">Changes are not being logged. Nothing has been written since 14:02Z.</p></div>
+    </div>
+    <div class="alert" data-tone="success">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+      <div><p class="alert-title">All controls evidenced</p></div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Toast</p>
+  <div class="stage" style="height:calc(var(--space-32) * 1.1)">
+    <div class="toast-region" role="region" aria-live="polite" aria-label="Notifications">
+      <div class="toast" data-tone="success">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+        <div><p class="toast-title">Scope saved</p><p class="toast-body">Version 4 · 14:06Z</p></div>
+        <button type="button" class="btn btn-ghost btn-icon btn-sm toast-close" aria-label="Dismiss">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Tooltip and callout</p>
+  <div class="row" style="align-items:flex-start;gap:var(--space-6)">
+    <span class="tooltip">Recorded as an unknown, not as compliant.</span>
+  </div>
+  <div class="callout" data-tone="accent" style="margin-top:var(--space-5)">
+    <p class="callout-title">On unknowns</p>
+    An unanswered control is evidence of a gap in the assessment, not evidence of compliance.
+    The distinction is the whole point of the audit trail.
+  </div>
+
+  <p class="note">Tone is one vocabulary across <code>.alert</code>, <code>.toast</code>,
+  <code>.state</code> and <code>.callout</code>. Danger and warning alerts take
+  <code>role="alert"</code> and announce assertively; everything else is polite. The callout is a
+  rule rather than a filled box — a box here would compete with the cards around it.</p>
+
+</main>
+</body>
+</html>

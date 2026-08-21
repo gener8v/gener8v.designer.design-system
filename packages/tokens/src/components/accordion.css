@@ -1,0 +1,43 @@
+/* --------------------------------------------------------------- accordion */
+
+.accordion { border-block-start: 1px solid var(--color-neutral-200); }
+.accordion-item { border-block-end: 1px solid var(--color-neutral-200); }
+
+.accordion-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  padding: var(--space-4) 0;
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+  text-align: start;
+  cursor: pointer;
+}
+.accordion-trigger:hover { color: var(--color-action); }
+
+/* Chevron from borders — rotates on aria-expanded, so the open state and the
+   announcement come from one attribute. */
+.accordion-trigger::after {
+  content: "";
+  margin-inline-start: auto;
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  flex: none;
+  border-inline-end: 1.5px solid var(--color-neutral-500);
+  border-block-end: 1.5px solid var(--color-neutral-500);
+  transform: translateY(-0.15em) rotate(45deg);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.accordion-trigger[aria-expanded="true"]::after { transform: translateY(0.1em) rotate(-135deg); }
+
+.accordion-panel {
+  padding-block-end: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+}
+.accordion-panel[hidden] { display: none; }

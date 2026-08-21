@@ -1,0 +1,110 @@
+<!-- @dsCard group="Components" name="Command, tree & code" subtitle="Command palette, hierarchy tree and code block — all keyboard-first" viewport="640x920" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Command, tree &amp; code</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 620px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+/* The palette is position:fixed in the real system; pinned to the stage so the
+   card renders deterministically. */
+.stage { position: relative; block-size: calc(var(--space-32) * 2.4); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); }
+.stage .command-backdrop { position: absolute; padding-block-start: var(--space-6); }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Command palette</p>
+  <div class="stage">
+    <div class="command-backdrop">
+      <div class="command" role="dialog" aria-modal="true" aria-label="Command palette">
+        <div class="command-search">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+          <input class="command-input" type="text" role="combobox" aria-expanded="true"
+            aria-controls="cmd-list" aria-autocomplete="list" aria-activedescendant="cmd-close"
+            aria-label="Search commands" value="clo" />
+          <span class="command-hint">esc</span>
+        </div>
+        <ul class="command-list" id="cmd-list" role="listbox" aria-label="Commands">
+          <li class="command-group" role="presentation">Work items</li>
+          <li class="command-item" id="cmd-close" role="option" aria-selected="true" data-active>
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+            Close work item<span class="command-item-note">⌘⇧C</span>
+          </li>
+          <li class="command-item" role="option" aria-selected="false">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>
+            Clone into a new item
+          </li>
+          <li class="command-group" role="presentation">Engagement</li>
+          <li class="command-item" role="option" aria-selected="false">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,132.69V40a8,8,0,0,0-16,0v92.69L93.66,106.34a8,8,0,0,0-11.32,11.32Z"/></svg>
+            Close out engagement<span class="command-item-note">Delivery</span>
+          </li>
+        </ul>
+        <div class="command-footer">
+          <span><span class="command-key">↑</span> <span class="command-key">↓</span> navigate</span>
+          <span><span class="command-key">↵</span> run</span>
+          <span><span class="command-key">esc</span> dismiss</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Tree</p>
+  <div class="card card-pad-sm">
+    <ul class="tree" role="tree" aria-label="Control families">
+      <li role="treeitem" aria-expanded="true">
+        <button type="button" class="tree-item" tabindex="0">
+          <span class="tree-twisty" aria-hidden="true"></span>
+          <span class="tree-label">AC — Access control</span><span class="tree-count">12</span>
+        </button>
+        <ul role="group" class="tree-group">
+          <li role="treeitem"><button type="button" class="tree-item" data-leaf tabindex="-1"><span class="tree-twisty" aria-hidden="true"></span><span class="tree-label">AC-2 Account management</span><span class="tree-count">3</span></button></li>
+          <li role="treeitem"><button type="button" class="tree-item" data-leaf tabindex="-1"><span class="tree-twisty" aria-hidden="true"></span><span class="tree-label">AC-6 Least privilege</span></button></li>
+        </ul>
+      </li>
+      <li role="treeitem" aria-expanded="true" aria-selected="true">
+        <button type="button" class="tree-item" tabindex="-1">
+          <span class="tree-twisty" aria-hidden="true"></span>
+          <span class="tree-label">AU — Audit and accountability</span><span class="tree-count">9</span>
+        </button>
+        <ul role="group" class="tree-group">
+          <li role="treeitem" aria-selected="true"><button type="button" class="tree-item" data-leaf tabindex="-1" aria-selected="true"><span class="tree-twisty" aria-hidden="true"></span><span class="tree-label">AU-6 Audit review</span><span class="tree-count">2</span></button></li>
+          <li role="treeitem"><button type="button" class="tree-item" data-leaf tabindex="-1"><span class="tree-twisty" aria-hidden="true"></span><span class="tree-label">AU-12 Audit generation</span></button></li>
+        </ul>
+      </li>
+      <li role="treeitem" aria-expanded="false">
+        <button type="button" class="tree-item" tabindex="-1">
+          <span class="tree-twisty" aria-hidden="true"></span>
+          <span class="tree-label">SC — System and communications</span><span class="tree-count">21</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <p class="demo-head label">Code</p>
+  <div>
+    <div class="code-head">install.sh<button type="button" class="btn btn-ghost btn-xs code-copy">Copy</button></div>
+    <pre class="code"><code>npm i @gener8v/ui @gener8v/tokens
+
+# one stylesheet, then the components
+import '@gener8v/ui/styles.css';
+import { Button, Flow, KnowledgeGraph } from '@gener8v/ui';</code></pre>
+  </div>
+
+  <p class="note">The palette is a dialog, not a dropdown — it takes the page over, so it uses the
+  same focus contract as <code>.dialog</code>. Focus stays in the search field and the highlighted row
+  is tracked by <code>aria-activedescendant</code>; moving focus into the list would break typing,
+  which is the only reason a palette exists. The tree is one Tab stop: arrows move through visible
+  rows, Right expands then descends, Left collapses then rises.</p>
+
+</main>
+</body>
+</html>

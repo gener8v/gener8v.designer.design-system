@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Landing</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  .hero { position: relative; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--space-16); align-items: center; }
+  .rule { display: block; block-size: 2px; inline-size: var(--space-16); background: var(--color-action); margin-block-end: var(--space-6); }
+  .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-4); }
+  .band-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-8); }
+  .band-value { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: var(--text-4xl); letter-spacing: var(--tracking-4xl); font-variant-numeric: tabular-nums; }
+  .logo-row { display: flex; flex-wrap: wrap; gap: var(--space-8); align-items: center; opacity: 0.62; }
+  .logo-row span { font-family: var(--font-mono); font-size: var(--text-sm); letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-neutral-600); }
+  .site-foot { border-block-start: 1px solid var(--color-neutral-200); }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-10); } }
+</style>
+</head>
+<body>
+
+<header class="nav" style="position:sticky;inset-block-start:0;z-index:20">
+  <a class="nav-brand" href="#"><img src="../../assets/logo.png" alt="" />GENER8V</a>
+  <div class="nav-links">
+    <a class="nav-item" href="#">What we do</a>
+    <a class="nav-item" href="#">Who we are</a>
+    <a class="nav-item" href="#">Writing</a>
+  </div>
+    <button type="button" class="hamburger nav-burger" aria-expanded="false" aria-label="Open menu">
+      <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+    </button>
+  <a class="btn btn-primary btn-sm" href="#">Start a conversation</a>
+</header>
+
+<section class="hero bg-dot-grid">
+  <div class="container section">
+    <div class="hero-grid">
+      <div>
+        <p class="label">AI delivery · Richmond, VA</p>
+        <span class="rule" style="margin-block-start:var(--space-4)"></span>
+        <h1>AI that survives an audit.</h1>
+        <p class="lede" style="margin-block-start:var(--space-6);max-inline-size:52ch">
+          We build and deliver AI inside environments that must be governed, evidenced and
+          defensible — federal, healthcare and financial services. Every decision path is traceable
+          because the audit trail is the product, not a report about it.
+        </p>
+        <div class="row" style="margin-block-start:var(--space-8);gap:var(--space-4)">
+          <a class="btn btn-primary btn-lg" href="#">Start a conversation<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+          <a class="btn btn-secondary btn-lg" href="#">Read a case study</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <p class="card-kicker">01 / Capability</p>
+        <p class="card-title" style="margin-block-start:var(--space-2)">Current-state assessment</p>
+        <div class="stack" style="gap:var(--space-4);margin-block-start:var(--space-5)">
+          <div class="meter" role="meter" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Auditability">
+            <div class="meter-head"><span class="meter-label">Auditability</span><span class="meter-value">91%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:91%"></div></div>
+          </div>
+          <div class="meter" role="meter" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100" aria-label="Control coverage">
+            <div class="meter-head"><span class="meter-label">Control coverage</span><span class="meter-value">78%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:78%"></div></div>
+          </div>
+          <div class="meter" data-tone="warning" role="meter" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="Unknowns remaining">
+            <div class="meter-head"><span class="meter-label">Unknowns remaining</span><span class="meter-value">24%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:24%"></div></div>
+          </div>
+        </div>
+        <div class="card-meta"><span class="tag tag-neutral">Week 3 of 6</span><span>Commonwealth engagement</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-band">
+  <div class="container section-tight">
+    <p class="label">By the numbers</p>
+    <div class="band-stats" style="margin-block-start:var(--space-6)">
+      <div><p class="band-value">$3.0M</p><p>Annual cost avoided across current engagements</p></div>
+      <div><p class="band-value">14</p><p>Active engagements in regulated sectors</p></div>
+      <div><p class="band-value">100%</p><p>Deliverables that carry an evidenced audit trail</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <p class="label">What we do</p>
+  <h2 style="margin-block-start:var(--space-3);max-inline-size:20ch">Three ways an engagement starts.</h2>
+  <div class="feature-grid" style="margin-block-start:var(--space-8)">
+    <a class="card card-interactive" href="#">
+      <p class="card-kicker">Advisory</p>
+      <p class="card-title">Can AI solve this?</p>
+      <p class="card-body">A current-state assessment that names what is possible, what is not, and
+        what evidence you would need either way. Six weeks, fixed fee.</p>
+    </a>
+    <a class="card card-interactive" href="#">
+      <p class="card-kicker">Build</p>
+      <p class="card-title">Deliver it inside the boundary</p>
+      <p class="card-body">Systems that run where your data already lives, with every model decision
+        logged and replayable.</p>
+    </a>
+    <a class="card card-interactive" href="#">
+      <p class="card-kicker">Managed</p>
+      <p class="card-title">Keep it evidenced</p>
+      <p class="card-body">Continuous control coverage, quarterly evidence collection, and a review
+        your auditor can read without translation.</p>
+    </a>
+  </div>
+</section>
+
+<section class="container section-tight">
+  <p class="label">Sectors served</p>
+  <div class="logo-row" style="margin-block-start:var(--space-5)">
+    <span>Federal</span><span>Commonwealth</span><span>Healthcare</span><span>Financial services</span><span>Logistics</span>
+  </div>
+</section>
+
+<section class="container section">
+  <div class="card card-quiet card-pad-lg">
+    <h3 style="max-inline-size:24ch">Tell us what is slowing the business down.</h3>
+    <p class="lede" style="margin-block-start:var(--space-4);max-inline-size:56ch">
+      We will tell you whether AI can help — and, just as often, where it cannot.
+    </p>
+    <div class="row" style="margin-block-start:var(--space-6);gap:var(--space-3)">
+      <a class="btn btn-primary btn-lg" href="#">Start a conversation</a>
+      <a class="btn btn-link" href="#">info@gener8v.com</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-foot">
+  <div class="container section-tight">
+    <div class="row" style="gap:var(--space-6)">
+      <span class="label">GENER8V · Richmond, VA</span>
+      <span class="muted" style="font-size:var(--text-sm);margin-inline-start:auto">© 2026</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

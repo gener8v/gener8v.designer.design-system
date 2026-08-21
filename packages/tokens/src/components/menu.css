@@ -1,0 +1,58 @@
+/* -------------------------------------------------------------------- menu */
+
+/* Applied by the React Menu, which positions with fixed coordinates so the
+   popup can flip away from a viewport edge. The static demo page shows .menu
+   in flow, without it. */
+.menu-popup { position: fixed; z-index: 70; }
+
+.menu {
+  min-inline-size: 220px;
+  max-inline-size: min(320px, calc(100vw - var(--space-8)));
+  padding: var(--space-1);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  inline-size: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+.menu-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-neutral-600); }
+
+/* Hover and keyboard highlight must look identical — a menu driven by arrow
+   keys should not feel like a different control from one driven by a mouse. */
+.menu-item:hover, .menu-item[data-highlighted] { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.menu-item[aria-disabled="true"] { color: var(--color-neutral-400); pointer-events: none; }
+.menu-item-danger { color: var(--color-danger-700); }
+.menu-item-danger:hover, .menu-item-danger[data-highlighted] { background: var(--color-danger-100); }
+
+.menu-label {
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.menu-sep { block-size: 1px; background: var(--color-divider); margin: var(--space-1) 0; border: 0; }
+.menu-shortcut {
+  margin-inline-start: auto;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-500);
+}

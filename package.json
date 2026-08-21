@@ -1,0 +1,38 @@
+{
+  "name": "gener8v-design-system",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:tokens": "node packages/tokens/build.mjs && node packages/tokens/build-pages.mjs",
+    "build": "pnpm build:tokens",
+    "dev": "node scripts/dev-server.mjs",
+    "lint:tokens": "node scripts/lint-tokens.mjs",
+    "lint:contrast": "node scripts/lint-contrast.mjs",
+    "check": "pnpm build:tokens && pnpm lint:tokens && pnpm lint:contrast && pnpm lint:palette && pnpm lint:parity && pnpm --filter @gener8v/ui build && pnpm --filter @gener8v/icons build && pnpm smoke && pnpm test && pnpm bench:graph && pnpm verify:consumer",
+    "lint:parity": "node scripts/lint-parity.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "test": "vitest run",
+    "bench:graph": "node scripts/bench-graph.mjs",
+    "lint:palette": "node scripts/lint-palette.mjs",
+    "verify:consumer": "pnpm --filter @gener8v/example-engagement-app typecheck && pnpm --filter @gener8v/example-engagement-app build"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.5",
+    "axe-core": "^4.13.0",
+    "jsdom": "^30.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "vitest": "^3.2.7"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  }
+}

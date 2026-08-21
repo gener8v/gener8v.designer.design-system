@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Close work item</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { block-size: 100%; }
+  body { display: grid; }
+  /* A detail page capped so the header, content and footer align on one
+     measure. Uncapped, the resolution note becomes a 130-character line. */
+  .wi-wrap { max-inline-size: var(--container-xl); margin-inline: auto; }
+  .wi-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-6); align-items: start; }
+  /* Long-form prose gets its own measure inside an already-wide column. */
+  .wi-prose { max-inline-size: 74ch; }
+  /* A class, not an inline style — the media query below has to be able to
+     reach it, or the footer stops wrapping on a phone. */
+  .wi-footrow { display: flex; align-items: center; gap: var(--space-3); inline-size: 100%; }
+  .wi-main { display: grid; gap: var(--space-5); }
+  .wi-rail { display: grid; gap: var(--space-4); position: sticky; inset-block-start: var(--space-6); }
+  .wi-idline { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+  .wi-meta { display: flex; align-items: center; gap: var(--space-2) var(--space-5); flex-wrap: wrap; margin-block-start: var(--space-4); font-size: var(--text-sm); color: var(--color-neutral-600); }
+  .wi-meta-item { display: inline-flex; align-items: center; gap: var(--space-2); }
+  .wi-confirm { border-block-start: 1px solid var(--color-neutral-200); background: var(--color-surface); padding: var(--space-8) var(--space-8) var(--space-10); }
+  .wi-stage { position: relative; block-size: calc(var(--space-32) * 2.9); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg); margin-block-start: var(--space-4); }
+  .wi-stage .dialog-backdrop { position: absolute; }
+  @media (max-width: 900px) { .wi-cols { grid-template-columns: minmax(0, 1fr); } .wi-rail { position: static; } }
+  @media (max-width: 720px) {
+    .wi-footrow { flex-wrap: wrap; }
+    .wi-footrow .flow-footer-status { order: -1; inline-size: 100%; margin-inline: 0; text-align: start; }
+  }
+</style>
+</head>
+<body>
+<div class="flow" style="grid-template-columns:minmax(0,1fr)">
+  <main class="flow-main">
+
+    <header class="flow-header">
+      <div class="wi-wrap">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="#">Delivery</a><span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <a href="#">G8V-2026-014</a><span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <a href="#">Work items</a><span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">WI-118</span>
+      </nav>
+
+      <div class="wi-idline" style="margin-block-start:var(--space-4)">
+        <span class="tag tag-outline mono">WI-118</span>
+        <h1 class="flow-title" style="margin:0;font-size:var(--text-2xl)">Access review evidence is not captured for service accounts</h1>
+        <span class="tag tag-warning tag-dot">Open</span>
+      </div>
+
+      <div class="wi-meta">
+        <span class="wi-meta-item"><span class="avatar avatar-sm">PL</span>Platform</span>
+        <span class="wi-meta-item">Control <a href="#" class="mono">AU-6</a></span>
+        <span class="wi-meta-item">Opened <span class="num">16 Aug 2026</span></span>
+        <span class="wi-meta-item">Last activity <span class="num">14:02Z</span></span>
+      </div>
+      </div>
+    </header>
+
+    <div class="flow-content">
+      <div class="wi-wrap"><div class="wi-cols">
+
+        <div class="wi-main">
+
+          <section class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Acceptance criteria</span>
+              <div class="meter meter-compact" data-tone="warning" role="meter" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="Criteria met">
+                <div class="meter-head"><span class="meter-value">3 of 4 met</span></div>
+                <div class="meter-track"><div class="meter-fill" style="inline-size:75%"></div></div>
+              </div>
+            </div>
+            <div class="panel-body">
+              <ul class="checklist">
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">Service accounts appear in the quarterly review export<span class="checklist-note">Verified against the 21 Aug export · 2 files attached</span></span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">Review covers all three environments</span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">Runbook updated with the new step<span class="checklist-note">PR #482, merged 09:41Z</span></span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" /><span class="checklist-text">Platform lead has countersigned<span class="checklist-note">Outstanding — closing now records this as an unknown, not as met</span></span></label></li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Resolution</span>
+              <span class="muted" style="font-size:var(--text-xs)">Required before closing</span>
+            </div>
+            <div class="panel-body stack" style="gap:var(--space-6)">
+              <div class="field">
+                <span class="field-label">Outcome</span>
+                <div class="radio-cards">
+                  <label class="radio-card">
+                    <input class="radio" type="radio" name="outcome" checked />
+                    <span class="radio-card-body">
+                      <span class="radio-card-title">Resolved — evidence now captured</span>
+                      <span class="radio-card-note">Marks AU-6 as evidenced for this assessment period</span>
+                    </span>
+                  </label>
+                  <label class="radio-card">
+                    <input class="radio" type="radio" name="outcome" />
+                    <span class="radio-card-body">
+                      <span class="radio-card-title">Accepted risk</span>
+                      <span class="radio-card-note">Requires a named accepting owner and a review date</span>
+                    </span>
+                  </label>
+                  <label class="radio-card">
+                    <input class="radio" type="radio" name="outcome" />
+                    <span class="radio-card-body">
+                      <span class="radio-card-title">Not applicable</span>
+                      <span class="radio-card-note">The control does not apply to this boundary</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="field wi-prose">
+                <label class="field-label" for="res">Resolution note</label>
+                <textarea class="textarea" id="res" style="min-block-size:calc(var(--control-h-md) * 2.4)">Review procedure amended to enumerate service accounts from the directory rather than the SSO roster. Verified on the 21 Aug export across all three environments.</textarea>
+                <span class="field-hint">Quoted verbatim in the assessment. Write it for the auditor, not for the team.</span>
+              </div>
+
+              <div class="field">
+                <span class="field-label">Evidence</span>
+                <ul class="file-list">
+                  <li class="file-item">
+                    <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg>
+                    <span class="file-name">access-review-2026-Q3.csv</span><span class="file-size">412 KB</span>
+                  </li>
+                  <li class="file-item">
+                    <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg>
+                    <span class="file-name">runbook-diff.pdf</span><span class="file-size">88 KB</span>
+                  </li>
+                </ul>
+                <button type="button" class="btn btn-secondary btn-sm" style="margin-block-start:var(--space-3);justify-self:start">Attach evidence</button>
+              </div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Activity</span>
+              <span class="muted" style="font-size:var(--text-xs)">4 entries</span>
+            </div>
+            <div class="panel-body stack" style="gap:var(--space-5)">
+              <div class="comment">
+                <span class="avatar avatar-sm">TE</span>
+                <div class="comment-body wi-prose">
+                  <div class="comment-head"><span class="comment-author">Delivery lead</span><span class="comment-time">14:02Z · today</span></div>
+                  <p class="comment-text">Export confirmed across all three environments. Countersign is the only thing outstanding.</p>
+                </div>
+              </div>
+              <div class="comment">
+                <span class="avatar avatar-sm">PL</span>
+                <div class="comment-body wi-prose">
+                  <div class="comment-head"><span class="comment-author">Platform</span><span class="comment-time">09:41Z · today</span></div>
+                  <p class="comment-text">Runbook merged — PR #482.</p>
+                </div>
+              </div>
+              <hr class="hr" />
+              <div class="comment-compose">
+                <span class="avatar avatar-sm">TE</span>
+                <div class="wi-prose" style="flex:1">
+                  <textarea class="textarea" aria-label="Add a comment" placeholder="Add a comment"></textarea>
+                  <div class="comment-actions"><button type="button" class="btn btn-secondary btn-sm">Comment</button></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+        </div>
+
+        <aside class="wi-rail" aria-label="Item detail">
+          <div class="card card-pad-sm">
+            <p class="card-kicker">Item</p>
+            <dl class="dl dl-stacked" style="margin-block-start:var(--space-3)">
+              <dt>Reference</dt><dd class="mono">WI-118</dd>
+              <dt>Type</dt><dd>Finding</dd>
+              <dt>Priority</dt><dd>Medium — needed before sign-off</dd>
+              <dt>Owner</dt><dd>Platform</dd>
+              <dt>Opened</dt><dd class="num">16 Aug 2026</dd>
+            </dl>
+          </div>
+
+          <div class="card card-quiet card-pad-sm">
+            <p class="card-kicker mono">AU-6</p>
+            <p class="card-body" style="margin-block-start:var(--space-1)">Audit record review, analysis and reporting</p>
+            <p class="card-body muted" style="margin-block-start:var(--space-2)">NIST SP 800-53 Rev. 5 · 2 open findings</p>
+          </div>
+
+          <div class="alert" data-tone="warning">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+            <div>
+              <p class="alert-title">One criterion unmet</p>
+              <p class="alert-body">Closing records the countersign as an unknown rather than as met.</p>
+            </div>
+          </div>
+
+          <div class="card card-pad-sm">
+            <p class="card-kicker">What closing writes</p>
+            <p class="card-body" style="margin-block-start:var(--space-2)">An immutable entry against
+              engagement G8V-2026-014. It cannot be edited — only superseded.</p>
+            <div class="endpoint" style="margin-block-start:var(--space-3)">
+              <span class="endpoint-method">LOG</span>
+              <span>WI-118 resolved · AU-6 · 2 artifacts · 1 unknown</span>
+            </div>
+          </div>
+        </aside>
+
+      </div></div>
+    </div>
+
+    <footer class="flow-footer">
+      <div class="wi-wrap wi-footrow">
+      <button type="button" class="btn btn-secondary">Back to item</button>
+      <span class="flow-footer-status">Resolution saved · 14:07Z</span>
+      <button type="button" class="btn btn-ghost">Save without closing</button>
+      <button type="button" class="btn btn-primary">Close work item</button>
+      </div>
+    </footer>
+
+    <section class="wi-confirm" aria-label="Confirmation step">
+      <div class="wi-wrap">
+      <p class="label">Final step — confirmation</p>
+      <p class="lede" style="margin-block-start:var(--space-2);font-size:var(--text-base);max-inline-size:62ch">
+        An irreversible action enumerates what it will write. Prose saying “this cannot be undone” is
+        not the same artifact as a list the user can check.
+      </p>
+      <div class="wi-stage">
+        <div class="dialog-backdrop">
+          <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="cdlg">
+            <p class="dialog-title" id="cdlg">Close WI-118?</p>
+            <div class="dialog-body">
+              <p>This writes an immutable entry to the audit log for engagement G8V-2026-014. A closed
+                item cannot be edited — only superseded by a new one.</p>
+              <ul class="checklist" style="margin-block-start:var(--space-4)">
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">Outcome: resolved — evidence now captured</span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">2 evidence artifacts attached</span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" checked /><span class="checklist-text">Resolution note recorded verbatim</span></label></li>
+                <li><label class="checklist-item"><input class="checkbox" type="checkbox" /><span class="checklist-text">Platform countersign<span class="checklist-note">Will record as an unknown</span></span></label></li>
+              </ul>
+            </div>
+            <div class="dialog-actions">
+              <button type="button" class="btn btn-secondary">Cancel</button>
+              <button type="button" class="btn btn-primary">Close item</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

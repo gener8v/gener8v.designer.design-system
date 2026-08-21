@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Purchase flow</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { block-size: 100%; }
+  body { display: grid; }
+  /* Two columns: what you are buying, and what it costs. The summary is sticky
+     because the total is the thing a buyer re-checks at every step. */
+  .buy-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-8); align-items: start; }
+  .buy-summary { position: sticky; inset-block-start: var(--space-6); }
+  .line { display: flex; gap: var(--space-4); padding-block: var(--space-4); border-block-end: 1px solid var(--color-divider); }
+  .line:last-of-type { border-block-end: 0; }
+  .line-thumb { inline-size: var(--space-16); block-size: var(--space-16); flex: none; border-radius: var(--radius-md); background: var(--color-neutral-100); display: grid; place-items: center; color: var(--color-neutral-400); }
+  .line-body { flex: 1; min-inline-size: 0; }
+  @media (max-width: 860px) { .buy-cols { grid-template-columns: minmax(0, 1fr); } .buy-summary { position: static; } }
+</style>
+</head>
+<body>
+<div class="flow">
+
+  <aside class="flow-rail">
+    <p class="flow-rail-title">Purchase</p>
+    <div class="stepper stepper-vertical">
+      <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Basket</span></div>
+      <div class="step" data-state="complete"><span class="step-marker">2</span><span class="step-label">Delivery</span></div>
+      <div class="step" data-state="complete"><span class="step-marker">3</span><span class="step-label">Payment</span></div>
+      <div class="step" aria-current="step"><span class="step-marker">4</span><span class="step-label">Review</span></div>
+    </div>
+  </aside>
+
+  <main class="flow-main">
+    <header class="flow-header">
+      <p class="flow-step-of">Step 4 of 4</p>
+      <h1 class="flow-title">Review and place the order</h1>
+      <p class="flow-lede">Nothing is charged until you place the order. Quantities can still be
+        changed here without going back a step.</p>
+    </header>
+
+    <div class="flow-content">
+      <div class="buy-cols">
+
+        <div>
+          <div class="panel">
+            <div class="panel-header">
+              <span class="panel-title">Basket</span>
+              <span class="muted" style="font-size:var(--text-sm)">3 items</span>
+            </div>
+            <div class="panel-body">
+              <div class="line">
+                <span class="line-thumb"><svg viewBox="0 0 256 256" fill="currentColor" width="24" height="24"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,16V158.75l-26.07-26.06a16,16,0,0,0-22.63,0l-20,20-44-44a16,16,0,0,0-22.62,0L40,149.37V56ZM40,172l52-52,80,80H40Zm176,28H194.63l-36-36,20-20L216,181.38V200ZM144,100a12,12,0,1,1,12,12A12,12,0,0,1,144,100Z"/></svg></span>
+                <div class="line-body">
+                  <p class="card-title" style="font-size:var(--text-base)">Compliance evidence connector</p>
+                  <p class="card-body">Annual licence · 3 environments</p>
+                  <div class="row" style="margin-top:var(--space-3);gap:var(--space-4)">
+                    <div class="qty">
+                      <button type="button" class="qty-btn" aria-label="Decrease Compliance evidence connector">−</button>
+                      <input class="qty-input" type="number" value="1" min="1" aria-label="Compliance evidence connector quantity" />
+                      <button type="button" class="qty-btn" aria-label="Increase Compliance evidence connector">+</button>
+                    </div>
+                    <button type="button" class="btn btn-link">Remove</button>
+                  </div>
+                </div>
+                <span class="num" style="font-family:var(--font-mono);font-size:var(--text-sm)">$12,000.00</span>
+              </div>
+
+              <div class="line">
+                <span class="line-thumb"><svg viewBox="0 0 256 256" fill="currentColor" width="24" height="24"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></span>
+                <div class="line-body">
+                  <p class="card-title" style="font-size:var(--text-base)">FedRAMP boundary add-on</p>
+                  <p class="card-body">Requires the connector above</p>
+                  <div class="row" style="margin-top:var(--space-3);gap:var(--space-4)">
+                    <div class="qty">
+                      <button type="button" class="qty-btn" aria-label="Decrease FedRAMP boundary add-on">−</button>
+                      <input class="qty-input" type="number" value="3" min="1" aria-label="FedRAMP boundary add-on quantity" />
+                      <button type="button" class="qty-btn" aria-label="Increase FedRAMP boundary add-on">+</button>
+                    </div>
+                    <button type="button" class="btn btn-link">Remove</button>
+                  </div>
+                </div>
+                <span class="num" style="font-family:var(--font-mono);font-size:var(--text-sm)">$4,500.00</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="demo-head label" style="margin:var(--space-8) 0 var(--space-3)">Delivery</p>
+          <div class="radio-cards">
+            <label class="radio-card">
+              <input class="radio" type="radio" name="ship" checked />
+              <span class="radio-card-body">
+                <span class="radio-card-title">Provisioned to your tenant</span>
+                <span class="radio-card-note">Available within one business day of the order</span>
+              </span>
+              <span class="radio-card-meta">Included</span>
+            </label>
+            <label class="radio-card">
+              <input class="radio" type="radio" name="ship" />
+              <span class="radio-card-body">
+                <span class="radio-card-title">Air-gapped media</span>
+                <span class="radio-card-note">Encrypted drive, tracked courier, signature required</span>
+              </span>
+              <span class="radio-card-meta">$250.00</span>
+            </label>
+          </div>
+
+          <p class="demo-head label" style="margin:var(--space-8) 0 var(--space-3)">Payment</p>
+          <div class="alert" data-tone="accent">
+            <svg viewBox="0 0 256 256" fill="currentColor"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm16-40a8,8,0,0,1-8,8,16,16,0,0,1-16-16V128a8,8,0,0,1,0-16,16,16,0,0,1,16,16v40A8,8,0,0,1,144,176ZM112,84a12,12,0,1,1,12,12A12,12,0,0,1,112,84Z"/></svg>
+            <div>
+              <p class="alert-title">Invoiced against PO 4400219</p>
+              <p class="alert-body">Net 30. No card is stored and nothing is charged at checkout.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="buy-summary">
+          <div class="card">
+            <p class="card-kicker">Order summary</p>
+            <dl class="summary" style="margin-top:var(--space-3)">
+              <div class="summary-row"><dt>Subtotal</dt><dd>$16,500.00</dd></div>
+              <div class="summary-row"><dt>Delivery</dt><dd>Included</dd></div>
+              <div class="summary-row"><dt>Tax (VA 5.3%)</dt><dd>$874.50</dd></div>
+              <div class="summary-row summary-total"><dt>Total</dt><dd>$17,374.50</dd></div>
+            </dl>
+            <p class="summary-note" style="margin-top:var(--space-3)">Billed annually. Renews 21 Aug 2027
+              unless cancelled 30 days prior.</p>
+            <label class="choice" style="margin-top:var(--space-2)">
+              <input class="checkbox" type="checkbox" />
+              <span>I accept the terms of service<span class="choice-hint">Required before the order can be placed.</span></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <footer class="flow-footer">
+      <button type="button" class="btn btn-secondary">Back</button>
+      <span class="flow-footer-status">Basket saved · 14:06Z</span>
+      <button type="button" class="btn btn-primary btn-lg">Place order · $17,374.50</button>
+    </footer>
+  </main>
+
+</div>
+</body>
+</html>

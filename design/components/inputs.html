@@ -1,0 +1,92 @@
+<!-- @dsCard group="Components" name="Advanced inputs" subtitle="Combobox, slider, file drop and calendar — native controls wherever one exists" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Advanced inputs</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+/* The listbox and calendar are position:fixed in the real system; shown in
+   flow here so the card renders deterministically. */
+.demo .listbox, .demo .calendar { position: static; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Combobox</p>
+  <div class="combobox">
+    <label class="field-label" for="client">Client</label>
+    <input class="input" id="client" type="text" role="combobox" aria-expanded="true"
+      aria-controls="client-list" aria-autocomplete="list" aria-activedescendant="client-list-nh"
+      value="No" style="margin-top:var(--space-2)" />
+    <button type="button" class="combobox-trigger" tabindex="-1" aria-label="Close suggestions" style="top:calc(50% + var(--space-3))">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+    </button>
+    <ul class="listbox" id="client-list" role="listbox" aria-label="Client" style="margin-top:var(--space-2)">
+      <li class="listbox-option" id="client-list-nh" role="option" aria-selected="false" data-active>Northlake Health<span class="listbox-option-note">Healthcare</span></li>
+      <li class="listbox-option" role="option" aria-selected="true">Commonwealth of Virginia<span class="listbox-option-note">Government</span></li>
+      <li class="listbox-option" role="option" aria-selected="false" aria-disabled="true">Meridian Financial<span class="listbox-option-note">Archived</span></li>
+    </ul>
+  </div>
+
+  <p class="demo-head label">Slider</p>
+  <div class="slider-head">
+    <span class="field-label">Risk tolerance</span>
+    <span class="slider-value">62%</span>
+  </div>
+  <input class="slider" type="range" min="0" max="100" value="62" style="--slider-pct:62" aria-label="Risk tolerance" />
+
+  <p class="demo-head label">File drop</p>
+  <label class="dropzone">
+    <span class="dropzone-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0ZM93.66,85.66,120,59.31V152a8,8,0,0,0,16,0V59.31l26.34,26.35a8,8,0,0,0,11.32-11.32l-40-40a8,8,0,0,0-11.32,0l-40,40A8,8,0,0,0,93.66,85.66Z"/></svg></span>
+    <span class="dropzone-title">Drop evidence here, or browse</span>
+    <span class="dropzone-hint">PDF, PNG or CSV · up to 25 MB each</span>
+    <input type="file" class="sr-only" multiple />
+  </label>
+  <ul class="file-list">
+    <li class="file-item">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,82.34l-56-56A8,8,0,0,0,152,24H56A16,16,0,0,0,40,40V216a16,16,0,0,0,16,16H200a16,16,0,0,0,16-16V88A8,8,0,0,0,213.66,82.34ZM160,51.31,188.69,80H160ZM200,216H56V40h88V88a8,8,0,0,0,8,8h48V216Z"/></svg>
+      <span class="file-name">AU-6-audit-review-evidence.pdf</span><span class="file-size">1.4 MB</span>
+    </li>
+    <li class="file-item" data-state="error">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+      <span class="file-name">controls-export.xlsx — unsupported type</span><span class="file-size">3.2 MB</span>
+    </li>
+  </ul>
+
+  <p class="demo-head label">Calendar</p>
+  <div class="calendar">
+    <div class="calendar-head">
+      <button type="button" class="calendar-nav" aria-label="Previous month"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/></svg></button>
+      <span class="calendar-title">August 2026</span>
+      <button type="button" class="calendar-nav" aria-label="Next month"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg></button>
+    </div>
+    <table class="calendar-grid" role="grid" aria-label="August 2026">
+      <thead><tr><th scope="col" abbr="Sunday">Su</th><th scope="col" abbr="Monday">Mo</th><th scope="col" abbr="Tuesday">Tu</th><th scope="col" abbr="Wednesday">We</th><th scope="col" abbr="Thursday">Th</th><th scope="col" abbr="Friday">Fr</th><th scope="col" abbr="Saturday">Sa</th></tr></thead>
+      <tbody>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, July 26, 2026" data-outside>26</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, July 27, 2026" data-outside>27</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, July 28, 2026" data-outside>28</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, July 29, 2026" data-outside>29</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, July 30, 2026" data-outside>30</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Friday, July 31, 2026" data-outside>31</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, August 1, 2026">1</button></td></tr>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, August 2, 2026">2</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, August 3, 2026">3</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, August 4, 2026">4</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, August 5, 2026">5</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, August 6, 2026">6</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Friday, August 7, 2026">7</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, August 8, 2026">8</button></td></tr>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, August 9, 2026">9</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, August 10, 2026">10</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, August 11, 2026">11</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, August 12, 2026">12</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, August 13, 2026">13</button></td><td role="gridcell" aria-selected="true"><button type="button" class="calendar-day" tabindex="0" aria-label="Friday, August 14, 2026">14</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, August 15, 2026">15</button></td></tr>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, August 16, 2026">16</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, August 17, 2026">17</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, August 18, 2026">18</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, August 19, 2026">19</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, August 20, 2026">20</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Friday, August 21, 2026" aria-current="date" data-today>21</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, August 22, 2026">22</button></td></tr>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, August 23, 2026">23</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, August 24, 2026">24</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, August 25, 2026">25</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, August 26, 2026">26</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, August 27, 2026">27</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Friday, August 28, 2026">28</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, August 29, 2026">29</button></td></tr>
+          <tr><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Sunday, August 30, 2026">30</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Monday, August 31, 2026">31</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Tuesday, September 1, 2026" data-outside>1</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Wednesday, September 2, 2026" data-outside>2</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Thursday, September 3, 2026" data-outside>3</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Friday, September 4, 2026" data-outside>4</button></td><td role="gridcell" aria-selected="false"><button type="button" class="calendar-day" tabindex="-1" aria-label="Saturday, September 5, 2026" data-outside>5</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p class="note">Dates cross the API boundary as <code>YYYY-MM-DD</code> strings, never as
+  <code>Date</code> objects — a Date carries a time and a zone, a calendar date has neither, and
+  conflating them is how "the deadline moved a day" happens. The slider is a native
+  <code>range</code>; the file input is <code>.sr-only</code> rather than
+  <code>display:none</code>, so it stays in the tab order.</p>
+
+</main>
+</body>
+</html>

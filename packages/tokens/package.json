@@ -1,0 +1,16 @@
+{
+  "name": "@gener8v/tokens",
+  "version": "0.1.0",
+  "description": "GENER8V design tokens — one source, generated to CSS, TypeScript, Tailwind and DTCG.",
+  "type": "module",
+  "license": "MIT",
+  "author": "GENER8V",
+  "publishConfig": { "access": "public" },
+  "exports": {
+    ".": { "types": "./dist/tokens.d.ts", "default": "./dist/tokens.mjs" },
+    "./tokens.json": "./dist/tokens.json",
+    "./styles.css": "./styles.css"
+  },
+  "files": ["dist", "styles.css", "README.md"],
+  "scripts": { "build": "node build.mjs && node build-pages.mjs" }
+}

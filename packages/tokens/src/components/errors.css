@@ -1,0 +1,29 @@
+/* ----------------------------------------------------------- error summary */
+
+/* An error summary at the top of a step, with each entry a link to the field.
+   This is the pattern government accessibility guidance settles on, and it is
+   the one that works when a form is long enough that the first invalid field
+   is off-screen — which is exactly when validation matters. */
+
+.error-summary {
+  padding: var(--space-4) var(--space-5);
+  background: var(--color-danger-100);
+  border: 1px solid var(--color-danger-300);
+  border-inline-start: 3px solid var(--color-danger);
+  border-radius: var(--radius-md);
+}
+.error-summary-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--text-base);
+  color: var(--color-danger-700);
+}
+.error-summary-list {
+  margin: var(--space-3) 0 0;
+  padding: 0 0 0 var(--space-4);
+  display: grid;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+.error-summary-list a { color: var(--color-danger-700); text-decoration: underline; text-underline-offset: 0.2em; }
+.error-summary-list a:hover { color: var(--color-danger-800); }

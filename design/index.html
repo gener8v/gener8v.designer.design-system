@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Design system</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+/* Page scaffolding only — every component below comes from styles.css. */
+.index-hero { border-block-end: 1px solid var(--color-neutral-200); }
+.index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
+.index-chip { forced-color-adjust: none; display: inline-block; inline-size: var(--space-6); block-size: var(--space-6); border-radius: var(--radius-xs); }
+.index-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.index-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-4); }
+.index-fact { padding: var(--space-4); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); }
+.index-fact-n { font-family: var(--font-mono); font-size: var(--text-2xl); color: var(--color-neutral-900); font-variant-numeric: tabular-nums; }
+.index-sec { margin-block-start: var(--space-16); }
+</style>
+</head>
+<body>
+
+<header class="index-hero bg-dot-grid">
+  <div class="container section-tight">
+    <p class="label">Design system</p>
+    <h1 style="margin-block-start:var(--space-3)">GENER8V</h1>
+    <p class="lede" style="margin-block-start:var(--space-4);max-inline-size:60ch">
+      A light, airy interface for delivering AI in regulated, governed and auditable
+      environments. One stylesheet, one token source, and the same class names in the
+      static HTML and in <code>@gener8v/ui</code>.
+    </p>
+    <div class="index-row" style="margin-block-start:var(--space-6)">
+      <a class="btn btn-primary" href="foundations/color.html">Foundations<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+      <a class="btn btn-secondary" href="readme.md">Read the guide</a>
+    </div>
+  </div>
+</header>
+
+<main class="container" style="padding-block:var(--space-12) var(--space-24)">
+
+  <div class="index-facts">
+    <div class="index-fact"><p class="index-fact-n">135</p><p class="label" style="margin-block-start:var(--space-1)">Tokens</p></div>
+    <div class="index-fact"><p class="index-fact-n">16</p><p class="label" style="margin-block-start:var(--space-1)">Component pages</p></div>
+    <div class="index-fact"><p class="index-fact-n">5</p><p class="label" style="margin-block-start:var(--space-1)">Foundations</p></div>
+    <div class="index-fact"><p class="index-fact-n">6px</p><p class="label" style="margin-block-start:var(--space-1)">Radius</p></div>
+  </div>
+
+  <section class="index-sec">
+    <p class="label">At a glance</p>
+    <div class="stack" style="margin-block-start:var(--space-4);gap:var(--space-5)">
+      <div class="index-row">
+        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Neutral</span>
+        <span class="index-chip" style="background:#F2F4F7" title="--color-neutral-100"></span><span class="index-chip" style="background:#E2E6ED" title="--color-neutral-200"></span><span class="index-chip" style="background:#CAD0DA" title="--color-neutral-300"></span><span class="index-chip" style="background:#ABB2C0" title="--color-neutral-400"></span><span class="index-chip" style="background:#8991A0" title="--color-neutral-500"></span><span class="index-chip" style="background:#697181" title="--color-neutral-600"></span><span class="index-chip" style="background:#4B5464" title="--color-neutral-700"></span><span class="index-chip" style="background:#2F3848" title="--color-neutral-800"></span><span class="index-chip" style="background:#182030" title="--color-neutral-900"></span>
+      </div>
+      <div class="index-row">
+        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Accent</span>
+        <span class="index-chip" style="background:#EEF4FF" title="--color-accent-100"></span><span class="index-chip" style="background:#D9E6FF" title="--color-accent-200"></span><span class="index-chip" style="background:#B7D0FF" title="--color-accent-300"></span><span class="index-chip" style="background:#88B1FF" title="--color-accent-400"></span><span class="index-chip" style="background:#528AFF" title="--color-accent-500"></span><span class="index-chip" style="background:#2664EC" title="--color-accent-600"></span><span class="index-chip" style="background:#1547B7" title="--color-accent-700"></span><span class="index-chip" style="background:#0C307E" title="--color-accent-800"></span><span class="index-chip" style="background:#071C4A" title="--color-accent-900"></span>
+      </div>
+      <div class="index-row">
+        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Action</span>
+        <span class="index-chip" style="background:#1547B7"></span>
+        <code style="font-size:var(--text-xs)">#1547B7</code>
+        <span class="muted" style="font-size:var(--text-xs)">fills a primary button — the accent stays for focus rings and links</span>
+      </div>
+      <div class="index-row">
+        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Type</span>
+        <span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:var(--text-2xl)">Inter 500</span>
+        <span class="mono" style="color:var(--color-neutral-600)">IBM Plex Mono</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="index-sec">
+    <p class="label">Foundations</p>
+    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
+  <a class="card card-interactive card-pad-sm" href="foundations/color.html">
+    <p class="card-kicker mono">foundations/color.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Color</p>
+    <p class="card-body">Six roles, two working ramps, and status held to five steps — generated in OKLCH</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/icons.html">
+    <p class="card-kicker mono">foundations/icons.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Icons</p>
+    <p class="card-body">Phosphor, inline SVG on currentColor, sized in em so they track the type</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/image.html">
+    <p class="card-kicker mono">foundations/image.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Imagery</p>
+    <p class="card-body">Figures sit on the ground with a hairline and a radius; atmosphere comes from dot grid and grain</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/layout.html">
+    <p class="card-kicker mono">foundations/layout.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Spacing & elevation</p>
+    <p class="card-body">A 4px spacing scale, 6px radius, and three soft elevation steps tuned for a light ground</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/type.html">
+    <p class="card-kicker mono">foundations/type.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Typography</p>
+    <p class="card-body">Inter at 500 for headings over Inter for body, with IBM Plex Mono as the technical voice</p>
+  </a></div></div>
+  </section>
+
+  <section class="index-sec">
+    <p class="label">Components</p>
+    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
+  <a class="card card-interactive card-pad-sm" href="components/buttons.html">
+    <p class="card-kicker mono">components/buttons.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Buttons</p>
+    <p class="card-body">Six variants, five sizes, icon and loading states — solid primary on a near-white ground</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/cards.html">
+    <p class="card-kicker mono">components/cards.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Cards & tags</p>
+    <p class="card-body">Hairline surfaces with a mono kicker; tags carry status, never decoration</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/charts.html">
+    <p class="card-kicker mono">components/charts.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Charts</p>
+    <p class="card-body">Bar, stacked, line and sparkline — palette validated for colour-blind separation, table view always available</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/command.html">
+    <p class="card-kicker mono">components/command.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Command, tree & code</p>
+    <p class="card-body">Command palette, hierarchy tree and code block — all keyboard-first</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/data.html">
+    <p class="card-kicker mono">components/data.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Data display</p>
+    <p class="card-body">Stats, meters, description lists and avatars — tabular figures throughout</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/disclosure.html">
+    <p class="card-kicker mono">components/disclosure.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Menu & disclosure</p>
+    <p class="card-body">Dropdown menu, accordion and segmented control — open state carried by aria-expanded</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/feedback.html">
+    <p class="card-kicker mono">components/feedback.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Feedback</p>
+    <p class="card-body">Dialog, alerts, toast, tooltip and callout — one tone vocabulary shared with states</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/flow.html">
+    <p class="card-kicker mono">components/flow.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Flow controls</p>
+    <p class="card-body">Stepper, progress, timeline, pagination and skeletons — the parts a flow is built from</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/forms.html">
+    <p class="card-kicker mono">components/forms.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Forms</p>
+    <p class="card-body">Native controls on the shared control-height scale, so fields and buttons line up</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/graph.html">
+    <p class="card-kicker mono">components/graph.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Knowledge graph</p>
+    <p class="card-body">Canvas-rendered, Barnes-Hut layout — 1,000 nodes at 0.8ms per tick; radius is sqrt(degree)</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/inputs.html">
+    <p class="card-kicker mono">components/inputs.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Advanced inputs</p>
+    <p class="card-body">Combobox, slider, file drop and calendar — native controls wherever one exists</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/integrations.html">
+    <p class="card-kicker mono">components/integrations.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Integrations & keys</p>
+    <p class="card-body">Connections, masked credentials, API key scopes and event rules</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/library.html">
+    <p class="card-kicker mono">components/library.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Document library</p>
+    <p class="card-body">Browsing MD, PDF, XLSX and CSV — list, grid and preview panes</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/navigation.html">
+    <p class="card-kicker mono">components/navigation.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Navigation</p>
+    <p class="card-body">Header, sidebar, tabs, breadcrumbs and the hamburger — active state keys off aria-current</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/states.html">
+    <p class="card-kicker mono">components/states.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">States</p>
+    <p class="card-body">The six states every flow passes through — most systems ship only the first</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="components/table.html">
+    <p class="card-kicker mono">components/table.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Table</p>
+    <p class="card-body">Hairline rules, mono headers, tabular figures — sort state carried by aria-sort</p>
+  </a></div></div>
+  </section>
+
+  <section class="index-sec">
+    <p class="label">Templates</p>
+    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
+  <a class="card card-interactive card-pad-sm" href="templates/intake/index.html">
+    <p class="card-kicker mono">templates/intake/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Engagement intake</p>
+    <p class="card-body">The flow shell as a working four-step journey, with the vertical rail and a persistent footer</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/purchase/index.html">
+    <p class="card-kicker mono">templates/purchase/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Purchase a product</p>
+    <p class="card-body">Four-step buy flow — basket with quantity steppers, delivery radio cards, sticky order summary</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/work-item-create/index.html">
+    <p class="card-kicker mono">templates/work-item-create/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Create a work item</p>
+    <p class="card-body">Describe, label and attach — token input, segmented type, combobox owner, evidence drop</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/work-item-close/index.html">
+    <p class="card-kicker mono">templates/work-item-close/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Close a work item</p>
+    <p class="card-body">Acceptance checklist, resolution outcome, evidence, activity thread and an irreversible confirm</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/app-shell/index.html">
+    <p class="card-kicker mono">templates/app-shell/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Application shell</p>
+    <p class="card-body">Header, rail, breadcrumbs, stat row and a data panel — the layout every client app starts from</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/landing/index.html">
+    <p class="card-kicker mono">templates/landing/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Landing page</p>
+    <p class="card-body">Hero, the one saturated stat band, feature cards and a close — the marketing voice</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/deck/index.html">
+    <p class="card-kicker mono">templates/deck/index.html</p>
+    <p class="card-title" style="font-size:var(--text-lg)">Presentation deck</p>
+    <p class="card-body">Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected</p>
+  </a></div></div>
+  </section>
+
+  <section class="index-sec">
+    <p class="label">Pick it up</p>
+    <div class="panel" style="margin-block-start:var(--space-4)">
+      <div class="panel-body">
+        <p class="card-body">Link the one stylesheet and take every value from its variables. The
+          React library ships the same class names, so markup written against this system ports
+          without a visual rewrite.</p>
+        <pre class="mono" style="margin-block-start:var(--space-4);padding:var(--space-4);background:var(--color-surface);border-radius:var(--radius-md);overflow-x:auto;white-space:pre"><code>&lt;link rel="stylesheet" href="styles.css"&gt;
+
+npm i @gener8v/ui @gener8v/tokens</code></pre>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

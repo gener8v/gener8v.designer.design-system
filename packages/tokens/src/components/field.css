@@ -1,0 +1,178 @@
+/* ------------------------------------------------------------------- field */
+
+/* minmax(0,1fr): grid items default to min-width:auto and refuse to shrink
+   below their content, so any wide child of a field — a credential row, a long
+   control group — would push the page wider instead of ellipsing. */
+.field { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+
+.field-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+.field-label[data-optional]::after {
+  content: " optional";
+  font-weight: 400;
+  color: var(--color-neutral-500);
+}
+
+.field-hint { font-size: var(--text-xs); color: var(--color-neutral-600); }
+.field-error { font-size: var(--text-xs); color: var(--color-danger-700); }
+
+/* --- text controls -------------------------------------------------- */
+
+/* Every text control sits on the same --control-h-* scale as .btn, so a field
+   and the button beside it line up without a per-page nudge. */
+.input,
+.select,
+.textarea {
+  inline-size: 100%;
+  min-block-size: var(--control-h-md);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: var(--color-neutral-900);
+  transition: border-color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.textarea { min-block-size: calc(var(--control-h-md) * 2); resize: vertical; }
+.select { appearance: none; padding-inline-end: var(--space-8); cursor: pointer; }
+
+.input::placeholder, .textarea::placeholder { color: var(--color-neutral-500); }
+
+/* Focus is deliberately :focus, not :focus-visible — clicking into a field
+   should show the ring, unlike clicking a button. */
+.input:focus, .select:focus, .textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.input[aria-invalid="true"], .select[aria-invalid="true"], .textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+.input[aria-invalid="true"]:focus,
+.select[aria-invalid="true"]:focus,
+.textarea[aria-invalid="true"]:focus {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-danger) 18%, transparent);
+}
+
+.input:read-only, .textarea:read-only { background: var(--color-surface); }
+
+.input-sm, .select-sm { min-block-size: var(--control-h-sm); padding-block: var(--space-1); font-size: var(--text-xs); }
+.input-lg, .select-lg { min-block-size: var(--control-h-lg); font-size: var(--text-base); }
+
+/* Chevron drawn from borders so it inherits tokens rather than baking a hex
+   into a background-image data URI. */
+.select-wrap { position: relative; display: block; }
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: var(--space-4);
+  inset-block-start: 50%;
+  inline-size: 0.42em;
+  block-size: 0.42em;
+  border-inline-end: 1.5px solid var(--color-neutral-600);
+  border-block-end: 1.5px solid var(--color-neutral-600);
+  transform: translateY(-70%) rotate(45deg);
+  pointer-events: none;
+}
+
+/* --- choice controls ------------------------------------------------ */
+
+.checkbox, .radio {
+  appearance: none;
+  flex: none;
+  inline-size: var(--space-5);
+  block-size: var(--space-5);
+  margin: 0;
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-400);
+  cursor: pointer;
+  display: grid;
+  place-content: center;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out);
+}
+.checkbox { border-radius: var(--radius-xs); }
+.radio { border-radius: var(--radius-full); }
+
+.checkbox:checked, .radio:checked {
+  background: var(--color-action);
+  border-color: var(--color-action);
+}
+
+/* Tick drawn from two borders — no icon dependency for a control this small. */
+.checkbox:checked::after {
+  content: "";
+  inline-size: 0.3em;
+  block-size: 0.6em;
+  border-inline-end: 2px solid var(--color-bg);
+  border-block-end: 2px solid var(--color-bg);
+  transform: translateY(-0.08em) rotate(45deg);
+}
+.radio:checked::after {
+  content: "";
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+}
+
+.checkbox:indeterminate { background: var(--color-action); border-color: var(--color-action); }
+.checkbox:indeterminate::after {
+  content: "";
+  inline-size: 0.55em;
+  block-size: 2px;
+  background: var(--color-bg);
+  transform: none;
+  border: 0;
+}
+
+/* The label is the hit target, so the whole row is clickable at ≥44px. */
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  min-block-size: var(--control-h-md);
+  padding-block: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+  cursor: pointer;
+}
+.choice-hint { display: block; font-size: var(--text-xs); color: var(--color-neutral-600); }
+
+/* --- switch --------------------------------------------------------- */
+
+.switch {
+  appearance: none;
+  position: relative;
+  flex: none;
+  inline-size: calc(var(--space-6) * 2 - var(--space-2));
+  block-size: var(--space-6);
+  margin: 0;
+  background: var(--color-neutral-300);
+  border: 0;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background-color var(--dur-base) var(--ease-out);
+}
+.switch::after {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--space-1);
+  inset-inline-start: var(--space-1);
+  inline-size: calc(var(--space-6) - var(--space-2));
+  block-size: calc(var(--space-6) - var(--space-2));
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+  transition: translate var(--dur-base) var(--ease-out);
+}
+.switch:checked { background: var(--color-action); }
+.switch:checked::after { translate: calc(var(--space-6) - var(--space-2)) 0; }

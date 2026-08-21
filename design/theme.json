@@ -1,0 +1,49 @@
+{
+  "name": "GENER8V",
+  "palette": {
+    "hue": 263,
+    "band": "light",
+    "scheme": "duo",
+    "sat": 0.07,
+    "pin": {
+      "bg": "#FFFFFF",
+      "surface": "#F7F9FC",
+      "accent": "#2563EB"
+    },
+    "bg": "#FFFFFF",
+    "surface": "#F7F9FC",
+    "text": "#111827",
+    "accent": "#2563EB",
+    "accent2": "#0891B2"
+  },
+  "fonts": {
+    "heading": {
+      "family": "Inter",
+      "class": "grotesque",
+      "weights": [
+        300,
+        400,
+        500,
+        600
+      ]
+    },
+    "body": {
+      "family": "Inter",
+      "class": "grotesque",
+      "weights": [
+        300,
+        400,
+        500,
+        600
+      ]
+    },
+    "headingWeight": 500
+  },
+  "density": 1,
+  "radius": 6,
+  "layoutStyle": "left",
+  "imageTreatment": "none",
+  "photo": "gener8v",
+  "iconSet": "phosphor",
+  "buttonStyle": "solid"
+}

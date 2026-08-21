@@ -1,0 +1,82 @@
+<!-- @dsCard group="Components" name="Buttons" subtitle="Six variants, five sizes, icon and loading states — solid primary on a near-white ground" viewport="640x900" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Buttons</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.swatch-row { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Variants</p>
+  <div class="swatch-row">
+    <button type="button" class="btn btn-primary">Start a conversation</button>
+    <button type="button" class="btn btn-secondary">Preview</button>
+    <button type="button" class="btn btn-ghost">Learn more</button>
+    <button type="button" class="btn btn-subtle">Duplicate</button>
+    <button type="button" class="btn btn-destructive">Delete</button>
+    <button type="button" class="btn btn-link">Read the brief</button>
+  </div>
+
+  <p class="demo-head label">Sizes</p>
+  <div class="swatch-row">
+    <button type="button" class="btn btn-primary btn-xs">Extra small</button>
+    <button type="button" class="btn btn-primary btn-sm">Small</button>
+    <button type="button" class="btn btn-primary">Medium</button>
+    <button type="button" class="btn btn-primary btn-lg">Large</button>
+    <button type="button" class="btn btn-primary btn-xl">Extra large</button>
+  </div>
+
+  <p class="demo-head label">With icons</p>
+  <div class="swatch-row">
+    <button type="button" class="btn btn-primary">Continue<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button>
+    <button type="button" class="btn btn-secondary"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg>New engagement</button>
+    <button type="button" class="btn btn-ghost"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,132.69V40a8,8,0,0,0-16,0v92.69L93.66,106.34a8,8,0,0,0-11.32,11.32Z"/></svg>Download</button>
+  </div>
+
+  <p class="demo-head label">Icon only</p>
+  <div class="swatch-row">
+    <button type="button" class="btn btn-primary btn-icon" aria-label="Add"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></svg></button>
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Search"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></button>
+    <button type="button" class="btn btn-ghost btn-icon" aria-label="More actions"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM48,100a28,28,0,1,0,28,28A28,28,0,0,0,48,100Zm160,0a28,28,0,1,0,28,28A28,28,0,0,0,208,100Z"/></svg></button>
+    <button type="button" class="btn btn-destructive btn-icon" aria-label="Delete"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/></svg></button>
+  </div>
+
+  <p class="demo-head label">Loading and disabled</p>
+  <div class="swatch-row">
+    <button type="button" class="btn btn-primary is-loading" aria-busy="true">Saving</button>
+    <button type="button" class="btn btn-secondary is-loading" aria-busy="true">Checking</button>
+    <button type="button" class="btn btn-primary" disabled>Disabled</button>
+    <button type="button" class="btn btn-secondary" disabled>Disabled</button>
+    <button type="button" class="btn btn-ghost" disabled>Disabled</button>
+  </div>
+
+  <p class="demo-head label">Grouped</p>
+  <div class="swatch-row">
+    <div class="btn-group" role="group" aria-label="View">
+      <button type="button" class="btn btn-secondary">Day</button>
+      <button type="button" class="btn btn-secondary">Week</button>
+      <button type="button" class="btn btn-secondary">Month</button>
+    </div>
+  </div>
+
+  <p class="demo-head label">Full width</p>
+  <button type="button" class="btn btn-primary btn-lg btn-block">Create engagement<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button>
+
+  <p class="note">One primary action per view. Hover and pressed states step down the accent ramp;
+  keyboard focus is the 2px accent <code>:focus-visible</code> ring at 2px offset. Icon-only buttons
+  always carry an <code>aria-label</code>.</p>
+
+</main>
+</body>
+</html>

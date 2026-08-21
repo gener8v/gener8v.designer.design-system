@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Deck</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  .deck-page { max-width: var(--container-lg); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+</style>
+</head>
+<body>
+<div class="deck-page">
+  <p class="label">Deck template · eight slides</p>
+  <div class="deck" style="margin-block-start:var(--space-5)">
+
+    <section class="slide slide-cover bg-dot-grid" aria-label="Cover">
+      <span class="slide-rule"></span>
+      <p class="slide-kicker">Current-state assessment · August 2026</p>
+      <h1 class="slide-title">AI that survives an audit</h1>
+      <p class="slide-lede">Commonwealth of Virginia · Engagement G8V-2026-014</p>
+      <div class="slide-foot"><span>GENER8V</span><span class="slide-num">01</span></div>
+    </section>
+
+    <section class="slide" aria-label="Contents">
+      <p class="slide-kicker">Contents</p>
+      <ul class="slide-list">
+        <li><span class="slide-marker">01</span>Where the evidence is today</li>
+        <li><span class="slide-marker">02</span>What the control set actually covers</li>
+        <li><span class="slide-marker">03</span>The four gaps, and which one matters</li>
+        <li><span class="slide-marker">04</span>What we recommend, and what it costs</li>
+      </ul>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">02</span></div>
+    </section>
+
+    <section class="slide slide-divider" aria-label="Section: findings">
+      <p class="slide-kicker">Section 01</p>
+      <h2 class="slide-title">Where the evidence is today</h2>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">03</span></div>
+    </section>
+
+    <section class="slide" aria-label="Coverage">
+      <p class="slide-kicker">01 / Coverage</p>
+      <h2 class="slide-title">Three of five sources are evidenced</h2>
+      <div class="slide-split">
+        <div>
+          <p class="slide-body">Access logs, key rotation and the runbook are captured and replayable.
+            The incident record and the vendor attestation are not — both are asserted in prose with no
+            artifact behind them.</p>
+        </div>
+        <div class="stack" style="gap:2cqw">
+          <div class="meter" role="meter" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Auditability">
+            <div class="meter-head"><span class="meter-label">Auditability</span><span class="meter-value">91%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:91%"></div></div>
+          </div>
+          <div class="meter" data-tone="warning" role="meter" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Control coverage">
+            <div class="meter-head"><span class="meter-label">Control coverage</span><span class="meter-value">62%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:62%"></div></div>
+          </div>
+          <div class="meter" data-tone="danger" role="meter" aria-valuenow="24" aria-valuemin="0" aria-valuemax="100" aria-label="Evidence attached">
+            <div class="meter-head"><span class="meter-label">Evidence attached</span><span class="meter-value">24%</span></div>
+            <div class="meter-track"><div class="meter-fill" style="inline-size:24%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">04</span></div>
+    </section>
+
+    <section class="slide" aria-label="Findings table">
+      <p class="slide-kicker">01 / Findings</p>
+      <h2 class="slide-title">Four gaps, one of them blocking</h2>
+      <div class="table-wrap" style="margin-block-start:2cqw">
+        <table class="table table-compact">
+          <thead><tr><th scope="col">Control</th><th scope="col">Gap</th><th scope="col">Status</th><th scope="col" data-numeric>Effort</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" data-nowrap>AU-6</td><td>Service accounts excluded from review</td><td><span class="tag tag-danger tag-dot">Blocking</span></td><td class="num">2 wk</td></tr>
+            <tr><td class="mono" data-nowrap>IR-4</td><td>Incident record is prose, not artifact</td><td><span class="tag tag-warning tag-dot">Open</span></td><td class="num">1 wk</td></tr>
+            <tr><td class="mono" data-nowrap>SC-13</td><td>Rotation evidenced, cadence unproven</td><td><span class="tag tag-warning tag-dot">Open</span></td><td class="num">3 d</td></tr>
+            <tr><td class="mono" data-nowrap>AC-2</td><td>Vendor attestation missing</td><td><span class="tag tag-neutral">Noted</span></td><td class="num">1 d</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">05</span></div>
+    </section>
+
+    <section class="slide slide-divider" aria-label="Section: recommendation">
+      <p class="slide-kicker">Section 02</p>
+      <h2 class="slide-title">What we recommend</h2>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">06</span></div>
+    </section>
+
+    <section class="slide" aria-label="Quote">
+      <p class="slide-kicker">In the client's words</p>
+      <blockquote class="slide-quote" style="margin-block-start:3cqw">
+        &ldquo;The audit trail was the thing we could never produce on demand. Now it produces itself.&rdquo;
+      </blockquote>
+      <p class="slide-body" style="margin-block-start:2.5cqw">Director of Information Security</p>
+      <div class="slide-foot"><span>G8V-2026-014</span><span class="slide-num">07</span></div>
+    </section>
+
+    <section class="slide slide-cover" aria-label="Close">
+      <span class="slide-rule"></span>
+      <h2 class="slide-title">Fix AU-6 first. The rest follow from it.</h2>
+      <p class="slide-lede">Two weeks, fixed fee. Nothing else changes until the review procedure does.</p>
+      <div class="slide-foot"><span>GENER8V · info@gener8v.com</span><span class="slide-num">08</span></div>
+    </section>
+
+  </div>
+</div>
+</body>
+</html>

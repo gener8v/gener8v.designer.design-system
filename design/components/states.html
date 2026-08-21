@@ -1,0 +1,79 @@
+<!-- @dsCard group="Components" name="States" subtitle="The six states every flow passes through — most systems ship only the first" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — States</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-8) 0 var(--space-3); }
+.demo-head:first-child { margin-top: 0; }
+.frame { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">1 · Loading</p>
+  <div class="frame"><div class="state state-tight" aria-busy="true">
+    <span class="spinner spinner-lg"></span>
+    <p class="state-title">Checking controls</p>
+    <p class="state-body">Reading the current control set from the audit log.</p>
+  </div></div>
+
+  <p class="demo-head label">2 · Empty</p>
+  <div class="frame"><div class="state state-tight">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg></span>
+    <p class="state-title">No engagements yet</p>
+    <p class="state-body">Engagements appear here once a statement of work is countersigned.</p>
+    <div class="state-actions"><button type="button" class="btn btn-primary btn-sm">Create engagement</button></div>
+  </div></div>
+
+  <p class="demo-head label">3 · Partial — some of it worked</p>
+  <div class="frame"><div class="state state-tight" data-tone="warning">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg></span>
+    <p class="state-title">3 of 5 sources loaded</p>
+    <p class="state-body">Two systems did not respond. Figures below exclude them.</p>
+    <div class="state-actions">
+      <button type="button" class="btn btn-secondary btn-sm">Retry the two</button>
+      <button type="button" class="btn btn-ghost btn-sm">Continue anyway</button>
+    </div>
+  </div></div>
+
+  <p class="demo-head label">4 · Error</p>
+  <div class="frame"><div class="state state-tight" data-tone="danger">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg></span>
+    <p class="state-title">Could not load the control set</p>
+    <p class="state-body">The audit service did not respond. Nothing was changed.</p>
+    <div class="state-actions"><button type="button" class="btn btn-primary btn-sm">Try again</button></div>
+    <p class="state-detail">AUDIT_TIMEOUT · req 4f2a91c · 14:02:11Z</p>
+  </div></div>
+
+  <p class="demo-head label">5 · Permission denied</p>
+  <div class="frame"><div class="state state-tight">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96ZM208,208H48V96H208V208Z"/></svg></span>
+    <p class="state-title">You do not have access to the audit log</p>
+    <p class="state-body">Access is granted per engagement. Ask the engagement lead to add you.</p>
+    <div class="state-actions"><button type="button" class="btn btn-secondary btn-sm">Request access</button></div>
+  </div></div>
+
+  <p class="demo-head label">6 · Success</p>
+  <div class="frame"><div class="state state-tight" data-tone="success">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg></span>
+    <p class="state-title">Engagement signed</p>
+    <p class="state-body">G8V-2026-014 is live. The audit trail starts from now.</p>
+    <div class="state-actions"><button type="button" class="btn btn-primary btn-sm">Open engagement</button></div>
+  </div></div>
+
+  <p class="note">Every state names what happened, whether anything changed, and what to do next.
+  Error carries a <code>.state-detail</code> line a support engineer can quote and a user can ignore.
+  <strong>Partial</strong> is the one most systems omit, and the one that matters most in audited
+  environments — a figure computed from three of five sources must say so.</p>
+
+</main>
+</body>
+</html>

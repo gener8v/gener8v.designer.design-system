@@ -1,0 +1,14 @@
+{
+  "name": "@gener8v/icons",
+  "version": "0.1.0",
+  "description": "The Phosphor subset the GENER8V design system actually uses, as tree-shakeable React components.",
+  "type": "module",
+  "license": "MIT",
+  "author": "GENER8V",
+  "publishConfig": { "access": "public" },
+  "exports": { ".": { "types": "./dist/index.d.ts", "default": "./dist/index.js" } },
+  "files": ["dist", "README.md"],
+  "scripts": { "build": "tsc -p tsconfig.json" },
+  "peerDependencies": { "react": ">=18" },
+  "devDependencies": { "@types/react": "^19.1.2", "typescript": "^5.7.0" }
+}

@@ -1,0 +1,50 @@
+<!-- @dsCard group="Foundations" name="Imagery" subtitle="Figures sit on the ground with a hairline and a radius; atmosphere comes from dot grid and grain" viewport="640x620" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Imagery</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 620px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+.ramp { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin-bottom: var(--space-2); }
+.ramp div { forced-color-adjust: none; aspect-ratio: 1 / 1.35; border-radius: var(--radius-xs); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-family: var(--font-mono); font-size: 9px; }
+.roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.role { border: 1px solid var(--color-divider); border-radius: var(--radius-sm); overflow: hidden; }
+.role .chip { height: 56px; forced-color-adjust: none; }
+.role .meta { padding: var(--space-2); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; }
+.kv { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-2) var(--space-4); font-family: var(--font-mono); font-size: var(--text-xs); align-items: center; }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Figure treatment</p>
+  <figure style="margin:0">
+    <div style="border:1px solid var(--color-divider);border-radius:var(--radius-md);overflow:hidden;background:var(--color-surface);padding:var(--space-8);display:grid;place-items:center">
+      <img src="../assets/logo.png" alt="GENER8V" style="height:var(--space-24);width:auto" />
+    </div>
+    <figcaption class="label" style="margin-top:var(--space-3)">Figure 01 — the mark on a surface panel</figcaption>
+  </figure>
+
+  <p class="demo-head label">Atmosphere</p>
+  <div class="row" style="gap:var(--space-3);align-items:stretch">
+    <div class="bg-dot-grid" style="flex:1;height:var(--space-24);border:1px solid var(--color-divider);border-radius:var(--radius-md)"></div>
+    <div class="section-band" style="flex:1;height:var(--space-24);border-radius:var(--radius-md);display:grid;place-items:center">
+      <span class="label">Section band</span>
+    </div>
+  </div>
+
+  <p class="note">This is a light system: images sit <em>on</em> the ground rather than blending into it.
+  Give every figure a hairline border and <code>--radius-md</code>. The dot grid and the grain overlay
+  supply atmosphere on otherwise empty ground; the saturated band is the one place the accent floods,
+  and it is used once per page at most.</p>
+
+</main>
+</body>
+</html>

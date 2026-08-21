@@ -1,0 +1,11 @@
+{
+  "name": "@gener8v/tailwind-preset",
+  "version": "0.1.0",
+  "description": "Tailwind v4 @theme over the GENER8V tokens, so utilities and the component layer share one source.",
+  "type": "module",
+  "license": "MIT",
+  "author": "GENER8V",
+  "publishConfig": { "access": "public" },
+  "exports": { "./theme.css": "./theme.css" },
+  "files": ["theme.css", "README.md"]
+}

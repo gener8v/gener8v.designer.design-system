@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — App shell</title>
+<link rel="stylesheet" href="../../styles.css" />
+<style>
+  html, body { block-size: 100%; }
+  /* Header pinned, rail and content scroll independently — the rail must not
+     scroll away when a long table does. */
+  .shell { display: grid; grid-template-rows: auto minmax(0, 1fr); block-size: 100%; }
+  .shell-body { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); min-block-size: 0; }
+  .shell-rail { overflow-y: auto; }
+  .shell-main { overflow-y: auto; padding: var(--space-8); }
+  .shell-head { display: flex; align-items: flex-start; gap: var(--space-4); flex-wrap: wrap; }
+  .shell-actions { margin-inline-start: auto; display: flex; gap: var(--space-2); }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); margin-block: var(--space-6); }
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-6); align-items: start; }
+  @media (max-width: 900px) {
+    .shell-body { grid-template-columns: minmax(0, 1fr); }
+    .shell-rail { display: none; }
+    .split { grid-template-columns: minmax(0, 1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="nav" aria-label="Main">
+    <a class="nav-brand" href="#"><img src="../../assets/logo.png" alt="" />GENER8V</a>
+    <div class="nav-links">
+      <a class="nav-item" href="#" aria-current="page">Delivery</a>
+      <a class="nav-item" href="#">Governance</a>
+      <a class="nav-item" href="#">Reporting</a>
+    </div>
+    <button type="button" class="btn btn-secondary btn-sm">
+      <svg viewBox="0 0 256 256" fill="currentColor"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+      Search<span class="menu-shortcut">⌘K</span>
+    </button>
+    <button type="button" class="hamburger nav-burger" aria-expanded="false" aria-label="Open menu">
+      <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+    </button>
+    <span class="avatar avatar-sm" style="margin-inline-start:var(--space-3)">TE</span>
+  </nav>
+
+  <div class="shell-body">
+    <nav class="sidebar shell-rail" aria-label="Delivery">
+      <p class="sidebar-group">Delivery</p>
+      <a class="sidebar-item" href="#" aria-current="page">Engagements<span class="sidebar-count">14</span></a>
+      <a class="sidebar-item" href="#">Work items<span class="sidebar-count">62</span></a>
+      <a class="sidebar-item" href="#">Reviews<span class="sidebar-count">3</span></a>
+      <p class="sidebar-group">Governance</p>
+      <a class="sidebar-item" href="#">Controls</a>
+      <a class="sidebar-item" href="#">Evidence</a>
+      <a class="sidebar-item" href="#">Audit log</a>
+      <p class="sidebar-group">Knowledge</p>
+      <a class="sidebar-item" href="#">Graph</a>
+      <a class="sidebar-item" href="#">Reports</a>
+    </nav>
+
+    <main class="shell-main">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="#">Delivery</a><span class="breadcrumb-sep" aria-hidden="true">/</span>
+        <span aria-current="page">Engagements</span>
+      </nav>
+
+      <div class="shell-head" style="margin-block-start:var(--space-3)">
+        <div>
+          <h1>Engagements</h1>
+          <p class="lede" style="margin-block-start:var(--space-2);font-size:var(--text-base)">Fourteen active across five sectors.</p>
+        </div>
+        <div class="shell-actions">
+          <div class="segmented" role="radiogroup" aria-label="Range">
+            <button type="button" class="segmented-item" role="radio" aria-checked="true">Quarter</button>
+            <button type="button" class="segmented-item" role="radio" aria-checked="false">Year</button>
+          </div>
+          <button type="button" class="btn btn-primary">New engagement</button>
+        </div>
+      </div>
+
+      <div class="stat-row">
+        <div class="card card-pad-sm"><div class="stat"><p class="stat-label">Active</p><p class="stat-value">14</p><p class="stat-delta" data-dir="up">Up 3 this quarter</p></div></div>
+        <div class="card card-pad-sm"><div class="stat"><p class="stat-label">Cost avoided</p><p class="stat-value">$3.0M</p><p class="stat-note">Trailing twelve months</p></div></div>
+        <div class="card card-pad-sm"><div class="stat"><p class="stat-label">Open findings</p><p class="stat-value">21</p><p class="stat-delta" data-dir="down">Down 23 since Sept</p></div></div>
+        <div class="card card-pad-sm"><div class="stat"><p class="stat-label">Auditability</p><p class="stat-value">91%</p><p class="stat-note">Across all engagements</p></div></div>
+      </div>
+
+      <div class="split">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">Active engagements</span>
+            <button type="button" class="btn btn-secondary btn-sm">Export</button>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr>
+                <th scope="col" aria-sort="descending"><button type="button">Code</button></th>
+                <th scope="col">Client</th>
+                <th scope="col">Status</th>
+                <th scope="col" data-numeric>Coverage</th>
+              </tr></thead>
+              <tbody>
+                <tr><td class="mono" data-nowrap>G8V-2026-014</td><td>Commonwealth of Virginia</td><td><span class="tag tag-success tag-dot">Live</span></td><td class="num">91%</td></tr>
+                <tr><td class="mono" data-nowrap>G8V-2026-011</td><td>Northlake Health</td><td><span class="tag tag-accent">In review</span></td><td class="num">62%</td></tr>
+                <tr><td class="mono" data-nowrap>G8V-2025-208</td><td>Meridian Financial</td><td><span class="tag tag-warning tag-dot">Blocked</span></td><td class="num">59%</td></tr>
+                <tr><td class="mono" data-nowrap>G8V-2025-190</td><td>Atlas Logistics</td><td><span class="tag tag-outline">Archived</span></td><td class="num">100%</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="stack" style="gap:var(--space-4)">
+          <div class="card card-pad-sm">
+            <p class="card-kicker">Coverage</p>
+            <div class="stack" style="gap:var(--space-4);margin-block-start:var(--space-3)">
+              <div class="meter" role="meter" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Auditability">
+                <div class="meter-head"><span class="meter-label">Auditability</span><span class="meter-value">91%</span></div>
+                <div class="meter-track"><div class="meter-fill" style="inline-size:91%"></div></div>
+              </div>
+              <div class="meter" data-tone="warning" role="meter" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Evidence attached">
+                <div class="meter-head"><span class="meter-label">Evidence attached</span><span class="meter-value">62%</span></div>
+                <div class="meter-track"><div class="meter-fill" style="inline-size:62%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-pad-sm">
+            <p class="card-kicker">Recent activity</p>
+            <div class="timeline" style="margin-block-start:var(--space-3)">
+              <div class="timeline-item" data-state="current"><span class="timeline-marker"></span>
+                <div><p class="timeline-time">14:02 · today</p><p class="timeline-title">WI-118 closed</p></div></div>
+              <div class="timeline-item"><span class="timeline-marker"></span>
+                <div><p class="timeline-time">09:40 · today</p><p class="timeline-title">Scope countersigned</p></div></div>
+              <div class="timeline-item"><span class="timeline-marker"></span>
+                <div><p class="timeline-time">16 Aug</p><p class="timeline-title">G8V-2026-014 created</p></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>
+</body>
+</html>

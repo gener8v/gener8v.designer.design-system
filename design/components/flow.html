@@ -1,0 +1,99 @@
+<!-- @dsCard group="Components" name="Flow controls" subtitle="Stepper, progress, timeline, pagination and skeletons — the parts a flow is built from" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Flow controls</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.pair { display: flex; gap: var(--space-6); align-items: center; flex-wrap: wrap; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Stepper</p>
+  <div class="stepper">
+    <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Scope</span><span class="step-connector"></span></div>
+    <div class="step" data-state="complete"><span class="step-marker">2</span><span class="step-label">Controls</span><span class="step-connector"></span></div>
+    <div class="step" aria-current="step"><span class="step-marker">3</span><span class="step-label">Review</span><span class="step-connector"></span></div>
+    <div class="step"><span class="step-marker">4</span><span class="step-label">Sign</span></div>
+  </div>
+
+  <p class="demo-head label">Progress</p>
+  <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">
+    <div class="progress-bar" style="inline-size:62%"></div>
+  </div>
+  <div class="progress progress-indeterminate" role="progressbar" aria-label="Working" style="margin-top:var(--space-3)">
+    <div class="progress-bar"></div>
+  </div>
+
+  <div class="pair" style="margin-top:var(--space-5)">
+    <div class="progress-ring" style="--progress:62" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Controls met">
+      <span class="progress-ring-value">62%</span>
+    </div>
+    <div class="progress-ring" style="--progress:91" role="progressbar" aria-valuenow="91" aria-valuemin="0" aria-valuemax="100" aria-label="Auditability">
+      <span class="progress-ring-value">91%</span>
+    </div>
+    <span class="muted" style="font-size:var(--text-sm)">One conic gradient, one <code>--progress</code> custom property.</span>
+  </div>
+
+  <p class="demo-head label">Spinner</p>
+  <div class="pair">
+    <span class="spinner spinner-sm"></span>
+    <span class="spinner"></span>
+    <span class="spinner spinner-lg"></span>
+  </div>
+
+  <p class="demo-head label">Skeleton</p>
+  <div class="card">
+    <div class="pair" style="gap:var(--space-4);align-items:flex-start">
+      <span class="skeleton skeleton-circle"></span>
+      <div style="flex:1;display:grid;gap:var(--space-2)">
+        <span class="skeleton skeleton-title" style="inline-size:60%"></span>
+        <span class="skeleton skeleton-text"></span>
+        <span class="skeleton skeleton-text" style="inline-size:80%"></span>
+      </div>
+    </div>
+  </div>
+
+  <p class="demo-head label">Pagination</p>
+  <nav class="pagination" aria-label="Pagination">
+    <button type="button" class="pagination-item">Prev</button>
+    <button type="button" class="pagination-item" aria-current="page">1</button>
+    <button type="button" class="pagination-item">2</button>
+    <button type="button" class="pagination-item">3</button>
+    <span class="pagination-gap">…</span>
+    <button type="button" class="pagination-item">24</button>
+    <button type="button" class="pagination-item">Next</button>
+  </nav>
+
+  <p class="demo-head label">Timeline</p>
+  <div class="timeline">
+    <div class="timeline-item" data-state="current">
+      <span class="timeline-marker"></span>
+      <div><p class="timeline-time">14:02 · today</p><p class="timeline-title">Control review opened</p><p class="timeline-body">Assigned to the delivery lead.</p></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-marker"></span>
+      <div><p class="timeline-time">09:40 · today</p><p class="timeline-title">Scope countersigned</p></div>
+    </div>
+    <div class="timeline-item">
+      <span class="timeline-marker"></span>
+      <div><p class="timeline-time">16 Aug</p><p class="timeline-title">Engagement created</p></div>
+    </div>
+  </div>
+
+  <p class="note">Step position is carried by <code>data-state</code> and <code>aria-current="step"</code>,
+  so the marker, the connector and the announcement read one source. Every progress element is a real
+  <code>role="progressbar"</code> with <code>aria-valuenow</code> — the bar is not decoration.</p>
+
+</main>
+</body>
+</html>

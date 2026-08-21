@@ -1,0 +1,80 @@
+<!-- @dsCard group="Foundations" name="Color" subtitle="Six roles, two working ramps, and status held to five steps — generated in OKLCH" viewport="640x820" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Color</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 620px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+.ramp { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin-bottom: var(--space-2); }
+.ramp div { forced-color-adjust: none; aspect-ratio: 1 / 1.35; border-radius: var(--radius-xs); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-family: var(--font-mono); font-size: 9px; }
+.roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
+.role { border: 1px solid var(--color-divider); border-radius: var(--radius-sm); overflow: hidden; }
+.role .chip { height: 56px; forced-color-adjust: none; }
+.role .meta { padding: var(--space-2); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; }
+.kv { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-2) var(--space-4); font-family: var(--font-mono); font-size: var(--text-xs); align-items: center; }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Roles</p>
+  <div class="roles"><div class="role">
+      <div class="chip" style="background:#FFFFFF;box-shadow:inset 0 0 0 1px var(--color-divider)"></div>
+      <div class="meta">--color-bg<br><span class="muted">#FFFFFF</span><br><span class="muted">Page ground</span></div>
+    </div><div class="role">
+      <div class="chip" style="background:#F7F9FC;"></div>
+      <div class="meta">--color-surface<br><span class="muted">#F7F9FC</span><br><span class="muted">Raised surface</span></div>
+    </div><div class="role">
+      <div class="chip" style="background:#111827;"></div>
+      <div class="meta">--color-text<br><span class="muted">#111827</span><br><span class="muted">Body ink</span></div>
+    </div><div class="role">
+      <div class="chip" style="background:#2563EB;"></div>
+      <div class="meta">--color-accent<br><span class="muted">#2563EB</span><br><span class="muted">Action</span></div>
+    </div><div class="role">
+      <div class="chip" style="background:#0891B2;"></div>
+      <div class="meta">--color-accent-2<br><span class="muted">#0891B2</span><br><span class="muted">Secondary accent</span></div>
+    </div><div class="role">
+      <div class="chip" style="background:color-mix(in srgb, #182030 12%, transparent);box-shadow:inset 0 0 0 1px var(--color-divider)"></div>
+      <div class="meta">--color-divider<br><span class="muted">color-mix(in srgb, #182030 12%, transparent)</span><br><span class="muted">Hairline</span></div>
+    </div></div>
+
+  <p class="demo-head label">Neutral — the workhorse. Near-white at 100, cool ink at 900</p><div class="ramp"><div style="background:#F2F4F7;color:#182030">100</div><div style="background:#E2E6ED;color:#182030">200</div><div style="background:#CAD0DA;color:#182030">300</div><div style="background:#ABB2C0;color:#182030">400</div><div style="background:#8991A0;color:#fff">500</div><div style="background:#697181;color:#fff">600</div><div style="background:#4B5464;color:#fff">700</div><div style="background:#2F3848;color:#fff">800</div><div style="background:#182030;color:#fff">900</div></div>
+  <p class="demo-head label">Accent — the only colour that carries an action</p><div class="ramp"><div style="background:#EEF4FF;color:#182030">100</div><div style="background:#D9E6FF;color:#182030">200</div><div style="background:#B7D0FF;color:#182030">300</div><div style="background:#88B1FF;color:#182030">400</div><div style="background:#528AFF;color:#fff">500</div><div style="background:#2664EC;color:#fff">600</div><div style="background:#1547B7;color:#fff">700</div><div style="background:#0C307E;color:#fff">800</div><div style="background:#071C4A;color:#fff">900</div></div>
+
+  <p class="demo-head label">Reserved</p>
+  <div class="kv" style="grid-template-columns:14ch 1fr">
+    <span>accent-2</span>
+    <span style="display:flex;align-items:center;gap:var(--space-2)">
+      <span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#91DCF6"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#289FC1"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#005D73"></span>
+      <span class="muted">data series only — never a second button colour</span></span>
+    <span>success</span>
+      <span style="display:flex;align-items:center;gap:var(--space-2)">
+        <span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#DDFDEC"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#91E4BD"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#00865D"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#006344"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#00432D"></span>
+        <span class="muted">tint · border · base · hover · pressed</span></span><span>warning</span>
+      <span style="display:flex;align-items:center;gap:var(--space-2)">
+        <span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#FFF1E7"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#FFC091"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#A85A00"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#7D4200"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#562B00"></span>
+        <span class="muted">tint · border · base · hover · pressed</span></span><span>danger</span>
+      <span style="display:flex;align-items:center;gap:var(--space-2)">
+        <span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#FFF0EE"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#FFBCB3"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#D1151B"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#A0000C"></span><span style="width:var(--space-6);height:var(--space-6);border-radius:var(--radius-xs);background:#6F0006"></span>
+        <span class="muted">tint · border · base · hover · pressed</span></span>
+  </div>
+
+  <p class="demo-head label">Contrast on the page ground</p>
+  <div class="kv">
+    <span>17.74:1</span><span class="muted">--color-text — body text</span><span>7.63:1</span><span class="muted">--color-neutral-700 — body text</span><span>3.17:1</span><span class="muted">--color-neutral-500 — large text and chrome only</span><span>5.17:1</span><span class="muted">--color-accent — body text</span><span>8.02:1</span><span class="muted">--color-accent-700 — body text</span><span>5.48:1</span><span class="muted">--color-danger — body text</span>
+  </div>
+
+  <p class="note">Chroma stays low outside the accent. Neutral chroma rises toward the dark end, so
+  shadows read cool and highlights stay near-white — the greys are tinted, never flat. Prefer a ramp
+  step over an ad-hoc <code>color-mix()</code>.</p>
+
+</main>
+</body>
+</html>

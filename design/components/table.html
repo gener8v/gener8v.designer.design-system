@@ -1,0 +1,101 @@
+<!-- @dsCard group="Components" name="Table" subtitle="Hairline rules, mono headers, tabular figures — sort state carried by aria-sort" viewport="640x820" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Table</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Table in a panel</p>
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">Engagements</span>
+      <button type="button" class="btn btn-secondary btn-sm">Export</button>
+    </div>
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col"><input class="checkbox" type="checkbox" aria-label="Select all" /></th>
+            <th scope="col" aria-sort="descending"><button type="button">Code</button></th>
+            <th scope="col"><button type="button">Client</button></th>
+            <th scope="col">Status</th>
+            <th scope="col" data-numeric>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr aria-selected="true">
+            <td><input class="checkbox" type="checkbox" checked aria-label="Select G8V-2026-014" /></td>
+            <td class="mono" data-nowrap>G8V-2026-014</td>
+            <td>Commonwealth of Virginia</td>
+            <td><span class="tag tag-success tag-dot">Live</span></td>
+            <td class="num">1,240,000</td>
+          </tr>
+          <tr>
+            <td><input class="checkbox" type="checkbox" aria-label="Select G8V-2026-011" /></td>
+            <td class="mono" data-nowrap>G8V-2026-011</td>
+            <td>Northlake Health</td>
+            <td><span class="tag tag-accent">In review</span></td>
+            <td class="num">385,500</td>
+          </tr>
+          <tr>
+            <td><input class="checkbox" type="checkbox" aria-label="Select G8V-2025-208" /></td>
+            <td class="mono" data-nowrap>G8V-2025-208</td>
+            <td>Meridian Financial</td>
+            <td><span class="tag tag-warning tag-dot">Blocked</span></td>
+            <td class="num">92,000</td>
+          </tr>
+          <tr>
+            <td><input class="checkbox" type="checkbox" aria-label="Select G8V-2025-190" /></td>
+            <td class="mono" data-nowrap>G8V-2025-190</td>
+            <td>Atlas Logistics</td>
+            <td><span class="tag tag-outline">Archived</span></td>
+            <td class="num">7,400</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="demo-head label">Compact</p>
+  <div class="panel">
+    <div class="table-wrap">
+      <table class="table table-compact">
+        <thead><tr><th scope="col">Control</th><th scope="col">Owner</th><th scope="col" data-numeric>Findings</th></tr></thead>
+        <tbody>
+          <tr><td data-nowrap>AC-2 Account management</td><td>Platform</td><td class="num">0</td></tr>
+          <tr><td data-nowrap>AU-6 Audit review</td><td>Delivery</td><td class="num">2</td></tr>
+          <tr><td data-nowrap>SC-13 Cryptography</td><td>Platform</td><td class="num">0</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <p class="demo-head label">Empty</p>
+  <div class="panel">
+    <div class="table-empty">
+      <p class="table-empty-title">No engagements yet</p>
+      <p>Engagements appear here once a statement of work is countersigned.</p>
+      <button type="button" class="btn btn-primary btn-sm" style="margin-top:var(--space-2)">Create engagement</button>
+    </div>
+  </div>
+
+  <p class="note">Rules, not stripes — on a light ground a hairline is enough separation and striping
+  doubles the noise. Headers are the mono voice. Figures are tabular and end-aligned, so digits line
+  up down the column. Sort state lives in <code>aria-sort</code> and selection in
+  <code>aria-selected</code>, so a screen reader and the styling read the same source.</p>
+
+</main>
+</body>
+</html>

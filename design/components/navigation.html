@@ -1,0 +1,104 @@
+<!-- @dsCard group="Components" name="Navigation" subtitle="Header, sidebar, tabs, breadcrumbs and the hamburger — active state keys off aria-current" viewport="640x1000" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Navigation</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.frame { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; }
+.frame-scroll { overflow-x: auto; }
+.stage-tall { height: var(--space-32); }
+.stage { position: relative; height: calc(var(--space-32) * 1.75); background: var(--color-surface); overflow: hidden; }
+.pair { display: flex; gap: var(--space-6); align-items: center; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Header — wide</p>
+  <div class="frame frame-scroll">
+    <nav class="nav" style="min-width:var(--container-md)">
+      <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
+      <div class="nav-links">
+        <a class="nav-item" href="#" aria-current="page">What we do</a>
+        <a class="nav-item" href="#">Who we are</a>
+        <a class="nav-item" href="#">Writing</a>
+      </div>
+      <a class="btn btn-primary btn-sm" href="#">Start a conversation</a>
+    </nav>
+  </div>
+
+  <p class="demo-head label">Header — narrow, collapsed to the hamburger</p>
+  <div class="frame">
+    <nav class="nav">
+      <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
+      <button type="button" class="hamburger" aria-expanded="false" aria-label="Open menu">
+        <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+      </button>
+    </nav>
+  </div>
+
+  <p class="demo-head label">Hamburger — closed and open</p>
+  <div class="pair">
+    <button type="button" class="hamburger" aria-expanded="false" aria-label="Open menu">
+      <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+    </button>
+    <button type="button" class="hamburger" aria-expanded="true" aria-label="Close menu">
+      <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+    </button>
+    <span class="muted" style="font-size:var(--text-sm)">One button, one <code>aria-expanded</code>. The bars morph; nothing is swapped out.</span>
+  </div>
+
+  <p class="demo-head label">Drawer</p>
+  <div class="frame stage">
+    <div class="drawer-scrim"></div>
+    <div class="drawer-panel">
+      <button type="button" class="hamburger" aria-expanded="true" aria-label="Close menu" style="align-self:flex-end">
+        <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+      </button>
+      <a class="nav-item" href="#" aria-current="page">What we do</a>
+      <a class="nav-item" href="#">Who we are</a>
+      <a class="nav-item" href="#">Writing</a>
+    </div>
+  </div>
+
+  <p class="demo-head label">Sidebar</p>
+  <div class="frame" style="display:flex">
+    <nav class="sidebar">
+      <p class="sidebar-group">Delivery</p>
+      <a class="sidebar-item" href="#" aria-current="page">Engagements<span class="sidebar-count">14</span></a>
+      <a class="sidebar-item" href="#">Deliverables<span class="sidebar-count">62</span></a>
+      <a class="sidebar-item" href="#">Reviews<span class="sidebar-count">3</span></a>
+      <p class="sidebar-group">Governance</p>
+      <a class="sidebar-item" href="#">Audit log</a>
+      <a class="sidebar-item" href="#">Controls</a>
+    </nav>
+    <div style="flex:1;padding:var(--space-6)">
+      <p class="breadcrumbs">
+        <a href="#">Delivery</a><span class="breadcrumb-sep">/</span>
+        <a href="#">Engagements</a><span class="breadcrumb-sep">/</span>
+        <span aria-current="page">G8V-2026-014</span>
+      </p>
+      <div class="tabs" style="margin-top:var(--space-5)">
+        <button type="button" class="tab" aria-selected="true">Overview</button>
+        <button type="button" class="tab" aria-selected="false">Scope</button>
+        <button type="button" class="tab" aria-selected="false">Audit</button>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">Active state is driven by <code>aria-current</code> (and <code>aria-selected</code>
+  on tabs), never by an <code>.is-active</code> class — the styling and the accessibility tree cannot
+  drift apart. The hamburger is a single button whose bars morph on
+  <code>aria-expanded</code>; nothing is swapped for an X glyph.</p>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,25 @@
+/* ----------------------------------------------------------------- popover */
+
+/* Non-modal: it floats over the page but does not take it over. No backdrop,
+   no focus trap — a popover the user cannot Tab out of is a dialog wearing
+   the wrong clothes. */
+.popover {
+  min-inline-size: 240px;
+  max-inline-size: 360px;
+  padding: var(--space-4);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+  z-index: 70;
+}
+.popover-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--text-base);
+  color: var(--color-neutral-900);
+  margin-block-end: var(--space-2);
+}
+.popover-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-block-start: var(--space-4); }

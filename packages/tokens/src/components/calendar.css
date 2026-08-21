@@ -1,0 +1,73 @@
+/* ---------------------------------------------------------------- calendar */
+
+.calendar {
+  inline-size: fit-content;
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 70;
+}
+
+.calendar-head { display: flex; align-items: center; gap: var(--space-1); margin-block-end: var(--space-2); }
+.calendar-title {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+.calendar-nav {
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+}
+.calendar-nav:hover { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.calendar-nav svg { inline-size: var(--space-4); block-size: var(--space-4); }
+
+.calendar-grid { border-collapse: collapse; }
+.calendar-grid th {
+  inline-size: var(--space-8);
+  padding-block: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  color: var(--color-neutral-600);
+}
+.calendar-grid td { padding: 1px; }
+
+.calendar-day {
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-800);
+  cursor: pointer;
+}
+.calendar-day:hover { background: var(--color-neutral-100); }
+.calendar-day[data-outside] { color: var(--color-neutral-400); }
+
+/* Today is an outline; selected is a fill. Both can be true at once, so they
+   must not use the same channel. */
+.calendar-day[data-today] { box-shadow: inset 0 0 0 1px var(--color-accent-400); }
+.calendar-grid td[aria-selected="true"] .calendar-day {
+  background: var(--color-action);
+  color: var(--color-bg);
+  font-weight: 500;
+}
+.calendar-day[aria-disabled="true"] {
+  color: var(--color-neutral-300);
+  pointer-events: none;
+  text-decoration: line-through;
+}
