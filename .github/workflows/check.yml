@@ -1,0 +1,38 @@
+name: check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with: { version: 10 }
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Eleven gates: token round-trip, WCAG contrast, chart-palette validation,
+      # HTML/React parity, package builds, a built-package smoke test, the test
+      # suite, the graph benchmark, and a consumer app built against the
+      # published packages.
+      - run: pnpm check
+
+      # The README claims nothing below design/ is hand-edited. This is the
+      # claim, checked: if a generated file was edited by hand, the rebuild in
+      # `pnpm check` above will have reverted it and this diff will be dirty.
+      - name: Generated output is reproducible
+        run: |
+          if ! git diff --exit-code -- design/ packages/tailwind-preset/ figma/ skills/; then
+            echo "::error::Generated output differs from a fresh build — something below design/ was hand-edited."
+            exit 1
+          fi
