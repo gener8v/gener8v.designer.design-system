@@ -36,23 +36,42 @@ if (dirty && !dry) {
   process.exit(1);
 }
 
+const manifests = PACKAGES.map((n) => `packages/${n}/package.json`);
+const restore = () => run('git', ['checkout', '--', ...manifests], { stdio: 'ignore' });
+
 console.log(`\n▸ setting all packages to ${version}`);
 for (const name of PACKAGES) {
   const file = `packages/${name}/package.json`;
-  const pkg = JSON.parse(readFileSync(file, 'utf8'));
-  pkg.version = version;
-  writeFileSync(file, JSON.stringify(pkg, null, 2) + '\n');
+  // Patch the version line rather than round-tripping the JSON: re-serialising
+  // rewrites unicode escapes and key order, producing a diff that has nothing
+  // to do with the release.
+  const src = readFileSync(file, 'utf8');
+  const next = src.replace(/^(\s*"version":\s*")[^"]+(")/m, `$1${version}$2`);
+  if (next === src && !src.includes(`"version": "${version}"`)) {
+    console.error(`\n✗ could not find a version field in ${file}`);
+    process.exit(1);
+  }
+  writeFileSync(file, next);
   console.log(`  @gener8v/${name} → ${version}`);
 }
 
 console.log(`\n▸ publishing${dry ? ' (dry run)' : ''}`);
-for (const name of PACKAGES) {
-  run('npm', ['publish', ...(dry ? ['--dry-run'] : []), '--access', 'restricted'],
-      { cwd: `packages/${name}` });
+try {
+  for (const name of PACKAGES) {
+    run('npm', ['publish', ...(dry ? ['--dry-run'] : []), '--access', 'restricted'],
+        { cwd: `packages/${name}` });
+  }
+} catch (err) {
+  // A half-published release must not leave bumped manifests behind, or the
+  // next attempt starts from a version that partly exists.
+  restore();
+  console.error(`\n✗ publish failed — manifests restored. Packages already pushed`
+    + ` in this run stay published; npm versions cannot be reused, so bump before retrying.`);
+  process.exit(1);
 }
 
 if (dry) {
-  run('git', ['checkout', '--', ...PACKAGES.map((n) => `packages/${n}/package.json`)]);
+  restore();
   console.log('\n✓ dry run complete — versions reverted, nothing published');
   process.exit(0);
 }
