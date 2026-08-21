@@ -56,7 +56,8 @@ These are not preferences. Breaking one produces work that is off-brand or inacc
 - `design/components/*.html` — every component, every variant, as plain HTML. View source
   and copy the markup; that is what these pages are for.
 - `design/templates/` — copy-whole starting points: app shell, landing, deck, and three
-  worked flows (purchase, create a work item, close a work item).
+  worked flows (purchase, create a work item, close a work item). **Start a screen from
+  one of these.** `examples/` is a packaging fixture, not a design reference.
 - `references/components.md` — the class index, if you only need the names.
 - `docs/specs/*.md` — anatomy, variants, keyboard maps per component family.
 

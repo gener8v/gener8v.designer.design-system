@@ -18,7 +18,7 @@
     "test": "vitest run",
     "bench:graph": "node scripts/bench-graph.mjs",
     "lint:palette": "node scripts/lint-palette.mjs",
-    "verify:consumer": "pnpm --filter @gener8v/example-engagement-app typecheck && pnpm --filter @gener8v/example-engagement-app build"
+    "verify:consumer": "pnpm --filter @gener8v/consumer-check typecheck && pnpm --filter @gener8v/consumer-check check && pnpm --filter @gener8v/consumer-check build"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",

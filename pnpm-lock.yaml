@@ -33,7 +33,7 @@ importers:
         specifier: ^3.2.7
         version: 3.2.7(jsdom@30.0.1)
 
-  examples/engagement-app:
+  examples/consumer-check:
     dependencies:
       '@gener8v/icons':
         specifier: workspace:*

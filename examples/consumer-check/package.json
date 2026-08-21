@@ -1,12 +1,11 @@
 {
-  "name": "@gener8v/example-engagement-app",
+  "name": "@gener8v/consumer-check",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --port 4400",
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "preview": "vite preview --port 4400"
+    "check": "node check.mjs"
   },
   "dependencies": {
     "@gener8v/ui": "workspace:*",
