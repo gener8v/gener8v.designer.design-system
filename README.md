@@ -174,6 +174,11 @@ straight into a `@gener8v/ui` app, because the React components render the same 
    target, `finalize_plan` to lock the exact paths (you approve that list), then
    `write_files`. Target a project of type `PROJECT_TYPE_DESIGN_SYSTEM` — pushing to an
    ordinary project does not make it one, and the type cannot be changed afterwards.
+4. **Then call `register_assets`.** The `@dsCard` markers on line 1 of each page are
+   *not* enough on their own: after a clean upload the pane reported “No cards yet”, and
+   only an explicit `register_assets` call made them appear. The tool documentation
+   describes that call as legacy and unnecessary, which is not what actually happens.
+   Skipping it leaves a project with every file present and nothing to look at.
 
 ### What matters, and what does not
 
@@ -182,8 +187,12 @@ two files that change what Claude generates. The component pages drive the visua
 in the Design System pane; the templates are copy-whole starting points.
 
 **It is a snapshot.** Change a token and the uploaded bundle is stale until re-pushed.
-There is no watcher — re-run the three steps above after any change to
+There is no watcher — re-run the steps above after any change to
 `packages/tokens/src/theme.mjs` or the component layer.
+
+Only root-level `.html` counts as a “page” in the pane's file picker; everything under
+`components/` and `foundations/` shows up as a **card**, which is what you want. Do not
+push `design/_responsive.html` — it is a test harness, not a design artifact.
 
 ## Rules that are not preferences
 
