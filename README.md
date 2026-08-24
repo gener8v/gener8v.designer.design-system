@@ -13,34 +13,58 @@ pnpm check    # seven gates
 
 ## What is here
 
-```
-design/            the lab AND the deliverable — static HTML, served, reviewed, exported
-packages/tokens/   one source → CSS, TypeScript, Tailwind, DTCG, adherence config
-packages/ui/       React: 183 exports, same classes as the HTML
-packages/icons/    the 18-icon Phosphor subset the system actually uses
-packages/tailwind-preset/   Tailwind v4 @theme over the same tokens
-examples/          a packaging fixture — NOT a design reference
-skills/            the Claude Code skill
-figma/plugin/      DTCG tokens for the Figma generator
-docs/              component specs and the workflow gap analysis
-```
+Six things are generated from one. Knowing which is which is the difference between a
+change that holds and one CI reverts.
 
-## Architecture
+| Path | What it is | Authored or generated |
+| --- | --- | --- |
+| `packages/tokens/src/theme.mjs` | **The source of truth.** 135 tokens | **Authored** — start here |
+| `packages/tokens/src/base.css` | Reset, base type, focus ring, layout utilities | **Authored** |
+| `packages/tokens/src/components/*.css` | The component layer, one file per family | **Authored** |
+| `design/components/*.html` | Every component rendered, as plain HTML | **Authored** |
+| `design/templates/*/` | Designed screens to copy | **Authored** |
+| `design/styles.css` | The only stylesheet | Generated |
+| `design/foundations/*.html`, `design/index.html` | Foundations pages, home | Generated |
+| `design/theme.json`, `design/_adherence.oxlintrc.json` | Machine records | Generated |
+| `packages/tokens/dist/`, `packages/tokens/styles.css` | The token package | Generated |
+| `packages/tailwind-preset/theme.css` | Tailwind `@theme` | Generated |
+| `figma/plugin/tokens.json` | DTCG for Figma | Generated |
+| `skills/…/references/components.md` | The class index the skill reads | Generated |
+| `packages/ui/src/` | React components | **Authored** |
+| `packages/icons/src/` | 18 Phosphor glyphs | **Authored** (extracted) |
+| `examples/consumer-check/` | Packaging fixture — **not** a design reference | **Authored** |
+| `docs/specs/`, `docs/gap-analysis.md`, `docs/adoption-prompt.md` | Reasoning and handover | **Authored** |
 
-`packages/tokens/src/theme.mjs` is canonical. One build fans out, so drift is structurally
-impossible rather than merely discouraged:
+Each package carries its own README explaining its role: [`tokens`](packages/tokens/README.md)
+· [`ui`](packages/ui/README.md) · [`icons`](packages/icons/README.md) ·
+[`tailwind-preset`](packages/tailwind-preset/README.md).
 
-```
-theme.mjs ──▶ design/styles.css            the only stylesheet
-          ──▶ design/theme.json
-          ──▶ design/_adherence.oxlintrc.json
-          ──▶ packages/tokens/dist/tokens.{mjs,d.ts,json}
-          ──▶ packages/tailwind-preset/theme.css
-          ──▶ figma/plugin/tokens.json
-          ──▶ skills/…/references/components.md
-```
+## Working in this repository
 
-Nothing below `design/` is hand-edited. `git diff --exit-code design/` proves it.
+Four things are true here that are not true of most design systems, and each one will bite
+a change that ignores it.
+
+**1 · One source, six outputs.** Editing `design/styles.css` does nothing — the next build
+overwrites it, and CI fails the reproducibility check. Change `packages/tokens/src/theme.mjs`
+(values) or `packages/tokens/src/components/*.css` (the component layer), then rebuild.
+
+**2 · The static HTML and the React components share class names.** `design/components/buttons.html`
+and `packages/ui/src/Button` both produce `class="btn btn-primary"`. This is enforced:
+`pnpm lint:parity` fails if the HTML uses a class no component can emit. Adding a component
+means touching three places — the CSS, a preview page, and the React component — or the gate
+stops you.
+
+**3 · `design/` is the lab *and* a shipped artifact.** Those pages are served locally for
+review, pushed to Claude's design system, and are what the React port is derived from. They
+are not throwaway demos.
+
+**4 · State lives in ARIA.** `aria-current`, `aria-selected`, `aria-expanded`, `aria-invalid`,
+`aria-sort` — the CSS styles the attribute. There is no `.is-active` class anywhere, and
+adding one means the visual and the accessibility tree can disagree.
+
+The design rules themselves — what makes something on-brand — are in
+**[`design/readme.md`](design/readme.md)**. Read that before building a screen. It is
+lint-gated against the stylesheet, so it cannot claim a class that does not exist.
 
 ## The gates
 

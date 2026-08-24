@@ -13,7 +13,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && cp ../../design/styles.css dist/styles.css",
@@ -38,5 +39,6 @@
   "publishConfig": {
     "access": "restricted",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "description": "React components for the GENER8V design system \u2014 the same class names as its static HTML, so markup ports either direction."
 }
