@@ -76,7 +76,17 @@ if (dry) {
   process.exit(0);
 }
 
-run('git', ['add', ...PACKAGES.map((n) => `packages/${n}/package.json`)]);
-run('git', ['commit', '-m', `Release ${version}`]);
-run('git', ['tag', `v${version}`]);
-console.log(`\n✓ released ${version} — push with: git push origin main --tags`);
+// Re-releasing a version already set in the manifests produces no diff, and
+// `git commit` exits non-zero on an empty commit — which killed the run after
+// a successful publish and left the release untagged. The tag is the part that
+// has to happen either way, so it is no longer downstream of the commit.
+run('git', ['add', ...manifests]);
+const staged = execFileSync('git', ['diff', '--cached', '--name-only']).toString().trim();
+if (staged) run('git', ['commit', '-m', `Release ${version}`]);
+else console.log('  manifests already at this version — nothing to commit');
+
+const existing = execFileSync('git', ['tag', '-l', `v${version}`]).toString().trim();
+if (existing) console.log(`  tag v${version} already exists`);
+else run('git', ['tag', '-a', `v${version}`, '-m', `Release ${version}`]);
+
+console.log(`\n✓ released ${version} — push with: git push origin main --follow-tags`);
