@@ -87,24 +87,67 @@ default, and publishing brand IP to the public registry is not undoable.
 
 Use an **Automation** token for CI (it bypasses 2FA); a Publish token is fine locally.
 
-## Using it in an engagement
+## Starting a new project
+
+### 1. Install
+
+The packages are **private** to the `@gener8v` npm org, so the consuming machine needs
+auth — the same `~/.npmrc` token used to publish. Nothing goes in the project repo.
 
 ```bash
 npm i @gener8v/ui @gener8v/tokens @gener8v/icons
 ```
 ```tsx
-import '@gener8v/ui/styles.css';
+import '@gener8v/ui/styles.css';          // one stylesheet, first
 import { Button, Flow, BarChart } from '@gener8v/ui';
 ```
 
-For Claude Code:
+For that project's **CI**, add its own `NPM_TOKEN` secret and let `actions/setup-node`
+write the `.npmrc`:
+
+```yaml
+- uses: actions/setup-node@v4
+  with:
+    node-version: 24
+    registry-url: https://registry.npmjs.org
+    scope: '@gener8v'
+- run: npm ci
+  env:
+    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+```
+
+### 2. Teach Claude Code the rules
 
 ```
-/plugin marketplace add gener8v/design-system
+/plugin marketplace add gener8v/gener8v.designer.design-system
 ```
 
-Copy `design/_adherence.oxlintrc.json` into a client repo to fail its lint on raw hex
-values, raw px, and fonts the system does not provide.
+The repo is private, so the machine needs GitHub access to it. A local path works with no
+auth at all: `/plugin marketplace add /path/to/gener8v.designer.design-system`.
+
+Claude then knows the ten hard rules, the class names, and where the templates are —
+without the design system repo being open.
+
+### 3. Enforce it
+
+Copy `design/_adherence.oxlintrc.json` into the project and point its lint at it. It
+fails on raw hex, raw px, and fonts the system does not provide — which is what stops a
+codebase drifting off-brand between reviews.
+
+### 4. Start from a template, not from nothing
+
+`design/templates/` holds designed screens: `app-shell` for an application,
+`landing` for marketing, `deck` for a presentation, and three worked flows.
+Copy one and replace the content. `examples/` is a packaging fixture, not a starting
+point.
+
+## Where Claude picks it up
+
+| Surface | Mechanism | Set up by |
+| --- | --- | --- |
+| A code repository | the Claude Code plugin + npm packages | `/plugin marketplace add`, `npm i` |
+| claude.ai chat and Artifacts | the DesignSync bundle | pushing `design/` (see below) |
+| Anything else | `styles.css` on its own | linking the stylesheet |
 
 ## Publishing to Claude's design system (DesignSync)
 
