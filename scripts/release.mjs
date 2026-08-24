@@ -76,17 +76,50 @@ if (dry) {
   process.exit(0);
 }
 
-// Re-releasing a version already set in the manifests produces no diff, and
-// `git commit` exits non-zero on an empty commit — which killed the run after
-// a successful publish and left the release untagged. The tag is the part that
-// has to happen either way, so it is no longer downstream of the commit.
-run('git', ['add', ...manifests]);
-const staged = execFileSync('git', ['diff', '--cached', '--name-only']).toString().trim();
-if (staged) run('git', ['commit', '-m', `Release ${version}`]);
+// Everything past this line runs AFTER an irreversible publish, so nothing here
+// may abort the run. It did once: 0.2.0 reached npm, the version commit failed
+// on a runner with no git identity, and the tag never happened — so the registry
+// said 0.2.0 while the repository said 0.1.0. A publish cannot be taken back,
+// which makes the bookkeeping best-effort and LOUD: attempt every step, then say
+// precisely what a human still has to do.
+//
+// Re-releasing a version already set in the manifests also produces no diff, and
+// `git commit` exits non-zero on an empty commit. The tag is the part that has to
+// happen either way, so it is downstream of neither the commit nor its failure.
+const problems = [];
+const attempt = (what, fn) => {
+  try {
+    fn();
+  } catch (err) {
+    problems.push(`${what} — ${String(err.message).split('\n')[0]}`);
+  }
+};
+
+attempt('staging the manifests', () => run('git', ['add', ...manifests]));
+
+let staged = '';
+attempt('reading the staged manifests', () => {
+  staged = execFileSync('git', ['diff', '--cached', '--name-only']).toString().trim();
+});
+if (staged) attempt('committing the version bump', () =>
+  run('git', ['commit', '-m', `Release ${version}`]));
 else console.log('  manifests already at this version — nothing to commit');
 
-const existing = execFileSync('git', ['tag', '-l', `v${version}`]).toString().trim();
+let existing = '';
+attempt('listing tags', () => {
+  existing = execFileSync('git', ['tag', '-l', `v${version}`]).toString().trim();
+});
 if (existing) console.log(`  tag v${version} already exists`);
-else run('git', ['tag', '-a', `v${version}`, '-m', `Release ${version}`]);
+else attempt('tagging the release', () =>
+  run('git', ['tag', '-a', `v${version}`, '-m', `Release ${version}`]));
+
+if (problems.length) {
+  console.error(`\n✗ ${version} IS PUBLISHED — npm has it. The repository does not:`);
+  for (const problem of problems) console.error(`    ${problem}`);
+  console.error(`\n  Reconcile by hand, or the registry and this repository disagree:`);
+  console.error(`    set packages/*/package.json to ${version}, commit, tag v${version},`);
+  console.error(`    then: git push origin main --follow-tags`);
+  process.exit(1);
+}
 
 console.log(`\n✓ released ${version} — push with: git push origin main --follow-tags`);

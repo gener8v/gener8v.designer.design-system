@@ -35,6 +35,15 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      # `git commit` and `git tag -a` both need an author, and a runner has
+      # none. Without this, release.mjs publishes all four packages and then
+      # dies on the version commit — which is exactly what 0.2.0 did, leaving
+      # npm at 0.2.0 and this repository at 0.1.0.
+      - name: Identify the release committer
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Release
         run: node scripts/release.mjs "${{ inputs.version }}" ${{ inputs.dry_run && '--dry' || '' }}
         env:
