@@ -1032,8 +1032,14 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .radio-card:has(:checked) { border-color: var(--color-action); background: var(--color-accent-100); }
 .radio-card:has(:focus-visible) { outline: var(--ring-width) solid var(--ring-color); outline-offset: var(--ring-offset); }
 .radio-card-body { flex: 1; min-inline-size: 0; }
-.radio-card-title { font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-900); }
-.radio-card-note { font-size: var(--text-xs); color: var(--color-neutral-600); margin-block-start: var(--space-1); }
+/* BLOCK, BECAUSE THE COMPONENT RENDERS THESE AS SPANS.
+   `RadioCard` puts the title and the note in `<span>`s, and a span is an inline box — vertical
+   margin does nothing on one. So the note's `margin-block-start` was inert and the two ran together
+   on a single line: "TranscriptAn interview or a meeting." Declaring the display here rather than
+   changing the elements keeps the class names doing the same thing in the static HTML and in
+   React, which is the promise the whole library rests on. */
+.radio-card-title { display: block; font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-900); }
+.radio-card-note { display: block; font-size: var(--text-xs); color: var(--color-neutral-600); margin-block-start: var(--space-1); }
 .radio-card-meta {
   margin-inline-start: auto;
   font-family: var(--font-mono);
