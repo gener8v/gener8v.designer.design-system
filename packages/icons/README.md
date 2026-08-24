@@ -1,6 +1,6 @@
 # @gener8v/icons
 
-The Phosphor subset the GENER8V design system actually uses. Eighteen icons, not 1,500.
+The Phosphor subset the GENER8V design system actually uses. Twenty-one icons, not 1,500.
 
 ```bash
 npm i @gener8v/icons       # private to the @gener8v npm org
@@ -17,9 +17,15 @@ Vendoring a whole icon set into a design system makes every consumer carry 1,500
 render eight. These are the ones the system's own components and templates reference,
 extracted from them — so the set is defined by use, not by what a library happened to ship.
 
-`ArrowRight` `CaretDown` `CaretLeft` `CaretRight` `Check` `DotsThree` `DownloadSimple`
-`File` `Folder` `Image` `Info` `Lock` `MagnifyingGlass` `Plus` `Trash` `UploadSimple`
-`Warning` `X`
+`ArrowRight` `ArrowsClockwise` `CaretDown` `CaretLeft` `CaretRight` `Check` `DotsThree`
+`DownloadSimple` `File` `Folder` `GitDiff` `Image` `Info` `Lock` `MagnifyingGlass` `Plus`
+`Stamp` `Trash` `UploadSimple` `Warning` `X`
+
+Three of them are governance glyphs rather than interface furniture — `GitDiff` (a standard
+moved underneath a decision), `ArrowsClockwise` (work marked stale, waiting on a rebuild) and
+`Stamp` (an approval). They are here because a governance product will keep needing them, and
+the alternative was a second icon set in the consuming repo. Other sets name the first two
+`GitCompareArrows` and `RefreshCw`; this set is Phosphor, so it uses Phosphor's names.
 
 ## Conventions
 
