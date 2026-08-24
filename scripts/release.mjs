@@ -25,6 +25,29 @@ if (!/^\d+\.\d+\.\d+(-[\w.]+)?$/.test(version ?? '')) {
 const run = (cmd, args, opts = {}) =>
   execFileSync(cmd, args, { stdio: 'inherit', ...opts });
 
+// THE CREDENTIAL, BEFORE ANYTHING ELSE
+//
+// A dry run cannot catch a bad token: `npm publish --dry-run` never contacts the registry, so it
+// reports a clean release for a credential that cannot write a byte. 0.2.0 found that out the
+// expensive way — the dry run passed, the real run chose the version, ran the gates, and only then
+// got `E404 PUT .../@gener8v%2ftokens` because the token in CI had no write on the scope.
+//
+// So this runs FIRST, in dry runs too, and costs a second. What it proves is identity: that the
+// registry knows who this credential is. A token that authenticates but lacks write on the scope
+// still only surfaces at publish — npm answers 404 rather than 403 for that, and there is no
+// read-only way to ask.
+console.log(`\n▸ checking the registry credential`);
+try {
+  const who = execFileSync('npm', ['whoami'], { stdio: ['ignore', 'pipe', 'pipe'] }).toString().trim();
+  console.log(`  authenticated as ${who}`);
+} catch {
+  console.error(`\n✗ the registry does not know this credential — \`npm whoami\` failed.`
+    + `\n  In CI: NPM_TOKEN is missing, expired, or malformed. Set it with \`gh secret set NPM_TOKEN\`.`
+    + `\n  Locally: npm login --scope=@gener8v`
+    + `\n\n  Nothing was bumped and nothing was published.`);
+  process.exit(1);
+}
+
 // Never ship a release that cannot pass its own gates.
 console.log(`\n▸ verifying`);
 run('pnpm', ['check']);
