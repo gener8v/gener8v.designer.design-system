@@ -56,3 +56,28 @@
   font-size: var(--text-xs);
   color: var(--color-neutral-500);
 }
+
+/* Who you are signed in as, at the top of an account menu. Deliberately not a `.menu-item`: no
+   hover, no pointer, no highlight. A row that lights up under the cursor is a row somebody will
+   try to click, and an identity is a fact rather than a destination. */
+.menu-identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+}
+/* `min-inline-size: 0` because a grid child's automatic minimum is its content, and an address
+   long enough to need wrapping will otherwise widen the popup instead of wrapping inside it. */
+.menu-identity-text { display: grid; gap: var(--space-1); min-inline-size: 0; }
+.menu-identity-name {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+}
+/* An email is one long word to the line breaker, so it needs permission to break inside itself.
+   Truncating instead would hide the half that tells two accounts apart. */
+.menu-identity-detail {
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+  overflow-wrap: anywhere;
+}

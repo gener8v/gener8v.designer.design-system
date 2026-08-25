@@ -45,6 +45,43 @@
     </nav>
   </div>
 
+  <p class="demo-head label">Account — the avatar, and what it opens</p>
+  <div class="pair" style="align-items:flex-start">
+    <div class="frame" style="flex:1">
+      <nav class="nav">
+        <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
+        <div class="nav-links">
+          <a class="nav-item" href="#" aria-current="page">Delivery</a>
+        </div>
+        <button type="button" class="btn btn-ghost btn-sm btn-icon" aria-haspopup="menu" aria-expanded="false" aria-label="Account">
+          <span class="avatar avatar-sm">TE</span>
+        </button>
+      </nav>
+    </div>
+    <div class="menu" role="menu" aria-label="Account">
+      <div class="menu-identity">
+        <span class="avatar avatar-sm">TE</span>
+        <span class="menu-identity-text">
+          <span class="menu-identity-name">Thomas Eaves</span>
+          <span class="menu-identity-detail">thomas@gener8v.com</span>
+        </span>
+      </div>
+      <hr role="separator" class="menu-sep" />
+      <p class="menu-label">Appearance</p>
+      <button type="button" role="menuitem" class="menu-item">
+        <svg viewBox="0 0 256 256" fill="currentColor"><path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z"/></svg>
+        System
+      </button>
+      <button type="button" role="menuitem" class="menu-item">Light</button>
+      <button type="button" role="menuitem" class="menu-item">Dark</button>
+      <hr role="separator" class="menu-sep" />
+      <button type="button" role="menuitem" class="menu-item menu-item-danger">Sign out</button>
+    </div>
+  </div>
+  <p class="note">The identity is not a menu item. It carries no <code>role</code>, so arrow keys
+    pass over it and it takes no hover — a row that lights up under the cursor is a row somebody
+    will try to click, and there is nothing here to click.</p>
+
   <p class="demo-head label">Hamburger — closed and open</p>
   <div class="pair">
     <button type="button" class="hamburger" aria-expanded="false" aria-label="Open menu">

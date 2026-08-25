@@ -1,6 +1,7 @@
 import { cloneElement, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { useAnchoredPosition } from '../useAnchoredPosition.js';
-import type { ButtonHTMLAttributes, ReactElement, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } from 'react';
+import { Avatar } from '../Avatar/Avatar.js';
 import { cx } from '../cx.js';
 
 const ITEMS = '[role="menuitem"]:not([aria-disabled="true"])';
@@ -135,3 +136,37 @@ export const MenuSeparator = ({ className, ...rest }: React.HTMLAttributes<HTMLH
 
 export const MenuShortcut = ({ className, ...rest }: React.HTMLAttributes<HTMLSpanElement>) =>
   <span {...rest} aria-hidden="true" className={cx('menu-shortcut', className)} />;
+
+export interface MenuIdentityProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
+  /** The person. Also derives the initials when there is no image. */
+  name: string;
+  /** The line beneath — an email, a role, the organisation. Whatever tells two accounts apart. */
+  detail?: ReactNode;
+  src?: string;
+}
+
+/**
+ * Who you are signed in as, at the top of an account menu.
+ *
+ * Not a `MenuItem`, and the distinction is the point: it has no `role="menuitem"`, so arrow keys
+ * skip it and it takes no hover. A row that lights up under the cursor is a row a reader will try
+ * to click, and there is nothing here to click — an identity is a fact, not a destination.
+ *
+ * WHY THIS IS IN THE SYSTEM AND NOT IN EVERY APP
+ *
+ * The app-shell template has always put an avatar in the nav and stopped there, so every consumer
+ * reached the same fork — a bare glyph that does nothing, or an account menu they design
+ * themselves — and the second one is the whole of "sign out, settings, who am I". Three products
+ * had three answers. Now they have one.
+ */
+export function MenuIdentity({ name, detail, src, className, ...rest }: MenuIdentityProps) {
+  return (
+    <div {...rest} className={cx('menu-identity', className)}>
+      <Avatar name={name} size="sm" {...(src ? { src } : {})} />
+      <span className="menu-identity-text">
+        <span className="menu-identity-name">{name}</span>
+        {detail !== undefined && <span className="menu-identity-detail">{detail}</span>}
+      </span>
+    </div>
+  );
+}
