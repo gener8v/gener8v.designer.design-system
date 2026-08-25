@@ -83,6 +83,17 @@
   --color-danger-700: #942521;
   --color-danger-800: #651814;
 
+  /* The panel that is dark in both modes */
+  --color-inverse: #182030;
+  --color-on-inverse: #E2E6ED;
+
+  /* Syntax */
+  --code-comment: #ABB2C0;
+  --code-string: #91E4BD;
+  --code-keyword: #B7D0FF;
+  --code-number: #FFC091;
+  --code-name: #D9E6FF;
+
   /* Type */
   --font-heading: "Inter", system-ui, sans-serif;
   --font-heading-weight: 500;
@@ -174,12 +185,69 @@
 }
 
 
-/* Chart series in a dark host. The system's own ground stays light — these
-   exist so a chart embedded in a dark application still validates. Steps are
-   the same eight hues re-stepped for a dark surface, not an automatic flip,
-   and all eight clear 3:1 against #182030. */
+/* DARK MODE.
+   Three states, and the middle one is the default: an explicit choice stamps
+   [data-theme], and "system" stamps nothing — so only prefers-color-scheme
+   separates light from dark, and [data-theme="light"] has to win over it. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
+    /* Ground, pinned in theme.mjs — a page's ground is a decision, not a ramp step. */
+    --color-bg: #0F1522;
+    --color-surface: #182030;
+    --color-text: #F2F4F7;
+    --color-divider: color-mix(in srgb, #FFFFFF 14%, transparent);
+
+    /* The ramps, mirrored. */
+    --color-neutral-100: #182030;
+    --color-neutral-200: #2F3848;
+    --color-neutral-300: #4B5464;
+    --color-neutral-400: #697181;
+    --color-neutral-500: #8991A0;
+    --color-neutral-600: #ABB2C0;
+    --color-neutral-700: #CAD0DA;
+    --color-neutral-800: #E2E6ED;
+    --color-neutral-900: #F2F4F7;
+    --color-accent-100: #071C4A;
+    --color-accent-200: #0C307E;
+    --color-accent-300: #1547B7;
+    --color-accent-400: #2664EC;
+    --color-accent-500: #528AFF;
+    --color-accent-600: #88B1FF;
+    --color-accent-700: #B7D0FF;
+    --color-accent-800: #D9E6FF;
+    --color-accent-900: #EEF4FF;
+    --color-accent-2-100: #01252F;
+    --color-accent-2-200: #003F4F;
+    --color-accent-2-300: #005D73;
+    --color-accent-2-400: #007D9B;
+    --color-accent-2-500: #289FC1;
+    --color-accent-2-600: #5EC0E0;
+    --color-accent-2-700: #91DCF6;
+    --color-accent-2-800: #C0EEFF;
+    --color-accent-2-900: #E4F8FF;
+    --color-success-100: #002819;
+    --color-success-300: #006344;
+    --color-success-700: #91E4BD;
+    --color-success-800: #BCF5D9;
+    --color-warning-100: #341800;
+    --color-warning-300: #7D4200;
+    --color-warning-700: #FFC091;
+    --color-warning-800: #FFDFC7;
+    --color-danger-100: #3C0F0C;
+    --color-danger-300: #942521;
+    --color-danger-700: #FFBCB3;
+    --color-danger-800: #FFDCD7;
+
+    /* A raised panel reads by being LIGHTER than the page here, not darker. */
+    --color-inverse: #182030;
+    --color-on-inverse: #F2F4F7;
+
+    /* Elevation is a shadow on white and a lighter surface on black; a shadow on a dark
+       ground is invisible, so the ring carries it instead. */
+    --shadow-sm: 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);
+
+    /* Chart series, re-stepped for a dark surface rather than flipped. */
     --series-1: #5C8FF5;
     --series-2: #D95926;
     --series-3: #007D9B;
@@ -191,6 +259,63 @@
   }
 }
 :root[data-theme="dark"] {
+    /* Ground, pinned in theme.mjs — a page's ground is a decision, not a ramp step. */
+    --color-bg: #0F1522;
+    --color-surface: #182030;
+    --color-text: #F2F4F7;
+    --color-divider: color-mix(in srgb, #FFFFFF 14%, transparent);
+
+    /* The ramps, mirrored. */
+    --color-neutral-100: #182030;
+    --color-neutral-200: #2F3848;
+    --color-neutral-300: #4B5464;
+    --color-neutral-400: #697181;
+    --color-neutral-500: #8991A0;
+    --color-neutral-600: #ABB2C0;
+    --color-neutral-700: #CAD0DA;
+    --color-neutral-800: #E2E6ED;
+    --color-neutral-900: #F2F4F7;
+    --color-accent-100: #071C4A;
+    --color-accent-200: #0C307E;
+    --color-accent-300: #1547B7;
+    --color-accent-400: #2664EC;
+    --color-accent-500: #528AFF;
+    --color-accent-600: #88B1FF;
+    --color-accent-700: #B7D0FF;
+    --color-accent-800: #D9E6FF;
+    --color-accent-900: #EEF4FF;
+    --color-accent-2-100: #01252F;
+    --color-accent-2-200: #003F4F;
+    --color-accent-2-300: #005D73;
+    --color-accent-2-400: #007D9B;
+    --color-accent-2-500: #289FC1;
+    --color-accent-2-600: #5EC0E0;
+    --color-accent-2-700: #91DCF6;
+    --color-accent-2-800: #C0EEFF;
+    --color-accent-2-900: #E4F8FF;
+    --color-success-100: #002819;
+    --color-success-300: #006344;
+    --color-success-700: #91E4BD;
+    --color-success-800: #BCF5D9;
+    --color-warning-100: #341800;
+    --color-warning-300: #7D4200;
+    --color-warning-700: #FFC091;
+    --color-warning-800: #FFDFC7;
+    --color-danger-100: #3C0F0C;
+    --color-danger-300: #942521;
+    --color-danger-700: #FFBCB3;
+    --color-danger-800: #FFDCD7;
+
+    /* A raised panel reads by being LIGHTER than the page here, not darker. */
+    --color-inverse: #182030;
+    --color-on-inverse: #F2F4F7;
+
+    /* Elevation is a shadow on white and a lighter surface on black; a shadow on a dark
+       ground is invisible, so the ring carries it instead. */
+    --shadow-sm: 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);
+
+    /* Chart series, re-stepped for a dark surface rather than flipped. */
     --series-1: #5C8FF5;
     --series-2: #D95926;
     --series-3: #007D9B;
@@ -209,7 +334,13 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* Native chrome follows the theme: form controls, scrollbars, the flash before first paint.
+     `light dark` says the page handles both; the [data-theme] overrides below pin it when a
+     reader has chosen, so a dark scrollbar cannot sit beside a light page. */
+  color-scheme: light dark;
 }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
 
 body {
   min-height: 100svh;
@@ -744,7 +875,7 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   z-index: 5;
   min-inline-size: 140px;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-neutral-900);
+  background: var(--color-inverse);
   color: var(--color-neutral-100);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
@@ -942,8 +1073,8 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .code {
   margin: 0;
   padding: var(--space-4);
-  background: var(--color-neutral-900);
-  color: var(--color-neutral-200);
+  background: var(--color-inverse);
+  color: var(--color-on-inverse);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -956,7 +1087,7 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
-  background: var(--color-neutral-800);
+  background: color-mix(in srgb, var(--color-inverse) 88%, #FFFFFF);
   border-start-start-radius: var(--radius-md);
   border-start-end-radius: var(--radius-md);
   font-family: var(--font-mono);
@@ -975,11 +1106,11 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  *
  * Six kinds, not twenty. A snippet needs a comment to recede and a string to stand apart; the rest
  * is decoration that makes code harder to read, not easier. */
-.code .tok-comment { color: var(--color-neutral-400); font-style: italic; }
-.code .tok-string  { color: var(--color-success-300); }
-.code .tok-keyword { color: var(--color-accent-300); }
-.code .tok-number  { color: var(--color-warning-300); }
-.code .tok-fn      { color: var(--color-accent-200); }
+.code .tok-comment { color: var(--code-comment); font-style: italic; }
+.code .tok-string  { color: var(--code-string); }
+.code .tok-keyword { color: var(--code-keyword); }
+.code .tok-number  { color: var(--code-number); }
+.code .tok-fn      { color: var(--code-name); }
 
 /* ---------------------------------------------------- gap-fill: transaction */
 /* Components the three example workflows needed and the system did not have. */
@@ -1458,7 +1589,7 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   display: inline-block;
   max-inline-size: 28ch;
   padding: var(--space-2) var(--space-3);
-  background: var(--color-neutral-900);
+  background: var(--color-inverse);
   color: var(--color-neutral-100);
   border-radius: var(--radius-sm);
   font-size: var(--text-xs);
@@ -2184,7 +2315,7 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
-  background: var(--color-neutral-900);
+  background: var(--color-inverse);
   color: var(--color-neutral-200);
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);

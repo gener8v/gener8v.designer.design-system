@@ -108,8 +108,8 @@
 .code {
   margin: 0;
   padding: var(--space-4);
-  background: var(--color-neutral-900);
-  color: var(--color-neutral-200);
+  background: var(--color-inverse);
+  color: var(--color-on-inverse);
   border-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -122,7 +122,7 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-2) var(--space-4);
-  background: var(--color-neutral-800);
+  background: color-mix(in srgb, var(--color-inverse) 88%, #FFFFFF);
   border-start-start-radius: var(--radius-md);
   border-start-end-radius: var(--radius-md);
   font-family: var(--font-mono);
@@ -141,8 +141,8 @@
  *
  * Six kinds, not twenty. A snippet needs a comment to recede and a string to stand apart; the rest
  * is decoration that makes code harder to read, not easier. */
-.code .tok-comment { color: var(--color-neutral-400); font-style: italic; }
-.code .tok-string  { color: var(--color-success-300); }
-.code .tok-keyword { color: var(--color-accent-300); }
-.code .tok-number  { color: var(--color-warning-300); }
-.code .tok-fn      { color: var(--color-accent-200); }
+.code .tok-comment { color: var(--code-comment); font-style: italic; }
+.code .tok-string  { color: var(--code-string); }
+.code .tok-keyword { color: var(--code-keyword); }
+.code .tok-number  { color: var(--code-number); }
+.code .tok-fn      { color: var(--code-name); }

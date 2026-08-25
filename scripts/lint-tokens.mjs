@@ -83,5 +83,39 @@ for (const dir of ['foundations', 'components']) {
   }
 }
 
+/* DARK MODE CANNOT INVENT A TOKEN.
+ *
+ * The dark block overrides VALUES. It must never introduce a name `:root` does not declare,
+ * because a component reading that name in light mode would get nothing at all — and the failure
+ * would appear only for readers who never switch themes, which is most of them.
+ *
+ * This is exactly the drift a generated system is supposed to make impossible, so it is checked
+ * rather than assumed.
+ */
+{
+  const { darkTokens } = await import('../packages/tokens/dist/tokens.mjs');
+  const unknown = Object.keys(darkTokens).filter((n) => !declared.has(n));
+  if (unknown.length) fail(`dark mode overrides names :root never declares: ${unknown.join(', ')}`);
+  // And the OVERRIDES have to reach both states. "System" stamps no attribute, so
+  // `prefers-color-scheme` is the only thing separating light from dark there, and an explicit
+  // choice has to win over it.
+  //
+  // Counted on the ground colour rather than on the selectors: `base.css` sets `color-scheme` on
+  // the same selectors for its own reasons, so their mere presence proves nothing about whether
+  // the TOKENS are overridden. A first version of this check passed while the attribute selector
+  // was misspelled, for exactly that reason.
+  const ground = `--color-bg: ${darkTokens['--color-bg']};`;
+  const blocks = {
+    'prefers-color-scheme (the "system" default)':
+      /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{([\s\S]*?)\n  \}/.exec(css),
+    '[data-theme="dark"] (an explicit choice)':
+      /\n:root\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/.exec(css),
+  };
+  for (const [state, m] of Object.entries(blocks)) {
+    if (!m) fail(`dark mode has no override block for ${state}`);
+    else if (!m[1].includes(ground)) fail(`the ${state} block does not set the dark ground`);
+  }
+}
+
 if (fails.length) { console.error('✗ token lint\n' + fails.map((f) => '  · ' + f).join('\n')); process.exit(1); }
 console.log(`✓ token lint — ${declared.size} tokens round-trip, component pages clean, readme accurate`);
