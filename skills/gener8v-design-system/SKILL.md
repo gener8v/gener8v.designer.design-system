@@ -60,6 +60,35 @@ These are not preferences. Breaking one produces work that is off-brand or inacc
 13. **Words are not the interface.** A status is one or two words, not a sentence. Prose
     belongs in a lede, a hint or a state's body — the places built to carry it — and never
     in a tag, a label or a control.
+14. **A page reads top to bottom as a funnel**: what you are looking at, then what is true
+    of it, then what you can do about it. A figure reading "66 requirements **this** module
+    defines" placed above the module picker sends the reader looking upward for an
+    antecedent that is not there yet.
+15. **Never restate a selection.** If a control shows which thing is selected, no heading
+    repeats it. Two places to read one fact is one place too many, and the day they
+    disagree the reader has no way to tell which is right.
+16. **A title sits above its description, never beside it.** Two strings sharing a baseline
+    read as one run-on sentence in two type sizes. This is the most common way a flex row
+    goes wrong: a title and its body become siblings in a ROW, and the body's top margin
+    silently does nothing.
+17. **A finding that names a gap offers the way out of it.** An empty state, a red status,
+    a count of what nobody has done — if the reader can act on it, the action is *there*,
+    not on another screen they have to guess at. A sentence that reports a problem and
+    stops is a sentence people learn to scroll past.
+18. **Absence names its cause.** "Not yet", "nobody looked", "we could not read it" and
+    "you are not allowed to see it" are four different things, and only one of them is a
+    finding. A zero is an answer *only* if something counted; where the count failed, show
+    no figure rather than a confident nought. A skeleton means "still reading" and never
+    "nothing to show" or "the read failed" — it is the one element that never tells you it
+    has finished.
+19. **The operating system draws none of this.** A native `<select>`'s open list and a
+    `title` attribute's tooltip are painted by the OS: no token reaches them, and neither
+    survives touch or a keyboard. Use `Menu`, `Combobox`, `RadioCards` and `Tooltip`.
+20. **A component asks for the layout it depends on.** A body that scrolls needs a bounded
+    height; a shell that is `block-size: 100%` needs a parent that has one. A component
+    that declares the first and never requests the second works in the demo and fails in
+    every real page — and a percentage resolves against a parent's *height*, so a parent
+    with only a `min-height` answers `auto`.
 
 ## Where to look
 
