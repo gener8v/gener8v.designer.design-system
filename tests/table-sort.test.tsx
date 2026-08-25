@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import { describe, expect, it } from 'vitest';
 import { renderHook, act, render } from '@testing-library/react';
 import { TableToolbar, useTableSort } from '../packages/ui/src/index.js';
@@ -91,5 +92,41 @@ describe('the count beside a filter', () => {
     const { container } = render(<TableToolbar showing={{ of: 1, total: 4, noun: 'answers' }} />);
 
     expect(container.querySelector('.table-count')?.textContent).toBe('1 of 4 answers');
+  });
+});
+
+describe('sorting inside a StrictMode app', () => {
+  it('still toggles when React double-invokes the updater', () => {
+    // THE DEFECT THIS EXISTS FOR.
+    //
+    // The hook held `key` and `direction` in two `useState`s and called `setDirection` from inside
+    // the `setKey` updater. React double-invokes updaters under StrictMode precisely to surface an
+    // updater that does something other than return the next state — so the toggle fired twice and
+    // landed back where it started. Clicking the same header did nothing, in every development
+    // build, and every test outside StrictMode passed.
+    const { result } = renderHook(() => useTableSort(ROWS, value), {
+      wrapper: ({ children }) => <StrictMode>{children}</StrictMode>,
+    });
+
+    act(() => result.current.sortProps('code').onSort());
+    expect(result.current.direction).toBe('ascending');
+
+    act(() => result.current.sortProps('code').onSort());
+
+    expect(result.current.direction).toBe('descending');
+    expect(result.current.sortProps('code').sort).toBe('descending');
+  });
+
+  it('starts a different column ascending, however many times the updater ran', () => {
+    const { result } = renderHook(() => useTableSort(ROWS, value), {
+      wrapper: ({ children }) => <StrictMode>{children}</StrictMode>,
+    });
+
+    act(() => result.current.sortProps('code').onSort());
+    act(() => result.current.sortProps('code').onSort()); // now descending
+    act(() => result.current.sortProps('findings').onSort());
+
+    expect(result.current.key).toBe('findings');
+    expect(result.current.direction).toBe('ascending');
   });
 });
