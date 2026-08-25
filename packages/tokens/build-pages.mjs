@@ -6,6 +6,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { contrast, STEPS } from './src/color.mjs';
+import { THEME_BOOT, THEME_CONTROL, THEME_CSS } from '../../scripts/lab-theme.mjs';
 import { theme, TYPE_SCALE, SPACE_BASE, SPACE_EXTRA, CONTROL_H } from './src/theme.mjs';
 import tokens from './dist/tokens.mjs';
 
@@ -31,6 +32,9 @@ const SCAFFOLD = `
 .kv { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-2) var(--space-4); font-family: var(--font-mono); font-size: var(--text-xs); align-items: center; }
 `;
 
+
+
+
 const page = (name, card, body, extraCss = '') => `<!-- @dsCard group="${card.group}" name="${card.name}" subtitle="${card.subtitle}" viewport="${card.viewport}" -->
 <!doctype html>
 <html lang="en">
@@ -39,9 +43,11 @@ const page = (name, card, body, extraCss = '') => `<!-- @dsCard group="${card.gr
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${theme.name} — ${card.name}</title>
 <link rel="stylesheet" href="../styles.css" />
-<style>${SCAFFOLD}${extraCss}</style>
+<style>${SCAFFOLD}${THEME_CSS}${extraCss}</style>
+${THEME_BOOT}
 </head>
 <body>
+${THEME_CONTROL}
 <main class="demo">
 ${body}
 </main>
@@ -332,7 +338,9 @@ write('design/index.html', `<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${theme.name} — Design system</title>
 <link rel="stylesheet" href="styles.css" />
+${THEME_BOOT}
 <style>
+${THEME_CSS}
 /* Page scaffolding only — every component below comes from styles.css. */
 .index-hero { border-block-end: 1px solid var(--color-neutral-200); }
 .index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
@@ -346,6 +354,7 @@ write('design/index.html', `<!doctype html>
 </head>
 <body>
 
+${THEME_CONTROL}
 <header class="index-hero bg-dot-grid">
   <div class="container section-tight">
     <p class="label">Design system</p>
