@@ -80,6 +80,24 @@
       <a class="sidebar-item" href="#">Audit log</a>
       <a class="sidebar-item" href="#">Controls</a>
     </nav>
+
+    <!-- The same rail, built from a list of groups. A wrapper takes away the rail's own gap and
+         its :first-child rule, so each group is a .sidebar-section and carries them itself. -->
+    <nav class="sidebar">
+      <div class="sidebar-section">
+        <p class="sidebar-group">The work</p>
+        <a class="sidebar-item" href="#" aria-current="page">Attention</a>
+        <a class="sidebar-item" href="#">Deliverables</a>
+      </div>
+      <div class="sidebar-section">
+        <button type="button" class="sidebar-group sidebar-group-toggle" aria-expanded="true"
+                aria-controls="rail-governance">Governance</button>
+        <div id="rail-governance" class="sidebar-section-items">
+          <a class="sidebar-item" href="#">Standards</a>
+          <a class="sidebar-item" href="#">Decisions</a>
+        </div>
+      </div>
+    </nav>
     <div style="flex:1;padding:var(--space-6)">
       <p class="breadcrumbs">
         <a href="#">Delivery</a><span class="breadcrumb-sep">/</span>

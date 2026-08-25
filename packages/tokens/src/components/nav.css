@@ -139,9 +139,75 @@
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-neutral-600);
+  /* OUT-RANKS THE ITEMS IT LABELS.
+   *
+   * At neutral-600 the heading was 4.65:1 against the rail while an item was 7.61:1 — and it is
+   * 12px where an item is 14px. A label quieter and smaller than its own children inverts the
+   * hierarchy: the eye reads the items as the structure and the headings as chrome, which is the
+   * opposite of what a grouped rail is for.
+   *
+   * The rank comes from CONTRAST rather than size. Mono, uppercase and 12px is what says "this is
+   * a label, not a destination", and growing it would make it compete with the items instead of
+   * heading them. */
+  color: var(--color-neutral-800);
+  /* A rule under the label, so the group reads as a section rather than as a quieter item. The
+     heading already has `padding-block-end`, which becomes the space between the words and the
+     line. */
+  border-block-end: 1px solid var(--color-divider);
 }
 .sidebar-group:first-child { margin-block-start: 0; }
+
+/* A GROUP AS A BLOCK.
+ *
+ * The rail above is flat by design: headings and items are siblings, the rail's own `gap` spaces
+ * them, and `:first-child` drops the leading heading's margin. That holds until something renders
+ * the groups as units — which is what any list-of-groups does — because a wrapper element takes
+ * BOTH rules away at once. The rail's gap then falls between wrappers rather than between items,
+ * and every heading is the first child of its own wrapper, so every heading loses its margin
+ * instead of only the first.
+ *
+ * A consumer hit exactly that: items flush against each other, and no separation above
+ * "Governance" or "Knowledge". So the wrapper is a component rather than a bare div, and it
+ * carries the two rules the rail can no longer apply on its behalf. */
+.sidebar-section { display: flex; flex-direction: column; gap: var(--space-1); }
+.sidebar-section + .sidebar-section { margin-block-start: var(--space-4); }
+
+/* A GROUP THAT COLLAPSES.
+ *
+ * The heading becomes the control, so it carries a button reset on top of `.sidebar-group` and the
+ * SAME chevron the accordion uses — one mechanism, so an expanded state looks the same wherever it
+ * appears in the system. `border-block-end` is left alone deliberately: the rule under the label is
+ * the group's, not the button's. */
+.sidebar-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  background: none;
+  border-inline: 0;
+  border-block-start: 0;
+  text-align: start;
+  cursor: pointer;
+}
+.sidebar-group-toggle:hover { color: var(--color-action); }
+.sidebar-group-toggle::after {
+  content: "";
+  margin-inline-start: auto;
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  flex: none;
+  border-inline-end: 1.5px solid var(--color-neutral-500);
+  border-block-end: 1.5px solid var(--color-neutral-500);
+  transform: translateY(-0.15em) rotate(-45deg);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.sidebar-group-toggle[aria-expanded="true"]::after { transform: translateY(0.1em) rotate(45deg); }
+/* The items get their own column when they are wrapped for the disclosure, so the gap the section
+   provides is not lost to the wrapper — the same trap `.sidebar-section` exists to close. */
+.sidebar-section-items { display: flex; flex-direction: column; gap: var(--space-1); }
+/* The heading needs no reset inside a section: it is the section's first child, so the
+   `:first-child` rule above already zeroes it. An explicit `.sidebar-section > .sidebar-group`
+   was written here and proved to change nothing — removing it left every spec green. */
 
 .sidebar-item {
   display: flex;
