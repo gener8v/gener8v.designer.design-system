@@ -44,20 +44,33 @@ export function useTableSort<Row, Key extends string>(
   value: (row: Row, key: Key) => string | number | null | undefined,
   initial?: { key: Key; direction?: SortDirection },
 ): TableSortResult<Row, Key> {
-  const [key, setKey] = useState<Key | null>(initial?.key ?? null);
-  const [direction, setDirection] = useState<SortDirection>(initial?.direction ?? 'ascending');
+  // ONE ATOM, NOT TWO.
+  //
+  // This was `useState` twice, with `setDirection` called INSIDE the `setKey` updater. React
+  // double-invokes updaters in StrictMode to surface exactly that — an updater that does something
+  // besides return the next state — so the toggle fired twice and the direction came back where it
+  // started. Clicking the same header did nothing at all, in every development build.
+  //
+  // Holding both in one object makes the updater pure, and it makes the invariant structural: the
+  // column and its direction change in a single transition, so there is no render in which they
+  // disagree. That was the point of the hook.
+  const [state, setState] = useState<{ key: Key | null; direction: SortDirection }>({
+    key: initial?.key ?? null,
+    direction: initial?.direction ?? 'ascending',
+  });
+  const { key, direction } = state;
 
   const sortProps = useCallback(
     (column: Key) => ({
       sort: key === column ? direction : null,
       onSort: () =>
-        setKey((was) => {
+        setState((was) => ({
+          key: column,
           // Same column toggles; a different one starts ascending. Carrying the previous
           // direction over to a new column is the behaviour nobody expects and everybody hits.
-          if (was === column) setDirection((d) => (d === 'ascending' ? 'descending' : 'ascending'));
-          else setDirection('ascending');
-          return column;
-        }),
+          direction:
+            was.key === column && was.direction === 'ascending' ? 'descending' : 'ascending',
+        })),
     }),
     [key, direction],
   );
@@ -78,7 +91,7 @@ export function useTableSort<Row, Key extends string>(
     });
   }, [rows, key, direction, value]);
 
-  const clear = useCallback(() => setKey(null), []);
+  const clear = useCallback(() => setState((was) => ({ ...was, key: null })), []);
 
   return { rows: sorted, key, direction, sortProps, clear };
 }
