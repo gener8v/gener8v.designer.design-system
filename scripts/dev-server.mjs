@@ -2,10 +2,19 @@
 // Serves design/ so component pages can be reviewed in a real browser.
 import { createServer } from 'node:http';
 import { readFile, stat, readdir } from 'node:fs/promises';
+import { THEME_BOOT, THEME_CONTROL, THEME_CSS } from './lab-theme.mjs';
 import { join, extname, resolve } from 'node:path';
 
 const ROOT = resolve(process.cwd(), 'design');
 const PORT = Number(process.env.PORT ?? 4321);
+/** The ground control, on any page that has not already been given one. */
+function withGroundControl(html) {
+  if (html.includes('lab-theme')) return html;
+  return html
+    .replace('</head>', `<style>${THEME_CSS}</style>${THEME_BOOT}</head>`)
+    .replace(/<body([^>]*)>/, (m) => `${m}${THEME_CONTROL}`);
+}
+
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8', '.json': 'application/json',
@@ -45,8 +54,17 @@ createServer(async (req, res) => {
     const s = await stat(file);
     if (!s.isFile()) throw new Error('not a file');
     const body = await readFile(file);
+    /*
+     * THE COMPONENT PAGES ARE AUTHORED, SO THEY GET THE CONTROL HERE.
+     *
+     * `build-pages.mjs` puts the ground control on the pages it generates. The sixteen component
+     * pages are hand-written, and sixteen copies of one script is sixteen things to keep in step —
+     * so the server adds it to any page that does not already carry it. Same snippet, imported
+     * from the same module, which is the whole point.
+     */
+    const html = extname(file) === '.html' ? withGroundControl(body.toString('utf8')) : body;
     res.writeHead(200, { 'content-type': MIME[extname(file)] ?? 'application/octet-stream', 'cache-control': 'no-store' });
-    res.end(body);
+    res.end(html);
   } catch {
     res.writeHead(404, { 'content-type': MIME['.html'] });
     res.end('<h1>404</h1>');

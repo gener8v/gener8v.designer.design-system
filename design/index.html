@@ -5,7 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GENER8V — Design system</title>
 <link rel="stylesheet" href="styles.css" />
+<script>
+(function () {
+  try {
+    var g = localStorage.getItem('gener8v.lab.theme');
+    if (g === 'light' || g === 'dark') document.documentElement.setAttribute('data-theme', g);
+  } catch (e) { /* private windows throw on access; the OS preference still applies */ }
+})();
+</script>
 <style>
+
+.lab-theme { position: fixed; inset-block-start: var(--space-4); inset-inline-end: var(--space-4); z-index: 90; }
+@media print { .lab-theme { display: none; } }
+
 /* Page scaffolding only — every component below comes from styles.css. */
 .index-hero { border-block-end: 1px solid var(--color-neutral-200); }
 .index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
@@ -19,6 +31,32 @@
 </head>
 <body>
 
+<div class="lab-theme">
+  <div class="segmented" role="radiogroup" aria-label="Ground">
+    <button type="button" class="segmented-item" role="radio" data-ground="system">System</button>
+    <button type="button" class="segmented-item" role="radio" data-ground="light">Light</button>
+    <button type="button" class="segmented-item" role="radio" data-ground="dark">Dark</button>
+  </div>
+</div>
+<script>
+(function () {
+  var KEY = 'gener8v.lab.theme';
+  var root = document.documentElement;
+  var buttons = [].slice.call(document.querySelectorAll('[data-ground]'));
+  function read() { try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; } }
+  function paint(g) {
+    buttons.forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.ground === g)); });
+  }
+  function set(g) {
+    if (g === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', g);
+    try { g === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, g); } catch (e) {}
+    paint(g);
+  }
+  buttons.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.ground); }); });
+  paint(read());
+})();
+</script>
 <header class="index-hero bg-dot-grid">
   <div class="container section-tight">
     <p class="label">Design system</p>
