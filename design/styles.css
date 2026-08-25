@@ -2246,7 +2246,12 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 
 /* --- preview pane ---------------------------------------------------- */
 
-.doc-preview { display: flex; flex-direction: column; min-block-size: 0; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg); }
+/* `block-size: 100%` because `.doc-preview-body` is `flex: 1; overflow: auto` — a body that
+   scrolls only means something inside a HEIGHT-BOUNDED box, and this component never asked for
+   one. Given a fixed parent it now fills it and the body scrolls; given an auto-height parent the
+   percentage resolves to auto and nothing changes. Without it the preview grew past its pane and
+   the next thing on the page started underneath it. */
+.doc-preview { block-size: 100%; display: flex; flex-direction: column; min-block-size: 0; border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-bg); }
 .doc-preview-head { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-block-end: 1px solid var(--color-neutral-200); background: var(--color-surface); }
 .doc-preview-title { font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-900); min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .doc-preview-actions { margin-inline-start: auto; display: flex; gap: var(--space-2); flex: none; }
@@ -2258,6 +2263,10 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .reader > * + * { margin-block-start: var(--space-4); }
 .reader h1, .reader h2, .reader h3 { margin-block-start: var(--space-8); }
 .reader h1:first-child, .reader h2:first-child { margin-block-start: 0; }
+/* The reader sets its own h1. Without one a consumer reaches for the base scale — 48px display
+   type above 24px section headings and 16px prose, which is two scales meeting in one document.
+   30px sits a step above the h2 below it and looks like the same family. */
+.reader h1 { font-size: var(--text-3xl); }
 .reader h2 { font-size: var(--text-2xl); }
 .reader h3 { font-size: var(--text-lg); }
 .reader ul, .reader ol { padding-inline-start: var(--space-6); display: grid; gap: var(--space-2); }
@@ -2953,10 +2962,23 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 .checklist-item:hover { background: var(--color-neutral-100); }
 /* Done items recede rather than disappear — the record of what was checked is
-   part of the audit trail. */
+   part of the audit trail.
+   neutral-600, not 500: 500 is 3.17:1 and this system's own rule is that it carries chrome, never
+   text. A struck item is quieter, not unreadable. */
 .checklist-item:has(:checked) .checklist-text {
-  color: var(--color-neutral-500);
+  color: var(--color-neutral-600);
   text-decoration: line-through;
+}
+
+/* A MANIFEST IS NOT A TASK LIST.
+ *
+ * Struck-through-and-quiet says "done, and behind you". On a list enumerating what an irreversible
+ * action is ABOUT TO WRITE it says the opposite of the truth: the captured items read as cancelled
+ * and the one still missing is the most legible thing in the dialog. Same control, opposite
+ * meaning, so the meaning is declared. */
+.checklist[data-purpose="manifest"] .checklist-item:has(:checked) .checklist-text {
+  color: inherit;
+  text-decoration: none;
 }
 .checklist-text { flex: 1; min-inline-size: 0; }
 .checklist-note { display: block; font-size: var(--text-xs); color: var(--color-neutral-600); text-decoration: none; }
