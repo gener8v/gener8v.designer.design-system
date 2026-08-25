@@ -117,5 +117,27 @@ for (const dir of ['foundations', 'components']) {
   }
 }
 
+/* A PANEL THAT IS DARK IN BOTH MODES NEEDS A FOREGROUND THAT IS TOO.
+ *
+ * `--color-inverse` exists because a code block, a tooltip and a chart readout are dark on a light
+ * page ON PURPOSE. Their text has to come from `--color-on-inverse` for the same reason: a ramp
+ * step MIRRORS in dark mode, so `color: var(--color-neutral-100)` on an inverse panel is near-white
+ * on white paper and near-black on black — and a tooltip renders as an empty box.
+ *
+ * That shipped. Three of the four inverse panels had it, and it was invisible in light mode.
+ */
+{
+  const rules = [...css.matchAll(/([^{}]+)\{([^}]*background:\s*[^;]*--color-inverse[^;]*;[^}]*)\}/g)];
+  for (const [, selector, body] of rules) {
+    const colour = /(?:^|[;\s])color:\s*([^;]+);/.exec(body);
+    if (!colour) continue;
+    if (!colour[1].includes('--color-on-inverse')) {
+      const where = selector.replace(/\/\*[\s\S]*?\*\//g, '').trim();
+      fail(`${where} sits on --color-inverse but takes its text from `
+        + `${colour[1].trim()} — a ramp step mirrors in dark mode and this panel does not`);
+    }
+  }
+}
+
 if (fails.length) { console.error('✗ token lint\n' + fails.map((f) => '  · ' + f).join('\n')); process.exit(1); }
 console.log(`✓ token lint — ${declared.size} tokens round-trip, component pages clean, readme accurate`);

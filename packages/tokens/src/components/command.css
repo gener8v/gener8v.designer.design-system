@@ -127,7 +127,9 @@
   border-start-end-radius: var(--radius-md);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  color: var(--color-neutral-400);
+  /* The head sits ON the inverse panel, so its label follows the panel's foreground rather than a
+     ramp step that mirrors away from it. */
+  color: color-mix(in srgb, var(--color-on-inverse) 72%, transparent);
 }
 .code-head + .code { border-start-start-radius: 0; border-start-end-radius: 0; }
 .code-copy { margin-inline-start: auto; }
