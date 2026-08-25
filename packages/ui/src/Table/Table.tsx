@@ -75,3 +75,32 @@ export const TableEmptyTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<H
   function TableEmptyTitle({ className, ...rest }, ref) {
     return <p {...rest} ref={ref} className={cx('table-empty-title', className)} />;
   });
+
+export interface TableToolbarProps extends HTMLAttributes<HTMLDivElement> {
+  /** How many rows are showing, and out of how many. Omit while the set is still arriving. */
+  showing?: { of: number; total: number };
+}
+
+/**
+ * What sits above a table: a filter, and how much of it you are looking at.
+ *
+ * The count is not decoration. A filter that hides rows without saying how many it left behind is
+ * indistinguishable from an empty table — and a reader who cannot see that 3 of 240 are showing
+ * has no reason to suspect a filter is on at all.
+ */
+export const TableToolbar = forwardRef<HTMLDivElement, TableToolbarProps>(function TableToolbar(
+  { showing, className, children, ...rest }, ref,
+) {
+  return (
+    <div {...rest} ref={ref} className={cx('table-toolbar', className)}>
+      {children}
+      {showing ? (
+        <span className="table-count" aria-live="polite">
+          {showing.of === showing.total
+            ? `${showing.total}`
+            : `${showing.of} of ${showing.total}`}
+        </span>
+      ) : null}
+    </div>
+  );
+});
