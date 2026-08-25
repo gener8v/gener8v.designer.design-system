@@ -3412,3 +3412,33 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 
   @page { margin: 18mm; }
 }
+
+/* --- reduced motion, and the three things that must still move -------- */
+
+/* `base.css` collapses every animation to a single 0.01ms iteration when a reader asks for reduced
+ * motion. That is the standard recipe and it is right for decoration — a skeleton's sweep, a
+ * toast's entrance, a card lifting under the cursor all say the same thing standing still.
+ *
+ * It is wrong for the three controls whose ENTIRE JOB is to say "something is happening". Collapsed,
+ * a spinner freezes mid-turn and reads as hung; an indeterminate progress bar parks at whatever
+ * fraction it had reached and reads as a DETERMINATE bar stuck at 40%. Stillness there is not calm,
+ * it is a wrong answer to the only question the control exists to answer.
+ *
+ * `prefers-reduced-motion` asks for less motion, not for none. What triggers a vestibular response
+ * is large-area and parallax movement; a 16px ring is neither. So these keep turning — slower, and
+ * without the sweep across a wide surface that the skeleton and the progress bar rely on. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .btn.is-loading::after {
+    animation-duration: 1.8s !important;
+    animation-iteration-count: infinite !important;
+  }
+
+  /* The bar slides across its whole track, which IS a wide-area sweep — so it pulses in place
+     instead. Still moving, still indeterminate, and going nowhere on purpose. */
+  .progress-indeterminate .progress-bar {
+    animation: progress-breathe 2.4s var(--ease-in-out) infinite !important;
+    inline-size: 100%;
+  }
+}
+@keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }

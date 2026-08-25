@@ -139,5 +139,40 @@ for (const dir of ['foundations', 'components']) {
   }
 }
 
+/* A READER WHO ASKS FOR LESS MOTION IS NOT ASKING TO BE LIED TO.
+ *
+ * The blanket `prefers-reduced-motion` recipe in `base.css` sets every animation to one 0.01ms
+ * iteration. Applied to a spinner that is a freeze mid-turn, which reads as hung; applied to an
+ * indeterminate progress bar it is a park at whatever fraction it had reached, which reads as a
+ * determinate bar stuck at 40%.
+ *
+ * So every control that indicates ACTIVITY has to be restored inside a reduced-motion block. This
+ * is a check on the stylesheet rather than on a rendered page because jsdom does not evaluate the
+ * media feature at all — there is nowhere else the rule can be caught.
+ */
+{
+  const ACTIVITY = ['.spinner', '.btn.is-loading::after', '.progress-indeterminate .progress-bar'];
+  // Every reduced-motion block in the sheet, brace-matched — there is more than one, and which
+  // file a selector is restored in is not this check's business.
+  let reduced = '';
+  for (const m of css.matchAll(/@media \(prefers-reduced-motion: reduce\)\s*\{/g)) {
+    let depth = 1;
+    let i = m.index + m[0].length;
+    for (; i < css.length && depth > 0; i += 1) {
+      if (css[i] === '{') depth += 1;
+      else if (css[i] === '}') depth -= 1;
+    }
+    reduced += css.slice(m.index + m[0].length, i);
+  }
+  for (const selector of ACTIVITY) {
+    const rule = new RegExp(`${selector.replace(/[.()[\]]/g, '\\$&')}[^{}]*\\{([^}]*)\\}`).exec(reduced);
+    if (!rule) fail(`${selector} indicates activity but reduced motion leaves it frozen — `
+      + 'the blanket rule in base.css collapses it to one 0.01ms iteration');
+    else if (!/animation(?:-iteration-count)?:[^;]*infinite/.test(rule[1])) {
+      fail(`${selector} is named in a reduced-motion block but never made to keep running`);
+    }
+  }
+}
+
 if (fails.length) { console.error('✗ token lint\n' + fails.map((f) => '  · ' + f).join('\n')); process.exit(1); }
 console.log(`✓ token lint — ${declared.size} tokens round-trip, component pages clean, readme accurate`);
