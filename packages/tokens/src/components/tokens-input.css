@@ -66,10 +66,23 @@
 }
 .checklist-item:hover { background: var(--color-neutral-100); }
 /* Done items recede rather than disappear — the record of what was checked is
-   part of the audit trail. */
+   part of the audit trail.
+   neutral-600, not 500: 500 is 3.17:1 and this system's own rule is that it carries chrome, never
+   text. A struck item is quieter, not unreadable. */
 .checklist-item:has(:checked) .checklist-text {
-  color: var(--color-neutral-500);
+  color: var(--color-neutral-600);
   text-decoration: line-through;
+}
+
+/* A MANIFEST IS NOT A TASK LIST.
+ *
+ * Struck-through-and-quiet says "done, and behind you". On a list enumerating what an irreversible
+ * action is ABOUT TO WRITE it says the opposite of the truth: the captured items read as cancelled
+ * and the one still missing is the most legible thing in the dialog. Same control, opposite
+ * meaning, so the meaning is declared. */
+.checklist[data-purpose="manifest"] .checklist-item:has(:checked) .checklist-text {
+  color: inherit;
+  text-decoration: none;
 }
 .checklist-text { flex: 1; min-inline-size: 0; }
 .checklist-note { display: block; font-size: var(--text-xs); color: var(--color-neutral-600); text-decoration: none; }

@@ -36,6 +36,8 @@ const pairs = [
   ['code: number',               t('--color-warning-300'),   t('--color-neutral-900'),   4.5],
   ['code: name',                 t('--color-accent-200'),    t('--color-neutral-900'),   4.5],
   ['code head label',            t('--color-neutral-400'),   t('--color-neutral-800'),   4.5],
+  // A struck item is quieter, not unreadable — 500 is 3.17:1 and carries chrome, never text.
+  ['checklist: done item',       t('--color-neutral-600'),   t('--color-bg'),            4.5],
   ['card border on ground',      t('--color-neutral-200'),   t('--color-bg'),            1.2],
   ['border on ground',           t('--color-neutral-300'),   t('--color-bg'),            1.5],
 ];
