@@ -1287,6 +1287,20 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .stat-delta[data-dir="up"] { color: var(--color-success-700); }
 .stat-delta[data-dir="down"] { color: var(--color-danger-700); }
 
+/* A ROW OF FIGURES IS ONE READING, NOT FOUR.
+ *
+ * Four `.stat`s side by side are four columns floating in a gap, and a reader has to decide for
+ * themselves whether they belong together. They do — "0 covered, 0 gaps, 0 not applicable, 66
+ * nobody has looked" is one sentence about one thing, and the rules between them say so.
+ *
+ * A rule between rather than a box around: a box would make the figures compete with the content
+ * beneath them, and they are a summary of it rather than a panel beside it. */
+.stat-row { display: flex; align-items: start; gap: var(--space-6); }
+.stat-row > .stat + .stat {
+  padding-inline-start: var(--space-6);
+  border-inline-start: 1px solid var(--color-divider);
+}
+
 /* --- meter — the capability bar, generalised ------------------------ */
 
 /* Distinct from .progress: progress reports a task advancing, a meter reports
@@ -2930,6 +2944,31 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   block-size: 2px;
   background: var(--color-action);
 }
+
+/* --- the page band -------------------------------------------------- */
+
+/* WHAT A SURFACE SAYS IT IS, ABOVE WHAT IT HOLDS.
+ *
+ * `.shell-head` lived in the app-shell template's own `<style>` block — scaffolding, not a
+ * component — so every consumer that wanted a page header wrote one. The delivery record's had no
+ * boundary of any kind: a picker, an eyebrow, a headline and four figures in undifferentiated
+ * space, with nothing saying where the header stopped and the page began.
+ *
+ * The rule is the whole point. A band is only a band if it has an edge; without one it is just the
+ * first few lines of the page, and the reader does the grouping.
+ */
+.shell-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-block-end: var(--space-6);
+  border-block-end: 1px solid var(--color-divider);
+}
+
+/* Pushed to the end of the row. A caller whose first child takes the free space (`flex: 1`) does
+   not need this and it costs nothing there; a caller whose does not is why it exists. */
+.shell-actions { margin-inline-start: auto; display: flex; gap: var(--space-2); }
 
 /* ----------------------------------------------------------------- popover */
 
