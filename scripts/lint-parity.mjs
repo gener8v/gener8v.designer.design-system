@@ -27,8 +27,22 @@ for (const f of readdirSync(COMPONENT_CSS).filter((f) => f.endsWith('.css'))) {
 }
 
 /** Classes a component file can emit: string literals plus `prefix-${union}`. */
+/**
+ * Source with comments removed.
+ *
+ * This scanned raw source, so a comment EXPLAINING a class name counted as emitting one — and a
+ * comment explaining why a template literal is avoided was read as a template literal and failed
+ * the gate. A linter that cannot tell code from the prose about the code will eventually disagree
+ * with a correct file, which is the one thing a gate must not do.
+ *
+ * `//` is matched only where it does not follow a colon, so a URL survives.
+ */
+function code(src) {
+  return src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+}
+
 function producible(file) {
-  const src = readFileSync(file, 'utf8');
+  const src = code(readFileSync(file, 'utf8'));
   const out = new Set();
   for (const m of src.matchAll(/'([a-z][a-z0-9-]*)'/g)) out.add(m[1]);
   // JSX attributes use double quotes: className="select-wrap"

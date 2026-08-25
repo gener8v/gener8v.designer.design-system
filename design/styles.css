@@ -956,6 +956,21 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .code-head + .code { border-start-start-radius: 0; border-start-end-radius: 0; }
 .code-copy { margin-inline-start: auto; }
 
+/* SYNTAX TOKENS.
+ *
+ * Colours come from the ramps the system already has — a highlighter that invented its own palette
+ * would be a second palette, and the one thing this system will not have is two of anything. Every
+ * pair is gated in `lint:contrast` against the code ground, which until now was the one surface
+ * whose text contrast nothing checked.
+ *
+ * Six kinds, not twenty. A snippet needs a comment to recede and a string to stand apart; the rest
+ * is decoration that makes code harder to read, not easier. */
+.code .tok-comment { color: var(--color-neutral-400); font-style: italic; }
+.code .tok-string  { color: var(--color-success-300); }
+.code .tok-keyword { color: var(--color-accent-300); }
+.code .tok-number  { color: var(--color-warning-300); }
+.code .tok-fn      { color: var(--color-accent-200); }
+
 /* ---------------------------------------------------- gap-fill: transaction */
 /* Components the three example workflows needed and the system did not have. */
 

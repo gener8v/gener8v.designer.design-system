@@ -27,6 +27,15 @@ const pairs = [
   ['tag: warning',               t('--color-warning-700'),   t('--color-warning-100'),   4.5],
   ['tag: danger',                t('--color-danger-700'),    t('--color-danger-100'),    4.5],
   ['tag: neutral',               t('--color-neutral-700'),   t('--color-neutral-100'),   4.5],
+  // The code ground. Nothing checked this surface until it gained syntax colours, and the body
+  // text on it was never gated either.
+  ['code text on code ground',   t('--color-neutral-200'),   t('--color-neutral-900'),   4.5],
+  ['code: comment',              t('--color-neutral-400'),   t('--color-neutral-900'),   4.5],
+  ['code: string',               t('--color-success-300'),   t('--color-neutral-900'),   4.5],
+  ['code: keyword',              t('--color-accent-300'),    t('--color-neutral-900'),   4.5],
+  ['code: number',               t('--color-warning-300'),   t('--color-neutral-900'),   4.5],
+  ['code: name',                 t('--color-accent-200'),    t('--color-neutral-900'),   4.5],
+  ['code head label',            t('--color-neutral-400'),   t('--color-neutral-800'),   4.5],
   ['card border on ground',      t('--color-neutral-200'),   t('--color-bg'),            1.2],
   ['border on ground',           t('--color-neutral-300'),   t('--color-bg'),            1.5],
 ];
