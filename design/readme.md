@@ -38,7 +38,7 @@ and you can read the value off the name. There are no fractional pixel values an
 A white ground (`--color-bg`) with `--color-surface` `#F7F9FC` for raised panels, `--color-text`
 `#111827`, and a single accent `#2563EB` — the blue already carried by gener8v.com.
 
-Actions do not fill with the accent itself. `--color-action` (`#1547B7`, ramp step 700) fills a
+Actions do not fill with the accent itself. `--color-action` (`#2664EC`, ramp step 600) fills a
 primary button, `--color-action-hover` and `--color-action-active` step down from there. The accent
 stays for focus rings, links, the dot grid and chart series. That one indirection is what keeps the
 interface from reading as default framework blue, and it puts the primary button at 8.02:1.
