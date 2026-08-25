@@ -77,8 +77,14 @@ export const TableEmptyTitle = forwardRef<HTMLParagraphElement, HTMLAttributes<H
   });
 
 export interface TableToolbarProps extends HTMLAttributes<HTMLDivElement> {
-  /** How many rows are showing, and out of how many. Omit while the set is still arriving. */
-  showing?: { of: number; total: number };
+  /**
+   * How many rows are showing, and out of how many. Omit while the set is still arriving.
+   *
+   * `noun` is what is being counted — "answers", "controls", "runs". Without it an unfiltered
+   * table renders a bare number beside itself, which reads as a stray digit rather than as a
+   * count of anything. Give it the plural; it is not pluralised here.
+   */
+  showing?: { of: number; total: number; noun?: string };
 }
 
 /**
@@ -97,8 +103,8 @@ export const TableToolbar = forwardRef<HTMLDivElement, TableToolbarProps>(functi
       {showing ? (
         <span className="table-count" aria-live="polite">
           {showing.of === showing.total
-            ? `${showing.total}`
-            : `${showing.of} of ${showing.total}`}
+            ? `${showing.total}${showing.noun ? ` ${showing.noun}` : ''}`
+            : `${showing.of} of ${showing.total}${showing.noun ? ` ${showing.noun}` : ''}`}
         </span>
       ) : null}
     </div>
