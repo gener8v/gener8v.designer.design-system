@@ -183,10 +183,21 @@ export function KnowledgeGraph({
     ctx.textBaseline = 'top';
     const fontPx = 11 / scale;
     ctx.font = `${fontPx}px ${pal.font}`;
+    // A THRESHOLD NOTHING CAN REACH IS NOT A THRESHOLD, IT IS A MUTE SWITCH.
+    //
+    // `labelDegreeThreshold` exists so a 500-node graph does not paint 500 overlapping labels:
+    // only hubs are named until somebody zooms in. In a graph where NO node reaches it, the same
+    // rule silences every label instead — and a record whose links have not been computed yet is
+    // exactly that graph. Six named nodes rendered as six unlabelled dots, unreadable at whatever
+    // zoom the fit happened to choose, with nothing on screen to suggest they had names at all.
+    //
+    // There are no hubs to prefer here, so there is nothing to protect the reader from.
+    let hubs = false;
+    for (let i = 0; i < L.n && !hubs; i++) hubs = L.degree[i]! >= labelDegreeThreshold;
     for (let i = 0; i < L.n; i++) {
       const isFocus = i === focusIdx;
       const show = isFocus || (lit(i) && focusIdx >= 0)
-        || scale > 1.25 || L.degree[i]! >= labelDegreeThreshold;
+        || scale > 1.25 || !hubs || L.degree[i]! >= labelDegreeThreshold;
       if (!show) continue;
       ctx.fillStyle = isFocus ? pal.textStrong : pal.text;
       ctx.globalAlpha = lit(i) ? 1 : 0.25;
