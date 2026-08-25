@@ -50,11 +50,13 @@
 
 /* Kind is a data attribute so a consuming app can add kinds without touching
    the component — it only has to add one rule. */
-.graph-node[data-kind="engagement"] circle { fill: var(--color-action); }
-.graph-node[data-kind="control"]    circle { fill: var(--color-accent-2-600); }
-.graph-node[data-kind="finding"]    circle { fill: var(--color-warning); }
-.graph-node[data-kind="evidence"]   circle { fill: var(--color-success); }
-.graph-node[data-kind="person"]     circle { fill: var(--color-neutral-500); }
+/* The kind's colour is set BY THE CALLER, from the kind's declared position in the categorical
+   palette — `--kind: var(--series-3)`. It used to be five rules keyed on the spelling of five
+   governance-domain nouns, in a component whose whole point is that the caller names its own
+   kinds: a graph of standards, deliverables and decisions matched none of them and rendered in one
+   colour. The fallback is a neutral rather than an accent, so a kind nobody coloured looks
+   uncoloured instead of looking like the first series. */
+.graph-node circle { fill: var(--kind, var(--color-neutral-400)); }
 
 .graph-toolbar {
   position: absolute;
