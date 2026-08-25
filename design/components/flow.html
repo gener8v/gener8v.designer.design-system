@@ -26,6 +26,17 @@
     <div class="step"><span class="step-marker">4</span><span class="step-label">Sign</span></div>
   </div>
 
+  <p class="demo-head label">Stepper — a sequence that stopped</p>
+  <div class="stepper">
+    <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Registered</span><span class="step-connector"></span></div>
+    <div class="step" data-state="failed"><span class="step-marker">2</span><span class="step-label">Repository</span><span class="step-connector"></span></div>
+    <div class="step"><span class="step-marker">3</span><span class="step-label">Webhook</span><span class="step-connector"></span></div>
+    <div class="step"><span class="step-marker">4</span><span class="step-label">Project</span></div>
+  </div>
+  <p class="note">A step that was attempted and refused is neither current nor complete. Without a
+    word for it the step sits at <code>current</code> forever or is marked done, which is a lie
+    about what happened. The connector stays neutral: nothing left that step.</p>
+
   <p class="demo-head label">Progress</p>
   <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">
     <div class="progress-bar" style="inline-size:62%"></div>

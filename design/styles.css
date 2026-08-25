@@ -1914,6 +1914,37 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
    would claim the current step is finished. */
 .step[data-state="complete"] .step-connector { background: var(--color-action); }
 
+/* A STEP THAT WAS ATTEMPTED AND REFUSED IS NEITHER CURRENT NOR COMPLETE.
+ *
+ * The vocabulary was complete / current / upcoming, which has no word for the one outcome a reader
+ * most needs to see. A consumer running a sequence that reaches out to somebody else's API — create
+ * the repository, wire the webhook, make the Project — had the choice of leaving the failed step
+ * looking "current" forever, or marking it complete, which is a lie. This system has a rule about
+ * exactly that: all six states or none.
+ *
+ * Danger rather than warning: the step did not happen, and the sequence stopped. */
+.step[data-state="failed"] .step-marker {
+  background: var(--color-danger-700);
+  border-color: var(--color-danger-700);
+  color: var(--color-bg);
+  font-size: 0;
+}
+/* A cross from the same two borders the tick is drawn from, rotated the other way and crossed.
+   No icon dependency inside a marker this small, for the reason the tick has none. */
+.step[data-state="failed"] .step-marker::before,
+.step[data-state="failed"] .step-marker::after {
+  content: "";
+  grid-area: 1 / 1;
+  inline-size: 0.62em;
+  block-size: 2px;
+  background: currentColor;
+  font-size: var(--text-base);
+}
+.step[data-state="failed"] .step-marker::before { transform: rotate(45deg); }
+.step[data-state="failed"] .step-marker::after { transform: rotate(-45deg); }
+.step[data-state="failed"] .step-label { color: var(--color-danger-700); }
+/* The connector stays neutral: the step did not complete, so nothing left it. */
+
 .step[aria-current="step"] .step-marker {
   border-color: var(--color-action);
   color: var(--color-action);
