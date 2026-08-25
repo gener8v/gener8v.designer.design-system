@@ -57,7 +57,7 @@
   min-inline-size: 140px;
   padding: var(--space-2) var(--space-3);
   background: var(--color-inverse);
-  color: var(--color-neutral-100);
+  color: var(--color-on-inverse);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
   font-size: var(--text-xs);
