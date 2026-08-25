@@ -3082,7 +3082,11 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   flex-wrap: wrap;
   margin-block-end: var(--space-3);
 }
-.table-toolbar .input { flex: 1 1 16rem; min-inline-size: 0; }
+/* A FILTER BOX IS NOT A BANNER.
+   `flex: 1 1` let it grow into whatever the table was wide, so a four-column log gave it 400px and
+   a twelve-column one gave it 900 — a search field the width of the page, with the count stranded
+   at the far edge. It takes the room it needs and gives the rest back. */
+.table-toolbar .input { flex: 0 1 20rem; min-inline-size: 0; }
 .table-count {
   margin-inline-start: auto;
   font-family: var(--font-mono);

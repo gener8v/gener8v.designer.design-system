@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { renderHook, act } from '@testing-library/react';
-import { useTableSort } from '../packages/ui/src/index.js';
+import { renderHook, act, render } from '@testing-library/react';
+import { TableToolbar, useTableSort } from '../packages/ui/src/index.js';
 
 /**
  * Sorting, with the caret and the row order read from one piece of state.
@@ -75,5 +75,21 @@ describe('sorting a table', () => {
     act(() => result.current.clear());
 
     expect(result.current.rows).toEqual(ROWS);
+  });
+});
+
+describe('the count beside a filter', () => {
+  it('says what it is counting rather than leaving a bare number', () => {
+    // An unfiltered table rendered "4" beside itself. Four what — rows, pages, matches, seconds?
+    // A number with no noun is a number a reader has to go and check.
+    const { container } = render(<TableToolbar showing={{ of: 4, total: 4, noun: 'answers' }} />);
+
+    expect(container.querySelector('.table-count')?.textContent).toBe('4 answers');
+  });
+
+  it('says how much of the set a filter left', () => {
+    const { container } = render(<TableToolbar showing={{ of: 1, total: 4, noun: 'answers' }} />);
+
+    expect(container.querySelector('.table-count')?.textContent).toBe('1 of 4 answers');
   });
 });
