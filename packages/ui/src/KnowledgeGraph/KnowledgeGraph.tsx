@@ -242,10 +242,32 @@ export function KnowledgeGraph({
 
     const onResize = () => { fit(); drawRef.current(); };
     globalThis.addEventListener?.('resize', onResize);
+
+    /*
+     * THE CANVAS'S OWN BOX, NOT THE WINDOW'S.
+     *
+     * The simulation stops when it settles, and after that only a WINDOW resize re-fitted anything.
+     * So a canvas whose size arrives late — a tab panel that becomes visible, a flex parent that
+     * resolves after first paint, a font that loads — kept whatever scale it was given while it had
+     * no size, and nothing ever corrected it. In a consumer that meant a settled graph drawn at a
+     * scale computed against a 1px box: forty-five nodes on screen, all but invisible.
+     *
+     * A remount is the same failure with a worse ending. `draw` writes the backing store from
+     * `clientWidth`, and a fresh canvas starts at the HTML default of 300x150 — so a canvas
+     * swapped in without the layout effect re-running was never sized and never drawn at all.
+     *
+     * Observing the element covers both, because both are the element's box changing.
+     */
+    const observer = typeof ResizeObserver === 'function'
+      ? new ResizeObserver(() => { fit(); drawRef.current(); })
+      : null;
+    observer?.observe(canvas);
+
     return () => {
       alive = false;
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       globalThis.removeEventListener?.('resize', onResize);
+      observer?.disconnect();
     };
   }, [nodes, links]);
 
