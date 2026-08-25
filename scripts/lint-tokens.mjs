@@ -174,5 +174,37 @@ for (const dir of ['foundations', 'components']) {
   }
 }
 
+/* A POPUP THAT LOOKS DIFFERENT DEPENDING ON WHERE ITS TRIGGER SITS IS NOT A COMPONENT.
+ *
+ * Every floating surface is positioned away from its trigger and still descends from it, so it
+ * inherits the trigger container's typography. `.nav` sets `white-space: nowrap`; the account menu
+ * inherited it and clipped the email on its second line, with `max-inline-size` doing nothing
+ * because nothing was allowed to wrap.
+ *
+ * jsdom resolves `white-space` but not inheritance through a class rule, so this is checked in the
+ * stylesheet — which is also where the fix lives.
+ */
+{
+  // Comments are stripped first: the selector capture below reaches back to the previous `}`, so
+  // an explanatory block above a rule lands inside the selector and nothing matches exactly.
+  const bare = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const FLOATING = ['.menu', '.tooltip', '.listbox', '.popover', '.command'];
+  const NEUTRALISED = ['white-space', 'text-transform', 'letter-spacing', 'text-align'];
+  for (const selector of FLOATING) {
+    // The rule whose selector list contains this class on its own — not `.menu-item`, and not a
+    // descendant rule that only styles what is inside.
+    const rule = [...bare.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(([, sel, body]) =>
+      sel.split(',').some((s) => s.trim() === selector) && NEUTRALISED.some((p) => body.includes(`${p}:`)));
+    if (!rule) {
+      fail(`${selector} floats away from its trigger but inherits the trigger's typography — `
+        + `it must neutralise ${NEUTRALISED.join(', ')}`);
+      continue;
+    }
+    for (const property of NEUTRALISED) {
+      if (!rule[2].includes(`${property}:`)) fail(`${selector} does not neutralise inherited ${property}`);
+    }
+  }
+}
+
 if (fails.length) { console.error('✗ token lint\n' + fails.map((f) => '  · ' + f).join('\n')); process.exit(1); }
 console.log(`✓ token lint — ${declared.size} tokens round-trip, component pages clean, readme accurate`);

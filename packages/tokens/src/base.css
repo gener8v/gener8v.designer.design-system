@@ -155,6 +155,35 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
+/* --- floating surfaces ------------------------------------------------ */
+
+/* A POPUP IS NOT PART OF ITS TRIGGER.
+ *
+ * A menu, a tooltip, a listbox and a popover are all positioned away from the thing that opened
+ * them — and all still DESCEND from it in the DOM. So each one inherits whatever typography the
+ * trigger's container happens to set, which is a property of where the trigger sits rather than of
+ * the popup.
+ *
+ * The account menu found this: `.nav` sets `white-space: nowrap` so a header row cannot break, the
+ * menu inherited it, and the identity's second line — an email — ran straight out of the panel and
+ * was clipped. `max-inline-size` did nothing, because nothing was allowed to wrap.
+ *
+ * The same trap is set in a toolbar (`text-transform: uppercase`), a table cell (`text-align: end`),
+ * a mono rail (`font-family`), a breadcrumb bar (nowrap again) and any surface that leans its type.
+ * A component that looks different depending on where its trigger sits is not a component.
+ *
+ * COLOUR IS NOT RESET. That is the theme, and the theme is meant to reach in here.
+ */
+.menu, .tooltip, .listbox, .popover, .command {
+  white-space: normal;
+  text-align: start;
+  text-transform: none;
+  letter-spacing: normal;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 400;
+}
+
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 .animate-fade-up { animation: fadeUp var(--dur-slow) var(--ease-out) both; }
 
