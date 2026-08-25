@@ -47,9 +47,9 @@
   --color-accent-2-900: #01252F;
 
   /* Action */
-  --color-action: #1547B7;
-  --color-action-hover: #0C307E;
-  --color-action-active: #071C4A;
+  --color-action: #2664EC;
+  --color-action-hover: #1547B7;
+  --color-action-active: #0C307E;
 
   /* Chart series */
   --series-1: #2664EC;
@@ -77,11 +77,11 @@
   --color-warning-300: #FFC091;
   --color-warning-700: #7D4200;
   --color-warning-800: #562B00;
-  --color-danger: #D1151B;
+  --color-danger: #C13B34;
   --color-danger-100: #FFF0EE;
   --color-danger-300: #FFBCB3;
-  --color-danger-700: #A0000C;
-  --color-danger-800: #6F0006;
+  --color-danger-700: #942521;
+  --color-danger-800: #651814;
 
   /* Type */
   --font-heading: "Inter", system-ui, sans-serif;
