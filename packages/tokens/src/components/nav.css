@@ -237,11 +237,20 @@
 /* --- tabs ----------------------------------------------------------- */
 
 /* A 1px rule under the strip, with the active tab drawing over it. */
+/* A STRIP OF SEPARATE THINGS, NOT ONE BAND.
+ *
+ * The rule under the strip was `neutral-200` — the same weight the selected tab's own 2px
+ * indicator has to stand out against — and the gap between tabs was 20px. Read together at a
+ * glance that is one continuous horizontal bar with words sitting on it, and telling one tab from
+ * the next takes effort the reader should not be spending.
+ *
+ * The rule is a hairline now, and the gap is wide enough that the labels separate on their own.
+ * The indicator keeps its weight, so the selected tab is the only strong horizontal mark. */
 .tabs {
   display: flex;
   align-items: center;
-  gap: var(--space-5);
-  border-block-end: 1px solid var(--color-neutral-200);
+  gap: var(--space-6);
+  border-block-end: 1px solid var(--color-divider);
 }
 .tab {
   position: relative;
@@ -258,6 +267,30 @@
 }
 .tab:hover { color: var(--color-neutral-900); }
 .tab[aria-selected="true"], .tab[aria-current] { color: var(--color-action); }
+/* A LABEL THAT NEEDS EXPLAINING SAYS SO.
+ *
+ * "Coverage" and "Library" are nouns, which is right, but a noun can still be opaque to somebody
+ * who has not been told what it holds. The mark is the affordance: it says an explanation exists
+ * without spending a line of the interface on one, and the tab itself is the tooltip's trigger, so
+ * hover and focus both reach it and no interactive element is nested inside a button.
+ *
+ * Drawn rather than iconographic, for the reason the accordion's chevron is: `@gener8v/ui` carries
+ * no icon dependency and should not gain one for a 12px circle. */
+.tab-hint {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 1.1em;
+  block-size: 1.1em;
+  margin-inline-start: var(--space-2);
+  border: 1px solid currentColor;
+  border-radius: var(--radius-full);
+  font-size: 0.7em;
+  font-style: normal;
+  font-weight: 600;
+  opacity: 0.55;
+}
+.tab:hover .tab-hint, .tab[aria-selected="true"] .tab-hint { opacity: 1; }
+
 .tab[aria-selected="true"]::after, .tab[aria-current]::after {
   content: "";
   position: absolute;

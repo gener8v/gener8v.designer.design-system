@@ -51,6 +51,16 @@
   color: var(--color-neutral-800);
 }
 .alert svg { inline-size: var(--space-5); block-size: var(--space-5); flex: none; color: var(--color-neutral-600); }
+/* THE STACK BESIDE THE ICON.
+ *
+ * `.alert` is a flex ROW so the icon sits beside the message. That only works if the message is
+ * one flex item — and the React component rendered the title and the body as SEPARATE children,
+ * so they became two items side by side and `.alert-body`'s `margin-block-start` did nothing. A
+ * title ran into its own description, on the component whose job is to be read quickly.
+ *
+ * The documented HTML always wrapped them in a bare `<div>`. This gives that wrapper a name, so
+ * the markup and the component can no longer disagree about it. */
+.alert-content { min-inline-size: 0; }
 .alert-title { font-weight: 500; color: var(--color-neutral-900); }
 .alert-body { margin-block-start: var(--space-1); color: var(--color-neutral-700); }
 .alert-actions { display: flex; gap: var(--space-3); margin-block-start: var(--space-3); }

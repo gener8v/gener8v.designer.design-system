@@ -1,6 +1,7 @@
 import { forwardRef, useCallback } from 'react';
-import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent } from 'react';
+import type { ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent, ReactNode } from 'react';
 import { cx } from '../cx.js';
+import { Tooltip } from '../Tooltip/index.js';
 
 export type TabsOrientation = 'horizontal' | 'vertical';
 
@@ -56,12 +57,26 @@ export interface TabProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   selected: boolean;
   /** The id of the panel this tab controls. */
   controls?: string;
+  /**
+   * What this tab holds, for a label that is a noun but not an obvious one.
+   *
+   * Adds a small mark after the label and makes the tab its own tooltip trigger — so hover and
+   * focus both reach it, and nothing interactive is nested inside a button. Leave it off when the
+   * word explains itself; a mark on every tab explains nothing.
+   */
+  hint?: ReactNode;
 }
 
 export const Tab = forwardRef<HTMLButtonElement, TabProps>(function Tab(
-  { selected, controls, className, type = 'button', ...rest }, ref,
+  { selected, controls, hint, className, type = 'button', children, ...rest }, ref,
 ) {
-  return <button {...rest} ref={ref} type={type} role="tab"
-    aria-selected={selected} aria-controls={controls} tabIndex={selected ? 0 : -1}
-    className={cx('tab', className)} />;
+  const tab = (
+    <button {...rest} ref={ref} type={type} role="tab"
+      aria-selected={selected} aria-controls={controls} tabIndex={selected ? 0 : -1}
+      className={cx('tab', className)}>
+      {children}
+      {hint ? <i className="tab-hint" aria-hidden="true">i</i> : null}
+    </button>
+  );
+  return hint ? <Tooltip content={hint}>{tab}</Tooltip> : tab;
 });
