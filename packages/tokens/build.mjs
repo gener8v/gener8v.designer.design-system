@@ -28,7 +28,18 @@ const ramps = {
   'accent-2': ramp(pal.accent2),
   success: ramp(semantic.success),
   warning: ramp(semantic.warning),
-  danger: ramp(semantic.danger),
+  // CHROMA PULLED BACK, BECAUSE THE RED WAS SHOUTING.
+  //
+  // `#DC2626` at full chroma produced a base of `#D1151B` — a pure, vivid crimson that was the
+  // loudest thing on any page carrying it, well past what the rest of the palette does. Danger
+  // has to be unmistakable; it does not have to be the brightest object on the screen, and a
+  // status colour that overpowers the content it is about is a status colour people learn to
+  // stop reading.
+  //
+  // Scaled rather than hand-picked, so every step of the ramp moves together and the tint and
+  // border steps stay in the same family as the base. Contrast barely moves: 5.48 to 5.33 with
+  // white on the base, 8.40 to 8.25 on the hover step.
+  danger: ramp(semantic.danger, { chromaScale: 0.8 }),
 };
 
 const px = (n) => `${n}px`;
@@ -57,9 +68,19 @@ for (const key of ['neutral', 'accent', 'accent-2']) {
 }
 
 /* --- action: what actually fills a button --- */
-T('--color-action', ramps.accent[700], 'color');
-T('--color-action-hover', ramps.accent[800], 'color');
-T('--color-action-active', ramps.accent[900], 'color');
+// ONE STEP LIGHTER THAN THE RAMP'S DEEPEST USABLE BLUE.
+//
+// The action sat at 700 and filled a primary button edge to edge, which read as far richer than
+// anything around it — a saturated slab against a page built from neutrals, hairlines and the
+// ramp's LIGHT accent steps. 600 keeps a blue that is unmistakably the action and stops it
+// out-weighing the surface it sits on. It is also `--series-1`, so the strongest thing on a page
+// and the first line on a chart are the same colour rather than two blues.
+//
+// It still clears every pair it has to: 5.10:1 with white on the button, and 5.10:1 as a link or a
+// focus ring on the ground, where 4.5 and 3.0 are the floors.
+T('--color-action', ramps.accent[600], 'color');
+T('--color-action-hover', ramps.accent[700], 'color');
+T('--color-action-active', ramps.accent[800], 'color');
 
 /* --- section band (saturation as presence, at page scale) --- */
 T('--color-section', ramps.accent[900], 'color');
