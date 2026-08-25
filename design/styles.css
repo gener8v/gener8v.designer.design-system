@@ -1548,6 +1548,20 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  * the markup and the component can no longer disagree about it. */
 .alert-content { min-inline-size: 0; }
 .alert-title { font-weight: 500; color: var(--color-neutral-900); }
+/* A RULE UNDER THE TITLE, AND ONLY WHERE SOMETHING FOLLOWS IT.
+ *
+ * The same treatment the rail's group headings carry, for the same reason: a heading and the thing
+ * it heads need a boundary, not just a gap. `:not(:last-child)` because an alert that is only a
+ * title has nothing to be separated FROM, and a rule under the last line of a card is a rule
+ * hanging in space.
+ *
+ * The colour is the tone's own border, so the line belongs to the alert rather than cutting across
+ * it in a neutral that appears nowhere else on the card. */
+.alert-content > .alert-title:not(:last-child) {
+  padding-block-end: var(--space-2);
+  border-block-end: 1px solid color-mix(in srgb, currentColor 28%, transparent);
+  margin-block-end: var(--space-2);
+}
 .alert-body { margin-block-start: var(--space-1); color: var(--color-neutral-700); }
 .alert-actions { display: flex; gap: var(--space-3); margin-block-start: var(--space-3); }
 
