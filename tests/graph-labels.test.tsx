@@ -26,9 +26,16 @@ let painted: string[] = [];
 let box = { w: 900, h: 600 };
 
 beforeAll(() => {
+  // `painted` is ONE FRAME's labels, not every frame's. The simulation ticks and redraws many
+  // times per render, so an accumulating list counts the same label once per frame and no
+  // assertion about how many fit could ever be written. Each draw begins by clearing the canvas,
+  // which is the frame boundary.
   const ctx = new Proxy({}, {
-    get: (_t, prop) =>
-      prop === 'fillText' ? (text: string) => { painted.push(text); } : () => undefined,
+    get: (_t, prop) => {
+      if (prop === 'fillText') return (text: string) => { painted.push(text); };
+      if (prop === 'clearRect') return () => { painted.length = 0; };
+      return () => undefined;
+    },
   }) as unknown as CanvasRenderingContext2D;
   HTMLCanvasElement.prototype.getContext = (() => ctx) as HTMLCanvasElement['getContext'];
   for (const [prop, read] of [['clientWidth', () => box.w], ['clientHeight', () => box.h]] as const) {
@@ -80,4 +87,36 @@ describe('a graph where nothing is a hub', () => {
     expect(painted).toContain('Hub');
     expect(painted).not.toContain('Spoke 7');
   });
+});
+
+describe('a graph with more names than room', () => {
+  /** Enough nodes in a small box that the layout cannot keep their labels apart. */
+  const CROWD = Array.from({ length: 40 }, (_, i) => ({
+    id: `n${i}`,
+    label: `A reasonably long deliverable name ${i}`,
+  }));
+
+  it('drops the labels that would land on top of another', () => {
+    // The fix above turns every label on when nothing is a hub, which is right — and in a sparse
+    // graph is also dense: with no links there is nothing pulling nodes together, so the layout
+    // spreads them evenly and forty names land on each other. Naming everything and naming nothing
+    // are the same result if the names cannot be read.
+    box = { w: 420, h: 300 };
+
+    render(<KnowledgeGraph caption="The record" nodes={CROWD} links={[]} />);
+
+    expect(painted.length).toBeGreaterThan(0);
+    expect(painted.length).toBeLessThan(CROWD.length);
+  });
+
+  // WHAT IS NOT GUARDED HERE, AND WHY
+  //
+  // The ORDER labels are placed in — focused node, then by degree — is not separately specified.
+  // Ordering only decides when several eligible labels collide, and which pair collides is the
+  // simulation's business: every spec that isolated it turned out to pass with the ordering removed
+  // (the degree threshold had already silenced the competition) or to depend on where the layout
+  // happened to put two nodes. A spec asserting positions would be asserting the simulation rather
+  // than the rule, and a spec that passes with the rule deleted guards nothing.
+  //
+  // So the rule stands on the check above — some labels are dropped — and on being read.
 });
