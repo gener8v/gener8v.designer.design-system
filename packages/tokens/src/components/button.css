@@ -40,13 +40,23 @@
 .btn-xl { --btn-h: var(--control-h-xl); --btn-pad-y: var(--space-3); --btn-pad-x: var(--space-6); font-size: var(--text-lg); }
 
 /* --- variants --- */
+/* A FILLED BUTTON HAS AN EDGE.
+ *
+ * The border was the same colour as the fill, so the shape had no boundary — a saturated slab
+ * bleeding into the page, and at `xl` a large one. The rail next to it reads as considered because
+ * its active item has a defined edge and a shadow doing quiet work; a filled button had neither
+ * doing anything.
+ *
+ * One ramp step down, same hue. It costs a pixel and gives the shape a limit, which is most of what
+ * "less harsh" turns out to mean here — the alternative, lightening the fill, would take the
+ * primary action off `--color-action` and it is the one thing that must stay put. */
 .btn-primary {
   background: var(--color-action);
-  border-color: var(--color-action);
+  border-color: var(--color-action-hover);
   color: #fff;
   box-shadow: var(--shadow-sm);
 }
-.btn-primary:hover:not([disabled]) { background: var(--color-action-hover); border-color: var(--color-action-hover); }
+.btn-primary:hover:not([disabled]) { background: var(--color-action-hover); border-color: var(--color-action-active); }
 .btn-primary:active:not([disabled]) { background: var(--color-action-active); border-color: var(--color-action-active); }
 
 .btn-secondary {
@@ -68,11 +78,11 @@
 
 .btn-destructive {
   background: var(--color-danger);
-  border-color: var(--color-danger);
+  border-color: var(--color-danger-700);
   color: #fff;
   box-shadow: var(--shadow-sm);
 }
-.btn-destructive:hover:not([disabled]) { background: var(--color-danger-700); border-color: var(--color-danger-700); }
+.btn-destructive:hover:not([disabled]) { background: var(--color-danger-700); border-color: var(--color-danger-800); }
 .btn-destructive:active:not([disabled]) { background: var(--color-danger-800); border-color: var(--color-danger-800); }
 
 .btn-link {
