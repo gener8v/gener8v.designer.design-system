@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // WCAG 2.2 contrast gate over the pairs the system actually renders.
 import { contrast } from '../packages/tokens/src/color.mjs';
-import tokens from '../packages/tokens/dist/tokens.mjs';
+import tokens, { darkTokens } from '../packages/tokens/dist/tokens.mjs';
 
 const t = (n) => tokens[n];
 const WHITE = '#FFFFFF';
@@ -41,6 +41,42 @@ const pairs = [
   ['card border on ground',      t('--color-neutral-200'),   t('--color-bg'),            1.2],
   ['border on ground',           t('--color-neutral-300'),   t('--color-bg'),            1.5],
 ];
+
+/* THE DARK GROUND, GATED THE SAME WAY.
+ *
+ * Dark mode mirrors every ramp, so a pair that clears 4.5:1 on white does NOT automatically clear
+ * it on black — the two ends of a ramp are not equidistant from their grounds. Shipping a mode
+ * this file does not check would be the one thing this file exists to stop.
+ *
+ * The step names below are the LIGHT ones, read through the mirror: dark `neutral-700` is light
+ * `neutral-300`, and so on.
+ */
+// Read from what dark mode actually emits, not recomputed here — a second copy of the mirror is a
+// second thing to keep in step, and this gate exists precisely because those drift.
+const d = (name) => {
+  const v = darkTokens[name];
+  if (!v) throw new Error(`lint-contrast: dark mode emits no ${name}`);
+  return v;
+};
+const DARK_BG = d('--color-bg');
+const DARK_SURFACE = d('--color-surface');
+
+pairs.push(
+  ['dark: body text on ground',   d('--color-text'),          DARK_BG,      4.5],
+  ['dark: paragraph on ground',   d('--color-neutral-700'),   DARK_BG,      4.5],
+  ['dark: muted / label',         d('--color-neutral-600'),   DARK_BG,      4.5],
+  ['dark: neutral-500 chrome',    d('--color-neutral-500'),   DARK_BG,      3.0],
+  ['dark: body text on surface',  d('--color-text'),          DARK_SURFACE, 4.5],
+  ['dark: primary button label',  WHITE,                      t('--color-action'), 4.5],
+  ['dark: action as chrome',      t('--color-action'),        DARK_BG,      3.0],
+  ['dark: link on ground',        d('--color-accent-700'),    DARK_BG,      4.5],
+  ['dark: tag accent',            d('--color-accent-700'),    d('--color-accent-100'),  4.5],
+  ['dark: tag success',           d('--color-success-700'),   d('--color-success-100'), 4.5],
+  ['dark: tag warning',           d('--color-warning-700'),   d('--color-warning-100'), 4.5],
+  ['dark: tag danger',            d('--color-danger-700'),    d('--color-danger-100'),  4.5],
+  ['dark: border on ground',      d('--color-neutral-300'),   DARK_BG,      1.5],
+  ['dark: text on the inverse panel', d('--color-on-inverse'), d('--color-inverse'),    4.5],
+);
 
 let bad = 0;
 for (const [name, fg, bg, min] of pairs) {

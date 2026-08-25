@@ -21,6 +21,17 @@ export const theme = {
     text: '#111827',
     accent: '#2563EB',   // blue-600, the site's action colour
     accent2: '#0891B2',  // cyan-600 — DATA SERIES ONLY, never a second button colour
+
+    // THE DARK GROUND, PINNED THE SAME WAY THE LIGHT ONE IS.
+    //
+    // Light mode pins `bg`, `surface` and `text` rather than deriving them, because a page's
+    // ground is a decision and not a step on a ramp. Dark mode is the same decision made twice, so
+    // it is declared here rather than computed from an inversion nobody chose.
+    //
+    // `surface` is the neutral ramp's darkest step, which is also the ground every dark panel in
+    // the system already used — so a code block and a raised card land on the same colour instead
+    // of two near-blacks that almost match.
+    dark: { bg: '#0F1522', surface: '#182030' },
   },
 
   semantic: {

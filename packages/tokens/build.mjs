@@ -62,6 +62,23 @@ T('--color-accent', pal.accent, 'color');
 T('--color-accent-2', pal.accent2, 'color');
 T('--color-divider', `color-mix(in srgb, ${ink} 12%, transparent)`, 'color');
 
+/* --- the panel that is dark in BOTH modes --- */
+// A code block, a tooltip and a chart's readout are dark on a light page on purpose: they are
+// read AGAINST the page rather than as part of it. Every one of them reached for
+// `--color-neutral-900` directly, which is fine until the ramp mirrors for dark mode and a code
+// block turns white. So the intent gets a name, and the name is what those components use.
+T('--color-inverse', ramps.neutral[900], 'color');
+T('--color-on-inverse', ramps.neutral[200], 'color');
+
+/* --- syntax, which lives on the inverse ground in both modes --- */
+// Not ramp steps: the ground under these does not change between modes, so neither should they.
+// Mirroring would have put a dark comment on a dark code block.
+T('--code-comment', ramps.neutral[400], 'color');
+T('--code-string', ramps.success[300], 'color');
+T('--code-keyword', ramps.accent[300], 'color');
+T('--code-number', ramps.warning[300], 'color');
+T('--code-name', ramps.accent[200], 'color');
+
 /* --- ramps --- */
 for (const key of ['neutral', 'accent', 'accent-2']) {
   for (const s of STEPS) T(`--color-${key}-${s}`, ramps[key][s], 'color');
@@ -170,6 +187,8 @@ ${section('Action')}${emit(pick(/^--color-action/))}
 ${section('Chart series')}${emit(pick(/^--series-\d/))}
 ${section('Section band')}${emit(pick(/^--color-section/))}
 ${section('Status')}${emit(pick(/^--color-(success|warning|danger)/))}
+${section('The panel that is dark in both modes')}${emit(pick(/^--color-(inverse|on-inverse)$/))}
+${section('Syntax')}${emit(pick(/^--code-/))}
 ${section('Type')}${emit(pick(/^--font-/))}
 ${emit(pick(/^--(text|leading|tracking)-/))}
 ${section('Space')}${emit(byKind('spacing'))}
@@ -192,21 +211,91 @@ if (existsSync(compDir)) {
   }
 }
 
-const seriesDark = SERIES_DARK.map((hex, i) => `    --series-${i + 1}: ${hex};`).join('\n');
-const darkSeriesBlock = `
-/* Chart series in a dark host. The system's own ground stays light — these
-   exist so a chart embedded in a dark application still validates. Steps are
-   the same eight hues re-stepped for a dark surface, not an automatic flip,
-   and all eight clear 3:1 against #182030. */
+/* ------------------------------------------------------------------ dark */
+
+/*
+ * A MIRROR, NOT A SECOND PALETTE.
+ *
+ * Every ramp step swaps with its opposite: 100 with 900, 200 with 800, and so on. That one move is
+ * what makes dark mode a token change rather than a rewrite, because it preserves what the numbers
+ * MEAN. A low step is the quiet one — a hover tint, a hairline — and a high step is the loud one —
+ * body text, a title. Mirroring keeps that true, so `.checklist-item:hover { background:
+ * neutral-100 }` becomes a dark tint on a dark page and `color: neutral-900` becomes light text,
+ * without either rule being touched.
+ *
+ * Inverting the ground and leaving the ramps alone would have done the opposite: every subtle tint
+ * would turn into the brightest thing on the page.
+ *
+ * WHAT DELIBERATELY DOES NOT MIRROR
+ *
+ * `--color-action`. Its whole job is to be the same action in both modes, and #2664EC works on
+ * both grounds — 5.10:1 with white on the button, 3.58:1 against the dark page, where 3.0 is the
+ * floor for a UI component. Mirroring it would have produced a pale blue that white text fails on.
+ *
+ * The inverse surface and the syntax colours, for the same reason one level down: the ground under
+ * them is dark in BOTH modes, so a mirror would put a dark comment on a dark code block.
+ */
+const MIRROR = Object.fromEntries(STEPS.map((s, i) => [s, STEPS[STEPS.length - 1 - i]]));
+const mirrored = (key) => STEPS.map((step) => `    --color-${key}-${step}: ${ramps[key][MIRROR[step]]};`);
+
+/* The same values as data. `lint:contrast` has to be able to read what dark mode actually renders
+ * — a mode the gate cannot see is a mode that ships unchecked, which is the one thing that gate
+ * exists to prevent. Written from the same object the CSS is written from, so the two cannot
+ * disagree. */
+const darkValues = {
+  '--color-bg': pal.dark.bg,
+  '--color-surface': pal.dark.surface,
+  '--color-text': ramps.neutral[100],
+  '--color-inverse': pal.dark.surface,
+  '--color-on-inverse': ramps.neutral[100],
+  ...Object.fromEntries(['neutral', 'accent', 'accent-2'].flatMap((k) =>
+    STEPS.map((step) => [`--color-${k}-${step}`, ramps[k][MIRROR[step]]]))),
+  ...Object.fromEntries(['success', 'warning', 'danger'].flatMap((k) =>
+    [100, 300, 700, 800].map((step) => [`--color-${k}-${step}`, ramps[k][MIRROR[step]]]))),
+};
+
+const darkVars = [
+  `    /* Ground, pinned in theme.mjs — a page's ground is a decision, not a ramp step. */`,
+  `    --color-bg: ${pal.dark.bg};`,
+  `    --color-surface: ${pal.dark.surface};`,
+  `    --color-text: ${ramps.neutral[100]};`,
+  `    --color-divider: color-mix(in srgb, #FFFFFF 14%, transparent);`,
+  ``,
+  `    /* The ramps, mirrored. */`,
+  ...mirrored('neutral'),
+  ...mirrored('accent'),
+  ...mirrored('accent-2'),
+  ...['success', 'warning', 'danger'].flatMap((k) =>
+    [100, 300, 700, 800].map((step) => `    --color-${k}-${step}: ${ramps[k][MIRROR[step]]};`)),
+  ``,
+  `    /* A raised panel reads by being LIGHTER than the page here, not darker. */`,
+  `    --color-inverse: ${pal.dark.surface};`,
+  `    --color-on-inverse: ${ramps.neutral[100]};`,
+  ``,
+  `    /* Elevation is a shadow on white and a lighter surface on black; a shadow on a dark`,
+  `       ground is invisible, so the ring carries it instead. */`,
+  `    --shadow-sm: 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);`,
+  `    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px color-mix(in srgb, #FFFFFF 10%, transparent);`,
+  ``,
+  `    /* Chart series, re-stepped for a dark surface rather than flipped. */`,
+  ...SERIES_DARK.map((hex, i) => `    --series-${i + 1}: ${hex};`),
+].join('\n');
+
+const darkBlock = `
+/* DARK MODE.
+   Three states, and the middle one is the default: an explicit choice stamps
+   [data-theme], and "system" stamps nothing — so only prefers-color-scheme
+   separates light from dark, and [data-theme="light"] has to win over it. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-${seriesDark}
+${darkVars}
   }
 }
 :root[data-theme="dark"] {
-${seriesDark}
+${darkVars}
 }
 `;
+const darkSeriesBlock = darkBlock;
 
 const css = `/* ${theme.name} design system — GENERATED by packages/tokens/build.mjs.
    Do not edit. Change packages/tokens/src/theme.mjs (tokens),
@@ -273,7 +362,8 @@ write('design/_adherence.oxlintrc.json', JSON.stringify({
 
 const jsonTokens = Object.fromEntries(tokens.map((t) => [t.name, t.value]));
 write('packages/tokens/dist/tokens.mjs',
-  `// GENERATED — do not edit.\nexport const tokens = ${JSON.stringify(jsonTokens, null, 2)};\nexport default tokens;\n`);
+  `// GENERATED — do not edit.\nexport const tokens = ${JSON.stringify(jsonTokens, null, 2)};\n`
+  + `export const darkTokens = ${JSON.stringify(darkValues, null, 2)};\nexport default tokens;\n`);
 write('packages/tokens/dist/tokens.d.ts',
   `// GENERATED — do not edit.\nexport declare const tokens: {\n${
     tokens.map((t) => `  ${JSON.stringify(t.name)}: string;`).join('\n')}\n};\nexport default tokens;\n`);
