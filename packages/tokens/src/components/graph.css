@@ -85,12 +85,19 @@
   color: var(--color-neutral-700);
 }
 .graph-legend-key { display: inline-flex; align-items: center; gap: var(--space-2); }
-.graph-legend-dot { inline-size: var(--space-2); block-size: var(--space-2); border-radius: var(--radius-full); }
-.graph-legend-dot[data-kind="engagement"] { background: var(--color-action) !important; }
-.graph-legend-dot[data-kind="control"]    { background: var(--color-accent-2-600) !important; }
-.graph-legend-dot[data-kind="finding"]    { background: var(--color-warning) !important; }
-.graph-legend-dot[data-kind="evidence"]   { background: var(--color-success) !important; }
-.graph-legend-dot[data-kind="person"]     { background: var(--color-neutral-500) !important; }
+/* NO PER-KIND RULES HERE, AND THAT IS THE FIX.
+   There were five, keyed on the spelling of five governance-domain nouns — engagement, control,
+   finding, evidence, person — in a component whose `kinds` prop exists so a caller can name its
+   own. A graph of standards, deliverables and decisions matched none of them: every dot rendered
+   with no background, beside a canvas where every node had fallen through to one fallback colour.
+   The colour is now set from the kind's DECLARED POSITION, by the component, from the same
+   arithmetic the canvas uses — so the legend and the nodes cannot disagree about what blue means. */
+.graph-legend-dot {
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-400);
+}
 
 /* The keyboard equivalent of the canvas: a real list of entities and their
    stated relationships. Shown on focus so it is discoverable, not a secret. */

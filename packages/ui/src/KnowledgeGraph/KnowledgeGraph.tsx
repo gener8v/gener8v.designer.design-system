@@ -19,20 +19,34 @@ export interface KnowledgeGraphProps {
   className?: string;
 }
 
-const KIND_VAR: Record<string, string> = {
-  engagement: '--color-action',
-  control: '--color-accent-2-600',
-  finding: '--color-warning',
-  evidence: '--color-success',
-  person: '--color-neutral-500',
-};
+/**
+ * How many distinct kinds a graph can colour: the categorical series palette, which is eight.
+ *
+ * WHY THE VOCABULARY IS THE CONSUMER'S
+ *
+ * This used to be a fixed map from five words — `engagement`, `control`, `finding`, `evidence`,
+ * `person` — to five tokens. Those are governance-domain nouns baked into a component that takes
+ * `kinds` from its caller precisely so the caller can name its own.
+ *
+ * A consumer whose graph held standards, deliverables and decisions matched none of them. Every
+ * node fell through to the same fallback colour and every legend dot rendered with no background
+ * at all, because the `[data-kind]` rules were written for words nobody else uses. The `kinds`
+ * prop accepted anything and coloured five things.
+ *
+ * So colour is assigned from the DECLARED order instead. `--series-N` is the palette for exactly
+ * this — categorical, hues the interface deliberately does not use for status, re-stepped rather
+ * than flipped for dark mode, and gated by the contrast and palette linters.
+ */
+const SERIES = 8;
 
 /** Reads token values once per mount so canvas colours still come from CSS. */
-function readPalette(el: HTMLElement) {
+function readPalette(el: HTMLElement, declared: readonly string[]) {
   const cs = getComputedStyle(el);
   const v = (name: string, fallback: string) => cs.getPropertyValue(name).trim() || fallback;
   const kinds: Record<string, string> = {};
-  for (const [kind, token] of Object.entries(KIND_VAR)) kinds[kind] = v(token, '#528AFF');
+  declared.forEach((kind, i) => {
+    kinds[kind] = v(`--series-${(i % SERIES) + 1}`, '#528AFF');
+  });
   return {
     kinds,
     fallback: v('--color-accent-500', '#528AFF'),
@@ -194,14 +208,49 @@ export function KnowledgeGraph({
     // There are no hubs to prefer here, so there is nothing to protect the reader from.
     let hubs = false;
     for (let i = 0; i < L.n && !hubs; i++) hubs = L.degree[i]! >= labelDegreeThreshold;
-    for (let i = 0; i < L.n; i++) {
+
+    // AND A LABEL ON TOP OF ANOTHER LABEL IS TWO LABELS NOBODY CAN READ.
+    //
+    // The fix above turned every label on in a graph with no hubs, which is right, and in a sparse
+    // graph is also dense: with no links there is nothing pulling nodes together, so the layout
+    // spreads them evenly and forty-five names land on top of each other. Naming everything and
+    // naming nothing are the same result if the names cannot be read.
+    //
+    // Greedy, in order of what matters: the focused node first, then hubs, then the rest. A label
+    // whose box overlaps one already placed is dropped rather than drawn over — so what survives at
+    // any zoom is the most important set that FITS, and zooming in reveals more rather than
+    // untangling a knot.
+    const placed: { x0: number; y0: number; x1: number; y1: number }[] = [];
+    const lineHeight = fontPx * 1.25;
+    // `measureText` is the real width; the estimate is for a canvas stub that has no text metrics.
+    const widthOf = (text: string) =>
+      ctx.measureText?.(text)?.width ?? text.length * fontPx * 0.55;
+    const order = [...Array(L.n).keys()].sort(
+      (a, b) =>
+        Number(b === focusIdx) - Number(a === focusIdx) || L.degree[b]! - L.degree[a]!,
+    );
+
+    for (const i of order) {
       const isFocus = i === focusIdx;
       const show = isFocus || (lit(i) && focusIdx >= 0)
         || scale > 1.25 || !hubs || L.degree[i]! >= labelDegreeThreshold;
       if (!show) continue;
+      const text = labelFor.get(L.ids[i]!) ?? '';
+      if (!text) continue;
+
+      const half = widthOf(text) / 2;
+      const top = y[i]! + radiusFor(L.degree[i]!) + 3 / scale;
+      const box = { x0: x[i]! - half, y0: top, x1: x[i]! + half, y1: top + lineHeight };
+      const clash = placed.some(
+        (p) => box.x0 < p.x1 && box.x1 > p.x0 && box.y0 < p.y1 && box.y1 > p.y0,
+      );
+      // The focused node keeps its label whatever it lands on: it is the one the reader pointed at.
+      if (clash && !isFocus) continue;
+      placed.push(box);
+
       ctx.fillStyle = isFocus ? pal.textStrong : pal.text;
       ctx.globalAlpha = lit(i) ? 1 : 0.25;
-      ctx.fillText(labelFor.get(L.ids[i]!) ?? '', x[i]!, y[i]! + radiusFor(L.degree[i]!) + 3 / scale);
+      ctx.fillText(text, x[i]!, top);
     }
     ctx.globalAlpha = 1;
   }, [hover, selected, neighbours, kindFor, labelFor, labelDegreeThreshold]);
@@ -214,7 +263,7 @@ export function KnowledgeGraph({
     const host = hostRef.current;
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
-    paletteRef.current = readPalette(host);
+    paletteRef.current = readPalette(host, kinds.map((k) => k.kind));
 
     const L = createLayout(nodes, links, W, H);
     layoutRef.current = L;
@@ -373,9 +422,17 @@ export function KnowledgeGraph({
 
       {kinds.length > 0 && !showIndex && (
         <div className="graph-legend">
-          {kinds.map((k) => (
+          {kinds.map((k, i) => (
             <span key={k.kind} className="graph-legend-key">
-              <span className="graph-legend-dot" data-kind={k.kind} />{k.label}
+              {/* The colour comes from the DECLARED position, the same arithmetic the canvas
+                  does — a stylesheet rule keyed on the kind's spelling is how the legend and the
+                  nodes came to disagree, and then to show nothing at all. */}
+              <span
+                className="graph-legend-dot"
+                data-kind={k.kind}
+                style={{ background: `var(--series-${(i % SERIES) + 1})` }}
+              />
+              {k.label}
             </span>
           ))}
         </div>
