@@ -149,5 +149,19 @@
   color: var(--color-neutral-700);
   font-size: var(--text-sm);
 }
-.callout[data-tone="accent"] { border-inline-start-color: var(--color-action); }
+/* ONE TONE VOCABULARY, OR IT IS NOT A VOCABULARY.
+ *
+ * `.alert`, `.toast` and `.state` all speak the same five — neutral, accent, success, warning,
+ * danger. `.callout` spoke two, so a consumer with a quiet aside that flags an ABSENCE had the
+ * choice of a tone that says "here is some context" or an alert, which is a box in the middle of
+ * prose shouting about a missing picture. They reached for `.label` and a warning colour instead,
+ * setting a two-line sentence in uppercase mono, because that was the only warning-coloured thing
+ * available at prose scale.
+ *
+ * The rule takes the tone and nothing else does. A callout is still a rule, not a box — a tinted
+ * background here would make it the alert it is deliberately not. */
+.callout[data-tone="accent"]  { border-inline-start-color: var(--color-action); }
+.callout[data-tone="success"] { border-inline-start-color: var(--color-success-700); }
+.callout[data-tone="warning"] { border-inline-start-color: var(--color-warning-700); }
+.callout[data-tone="danger"]  { border-inline-start-color: var(--color-danger-700); }
 .callout-title { font-weight: 500; color: var(--color-neutral-900); margin-block-end: var(--space-1); }
