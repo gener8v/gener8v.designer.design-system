@@ -14,7 +14,14 @@ export const Stepper = forwardRef<HTMLDivElement, StepperProps>(function Stepper
     className={cx('stepper', vertical && 'stepper-vertical', className)} />;
 });
 
-export type StepState = 'complete' | 'current' | 'upcoming';
+/**
+ * Where a step is.
+ *
+ * `failed` is the one that was missing, and it is not a cosmetic addition: a sequence that reaches
+ * out to somebody else's API stops when a step is refused, and without a word for that the step
+ * either sits at `current` forever or is marked `complete`, which is a lie about what happened.
+ */
+export type StepState = 'complete' | 'current' | 'failed' | 'upcoming';
 
 export interface StepProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
   state: StepState;
@@ -37,6 +44,9 @@ export const Step = forwardRef<HTMLDivElement, StepProps>(function Step(
       data-state={state === 'upcoming' ? undefined : state}
       aria-current={state === 'current' ? 'step' : undefined}
       className={cx('step', className)}>
+      {/* The marker is a glyph once a step is complete or failed, and the index is hidden by
+          `font-size: 0` rather than removed — a screen reader still reads the label beside it, and
+          the number is what keeps the markers the same size in both states. */}
       <span className="step-marker">{index}</span>
       <span className="step-label">{label}</span>
       {connector && <span className="step-connector" />}
