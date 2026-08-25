@@ -59,17 +59,29 @@ export interface DocRowProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: number;
   modified?: ReactNode;
   selected?: boolean;
+  /**
+   * What the badge says, when the row is not a file.
+   *
+   * `kindOf` reads an extension, which is right for a document library and wrong for a list of
+   * RECORDS — a standard, a deliverable and a decision are all markdown, so badging them by format
+   * tells a reader nothing about which is which. A consumer with its own vocabulary had to either
+   * accept three identical "MD" badges or hand-roll the whole list, and one of them did.
+   *
+   * Still a mono badge, never a coloured chip: the reasoning on `DocType` holds whatever the word
+   * is. Keep it short — three or four characters, like the extensions it sits alongside.
+   */
+  label?: string;
 }
 
 export const DocRow = forwardRef<HTMLButtonElement, DocRowProps>(function DocRow(
-  { name, kind, sub, size, modified, selected, className, type = 'button', ...rest }, ref,
+  { name, kind, sub, size, modified, selected, label, className, type = 'button', ...rest }, ref,
 ) {
   const k = kind ?? kindOf(name);
   return (
     <li>
       <button {...rest} ref={ref} type={type} aria-selected={selected}
         className={cx('doc-row', className)}>
-        <DocType kind={k} />
+        <DocType kind={k} {...(label ? { label } : {})} />
         <span className="doc-name">
           {name}
           {sub ? <span className="doc-sub">{sub}</span> : null}
