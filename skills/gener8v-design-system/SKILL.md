@@ -31,7 +31,7 @@ These are not preferences. Breaking one produces work that is off-brand or inacc
 
 1. **Headings are weight 500, never heavier.** Hierarchy is size and space. This single
    restraint is most of what "airy" means here.
-2. **Actions fill with `--color-action` (`#1547B7`), not `--color-accent`.** The accent
+2. **Actions fill with `--color-action` (`#2664EC`), not `--color-accent`.** The accent
    stays for focus rings, links and atmosphere. One primary button per view.
 3. **`--color-neutral-500` must not carry text** — 3.17:1 on white. Secondary copy uses
    `--color-neutral-600` (`.muted`, `.label`).
@@ -48,6 +48,18 @@ These are not preferences. Breaking one produces work that is off-brand or inacc
    only on reveal. Copy never requires reveal.
 10. **Irreversible actions enumerate what they will write.** Prose saying "this cannot be
     undone" is not the same artifact.
+11. **A label names its kind.** A button is an action **verb** — `Answer`, `Record`,
+    `Publish`. A navigation item is a **noun** — `Decisions`, `Standards`. Neither is a
+    sentence, a clause or a question. "Answer for it" makes a reader parse a phrase before
+    they can decide whether to press it; "Answer" does not.
+12. **A status is a `Tag`; an action is a `Button`.** Never a bare `<button>` styled to
+    look like a link. Where the two sit together — a row that reports a state and offers
+    the way out of it — they must differ in **shape**, not only in colour. Two small
+    coloured words side by side read as two statuses, and the reader cannot tell what is
+    being reported from what they can do about it.
+13. **Words are not the interface.** A status is one or two words, not a sentence. Prose
+    belongs in a lede, a hint or a state's body — the places built to carry it — and never
+    in a tag, a label or a control.
 
 ## Where to look
 
