@@ -26,6 +26,25 @@ describe('an alert', () => {
     expect(content!.querySelector('.alert-body')).not.toBeNull();
   });
 
+  it('rules off its title from the body below it', () => {
+    // The same treatment the rail's group headings carry: a heading and the thing it heads need a
+    // boundary, not only a gap.
+    const { container } = render(
+      <Alert tone="danger"><AlertTitle>No standards</AlertTitle><AlertBody>Nothing measures it.</AlertBody></Alert>,
+    );
+
+    // The SHORTHAND, because jsdom stores what was declared and does not expand it into
+    // `border-block-end-style` — asserting the longhand tests jsdom, not the rule.
+    expect(getComputedStyle(container.querySelector('.alert-title')!).borderBlockEnd).toMatch(/1px solid/);
+  });
+
+  it('leaves a title-only alert without a rule hanging in space', () => {
+    // Nothing follows it, so there is nothing to be separated from.
+    const { container } = render(<Alert tone="warning"><AlertTitle>Saved</AlertTitle></Alert>);
+
+    expect(getComputedStyle(container.querySelector('.alert-title')!).borderBlockEnd).not.toMatch(/1px solid/);
+  });
+
   it('keeps the icon out of that stack', () => {
     // An icon passed as a child would land inside the message and push the title down a line,
     // which is why it is a prop.
