@@ -311,3 +311,28 @@
   block-size: 2px;
   background: var(--color-action);
 }
+
+/* --- the page band -------------------------------------------------- */
+
+/* WHAT A SURFACE SAYS IT IS, ABOVE WHAT IT HOLDS.
+ *
+ * `.shell-head` lived in the app-shell template's own `<style>` block — scaffolding, not a
+ * component — so every consumer that wanted a page header wrote one. The delivery record's had no
+ * boundary of any kind: a picker, an eyebrow, a headline and four figures in undifferentiated
+ * space, with nothing saying where the header stopped and the page began.
+ *
+ * The rule is the whole point. A band is only a band if it has an edge; without one it is just the
+ * first few lines of the page, and the reader does the grouping.
+ */
+.shell-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-block-end: var(--space-6);
+  border-block-end: 1px solid var(--color-divider);
+}
+
+/* Pushed to the end of the row. A caller whose first child takes the free space (`flex: 1`) does
+   not need this and it costs nothing there; a caller whose does not is why it exists. */
+.shell-actions { margin-inline-start: auto; display: flex; gap: var(--space-2); }

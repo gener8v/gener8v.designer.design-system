@@ -25,6 +25,20 @@
 .stat-delta[data-dir="up"] { color: var(--color-success-700); }
 .stat-delta[data-dir="down"] { color: var(--color-danger-700); }
 
+/* A ROW OF FIGURES IS ONE READING, NOT FOUR.
+ *
+ * Four `.stat`s side by side are four columns floating in a gap, and a reader has to decide for
+ * themselves whether they belong together. They do — "0 covered, 0 gaps, 0 not applicable, 66
+ * nobody has looked" is one sentence about one thing, and the rules between them say so.
+ *
+ * A rule between rather than a box around: a box would make the figures compete with the content
+ * beneath them, and they are a summary of it rather than a panel beside it. */
+.stat-row { display: flex; align-items: start; gap: var(--space-6); }
+.stat-row > .stat + .stat {
+  padding-inline-start: var(--space-6);
+  border-inline-start: 1px solid var(--color-divider);
+}
+
 /* --- meter — the capability bar, generalised ------------------------ */
 
 /* Distinct from .progress: progress reports a task advancing, a meter reports
