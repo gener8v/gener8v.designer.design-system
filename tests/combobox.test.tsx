@@ -122,6 +122,27 @@ describe('Combobox — ARIA 1.2 pattern', () => {
   });
 });
 
+describe('Combobox — a label somebody can read', () => {
+  it('shows the label, as the gallery does', async () => {
+    // The component rendered every label `sr-only` while components/inputs.html showed a
+    // visible one. A form built from the gallery and a form built from the component did
+    // not agree, and this was always the one field on a page with no visible label.
+    render(<Harness />);
+    const label = document.querySelector('label.field-label');
+    expect(label).toHaveTextContent('Client');
+    expect(label).not.toHaveClass('sr-only');
+    expect(box()).toHaveAccessibleName('Client');
+  });
+
+  it('hides it only when asked', async () => {
+    render(
+      <Combobox label="Client" options={OPTIONS} value={null} onChange={() => {}} labelHidden />,
+    );
+    expect(document.querySelector('label.field-label')).toHaveClass('sr-only');
+    expect(box()).toHaveAccessibleName('Client');   // still named, just not shown
+  });
+});
+
 describe('Combobox — a value the list does not hold', () => {
   it('refuses one by default, so a closed vocabulary stays closed', async () => {
     const u = userEvent.setup();

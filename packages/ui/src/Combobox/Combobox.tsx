@@ -29,6 +29,18 @@ export interface ComboboxProps {
    * to work out which of the two the form is actually listening to.
    */
   allowCustom?: boolean;
+  /**
+   * Hide the label visually, keeping it for assistive technology. For a field
+   * whose purpose is already stated beside it — a filter in a table toolbar,
+   * a search box under its own heading.
+   *
+   * It is NOT the default, though it was: the component rendered every label
+   * `sr-only` while `components/inputs.html` showed a visible one, so a form
+   * built from the gallery and a form built from the component did not agree,
+   * and the only field on a page with no label a sighted reader could see was
+   * always this one.
+   */
+  labelHidden?: boolean;
   invalid?: boolean;
   id?: string;
   disabled?: boolean;
@@ -46,7 +58,7 @@ const defaultFilter = (o: ComboboxOption, q: string) =>
 export function Combobox({
   options, value, onChange, label, placeholder,
   filter = defaultFilter, emptyMessage = 'No matches', allowCustom = false,
-  invalid = false, id, disabled = false,
+  labelHidden = false, invalid = false, id, disabled = false,
 }: ComboboxProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
@@ -177,7 +189,7 @@ export function Combobox({
 
   return (
     <div className="combobox" ref={wrapRef}>
-      <label className="field-label sr-only" htmlFor={inputId}>{label}</label>
+      <label className={cx('field-label', labelHidden && 'sr-only')} htmlFor={inputId}>{label}</label>
       <input
         ref={inputRef}
         id={inputId}
