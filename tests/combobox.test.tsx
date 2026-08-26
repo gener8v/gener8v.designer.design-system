@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { useState } from 'react';
+import { act, useState } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Combobox } from '../packages/ui/src/index.js';
@@ -16,6 +16,14 @@ function Harness({ onChange }: { onChange?: (v: string | null) => void }) {
   const [value, setValue] = useState<string | null>(null);
   return (
     <Combobox label="Client" placeholder="Search clients" options={OPTIONS} value={value}
+      onChange={(v) => { setValue(v); onChange?.(v); }} />
+  );
+}
+
+function Open({ onChange }: { onChange?: (v: string | null) => void }) {
+  const [value, setValue] = useState<string | null>(null);
+  return (
+    <Combobox label="Subject" placeholder="Pick or type" options={OPTIONS} value={value} allowCustom
       onChange={(v) => { setValue(v); onChange?.(v); }} />
   );
 }
@@ -111,5 +119,96 @@ describe('Combobox — ARIA 1.2 pattern', () => {
     await u.type(box(), 'zzzz');
     expect(screen.getByText('No matches')).toBeInTheDocument();
     expect(screen.queryAllByRole('option')).toHaveLength(0);
+  });
+});
+
+describe('Combobox — a value the list does not hold', () => {
+  it('refuses one by default, so a closed vocabulary stays closed', async () => {
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Harness onChange={onChange} />);
+    await u.click(box());
+    await u.keyboard('Something Else{Enter}');
+    await u.tab();
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(box()).toHaveValue('');            // and the abandoned edit reverts
+  });
+
+  it('commits typed text on Enter when the field accepts one', async () => {
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Open onChange={onChange} />);
+    await u.click(box());
+    await u.keyboard('the ledger{Enter}');
+
+    expect(onChange).toHaveBeenCalledWith('the ledger');
+    expect(box()).toHaveValue('the ledger');  // and it SURVIVES the render it caused
+    expect(screen.queryByRole('listbox')).toBeNull();
+  });
+
+  it('commits typed text on tabbing out', async () => {
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Open onChange={onChange} />);
+    await u.click(box());
+    await u.keyboard('retry policy');
+    await u.tab();
+
+    expect(onChange).toHaveBeenCalledWith('retry policy');
+    expect(box()).toHaveValue('retry policy');
+  });
+
+  it('commits typed text on clicking away', async () => {
+    // THE ONE PEOPLE ACTUALLY DO, and a different code path from Tab: the
+    // dismiss-on-outside-click listener runs first and used to revert the query
+    // before the field had committed it. A test that only tabbed out passed
+    // while clicking away silently discarded what was typed.
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<><Open onChange={onChange} /><button type="button">elsewhere</button></>);
+    await u.click(box());
+    await u.keyboard('retry policy');
+    await u.click(screen.getByRole('button', { name: 'elsewhere' }));
+
+    expect(onChange).toHaveBeenCalledWith('retry policy');
+    expect(box()).toHaveValue('retry policy');
+  });
+
+  it('commits typed text when focus is moved off it programmatically', async () => {
+    // Neither Tab nor a click: a script or an assistive technology moving focus.
+    // Both other paths commit before blur ever runs, so without this the input's
+    // own blur handler is unreachable and could be deleted without a test noticing.
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<><Open onChange={onChange} /><button type="button">elsewhere</button></>);
+    await u.click(box());
+    await u.keyboard('retry policy');
+    await act(async () => { screen.getByRole('button', { name: 'elsewhere' }).focus(); });
+
+    expect(onChange).toHaveBeenCalledWith('retry policy');
+  });
+
+  it('still prefers an option when one is chosen', async () => {
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Open onChange={onChange} />);
+    await u.click(box());
+    await u.keyboard('Atlas{ArrowDown}{Enter}');
+
+    expect(onChange).toHaveBeenCalledWith('al');   // the option's value, not its label
+  });
+
+  it('clears rather than committing an empty string', async () => {
+    const u = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Open onChange={onChange} />);
+    await u.click(box());
+    await u.keyboard('draft');
+    await u.tab();
+    await u.clear(box());
+    await u.tab();
+
+    expect(onChange).toHaveBeenLastCalledWith(null);
   });
 });

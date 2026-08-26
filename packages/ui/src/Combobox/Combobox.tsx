@@ -19,6 +19,16 @@ export interface ComboboxProps {
   /** Case-insensitive substring by default. */
   filter?: (option: ComboboxOption, query: string) => boolean;
   emptyMessage?: ReactNode;
+  /**
+   * Accept a value the list does not hold. The typed text commits on Enter or
+   * on leaving the field, and arrives through `onChange` like any option.
+   *
+   * For the field that offers what is known but must not REFUSE what is not —
+   * a subject, a tag, an owner who has yet to be invited. Without it such a
+   * field needs a combobox AND a text input beside it, and a reader then has
+   * to work out which of the two the form is actually listening to.
+   */
+  allowCustom?: boolean;
   invalid?: boolean;
   id?: string;
   disabled?: boolean;
@@ -35,13 +45,20 @@ const defaultFilter = (o: ComboboxOption, q: string) =>
  */
 export function Combobox({
   options, value, onChange, label, placeholder,
-  filter = defaultFilter, emptyMessage = 'No matches', invalid = false, id, disabled = false,
+  filter = defaultFilter, emptyMessage = 'No matches', allowCustom = false,
+  invalid = false, id, disabled = false,
 }: ComboboxProps) {
   const autoId = useId();
   const inputId = id ?? autoId;
   const listId = `${inputId}-listbox`;
 
-  const selected = useMemo(() => options.find((o) => o.value === value) ?? null, [options, value]);
+  const selected = useMemo(() => {
+    const match = options.find((o) => o.value === value) ?? null;
+    // A custom value is its own label. Without this the effect below resets the
+    // query to '' on every render and the text disappears as it is typed.
+    if (match || !allowCustom || !value) return match;
+    return { value, label: value } as ComboboxOption;
+  }, [options, value, allowCustom]);
   const [query, setQuery] = useState(selected?.label ?? '');
   const [open, setOpen] = useState(false);
   // -1 means "open, but nothing highlighted yet". Opening the list must not
@@ -71,6 +88,22 @@ export function Combobox({
     setOpen(false);
   }, [onChange]);
 
+  /** Text that matched nothing, taken at its word. Empty clears rather than
+   *  committing '' — a field left blank is unset, not set to nothing. */
+  const commitText = useCallback((text: string) => {
+    const trimmed = text.trim();
+    onChange(trimmed || null);
+    setQuery(trimmed);
+    setOpen(false);
+  }, [onChange]);
+
+  /** Leaving the field with text the list does not hold. With `allowCustom`
+   *  that text IS the answer, so reverting it would discard what was typed. */
+  const leaving = useCallback(() => {
+    if (allowCustom && query !== (selected?.label ?? '')) { commitText(query); return true; }
+    return false;
+  }, [allowCustom, query, selected, commitText]);
+
   const close = useCallback((revert: boolean) => {
     setOpen(false);
     if (revert) setQuery(selected?.label ?? '');
@@ -80,11 +113,16 @@ export function Combobox({
     if (!open) return;
     const onDown = (e: MouseEvent) => {
       const t = e.target as Node;
-      if (!wrapRef.current?.contains(t) && !listRef.current?.contains(t)) close(true);
+      if (wrapRef.current?.contains(t) || listRef.current?.contains(t)) return;
+      // Dismissing by clicking away is still leaving the field, so a custom
+      // value commits here exactly as it does on Tab. This ran before the
+      // input's own blur and reverted the query out from under it.
+      if (leaving()) return;
+      close(true);
     };
     document.addEventListener('mousedown', onDown, true);
     return () => document.removeEventListener('mousedown', onDown, true);
-  }, [open, close]);
+  }, [open, close, leaving]);
 
   // Keep the highlighted option scrolled into view as the arrows move.
   useEffect(() => {
@@ -119,6 +157,7 @@ export function Combobox({
         if (!open) return;
         const option = active >= 0 ? enabled[active] : undefined;
         if (option) { e.preventDefault(); commit(option); }
+        else if (allowCustom && query.trim()) { e.preventDefault(); commitText(query); }
         break;
       }
       case 'Escape':
@@ -127,6 +166,8 @@ export function Combobox({
         else { setQuery(''); onChange(null); }
         break;
       case 'Tab':
+        // Ordered: a custom value commits, and only an unchanged field reverts.
+        if (leaving()) break;
         if (open) close(true);
         break;
     }
@@ -157,6 +198,7 @@ export function Combobox({
         onKeyDown={onKeyDown}
         onBlur={(e) => {
           if (listRef.current?.contains(e.relatedTarget as Node)) return;
+          if (leaving()) return;
           close(true);
         }}
       />
