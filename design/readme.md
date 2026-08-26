@@ -169,7 +169,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.meter` with `.meter-track`, `.meter-fill` | A level that is true — not `.progress`, which is a task advancing | components/data.html |
 | `.dl` (+ `.dl-stacked`) | Record detail | components/data.html |
 | `.avatar` (+ `-sm`, `-lg`, `.avatar-group`) | Person mark | components/data.html |
-| `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input | components/inputs.html |
+| `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input; `allowCustom` accepts a value the list does not hold | components/inputs.html |
 | `.slider` (+ `.slider-head`, `.slider-value`) | Native range; fill driven by `--slider-pct` | components/inputs.html |
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
