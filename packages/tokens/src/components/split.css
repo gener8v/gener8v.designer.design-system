@@ -7,7 +7,14 @@
  * panel exists to show — were each clipped mid-word beside an empty gutter. */
 
 .split { display: flex; align-items: stretch; min-inline-size: 0; }
-.split-aside { min-inline-size: 0; overflow: auto; }
+/* `flex: none`, or the width is a suggestion.
+ *
+ * A flex item shrinks below its `inline-size` when the row is tight, so the
+ * panel rendered narrower than the width it had been set to — and reopening
+ * after a collapse landed it BELOW its own minimum, which is a panel whose
+ * `min` does not mean anything. The width here is the reader's decision, and a
+ * decision the layout can overrule is not one. */
+.split-aside { flex: none; min-inline-size: 0; overflow: auto; }
 .split-main { flex: 1; min-inline-size: 0; overflow: auto; }
 
 /* THE HANDLE IS A CONTROL, SO IT HAS A CONTROL'S HIT AREA.
@@ -51,10 +58,46 @@
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-action) 28%, transparent);
 }
 
-/* Collapsed, the handle is the only way back, so it stays visible and says so
-   by pointing the other way. */
+/* COLLAPSED, THE HANDLE IS THE ONLY WAY BACK.
+ *
+ * So it stops being an invisible 16px strip. Shut, it sits flush against
+ * whatever chrome is beside it — an app sidebar, a window edge — and a target
+ * that narrow, unmarked, against another edge is one a reader hunts for and
+ * misses. It was missed on the first try on a real screen.
+ *
+ * Open, the handle is a line you happen to be able to grab. Shut, it is a
+ * control, so it looks like one: wider, with a visible grip. */
 .split[data-collapsed] .split-aside { display: none; }
-.split[data-collapsed] .split-handle { cursor: e-resize; }
+.split[data-collapsed] .split-handle {
+  inline-size: var(--space-6);
+  margin-inline: 0;
+  cursor: e-resize;
+}
+.split[data-collapsed] .split-handle::before {
+  inline-size: 3px;
+  inset-inline-start: 0;
+  border-start-end-radius: var(--radius-full);
+  border-end-end-radius: var(--radius-full);
+  background: var(--color-neutral-300);
+}
+.split[data-collapsed] .split-handle:hover::before,
+.split[data-collapsed] .split-handle:focus-visible::before { background: var(--color-action); }
+/* Two chevron strokes drawn from borders — the same technique the stepper's
+   tick uses, and for the same reason: no icon dependency inside a control this
+   small. They point at the panel that would come back. */
+.split[data-collapsed] .split-handle::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 30%;
+  inline-size: 0.4em;
+  block-size: 0.4em;
+  border-block-start: 1.5px solid var(--color-neutral-500);
+  border-inline-end: 1.5px solid var(--color-neutral-500);
+  transform: translateY(-50%) rotate(45deg);
+  font-size: var(--text-base);
+}
+.split[data-collapsed] .split-handle:hover::after { border-color: var(--color-action); }
 
 /* Nothing animates mid-drag: a transition on the panel makes the edge lag the
    pointer, which reads as the control being broken rather than smooth. */

@@ -99,4 +99,19 @@ describe('Split — the WAI-ARIA window splitter', () => {
     render(split({ collapsed: true }));
     expect(aside()).not.toBeVisible();
   });
+
+  it('comes back at least as wide as its own minimum', () => {
+    // A panel that reopens below `min` is a panel whose minimum means nothing, and the reader has
+    // to drag it out before they can read what they just reopened. Seen on a real screen: it came
+    // back at half the width it was set to.
+    const onResize = vi.fn();
+    const { rerender } = render(split({ initial: 40, min: 200, onResize }));
+    rerender(split({ initial: 40, min: 200, onResize, collapsed: true }));
+    rerender(split({ initial: 40, min: 200, onResize, collapsed: false }));
+
+    fireEvent.pointerDown(handle(), { clientX: 100 });
+    fireEvent.pointerUp(window, { clientX: 100 });   // a click: toggles
+    expect(onResize).toHaveBeenCalled();
+    for (const [w] of onResize.mock.calls) expect(w === 0 || w >= 200).toBe(true);
+  });
 });
