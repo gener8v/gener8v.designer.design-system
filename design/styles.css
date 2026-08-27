@@ -172,6 +172,7 @@
   --control-h-xl: 60px;
 
   /* Layout */
+  --rail-w: 240px;
   --container-sm: 640px;
   --container-md: 768px;
   --container-lg: 1024px;
@@ -3221,8 +3222,14 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  * obviously not part of what would print. */
 .paper-aside {
   flex: none;
-  inline-size: var(--space-24);
+  /* A LAYOUT DIMENSION, NOT A SPACING STEP. This was `--space-24`, which is
+     96px — narrow enough that a contents entry wrapped to twelve lines and its
+     longest word still could not fit, so the rail overflowed and put a
+     horizontal scrollbar under the whole document. */
+  inline-size: var(--rail-w);
   min-inline-size: 0;
+  /* A heading is one long word more often than anybody expects. */
+  overflow-wrap: anywhere;
   position: sticky;
   inset-block-start: var(--space-8);
   font-size: var(--text-sm);
@@ -3236,7 +3243,13 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 
 .paper {
-  margin-inline: auto;
+  /* NOT `margin-inline: auto`. The ground already centres; an auto margin on a
+     flex item ABSORBS the free space instead, which pushed the rail hard
+     against the far edge of the window with a chasm between it and the sheet.
+     `flex: 1 1 auto` is what makes the sheet reach its own width rather than
+     shrink to whatever the prose inside it happened to need — a sheet is a
+     size, not an outline of its contents. */
+  flex: 1 1 auto;
   /* Wider than the prose measure on purpose: a document carries tables, code
      and figures that the paragraphs must not be narrowed to fit. `.reader`
      still holds the PROSE to 72ch inside this. */
