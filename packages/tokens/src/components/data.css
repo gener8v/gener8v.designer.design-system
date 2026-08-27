@@ -129,6 +129,23 @@
 
 /* --- segmented control ----------------------------------------------- */
 
+/* A NAMED GROUP.
+ *
+ * The name is a `span`, not a `label`: a label must reference a control and a
+ * radiogroup is not one. `aria-labelledby` on the group is what carries it to a
+ * screen reader, so the visible name and the accessible name are the same string
+ * rather than two that drift.
+ *
+ * It matches `.field-label` on purpose — a choice and a text input are both a
+ * field, and naming them in two different type sizes is how a form starts
+ * reading as two forms. */
+.segmented-field { display: flex; flex-direction: column; gap: var(--space-2); align-items: flex-start; }
+.segmented-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+
 .segmented {
   display: inline-flex;
   gap: 2px;
