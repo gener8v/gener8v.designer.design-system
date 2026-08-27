@@ -1,0 +1,123 @@
+/* ------------------------------------------------------- a code editor */
+
+/* PAINT UNDER A TEXTAREA.
+ *
+ * The highlighted layer and the textarea render the same string, and every
+ * metric that decides where a glyph lands has to match between them: family,
+ * size, line height, padding, tab size, wrapping, letter spacing. The moment one
+ * differs the caret sits somewhere the letters are not — which is the only way
+ * this technique fails, and it fails invisibly until somebody types.
+ *
+ * So the two share one custom property for each of them, and neither is
+ * overridable from outside. A className that could change the font here would
+ * be a className that breaks the caret. */
+.code-editor {
+  --editor-font: var(--font-mono);
+  --editor-size: var(--text-sm);
+  --editor-leading: 1.65;
+  --editor-pad: var(--space-3);
+  display: grid;
+  gap: var(--space-2);
+}
+
+.code-editor-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+
+.code-editor-frame {
+  display: flex;
+  align-items: stretch;
+  min-inline-size: 0;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out);
+}
+/* The FRAME takes the focus ring, because the textarea inside it has no border
+   of its own — a ring on the textarea would be drawn inside the frame and read
+   as a second box. */
+.code-editor-frame:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+/* THE NUMBERS. Hidden entirely when lines wrap — see the component: a number
+   beside a wrapped line can only point at one of its rows, and one that points
+   at the wrong row is worse than none. */
+.code-editor-gutter {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--editor-pad);
+  padding-inline: var(--space-3) var(--space-2);
+  border-inline-end: 1px solid var(--color-neutral-200);
+  background: var(--color-surface);
+  font-family: var(--editor-font);
+  font-size: var(--editor-size);
+  line-height: var(--editor-leading);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-500);
+  text-align: end;
+  overflow: hidden;
+  user-select: none;
+}
+
+.code-editor-body {
+  position: relative;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* Both layers, identically. Every property here is one the caret depends on. */
+.code-editor-paint,
+.code-editor-input {
+  margin: 0;
+  padding: var(--editor-pad);
+  border: 0;
+  font-family: var(--editor-font);
+  font-size: var(--editor-size);
+  line-height: var(--editor-leading);
+  letter-spacing: normal;
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.code-editor[data-wrap] .code-editor-paint,
+.code-editor[data-wrap] .code-editor-input {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.code-editor-paint {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--color-neutral-800);
+  pointer-events: none;
+}
+
+.code-editor-input {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 100%;
+  resize: none;
+  background: transparent;
+  overflow: auto;
+  /* THE TEXT IS INVISIBLE AND THE CARET IS NOT. `color: transparent` would take
+     the caret with it in some engines, so the caret colour is stated. */
+  color: transparent;
+  caret-color: var(--color-neutral-900);
+  outline: none;
+}
+/* A selection over transparent text still has to be visible. */
+.code-editor-input::selection { background: var(--color-accent-200); color: transparent; }
+
+.code-editor-input:disabled { cursor: not-allowed; }
+.code-editor-frame:has(.code-editor-input:disabled) { background: var(--color-surface); }
