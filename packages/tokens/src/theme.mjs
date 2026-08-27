@@ -41,11 +41,22 @@ export const theme = {
   },
 
   fonts: {
-    heading: { family: 'Inter', class: 'grotesque', weights: [300, 400, 500, 600] },
+    // A SERIF FOR HEADINGS, AND IT IS NOT DECORATION.
+    //
+    // Heading and body were both Inter at 500 — so a heading was body text, very slightly bolder,
+    // and every scrap of hierarchy had to come from size alone. On a surface where the heading is
+    // small (a section inside a page) there was nothing left to carry it, and the product filled
+    // the gap with an 11px mono label above a 20px grey sentence: the name of the thing set
+    // smaller than the commentary about it. That is not a spacing bug, it is a missing voice.
+    //
+    // Source Serif 4 is screen-tuned, pairs with Inter by design, and reads as a document rather
+    // than as an interface — which is what a record somebody attaches to a filing should read as.
+    heading: { family: 'Source Serif 4', class: 'serif', weights: [400, 500, 600] },
     body: { family: 'Inter', class: 'grotesque', weights: [300, 400, 500, 600] },
     mono: { family: 'IBM Plex Mono', class: 'mono', weights: [400, 500, 600] },
-    // 500, not 800. Hierarchy comes from size and space — this is the airiness.
-    headingWeight: 500,
+    // 600 rather than 500: a serif at display sizes needs the weight to hold its own against a
+    // grotesque body, and the family change is now what carries the hierarchy anyway.
+    headingWeight: 600,
   },
 
   layoutStyle: 'left',

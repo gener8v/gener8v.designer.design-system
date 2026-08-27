@@ -23,7 +23,12 @@ for (const f of readdirSync(COMPONENT_CSS).filter((f) => f.endsWith('.css'))) {
   const css = readFileSync(join(COMPONENT_CSS, f), 'utf8');
   const exempt = /@parity-exempt:\s*([^*]+)/.exec(css);
   if (exempt) { exemptions.push(f); continue; }
-  for (const m of css.matchAll(/\.([a-z][a-z0-9-]*)/g)) componentClasses.add(m[1]);
+  // COMMENTS STRIPPED, for the reason `code()` below exists. A comment saying a rule replaces
+  // "a 20px `.lede`" registered `lede` as a component class, and the gate then demanded a React
+  // component emitting a class that no stylesheet in this directory defines. A linter that cannot
+  // tell a rule from the prose about the rule will eventually disagree with a correct file.
+  for (const m of css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/\.([a-z][a-z0-9-]*)/g))
+    componentClasses.add(m[1]);
 }
 
 /** Classes a component file can emit: string literals plus `prefix-${union}`. */

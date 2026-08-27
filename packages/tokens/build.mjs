@@ -167,9 +167,14 @@ T('--ring-color', 'var(--color-accent)', 'color');
 
 /* --------------------------------------------------------------- styles.css */
 
+/** Google's own name for a family, which is the family name with spaces as `+`. Written from the
+ *  theme rather than typed twice: a heading font changed in `theme.mjs` and not here loads nothing
+ *  and falls back to `system-ui`, which looks like a rendering fault and reads as one. */
+const googleName = (family) => family.replace(/ /g, '+');
 const googleFamilies = [
-  `Inter:wght@${fonts.heading.weights.join(';')}`,
-  `IBM+Plex+Mono:wght@${fonts.mono.weights.join(';')}`,
+  `${googleName(fonts.heading.family)}:wght@${fonts.heading.weights.join(';')}`,
+  `${googleName(fonts.body.family)}:wght@${fonts.body.weights.join(';')}`,
+  `${googleName(fonts.mono.family)}:wght@${fonts.mono.weights.join(';')}`,
 ];
 
 const section = (label) => `\n  /* ${label} */\n`;
