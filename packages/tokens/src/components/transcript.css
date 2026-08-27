@@ -1,0 +1,87 @@
+/* -------------------------------------------------------------- transcript */
+
+/* WHAT PEOPLE SAID, LAID OUT TO BE WORKED THROUGH.
+ *
+ * Not a chat log and not a comment thread. An hour-long interview is three
+ * hundred stretches of somebody talking, and the reader is not following along
+ * — they are going through it marking what each stretch is evidence of.
+ *
+ * So the words get the measure and everything else gets out of their way. */
+
+.transcript {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.transcript-turn {
+  display: grid;
+  /* The words, then a margin for what is known about them. A single column with
+     the marks inline would put a tag in the middle of a sentence. */
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-md);
+}
+
+/* A ROW YOU CAN SEE YOURSELF ON. Reading three hundred turns, losing your place
+   costs more than the highlight does. */
+/* The hover is the SURFACE, not another neutral step. A row lifting to a
+   different grey than the one `[data-current]` uses would give the page two
+   selection states that mean different things and look nearly the same. */
+.transcript-turn:hover { background: var(--color-surface); }
+.transcript-turn[data-current] { background: var(--color-neutral-100); }
+
+.transcript-speaker {
+  grid-column: 1;
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  /* QUIETER THAN WHAT WAS SAID. The speaker is how you follow the exchange; the
+     words are the evidence. A name at body size and weight makes a transcript
+     read as a list of people rather than as a record of what was said — and
+     this record never attributes a finding by name anyway. */
+  color: var(--color-neutral-600);
+  letter-spacing: 0.02em;
+}
+
+.transcript-said {
+  grid-column: 1;
+  /* PROSE, SO IT KEEPS THE MEASURE. A speaker's stretch runs to a paragraph and
+     a line that crosses the whole window is a line the eye loses on the return. */
+  /* A MEASURE IS IN CHARACTERS, which is why this is `ch` and not a spacing
+     token — the same reasoning `.reader` and the field family already follow. */
+  max-inline-size: 72ch;
+  font-size: var(--text-sm);
+  line-height: var(--leading-lg);
+  color: var(--color-neutral-900);
+}
+
+.transcript-margin {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* The column does not move when a control appears, so the words do not reflow
+     under the pointer. */
+  min-inline-size: var(--space-24);
+  justify-content: flex-end;
+}
+
+/* WHAT IT IS EVIDENCE OF: data, so it is always visible. */
+.transcript-mark { display: inline-flex; gap: var(--space-1); }
+
+/* WHAT CAN BE DONE WITH IT is revealed on interaction — `.on-demand` in
+   `base.css`, because a matrix of sixty-six requirements has the same problem as
+   a transcript of three hundred turns. A turn being worked on keeps its control
+   out, since the reader is about to use it. */
+.transcript-turn[data-current] .on-demand { opacity: 1; }
+
+@media (max-width: 720px) {
+  /* The margin stops being a margin. Beside a phone-width column it leaves the
+     words about twenty characters, which is not a measure, it is a gutter. */
+  .transcript-turn { grid-template-columns: minmax(0, 1fr); }
+  .transcript-margin { grid-column: 1; grid-row: auto; justify-content: flex-start; }
+}
