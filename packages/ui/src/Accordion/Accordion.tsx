@@ -32,6 +32,20 @@ export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>,
   children?: ReactNode;
   /** Stable id. Generated if omitted, which is fine for uncontrolled use. */
   value?: string;
+  /**
+   * Keep the panel's children out of the DOM until it is opened, and take them
+   * out again when it closes.
+   *
+   * The panel is `hidden` rather than unmounted by default, which is right for
+   * ordinary content: it stays in the document, keeps its scroll position, and
+   * is findable by the browser's own find-in-page. But `hidden` still MOUNTS,
+   * so a panel whose content fetches on mount fetches whether or not anybody
+   * opened it — and a list of twenty disclosures then makes twenty requests for
+   * a question most readers never ask.
+   *
+   * Set this when opening the panel is what should cause the work.
+   */
+  unmountClosed?: boolean;
 }
 
 /**
@@ -40,7 +54,7 @@ export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>,
  * `hidden` rather than height-0 — collapsed content must leave the
  * accessibility tree, not just the viewport.
  */
-export function AccordionItem({ title, children, value, className, ...rest }: AccordionItemProps) {
+export function AccordionItem({ title, children, value, unmountClosed = false, className, ...rest }: AccordionItemProps) {
   const auto = useId();
   const id = value ?? auto;
   const panelId = `${id}-panel`;
@@ -56,8 +70,10 @@ export function AccordionItem({ title, children, value, className, ...rest }: Ac
         aria-expanded={isOpen} aria-controls={panelId} onClick={onToggle}>
         {title}
       </button>
+      {/* The panel element itself always exists, so `aria-controls` always resolves
+          to something — an id pointing at nothing is worse than an empty region. */}
       <div id={panelId} className="accordion-panel" hidden={!isOpen} role="region">
-        {children}
+        {unmountClosed && !isOpen ? null : children}
       </div>
     </div>
   );
