@@ -171,6 +171,41 @@
  * A consumer hit exactly that: items flush against each other, and no separation above
  * "Governance" or "Knowledge". So the wrapper is a component rather than a bare div, and it
  * carries the two rules the rail can no longer apply on its behalf. */
+/* --- putting the rail away ------------------------------------------- */
+
+/* A matrix of sixty-six requirements, a document at its measure and a knowledge
+   graph all want the 240px this holds, and a reader who knows where they are
+   does not need eight destinations in view to stay there.
+ *
+ * NARROW IS EMPTY, NOT ABBREVIATED. A rail of unlabelled icons is a rail nobody
+ * can read without learning it first, and this product has no icon vocabulary to
+ * learn — so putting it away puts it away, and the control to bring it back is
+ * the only thing left. */
+.sidebar-fold {
+  align-self: flex-end;
+  display: grid;
+  place-items: center;
+  inline-size: var(--control-h-sm);
+  block-size: var(--control-h-sm);
+  margin-block-end: var(--space-2);
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.sidebar-fold:hover { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.sidebar-fold svg { transition: transform var(--dur-base) var(--ease-out); }
+
+.sidebar[data-narrow] { padding-inline: var(--space-2); }
+.sidebar[data-narrow] .sidebar-fold { align-self: center; }
+/* The arrow points the way it would move the rail, which is the only thing on a
+   control with no words to say what it does. */
+.sidebar[data-narrow] .sidebar-fold svg { transform: rotate(180deg); }
+.sidebar[data-narrow] .sidebar-section { display: none; }
+
 .sidebar-section { display: flex; flex-direction: column; gap: var(--space-1); }
 .sidebar-section + .sidebar-section { margin-block-start: var(--space-4); }
 
