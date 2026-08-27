@@ -18,7 +18,19 @@ export interface ComboboxProps {
   placeholder?: string;
   /** Case-insensitive substring by default. */
   filter?: (option: ComboboxOption, query: string) => boolean;
+  /** Shown when the query matches none of the options. */
   emptyMessage?: ReactNode;
+  /**
+   * Shown when there are NO options at all, which is a different fact and used
+   * to be reported as the first one.
+   *
+   * A field offering an empty list told the reader "no match for what you
+   * typed" before they had typed anything — an answer to a question nobody
+   * asked, about a search that never ran. Absence has to name its cause here
+   * too: nothing to choose from is a state of the record, not a state of the
+   * query.
+   */
+  noOptionsMessage?: ReactNode;
   /**
    * Accept a value the list does not hold. The typed text commits on Enter or
    * on leaving the field, and arrives through `onChange` like any option.
@@ -57,7 +69,8 @@ const defaultFilter = (o: ComboboxOption, q: string) =>
  */
 export function Combobox({
   options, value, onChange, label, placeholder,
-  filter = defaultFilter, emptyMessage = 'No matches', allowCustom = false,
+  filter = defaultFilter, emptyMessage = 'No matches',
+  noOptionsMessage = 'Nothing to choose from yet', allowCustom = false,
   labelHidden = false, invalid = false, id, disabled = false,
 }: ComboboxProps) {
   const autoId = useId();
@@ -83,6 +96,18 @@ export function Combobox({
   const { style } = useAnchoredPosition({
     open, anchorRef: wrapRef, floatingRef: listRef, placement: 'bottom', align: 'start',
   });
+
+  /** The field's width, handed to the list so it is the field's list rather than a popup that
+   *  happens to be near it. Measured on open: the field can be resized by its container between
+   *  one opening and the next. */
+  const [anchorWidth, setAnchorWidth] = useState<number | null>(null);
+  useEffect(() => {
+    if (!open) return;
+    const measure = () => setAnchorWidth(wrapRef.current?.getBoundingClientRect().width ?? null);
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [open]);
 
   // The query is a draft; the committed value stays authoritative until the
   // user picks something, so an abandoned edit reverts rather than clearing.
@@ -222,8 +247,13 @@ export function Combobox({
 
       {open && (
         <ul ref={listRef} id={listId} role="listbox" aria-label={typeof label === 'string' ? label : undefined}
-          style={style} className="listbox">
-          {matches.length === 0 && <li className="listbox-empty">{emptyMessage}</li>}
+          style={anchorWidth ? { ...style, ['--anchor-w' as string]: `${anchorWidth}px` } : style}
+          className="listbox">
+          {matches.length === 0 && (
+            <li className="listbox-empty">
+              {options.length === 0 ? noOptionsMessage : emptyMessage}
+            </li>
+          )}
           {matches.map((o) => {
             const idx = enabled.indexOf(o);
             return (

@@ -233,3 +233,26 @@ describe('Combobox — a value the list does not hold', () => {
     expect(onChange).toHaveBeenLastCalledWith(null);
   });
 });
+
+describe('Combobox — an empty list is not a failed search', () => {
+  it('says nothing to choose from when there are no options at all', async () => {
+    // It told the reader "no match for what you typed" before they had typed anything — an answer
+    // to a question nobody asked, about a search that never ran.
+    const u = userEvent.setup();
+    render(<Combobox label="Subject" options={[]} value={null} onChange={() => {}} />);
+    await u.click(screen.getByRole('combobox'));
+
+    expect(screen.getByText('Nothing to choose from yet')).toBeInTheDocument();
+    expect(screen.queryByText('No matches')).toBeNull();
+  });
+
+  it('says no matches only once a query has ruled them out', async () => {
+    const u = userEvent.setup();
+    render(<Harness />);
+    await u.click(screen.getByRole('combobox'));
+    await u.keyboard('zzzz');
+
+    expect(screen.getByText('No matches')).toBeInTheDocument();
+    expect(screen.queryByText('Nothing to choose from yet')).toBeNull();
+  });
+});
