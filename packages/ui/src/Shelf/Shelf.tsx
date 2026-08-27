@@ -23,6 +23,10 @@ export interface ShelfProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChan
   onMove: (itemId: string, toZone: string) => void;
   /** Somebody opened one. A row is a link to the thing, not only a token to drag. */
   onOpen?: (itemId: string) => void;
+  /** How the two zones sit. `row` puts them side by side once the WINDOW is wide, which is wrong
+   *  for a shelf living in a rail — the window says nothing about the 260px the shelf actually
+   *  has. `stack` keeps them one above the other whatever the window is doing. */
+  layout?: 'row' | 'stack';
 }
 
 /**
@@ -47,7 +51,7 @@ export interface ShelfProps extends Omit<HTMLAttributes<HTMLDivElement>, 'onChan
  * draggable every click would begin a drag nobody asked for, and the two gestures would fight on
  * every press.
  */
-export function Shelf({ zones, items, onMove, onOpen, className, ...rest }: ShelfProps) {
+export function Shelf({ zones, items, onMove, onOpen, layout = 'row', className, ...rest }: ShelfProps) {
   const [lifted, setLifted] = useState<{ id: string; from: string } | null>(null);
   const [over, setOver] = useState<string | null>(null);
   const [said, setSaid] = useState('');
@@ -137,7 +141,7 @@ export function Shelf({ zones, items, onMove, onOpen, className, ...rest }: Shel
   };
 
   return (
-    <div {...rest} className={cx('shelf', className)}>
+    <div {...rest} data-layout={layout} className={cx('shelf', className)}>
       {zones.map((zone) => (
         <section
           key={zone.id}

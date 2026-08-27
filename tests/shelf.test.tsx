@@ -149,3 +149,17 @@ describe('Shelf — the pointer path is the same mechanism', () => {
     expect(target).toHaveAttribute('data-over');
   });
 });
+
+describe('a shelf in a rail', () => {
+  it('keeps its two places stacked when the room it has is not the room the window has', () => {
+    // The zones go side by side at a 900px WINDOW. A shelf living in a 260px rail never has that
+    // room however wide the window is, and the media query cannot see the difference — so the two
+    // zones sat as two 120px columns with a word per line in each.
+    const { container } = render(
+      <Shelf layout="stack" zones={ZONES} items={{ on: [{ id: 'sox', name: 'SOX' }], off: [] }}
+        onMove={() => {}} />,
+    );
+
+    expect(container.querySelector('.shelf')?.getAttribute('data-layout')).toBe('stack');
+  });
+});
