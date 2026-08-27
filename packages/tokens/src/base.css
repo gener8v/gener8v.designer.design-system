@@ -257,3 +257,40 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
     transition-duration: 0.01ms !important;
   }
 }
+
+/* --- a control that waits to be asked for ---------------------------- */
+
+/* WHAT IS TRUE OF A ROW IS ALWAYS VISIBLE. WHAT CAN BE DONE TO IT WAITS.
+ *
+ * A list of sixty-six requirements with two controls on every row is a hundred
+ * and thirty-two controls, and the reader is scanning for the four rows that
+ * need them. Worse, a quiet control sitting beside a status tag at the same size
+ * reads as a THIRD STATUS — the row then says three things about itself, one of
+ * which is a button nobody can tell is a button.
+ *
+ * So: marks stay, controls appear when the row is pointed at or focused.
+ *
+ * `opacity`, NEVER `display: none` OR `visibility: hidden`. Both remove the
+ * control from the tab order, and a keyboard reader would have a list they can
+ * read and cannot act on — a whole class of user locked out of the work rather
+ * than merely inconvenienced. `:focus-within` is what makes the keyboard path
+ * work, and it is on the SAME rule as `:hover` so the two cannot drift apart.
+ *
+ * The reveal is per ROW, not per control: the container carries `.on-demand-row`
+ * and every `.on-demand` inside it appears together. A control that appeared
+ * only when pointed at directly would be one the reader has to find first. */
+.on-demand {
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.on-demand-row:hover .on-demand,
+.on-demand-row:focus-within .on-demand {
+  opacity: 1;
+}
+
+/* A POINTER THAT NEVER ARRIVES. On a touch screen there is no hover, so the
+   reveal never fires and the control is unreachable — the same lockout as
+   `display: none`, arrived at from the other side. */
+@media (hover: none) {
+  .on-demand { opacity: 1; }
+}
