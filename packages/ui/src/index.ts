@@ -87,6 +87,8 @@ export { Slider } from './Slider/index.js';
 export type { SliderProps } from './Slider/index.js';
 export { FileUpload, FileList, FileItem } from './FileUpload/index.js';
 export type { FileUploadProps, FileItemProps } from './FileUpload/index.js';
+export { CodeEditor } from './CodeEditor/index.js';
+export type { CodeEditorProps } from './CodeEditor/index.js';
 export { Combobox } from './Combobox/index.js';
 export type { ComboboxProps, ComboboxOption } from './Combobox/index.js';
 export { Calendar, toISO } from './Calendar/index.js';

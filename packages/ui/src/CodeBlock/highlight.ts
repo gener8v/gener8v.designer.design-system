@@ -71,7 +71,35 @@ const JSON_RULES: Rule[] = [
   { kind: 'number', re: '-?\\b\\d+(?:\\.\\d+)?(?:[eE][-+]?\\d+)?\\b' },
 ];
 
+/**
+ * Markdown, which is the language this product's own documents are written in.
+ *
+ * A FENCE IS MATCHED WHOLE, AND THAT IS WHAT PROTECTS ITS CONTENTS. `#` inside a code block stays
+ * a `#` rather than becoming a heading — the one mistake that makes a highlighted markdown editor
+ * worse than a plain one.
+ *
+ * It is the SPAN that does this, not the rule order: `exec` takes the leftmost match, and a fence
+ * begins before anything inside it. Reordering these rules changes nothing — a mutation proved
+ * that when it was expected to break something. What breaks it is a fence rule that cannot cross
+ * a line, which is what the guard mutates.
+ *
+ * The structural marks — a bullet, a quote's `>`, a rule, a table's pipes — are `comment`, which
+ * is the muted colour. That is deliberate: they are furniture, and a document whose bullets shout
+ * reads as a document about bullets.
+ */
+const MARKDOWN: Rule[] = [
+  { kind: 'string', re: '```[\\s\\S]*?```|~~~[\\s\\S]*?~~~|`[^`\\n]+`' },
+  { kind: 'keyword', re: '^#{1,6}[^\\n]*' },
+  {
+    kind: 'comment',
+    re: '^\\s*(?:[-*+]|\\d+\\.)\\s|^\\s*>[^\\n]*|^\\s*(?:---+|\\*\\*\\*+|___+)\\s*$|\\|',
+  },
+  { kind: 'fn', re: '!?\\[[^\\]\\n]*\\]\\([^)\\n]*\\)' },
+  { kind: 'number', re: '\\*\\*[^*\\n]+\\*\\*|__[^_\\n]+__' },
+];
+
 const BY_LANGUAGE: Record<string, Rule[]> = {
+  md: MARKDOWN, markdown: MARKDOWN, mdx: MARKDOWN,
   sh: SHELL, bash: SHELL, shell: SHELL, zsh: SHELL, console: SHELL,
   ts: TS, tsx: TS, js: TS, jsx: TS, javascript: TS, typescript: TS,
   css: CSS,
@@ -88,7 +116,11 @@ export function tokenize(code: string, language?: string): Token[] {
   if (!rules) return [{ text: code }];
 
   // One alternation, one pass. Separate passes would re-tokenize the inside of a comment.
-  const pattern = new RegExp(rules.map((r, i) => `(?<k${i}>${r.re})`).join('|'), 'g');
+  //
+  // `m` because markdown's rules are the only ones anchored to a line — a heading is a `#` at the
+  // START of a line and nowhere else. It is inert for every other language here, none of which
+  // uses `^`, and the alternative was a per-language flag for one language's benefit.
+  const pattern = new RegExp(rules.map((r, i) => `(?<k${i}>${r.re})`).join('|'), 'gm');
   const out: Token[] = [];
   let last = 0;
 
