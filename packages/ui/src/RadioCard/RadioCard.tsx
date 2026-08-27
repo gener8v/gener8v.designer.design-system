@@ -1,9 +1,16 @@
 import type { HTMLAttributes, InputHTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
 
+export interface RadioCardsProps extends HTMLAttributes<HTMLDivElement> {
+  /** Side by side rather than stacked. For short options that belong to one question — three
+   *  of them down a page read as three questions. Collapses to a stack when there is not room,
+   *  because a card squeezed to fifty pixels is not a choice anybody can read. */
+  columns?: 2 | 3;
+}
+
 /** Wrap in a fieldset with a legend — a group of choices needs a group name. */
-export const RadioCards = ({ className, ...rest }: HTMLAttributes<HTMLDivElement>) =>
-  <div {...rest} className={cx('radio-cards', className)} />;
+export const RadioCards = ({ columns, className, ...rest }: RadioCardsProps) =>
+  <div {...rest} data-columns={columns} className={cx('radio-cards', className)} />;
 
 export interface RadioCardProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'title'> {
   title: ReactNode;
