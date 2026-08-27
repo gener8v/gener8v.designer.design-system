@@ -20,6 +20,8 @@ export { Hamburger } from './Hamburger/index.js';
 export type { HamburgerProps } from './Hamburger/index.js';
 export { Drawer } from './Drawer/index.js';
 export type { DrawerProps } from './Drawer/index.js';
+export { Shelf } from './Shelf/index.js';
+export type { ShelfProps, ShelfItem } from './Shelf/index.js';
 export { Sidebar, SidebarGroup, SidebarSection, SidebarItem, SidebarCount } from './Sidebar/index.js';
 export type { SidebarItemProps } from './Sidebar/index.js';
 export { Breadcrumbs, Breadcrumb } from './Breadcrumbs/index.js';
