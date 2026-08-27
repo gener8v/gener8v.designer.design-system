@@ -31,6 +31,8 @@ add it to the system, not to the consuming app.
 | `.segmented` with `.segmented-item` | A radiogroup, not a tablist — it filters, it does not swap panels | components/disclosure.html |
 | `.stat` with `.stat-label`, `.stat-value`, `.stat-note`, `.stat-delta` | KPI tile; figures tabular | components/data.html |
 | `.meter` with `.meter-track`, `.meter-fill` | A level that is true — not `.progress`, which is a task advancing | components/data.html |
+| `.paper` with `.paper-ground`, `.paper-aside` | A sheet a document sits on, and the page behind it. Prose is read; a table is scanned — only the first gets a sheet, and navigation goes on the ground beside it | — |
+| `.shelf` with `.shelf-zone`, `.shelf-item`, `.shelf-grip` | Moving a thing between two places. Drag by the grip, or space/arrows/space by keyboard; the row itself opens the item | — |
 | `.conversation` with `.turn`, `.turn-body`, `.turn-meta`, `.turn-pending` | A person asking and a system answering — `data-side="sent"` is a bubble, `received` is prose at full measure | — |
 | `.split` with `.split-aside`, `.split-handle`, `.split-main` | Reader-sized pane: drag the handle, click it to collapse. `role="separator"` | — |
 | `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input; `allowCustom` accepts a value the list does not hold | components/inputs.html |
