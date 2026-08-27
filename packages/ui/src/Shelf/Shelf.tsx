@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
 
@@ -52,7 +52,6 @@ export function Shelf({ zones, items, onMove, onOpen, className, ...rest }: Shel
   const [over, setOver] = useState<string | null>(null);
   const [said, setSaid] = useState('');
   const id = useId();
-  const grips = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const zoneOf = useCallback(
     (itemId: string) =>
@@ -129,9 +128,10 @@ export function Shelf({ zones, items, onMove, onOpen, className, ...rest }: Shel
       case 'Escape':
         e.preventDefault();
         cancel();
-        // Focus stays on the grip so the next press does something. Losing it here would end the
-        // interaction rather than cancelling it.
-        grips.current[item.id]?.focus();
+        // NO EXPLICIT REFOCUS. Cancelling changes an attribute on the row, not the identity of the
+        // button, so React updates in place and focus never leaves. A `.focus()` here survived
+        // every mutation of it — which is the definition of a line nothing depends on, and the
+        // test below is what says so rather than a comment claiming it.
         break;
     }
   };
@@ -183,9 +183,6 @@ export function Shelf({ zones, items, onMove, onOpen, className, ...rest }: Shel
                   <span className="shelf-grip" aria-hidden="true" style={{ visibility: 'hidden' }} />
                 ) : (
                   <button
-                    ref={(el) => {
-                      grips.current[item.id] = el;
-                    }}
                     type="button"
                     className="shelf-grip"
                     draggable

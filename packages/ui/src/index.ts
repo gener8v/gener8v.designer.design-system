@@ -40,6 +40,7 @@ export { Spinner } from './Spinner/index.js';
 export type { SpinnerProps, SpinnerSize } from './Spinner/index.js';
 export { Skeleton } from './Skeleton/index.js';
 export type { SkeletonProps, SkeletonVariant } from './Skeleton/index.js';
+export { Paper, PaperAside, PaperGround } from './Paper/index.js';
 export { Pagination, PaginationItem, PaginationGap } from './Pagination/index.js';
 export type { PaginationItemProps } from './Pagination/index.js';
 export { Timeline, TimelineItem } from './Timeline/index.js';

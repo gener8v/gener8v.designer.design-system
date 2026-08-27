@@ -3138,6 +3138,115 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
    not need this and it costs nothing there; a caller whose does not is why it exists. */
 .shell-actions { margin-inline-start: auto; display: flex; gap: var(--space-2); }
 
+/* ------------------------------------------------------------------- paper */
+
+/* A SHEET A DOCUMENT SITS ON.
+ *
+ * The record's surfaces used to cap themselves at a fixed column and centre it,
+ * which left symmetric dead gutters on any wide screen. Removing the cap gave
+ * the width back to the things that wanted it — tables, trees, split panes —
+ * and took a wrong lesson with it: a document then ran flush against the
+ * sidebar with half the window empty beside it, which is not better, it is the
+ * same waste rotated.
+ *
+ * Prose is not a table. It has a measure, and a measured thing needs somewhere
+ * to BE — which is a sheet, on a ground, with the page visible around it. The
+ * page is not empty space to be eliminated; it is what makes the sheet read as
+ * a document rather than as text that ran out of room.
+ *
+ * So: `Paper` for anything read as a document. Full width for anything scanned
+ * as data. The distinction is what the reader is doing, not how much room there
+ * happens to be. */
+
+.paper-ground {
+  /* The page behind the sheet. Without it the sheet is the same colour as
+     everything else and the whole effect is a shadow nobody can explain. */
+  background: var(--color-surface);
+  padding: var(--space-8) var(--space-6);
+  min-block-size: 100%;
+  /* The sheet and anything beside it are centred AS A GROUP, so the document
+     does not shift left when a rail appears next to it. */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-8);
+}
+
+/* NAVIGATION IS NOT THE DOCUMENT, AND DOES NOT GO ON THE SHEET.
+ *
+ * A table of contents is how you move around the thing; it is not part of what
+ * the thing says. Putting it on its own sheet makes two documents where there
+ * is one, and a reader then has to work out which of the two they are reading.
+ *
+ * So it sits on the GROUND beside the paper — present, clearly secondary, and
+ * obviously not part of what would print. */
+.paper-aside {
+  flex: none;
+  inline-size: var(--space-24);
+  min-inline-size: 0;
+  position: sticky;
+  inset-block-start: var(--space-8);
+  font-size: var(--text-sm);
+}
+
+@media (max-width: 1100px) {
+  /* Below this the rail steals width the document needs. It goes above, where
+     a contents list is still useful and costs the prose nothing. */
+  .paper-ground { flex-direction: column; align-items: stretch; }
+  .paper-aside { position: static; inline-size: auto; order: -1; }
+}
+
+.paper {
+  margin-inline: auto;
+  /* Wider than the prose measure on purpose: a document carries tables, code
+     and figures that the paragraphs must not be narrowed to fit. `.reader`
+     still holds the PROSE to 72ch inside this. */
+  max-inline-size: var(--container-lg);
+  padding: var(--space-10) var(--space-10) var(--space-16);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  /* A hairline AND a shadow. The border is what survives a printed page and a
+     forced-colours mode; the shadow is what makes it sit ON something. */
+  box-shadow: var(--shadow-sm);
+}
+
+/* Wide content inside a sheet scrolls within itself rather than bursting the
+   edge — the same rule `.reader` applies to a table in prose. */
+.paper table, .paper pre { max-inline-size: 100%; }
+
+@media print {
+  /* Navigation does not print. A contents list on paper is a list of places
+     that are not links to anything. */
+  .paper-aside { display: none; }
+}
+
+@media (max-width: 720px) {
+  /* No sheet on a phone. The ground would be two visible strips either side of
+     something that is already the full width, which reads as a rendering fault
+     rather than as paper. */
+  .paper-ground { padding: 0; background: var(--color-bg); }
+  .paper {
+    max-inline-size: none;
+    padding: var(--space-6) var(--space-5) var(--space-10);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+@media print {
+  /* Printing a governed document is a real act — it is what somebody attaches
+     to something. The ground, the border and the shadow are screen furniture. */
+  .paper-ground { padding: 0; background: transparent; }
+  .paper {
+    max-inline-size: none;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
 /* ----------------------------------------------------------------- popover */
 
 /* Non-modal: it floats over the page but does not take it over. No backdrop,
