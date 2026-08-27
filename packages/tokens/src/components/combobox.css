@@ -26,8 +26,13 @@
 .listbox {
   margin: 0;
   list-style: none;
-  /* Never wider than the viewport allows, however long the option labels are. */
-  max-inline-size: min(420px, calc(100vw - var(--space-8)));
+  /* THE LIST IS THE WIDTH OF ITS FIELD.
+     It sized to its content, so a short option list rendered a narrow box hanging
+     off the left of a wide input — which reads as a detached popup rather than as
+     the field's own list. The anchor's width is measured and passed in as
+     `--anchor-w`; the max is the fallback when nothing set it. */
+  inline-size: var(--anchor-w, auto);
+  max-inline-size: min(max(var(--anchor-w, 420px), 420px), calc(100vw - var(--space-8)));
   max-block-size: calc(var(--space-24) * 2.4);
   overflow-y: auto;
   padding: var(--space-1);
@@ -58,4 +63,6 @@
 .listbox-option[aria-disabled="true"] { color: var(--color-neutral-400); pointer-events: none; }
 .listbox-option-note { margin-inline-start: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-neutral-500); }
 
-.listbox-empty { padding: var(--space-4) var(--space-3); font-size: var(--text-sm); color: var(--color-neutral-600); text-align: center; }
+/* Left, like every option above it. Centred, it read as a placeholder in an empty
+   box rather than as the list saying something. */
+.listbox-empty { padding: var(--space-4) var(--space-3); font-size: var(--text-sm); color: var(--color-neutral-600); }

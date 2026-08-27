@@ -117,14 +117,43 @@ export interface MenuItemProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
   danger?: boolean;
   disabled?: boolean;
   onSelect?: () => void;
+  /**
+   * This item is the current choice — a project, a sort order, a theme.
+   *
+   * Pass it on EVERY item in the group, not only the chosen one. A menu that
+   * marks the chosen row and nothing else pushes that row's label right by the
+   * width of the mark, so the list shuffles as the choice moves and reading
+   * which one is current means reading an indent. Passing the boolean on each
+   * reserves the column for all of them.
+   *
+   * It also makes the group a radio group: `role="menuitemradio"` with
+   * `aria-checked`, which is what a menu of mutually exclusive choices is, and
+   * what a screen reader needs in order to say "2 of 3, checked".
+   */
+  selected?: boolean;
 }
 
-export function MenuItem({ danger, disabled, onSelect, className, onClick, ...rest }: MenuItemProps) {
+export function MenuItem({ danger, disabled, selected, onSelect, className, onClick, children, ...rest }: MenuItemProps) {
+  const choice = selected !== undefined;
   return (
-    <button {...rest} type="button" role="menuitem" tabIndex={-1}
+    <button {...rest} type="button"
+      role={choice ? 'menuitemradio' : 'menuitem'}
+      aria-checked={choice ? Boolean(selected) : undefined}
+      tabIndex={-1}
       aria-disabled={disabled || undefined}
       onClick={(e) => { onClick?.(e); if (!disabled) onSelect?.(); }}
-      className={cx('menu-item', danger && 'menu-item-danger', className)} />
+      className={cx('menu-item', danger && 'menu-item-danger', className)}>
+      {choice && (
+        /* Drawn here rather than accepted as a child, so the space it occupies
+           exists whether or not it is filled. `aria-hidden` because
+           `aria-checked` already carries the state — a tick announced twice is
+           read twice. */
+        <svg className="menu-mark" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+          <path d="M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z" />
+        </svg>
+      )}
+      {children}
+    </button>
   );
 }
 

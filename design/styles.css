@@ -342,6 +342,37 @@ html {
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
+/* A SCROLLBAR IS CHROME, NOT CONTENT.
+ *
+ * The platform default is a mid-grey bar that, on a light surface, reads as a
+ * filled column beside the page — heavier than any rule, divider or border this
+ * system draws, and the strongest vertical line on a screen whose hairlines are
+ * all one pixel of neutral-200.
+ *
+ * `scrollbar-color` takes thumb then track. The track is the surface it sits on
+ * so it disappears, and the thumb is a neutral just dark enough to find. It
+ * darkens on hover, which is where a scrollbar earns its contrast: when
+ * somebody is reaching for it.
+ *
+ * Firefox and Chromium honour this; WebKit needs the pseudo-elements below and
+ * ignores the shorthand, so both are written rather than one being assumed. */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+}
+::-webkit-scrollbar { inline-size: var(--space-3); block-size: var(--space-3); }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  /* Inset from the edge, so the bar reads as floating on the surface rather
+     than as a second border welded to it. */
+  border: 3px solid transparent;
+  background-clip: content-box;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-neutral-400); background-clip: content-box; }
+::-webkit-scrollbar-corner { background: transparent; }
+
 body {
   min-height: 100svh;
   background: var(--color-bg);
@@ -958,8 +989,13 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .listbox {
   margin: 0;
   list-style: none;
-  /* Never wider than the viewport allows, however long the option labels are. */
-  max-inline-size: min(420px, calc(100vw - var(--space-8)));
+  /* THE LIST IS THE WIDTH OF ITS FIELD.
+     It sized to its content, so a short option list rendered a narrow box hanging
+     off the left of a wide input — which reads as a detached popup rather than as
+     the field's own list. The anchor's width is measured and passed in as
+     `--anchor-w`; the max is the fallback when nothing set it. */
+  inline-size: var(--anchor-w, auto);
+  max-inline-size: min(max(var(--anchor-w, 420px), 420px), calc(100vw - var(--space-8)));
   max-block-size: calc(var(--space-24) * 2.4);
   overflow-y: auto;
   padding: var(--space-1);
@@ -990,7 +1026,9 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .listbox-option[aria-disabled="true"] { color: var(--color-neutral-400); pointer-events: none; }
 .listbox-option-note { margin-inline-start: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-neutral-500); }
 
-.listbox-empty { padding: var(--space-4) var(--space-3); font-size: var(--text-sm); color: var(--color-neutral-600); text-align: center; }
+/* Left, like every option above it. Centred, it read as a placeholder in an empty
+   box rather than as the list saying something. */
+.listbox-empty { padding: var(--space-4) var(--space-3); font-size: var(--text-sm); color: var(--color-neutral-600); }
 
 /* ----------------------------------------------------------------- command */
 
@@ -2604,6 +2642,22 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   cursor: pointer;
 }
 .menu-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-neutral-600); }
+
+/* A MARK MUST NOT MOVE THE THING IT MARKS.
+ *
+ * A menu of choices renders a tick on the chosen one and nothing on the others,
+ * so the chosen row's label sat one icon plus one gap to the right of every
+ * other row's. Opening the menu to see what is selected meant reading an
+ * indent, and choosing a different row made the whole list shuffle.
+ *
+ * `selected` on any item turns the mark into a reserved column for the WHOLE
+ * menu, so the labels line up whichever row is chosen — and an unmarked menu is
+ * untouched, because a list of actions should not carry a gutter for a mark it
+ * never draws. */
+.menu-mark { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-action); }
+/* Hidden, not absent. `visibility` keeps the box, so an unchosen row occupies
+   exactly the width a chosen one does and nothing moves when the choice moves. */
+.menu-item[aria-checked="false"] .menu-mark { visibility: hidden; }
 
 /* Hover and keyboard highlight must look identical — a menu driven by arrow
    keys should not feel like a different control from one driven by a mouse. */

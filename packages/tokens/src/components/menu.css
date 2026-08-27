@@ -33,6 +33,22 @@
 }
 .menu-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-neutral-600); }
 
+/* A MARK MUST NOT MOVE THE THING IT MARKS.
+ *
+ * A menu of choices renders a tick on the chosen one and nothing on the others,
+ * so the chosen row's label sat one icon plus one gap to the right of every
+ * other row's. Opening the menu to see what is selected meant reading an
+ * indent, and choosing a different row made the whole list shuffle.
+ *
+ * `selected` on any item turns the mark into a reserved column for the WHOLE
+ * menu, so the labels line up whichever row is chosen — and an unmarked menu is
+ * untouched, because a list of actions should not carry a gutter for a mark it
+ * never draws. */
+.menu-mark { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-action); }
+/* Hidden, not absent. `visibility` keeps the box, so an unchosen row occupies
+   exactly the width a chosen one does and nothing moves when the choice moves. */
+.menu-item[aria-checked="false"] .menu-mark { visibility: hidden; }
+
 /* Hover and keyboard highlight must look identical — a menu driven by arrow
    keys should not feel like a different control from one driven by a mouse. */
 .menu-item:hover, .menu-item[data-highlighted] { background: var(--color-neutral-100); color: var(--color-neutral-900); }
