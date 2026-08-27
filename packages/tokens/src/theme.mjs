@@ -89,6 +89,11 @@ export const MOTION = {
 };
 
 export const CONTAINERS = {
+  // A rail beside a document — wide enough for a contents entry to be read at a glance, narrow
+  // enough that it is plainly not the document. A LAYOUT DIMENSION: this was reached for on the
+  // spacing scale, where the nearest step is 96px, and a 96px rail wrapped every entry to twelve
+  // lines and still overflowed.
+  '--rail-w': '240px',
   '--container-sm': '640px',
   '--container-md': '768px',
   '--container-lg': '1024px',
