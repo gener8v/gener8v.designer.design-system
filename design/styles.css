@@ -2,7 +2,7 @@
    Do not edit. Change packages/tokens/src/theme.mjs (tokens),
    src/base.css (base layer) or src/components/*.css (component layer). */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;500;600&family=Inter:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
 /* Colour roles */
@@ -95,8 +95,8 @@
   --code-name: #D9E6FF;
 
   /* Type */
-  --font-heading: "Inter", system-ui, sans-serif;
-  --font-heading-weight: 500;
+  --font-heading: "Source Serif 4", system-ui, sans-serif;
+  --font-heading-weight: 600;
   --font-body: "Inter", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
   --text-xs: 12px;
@@ -2027,6 +2027,38 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 .switch:checked { background: var(--color-action); }
 .switch:checked::after { translate: calc(var(--space-6) - var(--space-2)) 0; }
+
+/* ------------------------------------------------- the name of a section */
+
+/* A HEADING IS THE LOUD PART. `h2` is a page heading at 36px, so a section
+   inside a dense surface reached for `.label` — 11px mono uppercase grey — with
+   a 20px `.lede` underneath. The name of the thing set smaller than the
+   commentary about it, on every surface that has sections. */
+.section-head { margin-block-end: var(--space-4); }
+.section-head-line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+.section-head-action { margin-inline-start: auto; display: flex; gap: var(--space-2); }
+.section-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: var(--text-lg);
+  line-height: var(--leading-lg);
+  letter-spacing: var(--tracking-lg);
+  color: var(--color-neutral-900);
+}
+.section-lede {
+  margin-block-start: var(--space-1);
+  /* A line of commentary that runs the width of a wide surface is one nobody
+     finishes. `ch` rather than a token: this is a measure in CHARACTERS, which
+     is what a measure is, and `.reader` already caps prose the same way. */
+  max-inline-size: 68ch;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: var(--color-neutral-600);
+}
 
 /* -------------------------------------------------------------------- flow */
 /* Flow-control parts. Composed on their own, or by the .flow shell below. */
