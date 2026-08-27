@@ -32,10 +32,14 @@
 .connection-note { font-size: var(--text-xs); color: var(--color-neutral-600); margin-block-start: var(--space-1); }
 /* Wraps under the body when the card is narrow; margin-inline-start:auto keeps
    it right-aligned on the wrapped row too. */
-.connection-actions { flex: none; display: flex; gap: var(--space-2); align-items: center; margin-inline-start: auto; }
+.connection-actions { flex: none; align-self: center; display: flex; gap: var(--space-2); align-items: center; margin-inline-start: auto; }
 .connection-name { flex-wrap: wrap; }
 
-.connection-status { display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); font-weight: 500; }
+/* CENTRED AGAINST THE CONTROLS IT SITS BESIDE. `.connection` is `flex-start`,
+   so the status sat at the top of its line box while the buttons next to it
+   were 36px tall — three things on one row at three heights. It is a fact
+   about the whole card, not about the first line of it. */
+.connection-status { align-self: center; display: inline-flex; align-items: center; gap: var(--space-2); font-size: var(--text-xs); font-weight: 500; }
 .connection-status::before { content: ""; inline-size: var(--space-2); block-size: var(--space-2); border-radius: var(--radius-full); background: currentColor; flex: none; }
 .connection-status[data-state="connected"] { color: var(--color-success-700); }
 .connection-status[data-state="degraded"] { color: var(--color-warning-700); }
