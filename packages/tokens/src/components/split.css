@@ -1,0 +1,70 @@
+/* ------------------------------------------------------------------- split */
+
+/* A pane whose width is the reader's, not the designer's.
+ *
+ * A fixed side panel is a guess about content nobody has seen yet. It was wrong
+ * on the record's vault, where twenty-four document names — the one thing the
+ * panel exists to show — were each clipped mid-word beside an empty gutter. */
+
+.split { display: flex; align-items: stretch; min-inline-size: 0; }
+.split-aside { min-inline-size: 0; overflow: auto; }
+.split-main { flex: 1; min-inline-size: 0; overflow: auto; }
+
+/* THE HANDLE IS A CONTROL, SO IT HAS A CONTROL'S HIT AREA.
+ *
+ * The line is one pixel; the target is not. A 1px separator is a target nobody
+ * can hit, so the element is wide enough to grab and draws its line in the
+ * middle — the same reason a checkbox is bigger than its tick. */
+.split-handle {
+  flex: none;
+  position: relative;
+  inline-size: var(--space-4);
+  margin-inline: calc(var(--space-2) * -1);
+  z-index: 1;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: col-resize;
+  touch-action: none;
+}
+.split-handle::before {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 50%;
+  inline-size: 1px;
+  background: var(--color-neutral-200);
+  transition: background-color var(--dur-fast) var(--ease-out),
+              inline-size var(--dur-fast) var(--ease-out);
+}
+.split-handle:hover::before,
+.split-handle[data-dragging]::before {
+  inline-size: 2px;
+  background: var(--color-action);
+}
+/* Focus lands on the LINE, not on the invisible hit area, or the ring floats
+   in the gap between two panels. */
+.split-handle:focus-visible { outline: none; }
+.split-handle:focus-visible::before {
+  inline-size: 2px;
+  background: var(--color-action);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-action) 28%, transparent);
+}
+
+/* Collapsed, the handle is the only way back, so it stays visible and says so
+   by pointing the other way. */
+.split[data-collapsed] .split-aside { display: none; }
+.split[data-collapsed] .split-handle { cursor: e-resize; }
+
+/* Nothing animates mid-drag: a transition on the panel makes the edge lag the
+   pointer, which reads as the control being broken rather than smooth. */
+.split[data-dragging] { user-select: none; }
+.split[data-dragging] .split-aside { transition: none; }
+
+@media (max-width: 720px) {
+  /* Two panes side by side on a phone are two panes nobody can read. */
+  .split { flex-direction: column; }
+  .split-aside { inline-size: auto !important; max-block-size: 40svh; }
+  .split-handle { display: none; }
+  .split[data-collapsed] .split-aside { display: block; }
+}

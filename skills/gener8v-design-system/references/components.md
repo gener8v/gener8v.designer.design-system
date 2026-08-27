@@ -31,6 +31,8 @@ add it to the system, not to the consuming app.
 | `.segmented` with `.segmented-item` | A radiogroup, not a tablist — it filters, it does not swap panels | components/disclosure.html |
 | `.stat` with `.stat-label`, `.stat-value`, `.stat-note`, `.stat-delta` | KPI tile; figures tabular | components/data.html |
 | `.meter` with `.meter-track`, `.meter-fill` | A level that is true — not `.progress`, which is a task advancing | components/data.html |
+| `.conversation` with `.turn`, `.turn-body`, `.turn-meta`, `.turn-pending` | A person asking and a system answering — `data-side="sent"` is a bubble, `received` is prose at full measure | — |
+| `.split` with `.split-aside`, `.split-handle`, `.split-main` | Reader-sized pane: drag the handle, click it to collapse. `role="separator"` | — |
 | `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input; `allowCustom` accepts a value the list does not hold | components/inputs.html |
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
