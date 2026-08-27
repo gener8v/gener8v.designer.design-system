@@ -57,14 +57,20 @@ export function Split({
   const start = useRef<{ x: number; width: number; moved: number } | null>(null);
   const id = useId();
 
+  const clamp = useCallback((n: number) => Math.min(max, Math.max(min, n)), [min, max]);
+
   const collapsed = collapsedProp ?? ownCollapsed;
   const setCollapsed = useCallback((next: boolean) => {
     if (collapsedProp === undefined) setOwnCollapsed(next);
+    // OPENING RESTORES A USABLE WIDTH, not whatever number was last held.
+    // A panel that comes back narrower than its own minimum is a panel whose
+    // `min` does not mean anything, and the reader has to drag it out before
+    // they can read the thing they just reopened.
+    const back = clamp(width);
+    if (!next && back !== width) setWidth(back);
     onCollapse?.(next);
-    onResize?.(next ? 0 : width);
-  }, [collapsedProp, onCollapse, onResize, width]);
-
-  const clamp = useCallback((n: number) => Math.min(max, Math.max(min, n)), [min, max]);
+    onResize?.(next ? 0 : back);
+  }, [collapsedProp, onCollapse, onResize, width, clamp]);
 
   const resize = useCallback((next: number) => {
     const w = clamp(next);
