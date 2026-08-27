@@ -104,14 +104,16 @@ describe('Split — the WAI-ARIA window splitter', () => {
     // A panel that reopens below `min` is a panel whose minimum means nothing, and the reader has
     // to drag it out before they can read what they just reopened. Seen on a real screen: it came
     // back at half the width it was set to.
+    // Starts SHUT and holding a width below the minimum, so the click under test is the reopen —
+    // which is the only call that can be wrong. The first version of this test started open, so
+    // the click collapsed instead and the only value recorded was 0. It passed whatever the
+    // component did.
     const onResize = vi.fn();
-    const { rerender } = render(split({ initial: 40, min: 200, onResize }));
-    rerender(split({ initial: 40, min: 200, onResize, collapsed: true }));
-    rerender(split({ initial: 40, min: 200, onResize, collapsed: false }));
+    render(split({ initial: 40, min: 200, collapsed: true, onResize }));
 
     fireEvent.pointerDown(handle(), { clientX: 100 });
-    fireEvent.pointerUp(window, { clientX: 100 });   // a click: toggles
-    expect(onResize).toHaveBeenCalled();
-    for (const [w] of onResize.mock.calls) expect(w === 0 || w >= 200).toBe(true);
+    fireEvent.pointerUp(window, { clientX: 100 });   // a click: toggles it open
+
+    expect(onResize).toHaveBeenCalledWith(200);
   });
 });
