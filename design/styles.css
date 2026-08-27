@@ -3339,7 +3339,12 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  * likely to be using one are exactly the people it is for. */
 
 .shelf { display: grid; gap: var(--space-6); }
-@media (min-width: 900px) { .shelf { grid-template-columns: 1fr 1fr; } }
+/* Side by side once there is room for it. A shelf in a RAIL never has that room
+   however wide the window is, and the window is what this query can see — so
+   `data-layout="stack"` says so directly rather than guessing from the viewport. */
+@media (min-width: 900px) {
+  .shelf:not([data-layout="stack"]) { grid-template-columns: 1fr 1fr; }
+}
 
 .shelf-zone {
   display: flex;
