@@ -98,9 +98,19 @@
 
 /* trigger → transform → action, read left to right. The arrow is a real glyph
    rather than a border, because this line is the sentence the rule makes. */
+/* A SENTENCE'S WORDS SIT NEXT TO EACH OTHER.
+ *
+ * This was `minmax(0,1fr) auto minmax(0,1fr)` — two halves pushed to opposite
+ * ends with the arrow stranded between them. At a container width the design
+ * was drawn for that reads as a rule; at 1400px it puts 700px between the
+ * trigger and what it triggers, and "read as a sentence" stops being true of
+ * it. The parts now size to their content and pack from the start.
+ *
+ * `trailing` still goes to the end, because an action on the row is not part
+ * of the sentence. */
 .rule {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: auto auto minmax(0, 1fr);
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-3) var(--space-4);
@@ -109,6 +119,11 @@
   background: var(--color-bg);
 }
 .rule-node { display: flex; align-items: center; gap: var(--space-2); min-inline-size: 0; }
+/* The third column holds what the rule DOES plus anything trailing, so the
+   action stays beside the arrow and the action-button goes to the end. */
+.rule-node:last-child { gap: var(--space-3); }
+.rule-node:last-child .rule-label { flex: none; }
+.rule-node:last-child > :not(.rule-label):not(svg) { margin-inline-start: auto; }
 .rule-node svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: var(--color-neutral-600); }
 .rule-label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--text-sm); color: var(--color-neutral-900); }
 .rule-event { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-neutral-600); }
