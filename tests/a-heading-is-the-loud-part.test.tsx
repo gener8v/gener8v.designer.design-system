@@ -114,12 +114,26 @@ describe('a section marker', () => {
     expect(ruleFor('.mono')).toMatch(/font-family:\s*var\(--font-mono\)/);
   });
 
-  it('is ruled off from what it heads', () => {
-    // A marker with nothing under it floats; the rule is what makes it read as heading the block
-    // below rather than as a stray line. The document rails did it by hand, on two surfaces.
-    expect(ruleFor('.label')).toMatch(/border-block-end:\s*1px solid/);
-    // And the version for a marker INSIDE a row is not ruled, because there is no block under it.
-    expect(ruleFor('.label-bare')).not.toMatch(/border-block-end/);
+  it('underlines the WORD, not the container', () => {
+    // A `border-block-end` on a block element rules off the whole width, which is a DIVIDER: it
+    // separates the marker from what follows instead of marking the marker. The underline ends
+    // where the word ends, which is the device that has always meant "this names what is below".
+    const label = ruleFor('.label');
+
+    expect(label).toMatch(/text-decoration:\s*underline/);
+    expect(label).not.toMatch(/border-block-end/);
+    // Clear of the descenders, or it reads as a strike through the word's feet.
+    expect(label).toMatch(/text-underline-offset/);
+    // And the version for a marker INSIDE a row carries no underline at all.
+    expect(ruleFor('.label-bare')).not.toMatch(/text-decoration:\s*underline/);
+  });
+
+  it('gives a navigation rail one typeface', () => {
+    // The group headings were mono and the items were not, so a menu of nine words was set in two
+    // families. A group name is a category, not an identifier.
+    expect(ruleFor('.sidebar-group')).toMatch(/font-family:\s*var\(--font-body\)/);
+    // The count stays mono: it is a figure, and tabular digits are the whole reason.
+    expect(ruleFor('.sidebar-count')).toMatch(/font-family:\s*var\(--font-mono\)/);
   });
 });
 
