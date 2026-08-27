@@ -27,6 +27,24 @@ describe('a rail you can put away', () => {
     expect(declarationsFor('.sidebar[data-narrow] .sidebar-section')['display']).toBe('none');
   });
 
+  it('gives the width back, which is the whole point', () => {
+    // THE GUARD THAT WAS MISSING WHEN THIS SHIPPED BROKEN. Three tests covered emptying the rail,
+    // keeping the control and turning the arrow — every observable EXCEPT the one the feature is
+    // for. So a fold that hid the contents and stayed 240px passed all three: a control that made
+    // the page worse and gave nothing back.
+    const open = declarationsFor('.sidebar')['inline-size'];
+    const folded = declarationsFor('.sidebar[data-narrow]')['inline-size'];
+    expect(open).toBeTruthy();
+    expect(folded).toBeTruthy();
+    expect(folded).not.toBe(open);
+  });
+
+  it('holds its width rather than taking a share of one', () => {
+    // A rail is a WIDTH. As a flex child without this it shrinks to whatever the main pane leaves,
+    // and then folding it changes nothing anybody can see.
+    expect(declarationsFor('.sidebar')['flex']).toBe('none');
+  });
+
   it('keeps the control that brings it back', () => {
     // The one thing that must survive the fold. A rail with no way out of the folded state is a
     // navigation menu somebody has permanently deleted.
