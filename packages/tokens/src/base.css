@@ -94,10 +94,34 @@ a {
 }
 a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 
-/* The capability-statement voice: mono, uppercase, wide — for section markers,
-   figures and technical labels. Carried over from gener8v.com. */
+/* A SECTION MARKER: the small line above a thing that says what kind of thing
+   it is. Uppercase and tracked, in the body family.
+ *
+ * It was MONO — the capability-statement voice carried over from gener8v.com.
+ * In a product it put a third typeface on every surface for text that is not
+ * technical: "GOVERNANCE" over a nav group is a category, not an identifier.
+ * Mono stays for the things that ARE identifiers — `.mono`, `code`, a slug, a
+ * version — where the fixed width is doing work.
+ *
+ * AND IT IS RULED OFF. A marker with nothing under it floats; the rule is what
+ * makes it read as heading the block below rather than as a stray line. Same
+ * device the document rails already used by hand, made the default so it is
+ * the same everywhere. */
 .label {
-  font-family: var(--font-mono);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+  padding-block-end: var(--space-2);
+  border-block-end: 1px solid var(--color-neutral-200);
+}
+
+/* The same voice with no rule, for a marker sitting INSIDE a row rather than
+   over a block — a kind beside a name, a version beside a title. */
+.label-bare {
+  font-family: var(--font-body);
   font-size: var(--text-xs);
   font-weight: 500;
   letter-spacing: 0.1em;

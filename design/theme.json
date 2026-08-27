@@ -18,9 +18,10 @@
   },
   "fonts": {
     "heading": {
-      "family": "Source Serif 4",
-      "class": "serif",
+      "family": "Inter",
+      "class": "grotesque",
       "weights": [
+        300,
         400,
         500,
         600

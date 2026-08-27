@@ -171,11 +171,11 @@ T('--ring-color', 'var(--color-accent)', 'color');
  *  theme rather than typed twice: a heading font changed in `theme.mjs` and not here loads nothing
  *  and falls back to `system-ui`, which looks like a rendering fault and reads as one. */
 const googleName = (family) => family.replace(/ /g, '+');
-const googleFamilies = [
-  `${googleName(fonts.heading.family)}:wght@${fonts.heading.weights.join(';')}`,
-  `${googleName(fonts.body.family)}:wght@${fonts.body.weights.join(';')}`,
-  `${googleName(fonts.mono.family)}:wght@${fonts.mono.weights.join(';')}`,
-];
+// DEDUPED BY FAMILY, because heading and body are usually the same one and asking Google for it
+// twice is a request that says the product cannot count.
+const googleFamilies = [...new Map(
+  [fonts.heading, fonts.body, fonts.mono].map((f) => [f.family, f]),
+).values()].map((f) => `${googleName(f.family)}:wght@${f.weights.join(';')}`);
 
 const section = (label) => `\n  /* ${label} */\n`;
 const emit = (list) => list.map((t) => `  ${t.name}: ${t.value};`).join('\n');

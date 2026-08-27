@@ -70,24 +70,71 @@ describe('the name of a section', () => {
 });
 
 describe('the heading voice', () => {
-  it('is not the body voice with a heavier weight', () => {
-    // Heading and body were both Inter at 500, so a heading was body text slightly bolder and
-    // every scrap of hierarchy had to come from size — which leaves nothing at all for a heading
-    // that has to be small.
+  it('carries hierarchy in size and weight, not in a second family', () => {
+    // A serif for headings was tried and taken back out: a product that reads as one thing does
+    // not need two voices, and the problem it was reaching for was never a family problem.
+    //
+    // What was missing was a SIZE. `h2` is 36px — a page heading — so the name of a section had
+    // nowhere to go, and every surface filled the gap with an 11px mono label. `SectionHead` is
+    // that size, and 600 is what makes it read as a heading beside 400 body text.
     const heading = /--font-heading:\s*([^;]+);/.exec(RULES)?.[1] ?? '';
     const body = /--font-body:\s*([^;]+);/.exec(RULES)?.[1] ?? '';
+    const weight = Number(/--font-heading-weight:\s*(\d+)/.exec(RULES)?.[1] ?? 0);
 
-    expect(heading).not.toBe(body);
-    expect(heading).toContain('Source Serif');
+    expect(heading).toBe(body);
+    expect(weight).toBeGreaterThan(400);
   });
 
-  it('loads every family it names', () => {
+  it('loads every family it names, once', () => {
     // A family changed in the theme and not in the font import loads nothing and falls back to
-    // `system-ui`, which looks like a rendering fault and reads as one.
+    // `system-ui`, which looks like a rendering fault and reads as one. And heading and body being
+    // the same family must not ask Google for it twice.
     const imported = /fonts\.googleapis\.com[^']+/.exec(CSS)?.[0] ?? '';
+    const asked = [...imported.matchAll(/family=([^:&]+)/g)].map((m) => m[1]);
+
     for (const token of ['--font-heading', '--font-body', '--font-mono']) {
       const family = (new RegExp(`${token}:\\s*"([^"]+)"`).exec(RULES)?.[1] ?? '').replace(/ /g, '+');
-      expect(imported, `${token} is ${family}`).toContain(family);
+      expect(asked, `${token} is ${family}`).toContain(family);
     }
+    expect(asked.length, `asked twice for the same family: ${asked.join(', ')}`).toBe(
+      new Set(asked).size,
+    );
+  });
+});
+
+describe('a section marker', () => {
+  it('is in the body family, not a third typeface', () => {
+    // `.label` was mono — the capability-statement voice carried over from the marketing site. In
+    // a product it put a third typeface on every surface for text that is not technical:
+    // "GOVERNANCE" over a nav group is a category, not an identifier.
+    const label = ruleFor('.label');
+
+    expect(label).toMatch(/font-family:\s*var\(--font-body\)/);
+    // Mono stays where the fixed width does work.
+    expect(ruleFor('.mono')).toMatch(/font-family:\s*var\(--font-mono\)/);
+  });
+
+  it('is ruled off from what it heads', () => {
+    // A marker with nothing under it floats; the rule is what makes it read as heading the block
+    // below rather than as a stray line. The document rails did it by hand, on two surfaces.
+    expect(ruleFor('.label')).toMatch(/border-block-end:\s*1px solid/);
+    // And the version for a marker INSIDE a row is not ruled, because there is no block under it.
+    expect(ruleFor('.label-bare')).not.toMatch(/border-block-end/);
+  });
+});
+
+describe('a figure beside a page name', () => {
+  it('does not out-shout the name it sits next to', () => {
+    // A row of four `--text-3xl` figures beside a 36px `h1` is two headlines — and four zeros at
+    // 30px is a masthead announcing that nothing has happened.
+    const stat = /--text-([\w]+)\)/.exec(ruleFor('.stat-value'))?.[1] ?? '';
+    const px = (name: string) => Number(new RegExp(`--text-${name}:\\s*(\\d+)px`).exec(RULES)?.[1] ?? 0);
+
+    expect(px(stat)).toBeLessThan(px('4xl'));
+    expect(px(stat)).toBeGreaterThan(px('base'));
+  });
+
+  it('labels its figure in the body family', () => {
+    expect(ruleFor('.stat-label')).toMatch(/font-family:\s*var\(--font-body\)/);
   });
 });

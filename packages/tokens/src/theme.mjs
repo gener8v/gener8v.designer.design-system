@@ -41,21 +41,22 @@ export const theme = {
   },
 
   fonts: {
-    // A SERIF FOR HEADINGS, AND IT IS NOT DECORATION.
+    // ONE FAMILY. A second one was tried — a serif for headings — and taken back out: a product
+    // that reads as one thing does not need two voices, and the hierarchy problem it was reaching
+    // for was never a family problem.
     //
-    // Heading and body were both Inter at 500 — so a heading was body text, very slightly bolder,
-    // and every scrap of hierarchy had to come from size alone. On a surface where the heading is
-    // small (a section inside a page) there was nothing left to carry it, and the product filled
-    // the gap with an 11px mono label above a 20px grey sentence: the name of the thing set
-    // smaller than the commentary about it. That is not a spacing bug, it is a missing voice.
+    // What was actually missing was a SIZE. Heading and body were both Inter at 500, so a heading
+    // was body text very slightly bolder — and `h2` at 36px is a PAGE heading, which left nothing
+    // for the name of a section inside a dense surface. Every surface filled that gap with an
+    // 11px mono label above a 20px grey sentence: the name of the thing set smaller than the
+    // commentary about it.
     //
-    // Source Serif 4 is screen-tuned, pairs with Inter by design, and reads as a document rather
-    // than as an interface — which is what a record somebody attaches to a filing should read as.
-    heading: { family: 'Source Serif 4', class: 'serif', weights: [400, 500, 600] },
+    // `SectionHead` is that size, and 600 is the weight that makes it read as a heading beside
+    // 400 body text. Size and weight, one family.
+    heading: { family: 'Inter', class: 'grotesque', weights: [300, 400, 500, 600] },
     body: { family: 'Inter', class: 'grotesque', weights: [300, 400, 500, 600] },
     mono: { family: 'IBM Plex Mono', class: 'mono', weights: [400, 500, 600] },
-    // 600 rather than 500: a serif at display sizes needs the weight to hold its own against a
-    // grotesque body, and the family change is now what carries the hierarchy anyway.
+    // 600, not the old 500: with no family change to carry it, the weight has to.
     headingWeight: 600,
   },
 
@@ -104,7 +105,7 @@ export const CONTAINERS = {
   // enough that it is plainly not the document. A LAYOUT DIMENSION: this was reached for on the
   // spacing scale, where the nearest step is 96px, and a 96px rail wrapped every entry to twelve
   // lines and still overflowed.
-  '--rail-w': '240px',
+  '--rail-w': '260px',
   '--container-sm': '640px',
   '--container-md': '768px',
   '--container-lg': '1024px',
