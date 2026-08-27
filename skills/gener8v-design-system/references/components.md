@@ -69,7 +69,7 @@ add it to the system, not to the consuming app.
 
 ## Tokens
 
-142 tokens. The vocabulary:
+143 tokens. The vocabulary:
 
 | Group | Names |
 | --- | --- |

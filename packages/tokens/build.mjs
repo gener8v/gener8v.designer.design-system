@@ -196,7 +196,7 @@ ${section('Radius')}${emit(byKind('radius'))}
 ${section('Elevation')}${emit(byKind('shadow'))}
 ${section('Motion')}${emit(byKind('motion'))}
 ${section('Controls')}${emit(pick(/^--control-h-/))}
-${section('Layout')}${emit(pick(/^--container-/))}
+${section('Layout')}${emit(pick(/^--(container|rail)-/))}
 ${section('Focus')}${emit(pick(/^--ring-/))}
 }
 `;
