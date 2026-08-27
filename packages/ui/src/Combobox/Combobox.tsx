@@ -70,7 +70,7 @@ const defaultFilter = (o: ComboboxOption, q: string) =>
 export function Combobox({
   options, value, onChange, label, placeholder,
   filter = defaultFilter, emptyMessage = 'No matches',
-  noOptionsMessage = 'Nothing to choose from yet', allowCustom = false,
+  noOptionsMessage, allowCustom = false,
   labelHidden = false, invalid = false, id, disabled = false,
 }: ComboboxProps) {
   const autoId = useId();
@@ -113,10 +113,33 @@ export function Combobox({
   // user picks something, so an abandoned edit reverts rather than clearing.
   useEffect(() => { setQuery(selected?.label ?? ''); }, [selected]);
 
-  const matches = useMemo(
-    () => (query && query !== selected?.label ? options.filter((o) => filter(o, query)) : options),
-    [options, query, filter, selected],
-  );
+  /**
+   * WHAT THE FIELD WILL TAKE, AS A THING YOU CAN PICK.
+   *
+   * `allowCustom` used to be invisible: a list holding nothing said "Nothing to choose from yet",
+   * which is the one message that is never true of a field that accepts anything. Somebody who
+   * needed a subject the record did not have yet read that as a dead end and asked how to create
+   * one — and the answer, "type it and leave the field", was written nowhere on the screen.
+   *
+   * So the offer is an OPTION rather than a sentence: it carries what you typed, it is clickable,
+   * arrow keys reach it, and it commits through the same `commit` every other row uses. A hint
+   * saying you may type would have been words doing a control's job.
+   */
+  const custom = useMemo(() => {
+    if (!allowCustom) return null;
+    const typed = query.trim();
+    if (!typed || typed === selected?.label) return null;
+    if (options.some((o) => o.label.toLowerCase() === typed.toLowerCase())) return null;
+    return { value: typed, label: typed, note: 'use as typed' } as ComboboxOption;
+  }, [allowCustom, query, options, selected]);
+
+  const matches = useMemo(() => {
+    const found = query && query !== selected?.label ? options.filter((o) => filter(o, query)) : options;
+    // LAST. What the list already holds is the better answer when it holds one — the whole reason
+    // the picker exists is that a second name for a thing the record already names is a thing
+    // nobody finds later.
+    return custom ? [...found, custom] : found;
+  }, [options, query, filter, selected, custom]);
   const enabled = useMemo(() => matches.filter((o) => !o.disabled), [matches]);
 
   const commit = useCallback((option: ComboboxOption) => {
@@ -251,7 +274,10 @@ export function Combobox({
           className="listbox">
           {matches.length === 0 && (
             <li className="listbox-empty">
-              {options.length === 0 ? noOptionsMessage : emptyMessage}
+              {options.length === 0
+                ? (noOptionsMessage ??
+                    (allowCustom ? 'Type to add your own' : 'Nothing to choose from yet'))
+                : emptyMessage}
             </li>
           )}
           {matches.map((o) => {

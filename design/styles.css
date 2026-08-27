@@ -1241,6 +1241,12 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 /* A choice big enough to carry a description and a price. The whole card is
    the hit target, so the radio itself is only a marker. */
 .radio-cards { display: grid; gap: var(--space-3); }
+/* SIDE BY SIDE. Three short options stacked down a page read as three separate
+   questions; in a row they read as one question with three answers. */
+@media (min-width: 720px) {
+  .radio-cards[data-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .radio-cards[data-columns="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 .radio-card {
   display: flex;
   align-items: flex-start;
@@ -1874,6 +1880,39 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 
 .input:read-only, .textarea:read-only { background: var(--color-surface); }
+
+/* --- a field with words attached to it -------------------------------- */
+
+/* ONE UNIT, NOT A ROW OF THINGS THAT HAPPEN TO BE NEAR EACH OTHER. The parts
+   share their borders: only the outer edges are rounded, and the seam between
+   them is a single line rather than two sitting against each other. */
+.input-group {
+  display: flex;
+  align-items: stretch;
+  min-inline-size: 0;
+}
+.input-group > * { border-radius: 0; }
+.input-group > *:first-child { border-start-start-radius: var(--radius-md); border-end-start-radius: var(--radius-md); }
+.input-group > *:last-child { border-start-end-radius: var(--radius-md); border-end-end-radius: var(--radius-md); }
+.input-group > .input { flex: 1 1 auto; min-inline-size: 0; }
+/* The seam, once. Without this the two 1px borders stack into a 2px rule that
+   reads as a gap between two controls. */
+.input-group > * + * { margin-inline-start: -1px; }
+/* The focused field owns the seam, or its ring is drawn under the neighbour. */
+.input-group > .input:focus { position: relative; z-index: 1; }
+
+.input-addon {
+  display: flex;
+  align-items: center;
+  flex: none;
+  padding-inline: var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-neutral-300);
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: var(--color-neutral-600);
+  white-space: nowrap;
+}
 
 .input-sm, .select-sm { min-block-size: var(--control-h-sm); padding-block: var(--space-1); font-size: var(--text-xs); }
 .input-lg, .select-lg { min-block-size: var(--control-h-lg); font-size: var(--text-base); }

@@ -58,6 +58,12 @@
 /* A choice big enough to carry a description and a price. The whole card is
    the hit target, so the radio itself is only a marker. */
 .radio-cards { display: grid; gap: var(--space-3); }
+/* SIDE BY SIDE. Three short options stacked down a page read as three separate
+   questions; in a row they read as one question with three answers. */
+@media (min-width: 720px) {
+  .radio-cards[data-columns="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .radio-cards[data-columns="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 .radio-card {
   display: flex;
   align-items: flex-start;
