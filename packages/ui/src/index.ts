@@ -9,6 +9,8 @@ export { Tag } from './Tag/index.js';
 export type { TagProps, TagVariant } from './Tag/index.js';
 export { Field, FieldLabel, FieldHint, FieldError } from './Field/index.js';
 export type { FieldLabelProps } from './Field/index.js';
+export { Item, ItemList } from './Item/index.js';
+export type { ItemProps } from './Item/index.js';
 export { Input, InputAddon, InputGroup, Textarea } from './Input/index.js';
 export type { InputAddonProps, InputProps, TextareaProps, ControlSize } from './Input/index.js';
 export { Select } from './Select/index.js';

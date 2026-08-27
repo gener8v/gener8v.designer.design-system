@@ -2812,6 +2812,70 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 .endpoint-method { color: var(--color-accent-300); flex: none; }
 
+/* ------------------------------------------------------------ item list */
+
+/* A LIST OF RECORDS, each read on its own.
+ *
+ * `.table` is for values compared down a column; `.doc-list` is for files. This
+ * is for the third shape — a name, a line of provenance, a mark or two — which
+ * three surfaces had each invented separately before it was written down. */
+.item-list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+/* A HAIRLINE BETWEEN, NOT AROUND. A box per row turns a list of six into six
+   boxes; the rule is the least a reader needs to see where one ends. */
+.item + .item { border-block-start: 1px solid var(--color-neutral-200); }
+
+.item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  min-inline-size: 0;
+}
+
+.item-lead {
+  flex: none;
+  display: grid;
+  place-items: center;
+  color: var(--color-neutral-600);
+  /* Aligned to the TITLE'S line, not to the top of a row that may be three lines
+     tall — an icon floating above a two-line meta reads as belonging to neither. */
+  block-size: var(--leading-sm);
+}
+
+.item-body { display: flex; flex-direction: column; min-inline-size: 0; flex: 1; }
+
+/* The marks share the title's line and wrap with it: a tag on its own line reads
+   as a second fact about the row rather than as a qualification of its name. */
+.item-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+.item-title { font-size: var(--text-sm); color: var(--color-neutral-900); min-inline-size: 0; }
+.item-trailing { display: inline-flex; align-items: center; gap: var(--space-2); }
+
+.item-meta {
+  margin-block-start: var(--space-1);
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--color-neutral-600);
+}
+.item-detail {
+  margin-block-start: var(--space-2);
+  max-inline-size: 68ch;
+  font-size: var(--text-sm);
+  line-height: var(--leading-sm);
+  color: var(--color-neutral-700);
+}
+
 /* ----------------------------------------------------------------- library */
 
 /* A document library. File type is carried by a mono badge and a glyph, not by
