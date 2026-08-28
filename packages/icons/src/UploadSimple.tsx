@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `UploadSimple` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `UploadSimple` at regular weight. Sized in em so it tracks the type.
+ *
+ * Putting material on the record. */
 export function UploadSimple(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

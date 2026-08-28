@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Lock` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `Lock` at regular weight. Sized in em so it tracks the type.
+ *
+ * Private to the project it belongs to. */
 export function Lock(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

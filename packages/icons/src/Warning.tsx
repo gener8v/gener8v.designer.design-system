@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Warning` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `Warning` at regular weight. Sized in em so it tracks the type.
+ *
+ * Something is wrong and somebody has to act. Never used for absence. */
 export function Warning(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Check` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `Check` at regular weight. Sized in em so it tracks the type.
+ *
+ * Done, or chosen. Never 'good' — a covered requirement is not a compliment. */
 export function Check(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

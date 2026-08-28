@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Folder` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `Folder` at regular weight. Sized in em so it tracks the type.
+ *
+ * A place documents are kept, as against one document. */
 export function Folder(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"
