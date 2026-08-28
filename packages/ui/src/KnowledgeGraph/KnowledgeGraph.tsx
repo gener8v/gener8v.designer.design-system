@@ -440,7 +440,11 @@ export function KnowledgeGraph({
 
       {showIndex && (
         <div className="graph-index">
-          <p className="label">{caption}</p>
+          {/* NOT `.label`. That style is small, uppercase and letter-spaced — for ONE OR TWO WORDS
+              naming what follows. The caption is two sentences, and set in it they became a wall
+              of shouting capitals across the top of the list, which is a heading style applied to
+              prose. The list already has a heading: the button that opened it. */}
+          <p className="graph-index-caption">{caption}</p>
           <ul className="checklist" style={{ marginBlockStart: 'var(--space-3)' }}>
             {nodes.map((n) => {
               const adj = [...(neighbours.get(n.id) ?? [])].map((id) => labelFor.get(id) ?? id);
@@ -451,9 +455,23 @@ export function KnowledgeGraph({
                     onClick={() => onSelect?.(selected === n.id ? null : n.id)}>
                     <span>
                       <span className="checklist-text">{n.label}</span>
+                      {/* WHAT IS TRUE OF THIS ONE, not the same non-fact on every row.
+                       *
+                       * "no connections" was printed under every entity, so a graph with no edges
+                       * at all rendered as twenty rows of the identical sentence — the reader
+                       * scans for a difference, finds none, and learns nothing that the empty
+                       * canvas had not already told them. Silence carries it: a row with no
+                       * connections shows its kind and stops, and the rows that DO have
+                       * connections are then the ones that stand out.
+                       *
+                       * The count for the whole graph is in the caption, where a fact about the
+                       * graph belongs. */}
                       <span className="checklist-note">
-                        {n.kind ? `${n.kind} · ` : ''}
-                        {adj.length ? `${adj.length} connection${adj.length === 1 ? '' : 's'}: ${adj.slice(0, 6).join(', ')}${adj.length > 6 ? '…' : ''}` : 'no connections'}
+                        {n.kind ?? ''}
+                        {n.kind && adj.length ? ' · ' : ''}
+                        {adj.length
+                          ? `${adj.length} connection${adj.length === 1 ? '' : 's'}: ${adj.slice(0, 6).join(', ')}${adj.length > 6 ? '…' : ''}`
+                          : ''}
                       </span>
                     </span>
                   </button>
