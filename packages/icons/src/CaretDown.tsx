@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `CaretDown` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `CaretDown` at regular weight. Sized in em so it tracks the type.
+ *
+ * A group that opens. The same chevron everywhere one does, so the state reads the same. */
 export function CaretDown(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

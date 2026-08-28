@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Info` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `Info` at regular weight. Sized in em so it tracks the type.
+ *
+ * Something worth knowing that changes nothing. Never a warning wearing a quieter colour. */
 export function Info(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

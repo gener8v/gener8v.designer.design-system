@@ -1,6 +1,8 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `ArrowRight` at regular weight. Sized in em so it tracks the type. */
+/** Phosphor `ArrowRight` at regular weight. Sized in em so it tracks the type.
+ *
+ * Forward, on a control that continues something rather than confirming it. */
 export function ArrowRight(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"
