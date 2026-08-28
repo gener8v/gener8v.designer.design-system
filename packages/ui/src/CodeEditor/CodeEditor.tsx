@@ -28,6 +28,22 @@ export interface CodeEditorProps
   /** Visible rows before it scrolls. */
   rows?: number;
   /**
+   * Fill the window, with the page behind it.
+   *
+   * A GOVERNED DOCUMENT IS NOT A FORM FIELD. Editing one of these is the act somebody came to the
+   * product to do — a standard every project is measured against, where the shape of an ID table
+   * IS the thing being changed — and a twenty-eight-row box on a page is a keyhole to do it
+   * through. The reader scrolls a small viewport inside a scrolling page, which is the worst of
+   * both.
+   *
+   * `Escape` leaves it, and the control that opened it says so. A surface that fills the screen
+   * with no visible way out is a trap, and a keyboard is the first place somebody looks.
+   */
+  full?: boolean;
+  /** Leaving the full-screen state. Required with `full`, because the component does not own it —
+   *  the caller decides what "closed" means for its own page. */
+  onLeaveFull?: () => void;
+  /**
    * Wrap long lines.
    *
    * OFF BY DEFAULT, AND IT COSTS THE GUTTER. A wrapped line occupies several visual rows and a
@@ -56,6 +72,8 @@ export interface CodeEditorProps
  * than accepting a className that could change it.
  */
 export function CodeEditor({
+  full = false,
+  onLeaveFull,
   value,
   onChange,
   label,
@@ -97,7 +115,19 @@ export function CodeEditor({
   const tokens = tokenize(value, language);
 
   return (
-    <div className={cx('code-editor', className)} data-wrap={wrap || undefined}>
+    <div
+      className={cx('code-editor', className)}
+      data-wrap={wrap || undefined}
+      data-full={full || undefined}
+      onKeyDown={(e) => {
+        // ESCAPE LEAVES. A surface that fills the screen with no visible way out is a trap, and
+        // the keyboard is the first place somebody looks for one.
+        if (full && e.key === 'Escape') {
+          e.stopPropagation();
+          onLeaveFull?.();
+        }
+      }}
+    >
       <label htmlFor={id} className={labelHidden ? 'sr-only' : 'code-editor-label'}>
         {label}
       </label>
