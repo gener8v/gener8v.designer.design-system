@@ -1,0 +1,80 @@
+/* ------------------------------------------------------------------- facet */
+
+/* AN ATTRIBUTE YOU CAN ACT ON.
+ *
+ * A `Tag` says what something IS — a status, a state, a severity. It is a span,
+ * and correctly so: nothing happens when you press it.
+ *
+ * A facet is the other half of that idea and the system had no name for it: a
+ * recorded fact about a row — who wrote it, when, what it was built against —
+ * rendered where the reader is already looking, which NARROWS the list when
+ * pressed. The dimension a reader wants to filter by is almost always one they
+ * are already looking at, so the attribute itself is the control and there is no
+ * filter panel to go and find.
+ *
+ * NAME AND VALUE, ALWAYS BOTH. A bare "friction-extractor" is a string a reader
+ * has to place; "Agent · friction-extractor" places itself. The name is set
+ * small and quiet and the value in the row's own colour, so a column of facets
+ * down a list reads as a column even when the values run to wildly different
+ * lengths.
+ */
+
+.facets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.facet {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--color-neutral-700);
+  text-align: start;
+}
+
+/* The dimension. Quieter than its own value, and never louder — it is the label
+   on the fact, not the fact. */
+/* The system's own `.label-bare` values, not a near-miss of them: a label above a
+   figure and a label inside a facet are the same idea, and two settings that
+   differ by a hair are how a design system stops being one. The hierarchy comes
+   from case and colour, which is how every other label/value pair here works. */
+.facet-name {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  color: var(--color-neutral-600);
+}
+
+.facet-value { color: var(--color-neutral-800); font-weight: 500; }
+
+/* A VALUE THAT IS AN ABSENCE. "No standard named" is a real answer and belongs
+   in the slot, in a quieter voice — a blank where an attribute should be is the
+   one thing a reader never notices. */
+.facet-muted .facet-value { color: var(--color-neutral-500); font-weight: 400; font-style: italic; }
+
+/* PRESSABLE ONLY WHEN IT NARROWS. An attribute with nothing behind it must not
+   look like a control; the tag hover is what promises that pressing does
+   something. */
+button.facet { cursor: pointer; transition: background-color 120ms ease, border-color 120ms ease; }
+button.facet:hover { background: var(--color-neutral-100); border-color: var(--color-neutral-200); }
+
+/* THE ONE THAT IS NARROWING THE LIST reads as HELD DOWN rather than as a
+   different colour of tag. It is a state of the control, not a status of the
+   data, and the accent is the system's "this is the live thing" everywhere else. */
+.facet[aria-pressed='true'] {
+  background: var(--color-accent-100);
+  border-color: var(--color-accent-300);
+}
+.facet[aria-pressed='true'] .facet-name { color: var(--color-accent-700); }
+.facet[aria-pressed='true'] .facet-value { color: var(--color-accent-900); }
+button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
