@@ -1,4 +1,4 @@
-import { useCallback, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { ChangeEvent, TextareaHTMLAttributes, UIEvent } from 'react';
 import { cx } from '../cx.js';
 import { knows, tokenize } from '../CodeBlock/highlight.js';
@@ -88,6 +88,22 @@ export function CodeEditor({
   const id = useId();
   const paint = useRef<HTMLPreElement | null>(null);
   const gutter = useRef<HTMLDivElement | null>(null);
+  const input = useRef<HTMLTextAreaElement | null>(null);
+
+  /**
+   * FULL SCREEN TAKES THE FOCUS, or the key it advertises does nothing.
+   *
+   * `Escape` is handled on this element, so it only fires when focus is inside it — and the control
+   * that opens full screen is a button in the page BEHIND the overlay, which leaves focus on
+   * `<body>`. So the corner said "Done  Esc", the reader pressed Esc, and nothing happened: the
+   * component promising a way out was the component breaking the promise.
+   *
+   * Focusing the text is also simply right. Somebody who has just asked for the whole window wants
+   * to type in it, and this saves them a click into a surface that has nowhere else to click.
+   */
+  useEffect(() => {
+    if (full) input.current?.focus();
+  }, [full]);
   const [lines, setLines] = useState(() => value.split('\n').length);
 
   /** The painted layer follows the textarea, in both axes.
@@ -178,6 +194,7 @@ export function CodeEditor({
           </pre>
           <textarea
             {...rest}
+            ref={input}
             id={id}
             className="code-editor-input"
             value={value}
