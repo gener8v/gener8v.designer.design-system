@@ -61,6 +61,8 @@ export { Alert, AlertTitle, AlertBody, AlertActions } from './Alert/index.js';
 export type { AlertProps, Tone } from './Alert/index.js';
 export { ToastRegion, Toast, ToastTitle, ToastBody, ToastClose } from './Toast/index.js';
 export type { ToastProps, ToastCloseProps } from './Toast/index.js';
+export { Facet, Facets } from './Facet/index.js';
+export type { FacetProps } from './Facet/index.js';
 export { Entry } from './Entry/index.js';
 export type { EntryProps } from './Entry/index.js';
 export { Transcript, TranscriptTurn } from './Transcript/index.js';
