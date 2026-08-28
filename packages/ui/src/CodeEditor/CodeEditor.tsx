@@ -117,6 +117,9 @@ export function CodeEditor({
   return (
     <div
       className={cx('code-editor', className)}
+      // WHAT `rows` MEANS, in a place CSS can read. The attribute on a textarea is overridden by
+      // the frame's own height, and the frame has to know the number to compute one.
+      style={{ ['--editor-rows' as string]: rows }}
       data-wrap={wrap || undefined}
       data-full={full || undefined}
       onKeyDown={(e) => {
