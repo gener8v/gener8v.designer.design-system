@@ -131,6 +131,20 @@ export function CodeEditor({
       <label htmlFor={id} className={labelHidden ? 'sr-only' : 'code-editor-label'}>
         {label}
       </label>
+      {full && (
+        /* A VISIBLE WAY OUT, not only a key.
+         *
+         * The rule above this component said a surface filling the screen with no visible exit is
+         * a trap, and then shipped one: `Escape` was the whole of it, so leaving depended on
+         * knowing a convention — and on having a keyboard at all. A pointer user who opened this
+         * had no way back to the page.
+         *
+         * It names the key as well, because the reader who WILL use the key is the reader who
+         * spends all day in here, and they should not have to reach for the mouse to find out. */
+        <button type="button" className="code-editor-leave" onClick={onLeaveFull}>
+          Done <kbd>Esc</kbd>
+        </button>
+      )}
       <div className="code-editor-frame" data-language={knows(language) ? language : undefined}>
         {!wrap && (
           <div ref={gutter} className="code-editor-gutter" aria-hidden="true">

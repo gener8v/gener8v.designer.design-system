@@ -221,7 +221,27 @@
 /* The arrow points the way it would move the rail, which is the only thing on a
    control with no words to say what it does. */
 .sidebar[data-narrow] .sidebar-fold svg { transform: rotate(180deg); }
-.sidebar[data-narrow] .sidebar-section { display: none; }
+/* A FOLDED RAIL IS AN ICON RAIL, NOT AN EMPTY ONE.
+ *
+ * This hid the sections outright, so folding traded eleven destinations for a
+ * blank strip and the only way back to any of them was to unfold. A reader who
+ * folds the rail wants their page wider — not their navigation gone.
+ *
+ * The marks stay. `font-size: 0` collapses the label without removing it, so the
+ * accessible name of every link is intact and a screen reader still reads
+ * "Deliverables"; the icons carry their own explicit size and are untouched. The
+ * GROUP HEADINGS go, because a heading with no words is a rule across the rail
+ * saying nothing. */
+.sidebar[data-narrow] .sidebar-group { display: none; }
+.sidebar[data-narrow] .sidebar-item {
+  font-size: 0;
+  justify-content: center;
+  padding-inline: 0;
+}
+.sidebar[data-narrow] .sidebar-item svg { inline-size: var(--space-5); block-size: var(--space-5); }
+/* The count is a figure, and a figure with no row to sit in is a number floating
+   beside a picture. */
+.sidebar[data-narrow] .sidebar-count { display: none; }
 
 .sidebar-section { display: flex; flex-direction: column; gap: var(--space-1); }
 .sidebar-section + .sidebar-section { margin-block-start: var(--space-4); }

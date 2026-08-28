@@ -20,11 +20,16 @@ function declarationsFor(selector: string): Record<string, string> {
 }
 
 describe('a rail you can put away', () => {
-  it('empties rather than abbreviates', () => {
-    // A rail of unlabelled icons is a rail nobody can read without learning it first, and this
-    // product has no icon vocabulary to learn. So putting it away puts it away, and the control to
-    // bring it back is the only thing left.
-    expect(declarationsFor('.sidebar[data-narrow] .sidebar-section')['display']).toBe('none');
+  it('keeps the destinations, and drops the words', () => {
+    // THIS USED TO ASSERT THE OPPOSITE, on the argument that "this product has no icon vocabulary
+    // to learn". That premise expired: every destination in the rail now carries a mark chosen for
+    // what the surface holds, so folding no longer has to choose between a wall of words and a
+    // blank strip. It empties the LABELS and keeps the marks.
+    //
+    // The full behaviour is guarded in `a-way-out-and-a-folded-rail`; what is kept here is the
+    // thing this file exists for — that folding is not cosmetic.
+    expect(declarationsFor('.sidebar[data-narrow] .sidebar-section')['display']).not.toBe('none');
+    expect(declarationsFor('.sidebar[data-narrow] .sidebar-item')['font-size']).toBe('0');
   });
 
   it('gives the width back, which is the whole point', () => {
