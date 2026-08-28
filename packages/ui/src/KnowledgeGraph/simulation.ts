@@ -37,6 +37,8 @@ export interface Layout {
   degree: Int32Array;
   /** Flat edge pairs as node indices: [a0,b0, a1,b1, …]. */
   edges: Int32Array;
+  /** Edge slot -> the index of the link it was built from. See `from` in `createLayout`. */
+  edgeLink: Int32Array;
   alpha: number;
   n: number;
 }
@@ -176,14 +178,20 @@ export function createLayout(
   const degree = new Int32Array(n);
 
   const pairs: number[] = [];
-  for (const l of links) {
+  // WHICH LINK EACH EDGE CAME FROM. `pairs` DROPS links whose endpoints are missing and
+  // self-edges, so the nth edge is not the nth link — anything wanting a link's own data at draw
+  // time (its label) would read the wrong one, silently, and only on graphs with a dangling
+  // reference in them.
+  const from: number[] = [];
+  links.forEach((l, at) => {
     const a = index.get(l.source);
     const b = index.get(l.target);
-    if (a === undefined || b === undefined || a === b) continue;
+    if (a === undefined || b === undefined || a === b) return;
     pairs.push(a, b);
+    from.push(at);
     degree[a]! += 1;
     degree[b]! += 1;
-  }
+  });
 
   // Deterministic phyllotaxis seeding: even coverage, no RNG, so the same
   // graph always lays out the same way and a screenshot diff stays meaningful.
@@ -199,7 +207,7 @@ export function createLayout(
   return {
     ids: nodes.map((nd) => nd.id), index, x, y,
     vx: new Float64Array(n), vy: new Float64Array(n),
-    degree, edges: Int32Array.from(pairs), alpha: 1, n,
+    degree, edges: Int32Array.from(pairs), edgeLink: Int32Array.from(from), alpha: 1, n,
   };
 }
 
