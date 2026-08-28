@@ -18,8 +18,14 @@ const px = (v: string) => Number(/(-?\d+)px/.exec(v)?.[1] ?? 0);
 
 /** One rule's body, comments already gone. */
 function ruleFor(selector: string): string {
-  const at = RULES.indexOf(`${selector} {`);
-  return at < 0 ? '' : RULES.slice(at, RULES.indexOf('}', at));
+  // ANCHORED, because `indexOf('.sidebar-count {')` also matches inside
+  // `.sidebar[data-narrow] .sidebar-count {` — so this returned a DESCENDANT rule that happened
+  // to be written earlier in the file, and a guard about the base declaration read a variant of
+  // it. It found the wrong block silently, which is the way a guard passes for the wrong reason.
+  const at = RULES.search(new RegExp(`(^|[\\n;}])\\s*${selector.replace(/[.[\]*+?^$|()\\]/g, '\\$&')}\\s*\\{`));
+  if (at < 0) return '';
+  const open = RULES.indexOf('{', at);
+  return RULES.slice(at, RULES.indexOf('}', open));
 }
 
 /** What a `--text-*` token is actually worth. jsdom does not resolve `var()`, so a computed
