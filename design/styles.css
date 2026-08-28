@@ -2711,6 +2711,20 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .graph-index { position: absolute; inset: 0; overflow-y: auto; padding: var(--space-4); background: var(--color-bg); }
 .graph-index-item { display: block; inline-size: 100%; text-align: start; }
 
+/* THE CAPTION IS PROSE, SO IT IS SET AS PROSE.
+ *
+ * It carried `.label` — small, uppercase, letter-spaced, which is right for one
+ * or two words naming what follows and wrong for two sentences. Set that way it
+ * became a wall of capitals across the top of the list, harder to read than the
+ * list it was introducing. */
+.graph-index-caption {
+  max-inline-size: 72ch;
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-lg);
+  color: var(--color-neutral-600);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .graph-edge, .graph-node circle, .graph-node text { transition: none; }
 }
