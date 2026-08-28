@@ -68,8 +68,16 @@
   text-align: start;
   font: inherit;
   color: inherit;
-  cursor: pointer;
 }
+/* NO POINTER ON THE ROW.
+ *
+ * The row opens the item and the grip drags it, and when both switched the cursor
+ * the grip's own signal meant nothing — a reader crossing the card was already in
+ * "this does something" and the change at the grip read as noise rather than as
+ * the one gesture that is not a click.
+ *
+ * The hover treatment stays, so the row still says it is interactive. What it no
+ * longer does is compete with the only control here that needed to be found. */
 .shelf-item + .shelf-item { margin-block-start: var(--space-2); }
 .shelf-item:hover { border-color: var(--color-neutral-300); box-shadow: var(--shadow-sm); }
 
@@ -84,7 +92,11 @@
   place-items: center;
   inline-size: var(--space-6);
   block-size: var(--space-6);
-  margin-block-start: -1px;
+  /* CENTRED ON THE ROW IT DRAGS, not on the row's first line.
+     `.shelf-item` starts its children at the top, which is right for an icon that
+     belongs to the TITLE — and wrong for a handle that represents the whole card.
+     A grip level with the first of three lines looks like it grabs that line. */
+  align-self: center;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
