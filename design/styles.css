@@ -1052,6 +1052,35 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   gap: var(--space-2);
 }
 
+/* THE WHOLE WINDOW, for the one document somebody actually writes.
+ *
+ * A standard every project is measured against, edited through a twenty-eight-row box on a
+ * scrolling page, is a keyhole. `position: fixed` rather than a class on some ancestor, so a
+ * consumer does not have to restructure its layout to offer this — the editor takes the screen
+ * from wherever it is mounted.
+ *
+ * The frame grows to fill what is left after the label and the actions, which is why the height
+ * lives on the frame rather than on the textarea: the gutter has to match it. */
+.code-editor[data-full] {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--color-bg);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.code-editor[data-full] .code-editor-frame {
+  min-block-size: 0;
+  block-size: 100%;
+  border-radius: var(--radius-md);
+}
+.code-editor[data-full] .code-editor-body,
+.code-editor[data-full] .code-editor-input,
+.code-editor[data-full] .code-editor-paint {
+  block-size: 100%;
+}
+
 .code-editor-label {
   font-size: var(--text-sm);
   font-weight: 500;
@@ -1368,11 +1397,27 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  *
  * Six kinds, not twenty. A snippet needs a comment to recede and a string to stand apart; the rest
  * is decoration that makes code harder to read, not easier. */
-.code .tok-comment { color: var(--code-comment); font-style: italic; }
-.code .tok-string  { color: var(--code-string); }
-.code .tok-keyword { color: var(--code-keyword); }
-.code .tok-number  { color: var(--code-number); }
-.code .tok-fn      { color: var(--code-name); }
+/* SCOPED TO BOTH SURFACES THAT PAINT CODE, and it was scoped to one.
+ *
+ * `CodeEditor` renders exactly these classes into `.code-editor-paint`, and every rule here named
+ * `.code` — so the editor tokenized its content correctly, produced the right spans, and painted
+ * every one of them the same colour. A markdown standard opened for editing showed headings,
+ * bold, tables and rules as undifferentiated grey, which reads as an editor that does not
+ * highlight rather than as a stylesheet that missed a selector.
+ *
+ * The list is explicit rather than a `[class*="tok-"]`: an attribute match would also catch a
+ * consumer's own class that happens to contain the string, and this palette is contrast-gated
+ * against the code ground specifically. */
+.code .tok-comment,
+.code-editor-paint .tok-comment { color: var(--code-comment); font-style: italic; }
+.code .tok-string,
+.code-editor-paint .tok-string  { color: var(--code-string); }
+.code .tok-keyword,
+.code-editor-paint .tok-keyword { color: var(--code-keyword); }
+.code .tok-number,
+.code-editor-paint .tok-number  { color: var(--code-number); }
+.code .tok-fn,
+.code-editor-paint .tok-fn      { color: var(--code-name); }
 
 /* ---------------------------------------------------- gap-fill: transaction */
 /* Components the three example workflows needed and the system did not have. */

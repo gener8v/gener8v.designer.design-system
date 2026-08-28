@@ -20,6 +20,35 @@
   gap: var(--space-2);
 }
 
+/* THE WHOLE WINDOW, for the one document somebody actually writes.
+ *
+ * A standard every project is measured against, edited through a twenty-eight-row box on a
+ * scrolling page, is a keyhole. `position: fixed` rather than a class on some ancestor, so a
+ * consumer does not have to restructure its layout to offer this — the editor takes the screen
+ * from wherever it is mounted.
+ *
+ * The frame grows to fill what is left after the label and the actions, which is why the height
+ * lives on the frame rather than on the textarea: the gutter has to match it. */
+.code-editor[data-full] {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  margin: 0;
+  padding: var(--space-5);
+  background: var(--color-bg);
+  grid-template-rows: auto minmax(0, 1fr);
+}
+.code-editor[data-full] .code-editor-frame {
+  min-block-size: 0;
+  block-size: 100%;
+  border-radius: var(--radius-md);
+}
+.code-editor[data-full] .code-editor-body,
+.code-editor[data-full] .code-editor-input,
+.code-editor[data-full] .code-editor-paint {
+  block-size: 100%;
+}
+
 .code-editor-label {
   font-size: var(--text-sm);
   font-weight: 500;
