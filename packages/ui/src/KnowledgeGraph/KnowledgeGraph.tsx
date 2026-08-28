@@ -53,6 +53,10 @@ function readPalette(el: HTMLElement, declared: readonly string[]) {
     edge: v('--color-neutral-300', '#CAD0DA'),
     edgeActive: v('--color-action', '#1547B7'),
     ring: v('--color-bg', '#FFFFFF'),
+    bg: v('--color-bg', '#FFFFFF'),
+    // Quieter than a node's own name, because the relation is the line's annotation and the
+    // reader came for the things at each end of it.
+    edgeLabel: v('--color-neutral-600', '#697181'),
     text: v('--color-neutral-700', '#4B5464'),
     textStrong: v('--color-neutral-900', '#182030'),
     font: v('--font-body', 'Inter, system-ui, sans-serif'),
@@ -164,6 +168,39 @@ export function KnowledgeGraph({
         ctx.lineTo(x[b]!, y[b]!);
       }
       ctx.stroke();
+
+      /*
+       * WHAT THE EDGE MEANS, WHEN A READER IS ASKING ABOUT ONE NODE.
+       *
+       * `GraphLink` has carried a `label` since it was written and the canvas drew none, so a
+       * graph whose whole subject is what governs what showed every relationship as the same
+       * anonymous line. A consumer could type the meaning and never show it.
+       *
+       * ONLY ON THE FOCUSED NODE'S OWN EDGES. Labelling all of them at once is unreadable at any
+       * zoom a whole corpus fits in, and the moment somebody wants the word is the moment they
+       * are looking at one thing's relationships — which is exactly when these are already drawn
+       * brighter and everything else is dimmed to 0.14.
+       *
+       * The ground is painted behind each one because a line through the middle of a word is
+       * worse than no word.
+       */
+      const size = 10 / scale;
+      ctx.font = `500 ${size}px ${pal.font}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (let e = 0; e < edges.length; e += 2) {
+        const a = edges[e]!, b = edges[e + 1]!;
+        if (a !== focusIdx && b !== focusIdx) continue;
+        const label = links[L.edgeLink[e / 2]!]?.label;
+        if (!label) continue;
+        const mx = (x[a]! + x[b]!) / 2;
+        const my = (y[a]! + y[b]!) / 2;
+        const w = ctx.measureText(label).width;
+        ctx.fillStyle = pal.bg;
+        ctx.fillRect(mx - w / 2 - size * 0.3, my - size * 0.65, w + size * 0.6, size * 1.3);
+        ctx.fillStyle = pal.edgeLabel;
+        ctx.fillText(label, mx, my);
+      }
     }
 
     // Nodes, grouped by fill so the canvas state changes once per kind.
