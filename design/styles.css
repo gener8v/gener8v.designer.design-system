@@ -3653,7 +3653,18 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 
      The width is the button plus its padding, computed rather than typed, so it
      stays snug if either token moves. */
-  inline-size: calc(var(--control-h-sm) + 2 * var(--space-2));
+  /* AND THE BORDER IS PART OF THE WIDTH.
+   *
+   * `.sidebar` is `border-box` and carries a 1px `border-inline-end`, so a width
+   * of "the button plus its padding" left a content box ONE PIXEL narrower than
+   * the button — 36px of fold control in 35px of room. That single pixel of
+   * overflow drew a horizontal scrollbar the full height of the rail, because
+   * `overflow-y: auto` forces `overflow-x` to compute to `auto` as well: a
+   * vertical rail that scrolls sideways, over a pixel.
+   *
+   * The border is added rather than the box-sizing changed, so the number still
+   * follows the tokens above it. */
+  inline-size: calc(var(--control-h-sm) + 2 * var(--space-2) + 1px);
   padding-inline: var(--space-2);
 }
 .sidebar[data-narrow] .sidebar-fold { align-self: center; }
@@ -3676,6 +3687,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   font-size: 0;
   justify-content: center;
   padding-inline: 0;
+  /* THE GAP OUTLIVES THE LABEL IT SEPARATED.
+     `font-size: 0` collapses the words and leaves a zero-width element after the
+     mark — so the row centred [icon][12px gap][nothing] and put every icon
+     exactly half a gap left of centre. Measured on the live console: 6px. */
+  gap: 0;
 }
 .sidebar[data-narrow] .sidebar-item svg { inline-size: var(--space-5); block-size: var(--space-5); }
 /* The count is a figure, and a figure with no row to sit in is a number floating

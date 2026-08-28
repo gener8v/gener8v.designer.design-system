@@ -95,3 +95,28 @@ describe('a folded rail is an icon rail', () => {
     expect(declarationsFor('.sidebar[data-narrow] .sidebar-item')['justify-content']).toBe('center');
   });
 });
+
+describe('a vertical rail does not scroll sideways', () => {
+  it('counts its own border in its width', () => {
+    // `.sidebar` is `border-box` and carries a 1px `border-inline-end`, so a width of "the button
+    // plus its padding" left a content box ONE PIXEL narrower than the button — 36px of fold
+    // control in 35px of room. Measured on the live console: clientWidth 51, scrollWidth 52.
+    const narrow = declarationsFor('.sidebar[data-narrow]')['inline-size'] ?? '';
+    expect(narrow, 'the width still omits the border it sits next to').toMatch(/\+\s*1px/);
+    expect(narrow, 'the width stopped following the tokens').toContain('--control-h-sm');
+  });
+
+  it('is one pixel, and that is the whole point', () => {
+    // `overflow-y: auto` forces `overflow-x` to compute to `auto` as well, so a single pixel of
+    // horizontal overflow draws a scrollbar the full height of the rail.
+    expect(declarationsFor('.sidebar').overflow).toBeUndefined();
+  });
+
+  it('drops the gap once there is no label to separate', () => {
+    // `font-size: 0` collapses the words and leaves a zero-width element after the mark, so the
+    // row centred [icon][gap][nothing] and put every icon exactly half a gap left of centre.
+    expect(declarationsFor('.sidebar[data-narrow] .sidebar-item').gap).toBe('0');
+    // The wide rail still needs it — this is a narrow-state rule, not a deletion.
+    expect(declarationsFor('.sidebar-item').gap).toBeTruthy();
+  });
+});
