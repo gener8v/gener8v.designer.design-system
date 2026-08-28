@@ -55,10 +55,28 @@
   color: var(--color-neutral-900);
 }
 
+/* THE HEIGHT `rows` PROMISES, and until now did not deliver.
+ *
+ * `rows` was set on the textarea and meant nothing, because the GUTTER renders
+ * one element per line and the frame stretched to fit it. On a nine-hundred-line
+ * standard that made the editor 9,379px tall — every control below it (save,
+ * cancel, the way into full screen) pushed nine thousand pixels down a scrolling
+ * page, reachable only by scrolling through the entire document first.
+ *
+ * So the height is stated, from the same metrics both layers already share. The
+ * gutter and the paint scroll with the textarea, which they already did; what
+ * was missing was anything for them to scroll INSIDE.
+ *
+ * `1lh` would be the modern spelling and is not safe here: it resolves against
+ * the element's own font, and this must resolve against the EDITOR's — the one
+ * both layers are locked to. */
 .code-editor-frame {
   display: flex;
   align-items: stretch;
   min-inline-size: 0;
+  block-size: calc(
+    var(--editor-rows, 18) * var(--editor-size) * var(--editor-leading) + 2 * var(--editor-pad)
+  );
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-md);
   background: var(--color-bg);
