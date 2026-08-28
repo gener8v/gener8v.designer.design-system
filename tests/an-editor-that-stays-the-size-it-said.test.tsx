@@ -1,7 +1,7 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import { CodeEditor } from '../packages/ui/src/CodeEditor/CodeEditor.js';
 
 const RULES = readFileSync(join(__dirname, '..', 'design', 'styles.css'), 'utf8');
@@ -62,5 +62,34 @@ describe('an editor that stays the size it said', () => {
     // One element per line, and it scrolls with the textarea. Without this it is the tallest child
     // of a stretch row and the height above is decoration.
     expect(declarationsFor('.code-editor-gutter').overflow).toBe('hidden');
+  });
+});
+
+describe('the key the corner advertises', () => {
+  it('takes the focus when it fills the window', () => {
+    // `Escape` is handled ON the editor, so it only fires when focus is inside it — and the control
+    // that opens full screen is a button in the page BEHIND the overlay, which leaves focus on
+    // `<body>`. Measured on the live console: the corner said "Done  Esc", Esc was pressed, and
+    // nothing happened. The component promising a way out was the one breaking the promise.
+    const { container } = render(
+      <CodeEditor value="x" onChange={() => {}} label="Source" full onLeaveFull={() => {}} />,
+    );
+    expect(document.activeElement).toBe(container.querySelector('.code-editor-input'));
+  });
+
+  it('does not steal the focus when it is an ordinary field', () => {
+    // A form with an editor in it must not jump the caret into the editor on mount, over whatever
+    // the reader was actually filling in.
+    const { container } = render(<CodeEditor value="x" onChange={() => {}} label="Source" />);
+    expect(document.activeElement).not.toBe(container.querySelector('.code-editor-input'));
+  });
+
+  it('leaves on escape once the focus is there', () => {
+    const leave = vi.fn();
+    const { container } = render(
+      <CodeEditor value="x" onChange={() => {}} label="Source" full onLeaveFull={leave} />,
+    );
+    fireEvent.keyDown(container.querySelector('.code-editor-input')!, { key: 'Escape' });
+    expect(leave).toHaveBeenCalledTimes(1);
   });
 });
