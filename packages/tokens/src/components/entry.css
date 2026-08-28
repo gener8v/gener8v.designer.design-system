@@ -1,0 +1,95 @@
+/* ------------------------------------------------------------------- entry */
+
+/* THE PAGE THAT STANDS BETWEEN SOMEBODY AND THE PRODUCT.
+ *
+ * Not an empty state and not a document. A gate has one thing to do, it is the
+ * first thing anybody sees, and everything on it is arranged around the single
+ * action rather than around reading. */
+
+.entry-ground {
+  display: grid;
+  place-items: center;
+  min-block-size: 100svh;
+  padding: var(--space-6);
+  /* THE GROUND, so the panel reads as sitting ON something — the same move
+     `Paper` makes, and the reason a centred card looks placed rather than
+     stranded. */
+  background: var(--color-surface);
+}
+
+.entry {
+  inline-size: 100%;
+  /* NARROW ON PURPOSE. A sign-in form is two fields; at a document's width the
+     eye travels the whole window between the label and the box. */
+  max-inline-size: 26rem;
+  padding: var(--space-8);
+  background: var(--color-bg);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  text-align: start;
+}
+
+/* THE PRODUCT, NAMED — and above the title rather than beside it. Beside, at the
+   same size, they read as one phrase and the name stops being a name. */
+.entry-mark {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+
+.entry-title {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-2xl);
+  font-weight: 600;
+  line-height: var(--leading-base);
+  color: var(--color-neutral-900);
+}
+
+.entry-lede {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading-lg);
+  color: var(--color-neutral-600);
+}
+
+.entry-way { margin-block-start: var(--space-6); }
+
+/* A DIFFERENT DOOR, NOT A SMALLER BUTTON.
+ *
+ * A second sign-in control drawn slightly smaller reads as a variant of the
+ * first — "sign in, but quieter" — rather than as another way in entirely. The
+ * rule is what says they are different things, and it costs no words. */
+.entry-alternatives {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-5);
+  border-block-start: 1px solid var(--color-divider);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.entry-note {
+  margin: var(--space-5) 0 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-lg);
+  color: var(--color-neutral-600);
+}
+
+@media (max-width: 480px) {
+  /* NO SHEET ON A PHONE. The ground would be two visible strips either side of
+     something already the full width, which reads as a rendering fault. */
+  .entry-ground { padding: 0; background: var(--color-bg); }
+  .entry {
+    max-inline-size: none;
+    min-block-size: 100svh;
+    padding: var(--space-8) var(--space-5);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
