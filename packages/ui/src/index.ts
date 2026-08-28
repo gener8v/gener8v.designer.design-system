@@ -63,6 +63,8 @@ export { ToastRegion, Toast, ToastTitle, ToastBody, ToastClose } from './Toast/i
 export type { ToastProps, ToastCloseProps } from './Toast/index.js';
 export { Claim, ClaimActions, ClaimBody, ClaimReason, ClaimStanding, ClaimText } from './Claim/index.js';
 export type { ClaimProps, ClaimReasonProps, ClaimStandingProps } from './Claim/index.js';
+export { Tally } from './Tally/index.js';
+export type { TallyProps, TallyPart, TallyTone } from './Tally/index.js';
 export { Facet, Facets } from './Facet/index.js';
 export type { FacetProps } from './Facet/index.js';
 export { Entry } from './Entry/index.js';

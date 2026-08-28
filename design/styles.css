@@ -4656,6 +4656,55 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   flex: none;
 }
 
+/* What a set of statements adds up to when they do not agree.
+ *
+ * THE TRACK IS ALWAYS FULL WIDTH; the segments inside it are not. That is what carries "five people
+ * said this and one person said that" — a bar filling a third of its track has said something the
+ * proportions alone cannot. */
+.tally {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.tally-track {
+  display: flex;
+  /* No gap. Adjacent segments are parts of ONE quantity; a gutter between them reads as separate
+   * bars, which is the reading this component exists to prevent. */
+  inline-size: 100%;
+  block-size: var(--space-1);
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-100);
+  overflow: hidden;
+}
+
+.tally-part {
+  display: block;
+  block-size: 100%;
+  background: var(--color-neutral-400);
+  /* A segment rounded to one statement can otherwise vanish entirely at these heights. */
+  min-inline-size: 2px;
+}
+
+.tally-part[data-tone='success'] { background: var(--color-success); }
+.tally-part[data-tone='warning'] { background: var(--color-warning); }
+.tally-part[data-tone='danger'] { background: var(--color-danger); }
+
+.tally-read {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--color-neutral-600);
+}
+
+.tally-count b {
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+
 /* ------------------------------------------------- gap-fill: token input */
 
 /* A removable tag. The × is a real button, not an ::after — a decoration
