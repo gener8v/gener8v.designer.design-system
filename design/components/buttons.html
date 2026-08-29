@@ -73,6 +73,18 @@
   <p class="demo-head label">Full width</p>
   <button type="button" class="btn btn-primary btn-lg btn-block">Create engagement<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></button>
 
+  <p class="demo-head label">Actions that navigate</p>
+  <div class="swatch-row">
+    <a class="btn btn-primary" href="#buttons">Open the record</a>
+    <a class="btn btn-secondary" href="#buttons">Preview</a>
+    <a class="btn btn-link btn-xs" href="#buttons">Download as Markdown</a>
+  </div>
+  <p class="note">An action with a destination is an anchor, not a button with a handler — it can
+  be opened in a new tab, copied, and it works before JavaScript arrives. Same classes, so a link
+  and a button side by side line up on the same control scale. <code>ButtonLink</code> in the
+  library; <code>href</code> is required, and there is no loading or disabled state because a link
+  can have neither.</p>
+
   <p class="note">One primary action per view. Hover and pressed states step down the accent ramp;
   keyboard focus is the 2px accent <code>:focus-visible</code> ring at 2px offset. Icon-only buttons
   always carry an <code>aria-label</code>.</p>

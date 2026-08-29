@@ -1,5 +1,5 @@
-export { Button } from './Button/index.js';
-export type { ButtonVariant, ButtonSize, ButtonProps } from './Button/index.js';
+export { Button, ButtonLink } from './Button/index.js';
+export type { ButtonVariant, ButtonSize, ButtonProps, ButtonLinkProps } from './Button/index.js';
 export { ButtonGroup } from './ButtonGroup/index.js';
 export type { ButtonGroupProps } from './ButtonGroup/index.js';
 export { Card, CardLink, CardKicker, CardTitle, CardBody, CardMeta, CardMedia } from './Card/index.js';
