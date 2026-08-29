@@ -2543,14 +2543,25 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   border-color: var(--color-action);
 }
 
-/* Tick drawn from two borders — no icon dependency for a control this small. */
+/* Tick drawn from two borders — no icon dependency for a control this small.
+ *
+ * `place-content: center` centres the pseudo-element's BOX, and the ink is not
+ * the box: it is an L hugging two of its four edges. Rotated 45°, the ink no
+ * longer sits where the box does, so it needs a translate back.
+ *
+ * Derived rather than eyeballed: the offset of the ink's bounding box from the
+ * control's centre, found by rasterising this exact geometry at 20× and scanning
+ * the painted pixels. It is NOT the same number as the step marker's tick, which
+ * has different proportions — sharing one value is how both ended up wrong.
+ * Horizontally the ink centres itself, because the box's width and height enter
+ * the rotation symmetrically. */
 .checkbox:checked::after {
   content: "";
   inline-size: 0.3em;
   block-size: 0.6em;
   border-inline-end: 2px solid var(--color-bg);
   border-block-end: 2px solid var(--color-bg);
-  transform: translateY(-0.08em) rotate(45deg);
+  transform: translateY(-0.059em) rotate(45deg);
 }
 .radio:checked::after {
   content: "";
@@ -2683,7 +2694,18 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   color: var(--color-bg);
   font-size: 0;
 }
-/* Tick drawn from borders — no icon dependency inside a marker this small. */
+/* Tick drawn from borders — no icon dependency inside a marker this small.
+ *
+ * `place-items: center` centres the pseudo-element's BOX, and the ink is not the
+ * box: it is an L hugging two of its four edges. Rotate that box 45° and the ink
+ * no longer sits where the box does, so the mark needs a translate to bring it
+ * back — which is what this is, and it was hand-tuned rather than derived.
+ *
+ * The value is the offset of the ink's bounding box from the marker's centre
+ * after rotation, measured by rasterising the exact geometry at 20× and scanning
+ * the painted pixels. Redo that if the proportions change; do not eyeball it.
+ * Horizontally the ink centres itself, because the box's width and height enter
+ * the rotation symmetrically. */
 .step[data-state="complete"] .step-marker::after {
   content: "";
   inline-size: 0.28em;
@@ -2691,7 +2713,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   border-inline-end: 2px solid currentColor;
   border-block-end: 2px solid currentColor;
   font-size: var(--text-base);
-  transform: translateY(-0.08em) rotate(45deg);
+  transform: translateY(-0.053em) rotate(45deg);
 }
 .step[data-state="complete"] .step-label { color: var(--color-neutral-800); }
 /* A connector belongs to the step it LEAVES, so it fills only when that step
