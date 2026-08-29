@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
 
 export type ButtonVariant =
@@ -60,5 +60,54 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     >
       {children}
     </button>
+  );
+});
+
+export interface ButtonLinkBase
+  extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'children'> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  /** Fills the inline axis. */
+  block?: boolean;
+  /** Required. An action that navigates has a destination the browser can see. */
+  href: string;
+  children?: ReactNode;
+}
+
+export type ButtonLinkProps =
+  | (ButtonLinkBase & { iconOnly: true; 'aria-label': string })
+  | (ButtonLinkBase & { iconOnly?: false });
+
+/**
+ * An action that navigates. Separate from `Button` rather than a polymorphic `as`
+ * prop, for the reason `CardLink` is separate from `Card`: `href` stays required
+ * and the anchor keeps its real semantics — opened in a new tab, copied, and
+ * working with no JavaScript, none of which a button with a click handler does.
+ *
+ * There is no `loading` and no `disabled`. A link cannot be busy, and an anchor
+ * cannot be disabled — the honest answer to "not available yet" is to not render
+ * a link, which is why neither is offered here to be reached for.
+ *
+ * `variant="link"` is the one that ends the hand-rolled text link: `btn-link` is
+ * an unpadded accent label that underlines on hover, and every consumer writing
+ * that in utility classes was reinventing it because it could not be an anchor.
+ */
+export const ButtonLink = forwardRef<HTMLAnchorElement, ButtonLinkProps>(function ButtonLink(
+  { variant = 'secondary', size = 'md', block = false, iconOnly = false, className, ...rest },
+  ref,
+) {
+  return (
+    <a
+      {...rest}
+      ref={ref}
+      className={cx(
+        'btn',
+        `btn-${variant}`,
+        SIZE_CLASS[size],
+        iconOnly && 'btn-icon',
+        block && 'btn-block',
+        className,
+      )}
+    />
   );
 });
