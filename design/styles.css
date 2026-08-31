@@ -1377,10 +1377,19 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   z-index: 70;
 }
 
+/* A ROW WHEN THE NOTE IS A MARK, A BLOCK WHEN IT IS A SENTENCE.
+   This was `display: flex; align-items: center` with the note pushed to the far
+   end, which is right for the short mark it was built for — "use as typed".
+   Given a definition it fell apart: the label wrapped to two lines, the note
+   wrapped to two lines, and the pair sat at opposite ends of the row with a
+   ragged gutter between them. Consumers pass prose because prose is what the
+   reader needs to choose, so the note stacks under the label and the row grows
+   with it. */
 .listbox-option {
   display: flex;
-  align-items: center;
-  gap: var(--space-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-sm);
   font-size: var(--text-sm);
@@ -1395,7 +1404,19 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 .listbox-option[aria-selected="true"] { color: var(--color-action); font-weight: 500; }
 .listbox-option[aria-disabled="true"] { color: var(--color-neutral-400); pointer-events: none; }
-.listbox-option-note { margin-inline-start: auto; font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-neutral-500); }
+/* NOT MONO. The note is the thing that explains the option, and mono says
+   "identifier" — a definition set in it reads as code the reader is expected to
+   match rather than a sentence they are meant to understand. It keeps the
+   measure so a long one wraps into a column instead of running the width of the
+   popover. */
+.listbox-option-note {
+  /* `ch` rather than a token, as `.section-lede` and `.reader` already do: this
+     is a measure in CHARACTERS, which is what a measure is. */
+  max-inline-size: 64ch;
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--color-neutral-600);
+}
 
 /* Left, like every option above it. Centred, it read as a placeholder in an empty
    box rather than as the list saying something. */
