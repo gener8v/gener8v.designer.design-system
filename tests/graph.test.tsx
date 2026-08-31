@@ -76,13 +76,28 @@ describe('graph layout', () => {
     expect(ticks).toBeLessThan(1200);
   });
 
+  // THE FASTEST OF FIVE RUNS, NOT ONE RUN.
+  //
+  // This timed twenty ticks once and compared the mean to the frame budget, and it fails whenever
+  // the machine is busy — vitest runs fifty test files in parallel, so "busy" is the ordinary
+  // condition rather than the exception. It reported 17.8ms/tick against a 16.7 budget in a full
+  // run and 0.4ms/tick on its own, for the same code.
+  //
+  // A minimum is the honest statistic for "how long does this take": every sample is the same work
+  // plus some interference, and the smallest carries the least of it. The budget is unchanged —
+  // what changes is that a red result now means the layout got slower rather than that something
+  // else was running.
   it('meets the 60fps budget at 1,000 nodes', () => {
     const { nodes, links } = corpus(1000);
     const L = createLayout(nodes, links, 1200, 760);
     for (let i = 0; i < 5; i++) tick(L, { width: 1200, height: 760 });
-    const t0 = performance.now();
-    for (let i = 0; i < 20; i++) tick(L, { width: 1200, height: 760 });
-    const perTick = (performance.now() - t0) / 20;
-    expect(perTick).toBeLessThan(16.7);
+
+    let best = Number.POSITIVE_INFINITY;
+    for (let run = 0; run < 5; run++) {
+      const t0 = performance.now();
+      for (let i = 0; i < 20; i++) tick(L, { width: 1200, height: 760 });
+      best = Math.min(best, (performance.now() - t0) / 20);
+    }
+    expect(best).toBeLessThan(16.7);
   });
 });

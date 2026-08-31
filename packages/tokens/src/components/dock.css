@@ -1,0 +1,65 @@
+/* -------------------------------------------------------------------- dock */
+
+/* A LONG COLUMN OF RECORDS, READ BY SCROLLING.
+ *
+ * Twenty-four standards in a 240px column truncate every name —
+ * `ECOA-0a-Fair-Lending-Re…`, `FRAME-00-Overview-and-…` — and a reader cannot
+ * tell two documents apart without opening one. Widening the column takes the
+ * width from the thing they came to look at.
+ *
+ * So this trades PERSISTENT width for MOMENTARY width: everything stays small,
+ * and whatever is at the focus point gets the room to be legible.
+ *
+ * Growing is READING, not opening. Nothing here selects anything — the
+ * component refuses to, and `Dock.tsx` says why. */
+.dock { overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-1); }
+
+.dock-item > button {
+  inline-size: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-align: start;
+  color: var(--color-neutral-700);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: font-size var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.dock-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dock-note { font-size: var(--text-xs); color: var(--color-neutral-600); }
+
+/* THE ONE AT THE FOCUS POINT. Bigger, darker, and allowed to wrap — the
+   truncation is the defect this control exists for, so the grown row is the one
+   place it stops. A bigger row still ending in an ellipsis has solved nothing. */
+.dock-item[data-grown] > button {
+  font-size: var(--text-base);
+  color: var(--color-neutral-900);
+}
+.dock-item[data-grown] .dock-name { white-space: normal; }
+
+/* Collapsed: every row is its mark until it reaches the focus point. A collapsed
+   column of identical dots is a column of nothing, which is why an item carries
+   a mark rather than the component drawing one. */
+.dock[data-collapsed] .dock-item:not([data-grown]) .dock-name { font-size: 0; }
+.dock[data-collapsed] .dock-item:not([data-grown]) .dock-note { display: none; }
+
+/* REDUCED MOTION IS NOT NO INFORMATION.
+ *
+ * A magnification that tracks scroll is motion, and somebody who asked for none
+ * of it must still be able to tell two documents apart — which is the problem
+ * this control exists to solve, not a decoration on top of it. So the growth
+ * stops being animated AND stops being the only way to read a name: every row
+ * shows its name in full, wrapped, at one size. */
+@media (prefers-reduced-motion: reduce) {
+  .dock-item > button { transition: none; }
+  .dock-item[data-grown] > button { font-size: var(--text-sm); }
+  .dock .dock-name,
+  .dock[data-collapsed] .dock-item:not([data-grown]) .dock-name {
+    font-size: var(--text-sm);
+    white-space: normal;
+  }
+}
