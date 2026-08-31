@@ -24,6 +24,8 @@ export { Drawer } from './Drawer/index.js';
 export type { DrawerProps } from './Drawer/index.js';
 export { SectionHead } from './SectionHead/index.js';
 export type { SectionHeadProps } from './SectionHead/index.js';
+export { Dock } from './Dock/index.js';
+export type { DockProps, DockItem } from './Dock/index.js';
 export { Shelf } from './Shelf/index.js';
 export type { ShelfProps, ShelfItem } from './Shelf/index.js';
 export { Sidebar, SidebarGroup, SidebarSection, SidebarItem, SidebarCount } from './Sidebar/index.js';

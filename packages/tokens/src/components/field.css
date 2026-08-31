@@ -140,14 +140,25 @@
   border-color: var(--color-action);
 }
 
-/* Tick drawn from two borders — no icon dependency for a control this small. */
+/* Tick drawn from two borders — no icon dependency for a control this small.
+ *
+ * `place-content: center` centres the pseudo-element's BOX, and the ink is not
+ * the box: it is an L hugging two of its four edges. Rotated 45°, the ink no
+ * longer sits where the box does, so it needs a translate back.
+ *
+ * Derived rather than eyeballed: the offset of the ink's bounding box from the
+ * control's centre, found by rasterising this exact geometry at 20× and scanning
+ * the painted pixels. It is NOT the same number as the step marker's tick, which
+ * has different proportions — sharing one value is how both ended up wrong.
+ * Horizontally the ink centres itself, because the box's width and height enter
+ * the rotation symmetrically. */
 .checkbox:checked::after {
   content: "";
   inline-size: 0.3em;
   block-size: 0.6em;
   border-inline-end: 2px solid var(--color-bg);
   border-block-end: 2px solid var(--color-bg);
-  transform: translateY(-0.08em) rotate(45deg);
+  transform: translateY(-0.059em) rotate(45deg);
 }
 .radio:checked::after {
   content: "";

@@ -2026,6 +2026,72 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   .slide { break-after: page; border: 0; border-radius: 0; }
 }
 
+/* -------------------------------------------------------------------- dock */
+
+/* A LONG COLUMN OF RECORDS, READ BY SCROLLING.
+ *
+ * Twenty-four standards in a 240px column truncate every name —
+ * `ECOA-0a-Fair-Lending-Re…`, `FRAME-00-Overview-and-…` — and a reader cannot
+ * tell two documents apart without opening one. Widening the column takes the
+ * width from the thing they came to look at.
+ *
+ * So this trades PERSISTENT width for MOMENTARY width: everything stays small,
+ * and whatever is at the focus point gets the room to be legible.
+ *
+ * Growing is READING, not opening. Nothing here selects anything — the
+ * component refuses to, and `Dock.tsx` says why. */
+.dock { overflow-y: auto; display: flex; flex-direction: column; gap: var(--space-1); }
+
+.dock-item > button {
+  inline-size: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-align: start;
+  color: var(--color-neutral-700);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  transition: font-size var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+.dock-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dock-note { font-size: var(--text-xs); color: var(--color-neutral-600); }
+
+/* THE ONE AT THE FOCUS POINT. Bigger, darker, and allowed to wrap — the
+   truncation is the defect this control exists for, so the grown row is the one
+   place it stops. A bigger row still ending in an ellipsis has solved nothing. */
+.dock-item[data-grown] > button {
+  font-size: var(--text-base);
+  color: var(--color-neutral-900);
+}
+.dock-item[data-grown] .dock-name { white-space: normal; }
+
+/* Collapsed: every row is its mark until it reaches the focus point. A collapsed
+   column of identical dots is a column of nothing, which is why an item carries
+   a mark rather than the component drawing one. */
+.dock[data-collapsed] .dock-item:not([data-grown]) .dock-name { font-size: 0; }
+.dock[data-collapsed] .dock-item:not([data-grown]) .dock-note { display: none; }
+
+/* REDUCED MOTION IS NOT NO INFORMATION.
+ *
+ * A magnification that tracks scroll is motion, and somebody who asked for none
+ * of it must still be able to tell two documents apart — which is the problem
+ * this control exists to solve, not a decoration on top of it. So the growth
+ * stops being animated AND stops being the only way to read a name: every row
+ * shows its name in full, wrapped, at one size. */
+@media (prefers-reduced-motion: reduce) {
+  .dock-item > button { transition: none; }
+  .dock-item[data-grown] > button { font-size: var(--text-sm); }
+  .dock .dock-name,
+  .dock[data-collapsed] .dock-item:not([data-grown]) .dock-name {
+    font-size: var(--text-sm);
+    white-space: normal;
+  }
+}
+
 /* ------------------------------------------------------------------- entry */
 
 /* THE PAGE THAT STANDS BETWEEN SOMEBODY AND THE PRODUCT.
@@ -2543,14 +2609,25 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   border-color: var(--color-action);
 }
 
-/* Tick drawn from two borders — no icon dependency for a control this small. */
+/* Tick drawn from two borders — no icon dependency for a control this small.
+ *
+ * `place-content: center` centres the pseudo-element's BOX, and the ink is not
+ * the box: it is an L hugging two of its four edges. Rotated 45°, the ink no
+ * longer sits where the box does, so it needs a translate back.
+ *
+ * Derived rather than eyeballed: the offset of the ink's bounding box from the
+ * control's centre, found by rasterising this exact geometry at 20× and scanning
+ * the painted pixels. It is NOT the same number as the step marker's tick, which
+ * has different proportions — sharing one value is how both ended up wrong.
+ * Horizontally the ink centres itself, because the box's width and height enter
+ * the rotation symmetrically. */
 .checkbox:checked::after {
   content: "";
   inline-size: 0.3em;
   block-size: 0.6em;
   border-inline-end: 2px solid var(--color-bg);
   border-block-end: 2px solid var(--color-bg);
-  transform: translateY(-0.08em) rotate(45deg);
+  transform: translateY(-0.059em) rotate(45deg);
 }
 .radio:checked::after {
   content: "";
@@ -2683,7 +2760,18 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   color: var(--color-bg);
   font-size: 0;
 }
-/* Tick drawn from borders — no icon dependency inside a marker this small. */
+/* Tick drawn from borders — no icon dependency inside a marker this small.
+ *
+ * `place-items: center` centres the pseudo-element's BOX, and the ink is not the
+ * box: it is an L hugging two of its four edges. Rotate that box 45° and the ink
+ * no longer sits where the box does, so the mark needs a translate to bring it
+ * back — which is what this is, and it was hand-tuned rather than derived.
+ *
+ * The value is the offset of the ink's bounding box from the marker's centre
+ * after rotation, measured by rasterising the exact geometry at 20× and scanning
+ * the painted pixels. Redo that if the proportions change; do not eyeball it.
+ * Horizontally the ink centres itself, because the box's width and height enter
+ * the rotation symmetrically. */
 .step[data-state="complete"] .step-marker::after {
   content: "";
   inline-size: 0.28em;
@@ -2691,7 +2779,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   border-inline-end: 2px solid currentColor;
   border-block-end: 2px solid currentColor;
   font-size: var(--text-base);
-  transform: translateY(-0.08em) rotate(45deg);
+  transform: translateY(-0.053em) rotate(45deg);
 }
 .step[data-state="complete"] .step-label { color: var(--color-neutral-800); }
 /* A connector belongs to the step it LEAVES, so it fills only when that step
