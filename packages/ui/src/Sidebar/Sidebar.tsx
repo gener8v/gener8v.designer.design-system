@@ -68,11 +68,25 @@ export const SidebarGroup = forwardRef<HTMLParagraphElement, HTMLAttributes<HTML
 
 export interface SidebarItemProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   current?: boolean;
+  /**
+   * This destination cannot hold anything yet, because something else has to happen first.
+   *
+   * A rail lists everywhere a person can go, usually in an order somebody filed — while the
+   * product underneath enforces a real one as a refusal, at the moment they try. So the work has
+   * a sequence and the navigation shows none of it.
+   *
+   * QUIETER, NOT DISABLED. It stays a link: arriving to read what is there, or to see why it is
+   * empty, is legitimate, and hiding the row would answer "what happens next" with silence. Say
+   * WHY in `title` — "not ready" tells somebody they are stuck; what has to come first tells them
+   * where to go.
+   */
+  waiting?: boolean;
 }
 
 export const SidebarItem = forwardRef<HTMLAnchorElement, SidebarItemProps>(
-  function SidebarItem({ current = false, className, ...rest }, ref) {
+  function SidebarItem({ current = false, waiting = false, className, ...rest }, ref) {
     return <a {...rest} ref={ref} aria-current={current ? 'page' : undefined}
+      data-waiting={waiting || undefined}
       className={cx('sidebar-item', className)} />;
   });
 
