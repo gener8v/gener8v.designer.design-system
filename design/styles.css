@@ -3463,6 +3463,24 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   color: var(--color-neutral-700);
 }
 
+/* THE MEASURE BELONGS TO THE COLUMN, NOT TO THE BLOCK.
+
+   68ch keeps a paragraph readable, and a detail holding one is capped at it. A
+   detail holding two positions BEING COMPARED is not a paragraph: capping the
+   pair gives each side 34ch and leaves the rest of the row empty, so the reader
+   scrolls between two things whose whole point is that they are opposed.
+
+   No breakpoint. A row is not always the width of the page — it can sit in a
+   panel or a drawer — so `auto-fit` answers the space this row actually has,
+   and folds back to one column when there is not enough for two. */
+.item-detail[data-layout='columns'] {
+  max-inline-size: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 44ch), 1fr));
+  gap: var(--space-3) var(--space-6);
+  align-items: start;
+}
+
 /* ----------------------------------------------------------------- library */
 
 /* A document library. File type is carried by a mono badge and a glyph, not by

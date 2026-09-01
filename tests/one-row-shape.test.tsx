@@ -69,3 +69,46 @@ describe('a list of records', () => {
     expect(container.querySelectorAll('li')).toHaveLength(2);
   });
 });
+
+describe('a detail that is a comparison', () => {
+  it('gives the measure to the column instead of the block', () => {
+    // 68ch keeps a paragraph readable, and a detail holding one keeps it. A detail holding two
+    // positions BEING COMPARED is not a paragraph: capping the pair gives each side 34ch and
+    // leaves the rest of the row empty, so the reader scrolls between two things whose whole
+    // point is that they are opposed.
+    const prose = declarationsFor('.item-detail');
+    const columns = declarationsFor(".item-detail[data-layout='columns']");
+
+    expect(prose['max-inline-size']).toBe('68ch');
+    expect(columns['max-inline-size']).toBe('none');
+    expect(columns['display']).toBe('grid');
+    // No breakpoint: a row can sit in a panel or a drawer, so the columns answer the space this
+    // row has rather than the width of the page.
+    expect(columns['grid-template-columns']).toContain('auto-fit');
+  });
+
+  it('says nothing about layout unless it is a comparison', () => {
+    // The default carries no attribute at all. A `data-layout="prose"` on every row in the
+    // product would be a styling hook nobody set, sitting in the markup of every list.
+    const { container } = render(
+      <ItemList>
+        <Item title="Portfolio and PMO">a note about it</Item>
+      </ItemList>,
+    );
+
+    expect(container.querySelector('.item-detail')?.getAttribute('data-layout')).toBeNull();
+  });
+
+  it('marks the detail when it is', () => {
+    const { container } = render(
+      <ItemList>
+        <Item title="Portfolio and PMO" detail="columns">
+          <span>has it</span>
+          <span>lacks it</span>
+        </Item>
+      </ItemList>,
+    );
+
+    expect(container.querySelector('.item-detail')?.getAttribute('data-layout')).toBe('columns');
+  });
+});
