@@ -8,13 +8,20 @@
   display: grid;
   place-items: center;
   padding: var(--space-6);
-  background: color-mix(in srgb, var(--color-neutral-900) 34%, transparent);
+  /* A MODAL IS THE ONLY THING, OR IT IS A CARD. At 34% the page behind stayed fully legible and
+     the dialog read as floating over live content rather than replacing it. */
+  background: color-mix(in srgb, var(--color-neutral-900) 56%, transparent);
   z-index: 50;
 }
 .dialog {
   inline-size: min(520px, 100%);
   max-block-size: calc(100vh - var(--space-16));
-  overflow-y: auto;
+  /* THE BODY SCROLLS, NOT THE DIALOG.
+     `overflow-y` on the box itself scrolled the title out of view and the actions off the bottom —
+     so a long explanation could put the confirm button somewhere a reader had to go looking for
+     it, on the one surface where the controls are the entire point. */
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   padding: var(--space-6);
   background: var(--color-bg);
   border-radius: var(--radius-lg);
@@ -27,12 +34,44 @@
   letter-spacing: var(--tracking-xl);
   color: var(--color-neutral-900);
 }
-.dialog-body { margin-block-start: var(--space-3); font-size: var(--text-sm); color: var(--color-neutral-700); }
+.dialog-body {
+  margin-block-start: var(--space-3);
+  overflow-y: auto;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+}
+/* Prose in a dialog is prose. Without a measure it ran the full 520px in one block, which is the
+   width this system caps everywhere else it asks somebody to read a paragraph. */
+.dialog-body > p { max-inline-size: 60ch; }
+/* TONE, THE SAME ATTRIBUTE `.alert` AND `.state` CARRY — one vocabulary, as this file already
+   argues. Without it a destructive confirmation had to be WRITTEN into seriousness: three lines of
+   prose and a red-ish button, with nothing on the surface itself saying what kind of decision this
+   is. A reader skims the title and the buttons; the paragraph is the part they skip.
+
+   A band across the head rather than a tinted panel. The dialog stays a sheet you read — tinting
+   the whole thing makes the body harder to read at exactly the moment it matters most. */
+.dialog[data-tone]::before {
+  content: "";
+  display: block;
+  block-size: var(--space-1);
+  margin: calc(var(--space-6) * -1) calc(var(--space-6) * -1) var(--space-5);
+  border-start-start-radius: var(--radius-lg);
+  border-start-end-radius: var(--radius-lg);
+}
+.dialog[data-tone="accent"]::before  { background: var(--color-accent-600); }
+.dialog[data-tone="success"]::before { background: var(--color-success); }
+.dialog[data-tone="warning"]::before { background: var(--color-warning); }
+.dialog[data-tone="danger"]::before  { background: var(--color-danger); }
+.dialog[data-tone="danger"] .dialog-title  { color: var(--color-danger-700); }
+.dialog[data-tone="warning"] .dialog-title { color: var(--color-warning-700); }
+
 .dialog-actions {
   display: flex;
   justify-content: flex-end;
   gap: var(--space-3);
-  margin-block-start: var(--space-6);
+  /* The decision is separated from the explanation by air rather than a rule — the layout
+     foundation's own instruction: reach for a larger space step before reaching for a divider. */
+  margin-block-start: var(--space-8);
 }
 
 /* --- alert ---------------------------------------------------------- */
