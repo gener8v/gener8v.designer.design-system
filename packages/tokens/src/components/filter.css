@@ -1,0 +1,67 @@
+/* ------------------------------------------------------------------ filter */
+
+/* A ROW OF DIMENSIONS, WRAPPING.
+   They sit beside a search field as often as they sit alone, so the row aligns
+   on the centre rather than the baseline: a filter next to a taller input
+   should look set into the same band, not hung off its text. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* THE CONTROL IS A FIELD, NOT A TAG.
+   It is bordered and paper-coloured like the inputs it sits with, because it
+   IS an input — a dimension holding a value — and the reader should reach for
+   it the way they reach for a select. `Tag` and `Facet` are the flat, tinted
+   shapes in this system, and both of them mean *a fact about a row*; borrowing
+   either would say this filter was something the data said rather than
+   something the reader set. */
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-h-md);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-neutral-700);
+  font: inherit;
+  font-size: var(--text-sm);
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 120ms ease-out, background 120ms ease-out;
+}
+.filter:hover:not(:disabled) { border-color: var(--color-neutral-400); }
+.filter:disabled { opacity: 0.5; cursor: not-allowed; }
+.filter[aria-expanded='true'] { border-color: var(--color-action); }
+
+/* NARROWED LOOKS DIFFERENT FROM NOT NARROWED.
+   A list is being hidden from the reader, and the control doing it must say so
+   without being read. The border takes the action colour and the value goes to
+   full text weight; the dimension stays quiet beside it. */
+.filter-on { border-color: var(--color-action); color: var(--color-text); }
+.filter-name { color: var(--color-neutral-600); }
+.filter-on .filter-name::after { content: ':'; }
+.filter-on .filter-value { color: var(--color-text); font-weight: 500; }
+
+/* Down while shut, up while open — so the control says which way it will move
+   before it is pressed. */
+.filter-caret {
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  margin-inline-start: auto;
+  color: var(--color-neutral-500);
+  transition: transform 140ms ease-out;
+}
+.filter[aria-expanded='true'] .filter-caret { transform: rotate(180deg); }
+
+/* A value and the line that settles it, stacked inside the row. */
+.filter-option { display: flex; flex-direction: column; gap: 2px; min-inline-size: 0; }
+.filter-option-note {
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
+  color: var(--color-neutral-600);
+}

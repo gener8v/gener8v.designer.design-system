@@ -1339,11 +1339,24 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 /* The clear/expand affordance sits inside the field, so it must not overlap
    the text. The input reserves room for it rather than the button covering it. */
 .combobox .input { padding-inline-end: var(--space-10); }
+/* THE CARET CENTRES ON THE FIELD, NOT ON THE COMPONENT.
+ *
+ * `inset-block-start: 50%` centred it in `.combobox` — and `.combobox` contains
+ * the LABEL as well as the input, so the caret sat half a label's height above
+ * the middle of the box it belongs to. Measured on a consumer: field centre
+ * 727px, caret centre 714px.
+ *
+ * It was invisible in the demo because that example hides its label. Every
+ * consumer that shows one — which is most of them, a labelled field being the
+ * normal case — got a caret riding high in its own input.
+ *
+ * Anchored to the field's bottom edge instead. The input's height is a known
+ * quantity and the label's is not: a label wraps onto two lines at a narrow
+ * width, and anything measured from the top moves when it does. */
 .combobox-trigger {
   position: absolute;
   inset-inline-end: var(--space-2);
-  inset-block-start: 50%;
-  transform: translateY(-50%);
+  inset-block-end: calc((var(--control-h-md) - var(--space-6)) / 2);
   display: grid;
   place-items: center;
   inline-size: var(--space-6);
@@ -2779,6 +2792,74 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   max-inline-size: 68ch;
   font-size: var(--text-sm);
   line-height: var(--leading-sm);
+  color: var(--color-neutral-600);
+}
+
+/* ------------------------------------------------------------------ filter */
+
+/* A ROW OF DIMENSIONS, WRAPPING.
+   They sit beside a search field as often as they sit alone, so the row aligns
+   on the centre rather than the baseline: a filter next to a taller input
+   should look set into the same band, not hung off its text. */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* THE CONTROL IS A FIELD, NOT A TAG.
+   It is bordered and paper-coloured like the inputs it sits with, because it
+   IS an input — a dimension holding a value — and the reader should reach for
+   it the way they reach for a select. `Tag` and `Facet` are the flat, tinted
+   shapes in this system, and both of them mean *a fact about a row*; borrowing
+   either would say this filter was something the data said rather than
+   something the reader set. */
+.filter {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-h-md);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-neutral-700);
+  font: inherit;
+  font-size: var(--text-sm);
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 120ms ease-out, background 120ms ease-out;
+}
+.filter:hover:not(:disabled) { border-color: var(--color-neutral-400); }
+.filter:disabled { opacity: 0.5; cursor: not-allowed; }
+.filter[aria-expanded='true'] { border-color: var(--color-action); }
+
+/* NARROWED LOOKS DIFFERENT FROM NOT NARROWED.
+   A list is being hidden from the reader, and the control doing it must say so
+   without being read. The border takes the action colour and the value goes to
+   full text weight; the dimension stays quiet beside it. */
+.filter-on { border-color: var(--color-action); color: var(--color-text); }
+.filter-name { color: var(--color-neutral-600); }
+.filter-on .filter-name::after { content: ':'; }
+.filter-on .filter-value { color: var(--color-text); font-weight: 500; }
+
+/* Down while shut, up while open — so the control says which way it will move
+   before it is pressed. */
+.filter-caret {
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  margin-inline-start: auto;
+  color: var(--color-neutral-500);
+  transition: transform 140ms ease-out;
+}
+.filter[aria-expanded='true'] .filter-caret { transform: rotate(180deg); }
+
+/* A value and the line that settles it, stacked inside the row. */
+.filter-option { display: flex; flex-direction: column; gap: 2px; min-inline-size: 0; }
+.filter-option-note {
+  font-size: var(--text-xs);
+  line-height: var(--leading-xs);
   color: var(--color-neutral-600);
 }
 

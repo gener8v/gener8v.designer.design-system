@@ -5,11 +5,24 @@
 /* The clear/expand affordance sits inside the field, so it must not overlap
    the text. The input reserves room for it rather than the button covering it. */
 .combobox .input { padding-inline-end: var(--space-10); }
+/* THE CARET CENTRES ON THE FIELD, NOT ON THE COMPONENT.
+ *
+ * `inset-block-start: 50%` centred it in `.combobox` — and `.combobox` contains
+ * the LABEL as well as the input, so the caret sat half a label's height above
+ * the middle of the box it belongs to. Measured on a consumer: field centre
+ * 727px, caret centre 714px.
+ *
+ * It was invisible in the demo because that example hides its label. Every
+ * consumer that shows one — which is most of them, a labelled field being the
+ * normal case — got a caret riding high in its own input.
+ *
+ * Anchored to the field's bottom edge instead. The input's height is a known
+ * quantity and the label's is not: a label wraps onto two lines at a narrow
+ * width, and anything measured from the top moves when it does. */
 .combobox-trigger {
   position: absolute;
   inset-inline-end: var(--space-2);
-  inset-block-start: 50%;
-  transform: translateY(-50%);
+  inset-block-end: calc((var(--control-h-md) - var(--space-6)) / 2);
   display: grid;
   place-items: center;
   inline-size: var(--space-6);
