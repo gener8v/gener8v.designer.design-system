@@ -36,6 +36,21 @@
       </button>
       <button type="button" class="menu-item" role="menuitem" aria-disabled="true">Duplicate</button>
       <hr class="menu-sep" />
+      <!-- A menu item that opens a menu. The caret is the affordance; the row
+           stays lit while the flyout is open, so the parent keeps saying which
+           of its rows the open menu belongs to. -->
+      <div class="menu-sub">
+        <button type="button" class="menu-item menu-sub-trigger" role="menuitem" aria-haspopup="menu" aria-expanded="true">
+          Move to
+          <svg class="menu-sub-mark" viewBox="0 0 256 256" fill="currentColor"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg>
+        </button>
+        <div class="menu" role="menu" aria-label="Move to" style="position:absolute;inset-inline-start:100%;inset-block-start:0;margin-inline-start:var(--space-1)">
+          <button type="button" class="menu-item" role="menuitemradio" aria-checked="true">Current quarter</button>
+          <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Next quarter</button>
+          <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Archive</button>
+        </div>
+      </div>
+      <hr class="menu-sep" />
       <button type="button" class="menu-item menu-item-danger" role="menuitem">
         <svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg>
         Archive

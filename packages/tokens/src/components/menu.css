@@ -56,6 +56,36 @@
 .menu-item-danger { color: var(--color-danger-700); }
 .menu-item-danger:hover, .menu-item-danger[data-highlighted] { background: var(--color-danger-100); }
 
+/* A MENU ITEM THAT OPENS A MENU.
+ *
+ * A flat menu that groups with headings grows with every group — the account
+ * settings sink further down a list somebody opened for one of them, and a
+ * heading over a single row spends a line saying a thing exists and another
+ * line being it. A flyout keeps the parent one row per subject.
+ *
+ * The wrapper carries the hover intent and nothing else: `display: contents`
+ * so it does not become a box between the menu and its items, which would take
+ * the padding and the highlight off the row. */
+.menu-sub { display: contents; }
+
+/* The caret is the affordance. Without it a row that opens a menu looks exactly
+ * like a row that does something, and the reader finds out by pressing it. */
+.menu-sub-mark {
+  margin-inline-start: auto;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  flex: none;
+  color: var(--color-neutral-500);
+}
+/* Open stays lit while the pointer is in the flyout. Otherwise the row a
+ * reader is inside of goes quiet the moment they leave it, and the parent
+ * stops saying which of its rows the open menu belongs to. */
+.menu-sub-trigger[aria-expanded="true"] {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+.menu-sub-trigger[aria-expanded="true"] .menu-sub-mark { color: var(--color-neutral-800); }
+
 .menu-label {
   padding: var(--space-2) var(--space-3) var(--space-1);
   font-family: var(--font-mono);
