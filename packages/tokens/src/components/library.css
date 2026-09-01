@@ -84,7 +84,32 @@
 .reader h1 { font-size: var(--text-3xl); }
 .reader h2 { font-size: var(--text-2xl); }
 .reader h3 { font-size: var(--text-lg); }
-.reader ul, .reader ol { padding-inline-start: var(--space-6); display: grid; gap: var(--space-2); }
+/* A LIST WITHOUT MARKERS IS AN INDENTED PARAGRAPH.
+ *
+ * This was `display: grid; gap`, reached for to space the items. Grid BLOCKIFIES its children, and
+ * a blockified `li` has no `::marker` — so every list in every rendered document lost its bullets
+ * and became indented prose. A long answer with three nested lists in it read as one wall of text
+ * with no way to see where a list started, which item belonged to which, or where it ended.
+ *
+ * The gap comes from a margin between items instead, which leaves the list a list. */
+.reader ul, .reader ol { padding-inline-start: var(--space-6); }
+.reader li + li { margin-block-start: var(--space-2); }
+/* Quiet. A marker is there to show you where an item begins, not to be read. */
+.reader li::marker { color: var(--color-neutral-500); }
+/* A nested level says so by its marker, not only by its indent — two indents of unmarked text at
+   different depths is the thing that made the nesting invisible. */
+.reader ul { list-style: disc; }
+.reader ul ul { list-style: circle; }
+.reader ul ul ul { list-style: square; }
+
+/* GROUPING, WHICH IS THE OTHER HALF OF THE WALL.
+ *
+ * `.reader > * + *` gives every block the same space, so a list sits as far from the sentence
+ * introducing it as from the next section, and nothing reads as belonging to anything. A list
+ * belongs to the line above it: it hugs that, and the next block gets a clear step instead. */
+.reader p + ul, .reader p + ol { margin-block-start: var(--space-2); }
+.reader li > ul, .reader li > ol { margin-block-start: var(--space-2); }
+.reader ul + p, .reader ol + p { margin-block-start: var(--space-6); }
 .reader blockquote { padding-inline-start: var(--space-4); border-inline-start: 2px solid var(--color-neutral-300); color: var(--color-neutral-700); }
 .reader hr { border: 0; border-block-start: 1px solid var(--color-divider); margin-block: var(--space-8); }
 .reader code { background: var(--color-neutral-100); padding: 0.1em 0.35em; border-radius: var(--radius-xs); }
