@@ -69,6 +69,8 @@ export { Tally } from './Tally/index.js';
 export type { TallyProps, TallyPart, TallyTone } from './Tally/index.js';
 export { Facet, Facets } from './Facet/index.js';
 export type { FacetProps } from './Facet/index.js';
+export { Filter, Filters } from './Filter/index.js';
+export type { FilterProps, FilterOption } from './Filter/index.js';
 export { Entry } from './Entry/index.js';
 export type { EntryProps } from './Entry/index.js';
 export { Transcript, TranscriptTurn } from './Transcript/index.js';
