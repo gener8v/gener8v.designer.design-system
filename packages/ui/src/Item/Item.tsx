@@ -28,6 +28,14 @@ export interface ItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title'> 
   trailing?: ReactNode;
   /** More about it, under the meta. */
   children?: ReactNode;
+  /**
+   * How the detail is laid out.
+   *
+   * `prose` (the default) holds the reading measure. `columns` gives the measure to each column
+   * instead of to the block — for a detail whose children are being compared with each other
+   * rather than read in sequence.
+   */
+  detail?: 'prose' | 'columns';
 }
 
 /**
@@ -37,7 +45,16 @@ export interface ItemProps extends Omit<HTMLAttributes<HTMLLIElement>, 'title'> 
  * qualification of its name — "not yet searchable by meaning" belongs beside the thing it is about,
  * not underneath it. So `trailing` sits on the title's line and wraps with it.
  */
-export function Item({ title, meta, lead, trailing, children, className, ...rest }: ItemProps) {
+export function Item({
+  title,
+  meta,
+  lead,
+  trailing,
+  children,
+  detail = 'prose',
+  className,
+  ...rest
+}: ItemProps) {
   return (
     <li {...rest} className={cx('item', className)}>
       {lead ? <span className="item-lead">{lead}</span> : null}
@@ -47,7 +64,11 @@ export function Item({ title, meta, lead, trailing, children, className, ...rest
           {trailing ? <span className="item-trailing">{trailing}</span> : null}
         </span>
         {meta ? <span className="item-meta">{meta}</span> : null}
-        {children ? <span className="item-detail">{children}</span> : null}
+        {children ? (
+          <span className="item-detail" data-layout={detail === 'prose' ? undefined : detail}>
+            {children}
+          </span>
+        ) : null}
       </span>
     </li>
   );
