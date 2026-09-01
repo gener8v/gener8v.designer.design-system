@@ -314,6 +314,29 @@
 .sidebar-item:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
 .sidebar-item[aria-current] { background: var(--color-bg); color: var(--color-action); font-weight: 500; box-shadow: var(--shadow-sm); }
 .sidebar-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; }
+
+/* A DESTINATION THAT IS NOT READY YET.
+ *
+ * A rail lists everywhere a person can go, in an order that is usually a filing decision — while
+ * the product underneath enforces a real one, as a refusal, at the moment somebody tries. So the
+ * work has a sequence and the navigation shows none of it, and a reader finds out what is not yet
+ * possible by walking into it.
+ *
+ * QUIETER, NOT DISABLED. It is still a link: arriving to read what is there, or to understand why
+ * it is empty, is legitimate — and a rail that removed the row would answer "what happens next"
+ * with silence. So this is the weight of a thing that is not ready, not the grey of a thing that
+ * cannot be pressed, and hover and current state are untouched because both are still true.
+ *
+ * NO ICON OF ITS OWN. A second mark in a row that already has one competes with the mark that
+ * says what the surface holds; the reason lives in the row's title and on the destination, where
+ * somebody who has arrived can act on it. */
+.sidebar-item[data-waiting] { color: var(--color-neutral-500); }
+.sidebar-item[data-waiting] svg { opacity: 0.55; }
+.sidebar-item[data-waiting]:hover { color: var(--color-neutral-800); }
+.sidebar-item[data-waiting]:hover svg { opacity: 1; }
+/* Where you ARE always reads as where you are, ready or not. */
+.sidebar-item[data-waiting][aria-current] { color: var(--color-action); }
+.sidebar-item[data-waiting][aria-current] svg { opacity: 1; }
 /* The count stays MONO: it is a figure in a column of figures, and tabular digits
    are the whole reason. */
 .sidebar-count { margin-inline-start: auto; font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: var(--text-xs); color: var(--color-neutral-600); }
