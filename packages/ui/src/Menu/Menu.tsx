@@ -4,7 +4,22 @@ import type { ButtonHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } fr
 import { Avatar } from '../Avatar/Avatar.js';
 import { cx } from '../cx.js';
 
-const ITEMS = '[role="menuitem"]:not([aria-disabled="true"])';
+const ITEMS = '[role="menuitem"],[role="menuitemradio"]';
+
+/**
+ * The items this menu steers, which is not every item inside it.
+ *
+ * A submenu renders its own `role="menu"` within the parent's DOM, so a plain
+ * `querySelectorAll` hands the parent its child's rows as well — and arrowing
+ * down the account menu would walk into the open flyout and out the other side.
+ * Ownership is decided by the nearest enclosing menu, not by depth.
+ */
+function ownItems(menu: HTMLElement | null): HTMLElement[] {
+  if (menu === null) return [];
+  return [...menu.querySelectorAll<HTMLElement>(ITEMS)].filter(
+    (el) => el.getAttribute('aria-disabled') !== 'true' && el.closest('[role="menu"]') === menu,
+  );
+}
 
 export interface MenuProps {
   /** The control that opens the menu. Cloned to receive the ARIA wiring. */
@@ -42,7 +57,7 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
   }, []);
 
   const focusItem = useCallback((index: number) => {
-    const items = [...(menuRef.current?.querySelectorAll<HTMLElement>(ITEMS) ?? [])];
+    const items = ownItems(menuRef.current);
     if (items.length === 0) return;
     const i = ((index % items.length) + items.length) % items.length;
     items.forEach((el) => el.removeAttribute('data-highlighted'));
@@ -74,7 +89,7 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
   };
 
   const onMenuKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const items = [...(menuRef.current?.querySelectorAll<HTMLElement>(ITEMS) ?? [])];
+    const items = ownItems(menuRef.current);
     const from = items.indexOf(document.activeElement as HTMLElement);
     if (e.key === 'ArrowDown') { e.preventDefault(); focusItem(from + 1); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); focusItem(from - 1); }
@@ -154,6 +169,148 @@ export function MenuItem({ danger, disabled, selected, onSelect, className, onCl
       )}
       {children}
     </button>
+  );
+}
+
+export interface MenuSubProps {
+  /** The row's own text. It names where the flyout goes, so it is a noun. */
+  label: ReactNode;
+  /** An icon for the row, matching the items around it. */
+  icon?: ReactNode;
+  disabled?: boolean;
+  children?: ReactNode;
+}
+
+/**
+ * A menu item that opens a menu.
+ *
+ * **A label with items under it is not a submenu.** A flat menu that groups
+ * with headings grows with every group: the account settings sink further down
+ * a list somebody opened for one of them, and a heading over a single row
+ * spends a line saying a thing exists and another line being it. A flyout keeps
+ * the parent one row per subject and puts the choices beside it.
+ *
+ * The pattern is WAI-ARIA's, and the keys are the ones a menu already teaches:
+ * **ArrowRight or Enter opens** and lands on the first child, **ArrowLeft or
+ * Escape closes** and returns to this row, and hover opens after a beat.
+ *
+ * **Hover has a delay and closing has a longer one.** Opening on contact makes
+ * a flyout that flickers as the pointer crosses rows on its way somewhere else;
+ * closing on exit makes one that vanishes while somebody is travelling towards
+ * it diagonally. Neither is a preference — both are the difference between a
+ * submenu that works with a mouse and one that has to be clicked.
+ */
+export function MenuSub({ label, icon, disabled, children }: MenuSubProps) {
+  const [open, setOpen] = useState(false);
+  const itemRef = useRef<HTMLButtonElement | null>(null);
+  const subRef = useRef<HTMLDivElement | null>(null);
+  const timer = useRef<number | undefined>(undefined);
+  const subId = useId();
+  const { style } = useAnchoredPosition({
+    open, anchorRef: itemRef, floatingRef: subRef, placement: 'right', align: 'start', offset: 2,
+  });
+
+  const later = (fn: () => void, ms: number) => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(fn, ms);
+  };
+  const now = (fn: () => void) => {
+    window.clearTimeout(timer.current);
+    fn();
+  };
+  useEffect(() => () => window.clearTimeout(timer.current), []);
+
+  const openOn = (edge: 'first' | 'last' = 'first') => {
+    now(() => setOpen(true));
+    queueMicrotask(() => {
+      const items = ownItems(subRef.current);
+      const el = edge === 'first' ? items[0] : items[items.length - 1];
+      el?.setAttribute('data-highlighted', '');
+      el?.focus();
+    });
+  };
+  const shut = (restoreFocus: boolean) => {
+    now(() => setOpen(false));
+    if (restoreFocus) itemRef.current?.focus();
+  };
+
+  return (
+    <div
+      className="menu-sub"
+      onMouseEnter={() => (disabled === true ? undefined : later(() => setOpen(true), 120))}
+      /* Longer than the open delay, so a pointer travelling diagonally towards
+         the flyout does not lose it by clipping the row below. */
+      onMouseLeave={() => later(() => setOpen(false), 320)}
+    >
+      <button
+        ref={itemRef}
+        type="button"
+        role="menuitem"
+        tabIndex={-1}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-controls={open ? subId : undefined}
+        aria-disabled={disabled === true ? true : undefined}
+        className="menu-item menu-sub-trigger"
+        onClick={() => (disabled === true ? undefined : open ? shut(true) : openOn())}
+        onKeyDown={(e) => {
+          if (disabled === true) return;
+          if (e.key === 'ArrowRight' || e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            e.stopPropagation();
+            openOn();
+          }
+        }}
+      >
+        {icon}
+        {label}
+        {/* The caret is the affordance: without it a row that opens a menu is
+            indistinguishable from a row that does something. */}
+        <svg className="menu-sub-mark" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true">
+          <path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z" />
+        </svg>
+      </button>
+
+      {open && (
+        <div
+          ref={subRef}
+          id={subId}
+          role="menu"
+          aria-label={typeof label === 'string' ? label : undefined}
+          style={style}
+          className={cx('menu', 'menu-popup')}
+          onKeyDown={(e) => {
+            const items = ownItems(subRef.current);
+            const from = items.indexOf(document.activeElement as HTMLElement);
+            const move = (to: number) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (items.length === 0) return;
+              const i = ((to % items.length) + items.length) % items.length;
+              items.forEach((el) => el.removeAttribute('data-highlighted'));
+              items[i]!.setAttribute('data-highlighted', '');
+              items[i]!.focus();
+            };
+            if (e.key === 'ArrowDown') move(from + 1);
+            else if (e.key === 'ArrowUp') move(from - 1);
+            else if (e.key === 'Home') move(0);
+            else if (e.key === 'End') move(-1);
+            /* Escape closes the flyout and not the menu holding it, which is
+               why this stops here. One press, one level. */
+            else if (e.key === 'ArrowLeft' || e.key === 'Escape') {
+              e.preventDefault();
+              e.stopPropagation();
+              shut(true);
+            }
+          }}
+          /* Choosing anything inside closes this level; the parent's own
+             dismissal handles the rest. */
+          onClick={() => shut(false)}
+        >
+          {children}
+        </div>
+      )}
+    </div>
   );
 }
 
