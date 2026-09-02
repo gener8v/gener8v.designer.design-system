@@ -157,3 +157,5 @@ export type {
   ScopeProps, RuleProps, EndpointProps,
 } from './Integrations/index.js';
 export { cx } from './cx.js';
+export { problems, reads } from './language.js';
+export type { Surface, Problem } from './language.js';
