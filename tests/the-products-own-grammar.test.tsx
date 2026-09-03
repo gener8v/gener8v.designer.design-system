@@ -127,3 +127,22 @@ describe('what a single label cannot be judged on', () => {
     expect(found.every((p) => p.says.length > 0)).toBe(true);
   });
 });
+
+describe('what the checker must not flag', () => {
+  it('leaves a phrasal verb and a value-heading column alone', () => {
+    // Pointed at a real product it flagged "Sign in", where `in` is part of the verb, and
+    // "Invited by" / "Decided by" / "Approved by", where `by` heads the value the column holds.
+    // The rule's own examples are clauses — "The Period This Applies To" — and renaming idiomatic
+    // two-word labels to satisfy it would make a product worse, which is the failure a checker
+    // exists to prevent.
+    expect(breaks('Sign in', 'action', 5)).toBe(false);
+    for (const header of ['Invited by', 'Decided by', 'Approved by']) {
+      expect(breaks(header, 'column', 5)).toBe(false);
+    }
+  });
+
+  it('still catches the clause that ran out', () => {
+    expect(breaks('The Period This Applies To', 'column', 5)).toBe(true);
+    expect(breaks('The Unit This Belongs To', 'column', 5)).toBe(true);
+  });
+});

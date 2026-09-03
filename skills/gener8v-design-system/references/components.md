@@ -60,7 +60,7 @@ add it to the system, not to the consuming app.
 | `.rule`, `.endpoint` | Event rule as a sentence; inbound webhook | components/integrations.html |
 | `.slide` with `.slide-title`, `.slide-list`, `.slide-divider` | Deck slides, type sized in container units | templates/deck/ |
 | `.error-summary` | Validation summary linking to each field | — |
-| `.label` | The mono eyebrow — section markers and technical labels | foundations/type.html |
+| `.label` | The mono label — section markers, figures and data labels. NEVER above a heading: an eyebrow is a quiet line the eye reaches before the loud one, and it names something the reader can already see | foundations/type.html |
 | `.lede`, `.muted`, `.num`, `.mono` | Intro paragraph, secondary text, tabular figures, technical identifiers | foundations/type.html |
 | `.table` in `.table-wrap`, with `.table-compact`, `.table-sticky`, `.table-empty` | Data tables — hairline rules, mono headers, `aria-sort` | components/table.html |
 | `.container`, `.section`, `.stack`, `.row`, `.hr` | Layout primitives and the section rhythm | foundations/layout.html |

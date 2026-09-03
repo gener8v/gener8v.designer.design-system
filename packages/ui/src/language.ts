@@ -86,7 +86,13 @@ export function problems(text: string, surface: Surface): Problem[] {
   }
 
   // Rule 5 — a preposition at the end is a sentence that ran out.
-  if (STRANDED.test(said)) {
+  //
+  // A CLAUSE THAT RAN OUT, NOT A TWO-WORD HEADER. The rule's own examples are "The Period This
+  // Applies To" and "The Unit This Belongs To" — clauses. Pointed at short labels it flagged
+  // "Sign in", where `in` is part of the verb, and "Invited by", "Decided by", "Approved by",
+  // where `by` heads the value the column holds. Renaming those would have made a product worse
+  // to satisfy a checker, which is the failure a checker is supposed to prevent.
+  if (parts.length > 2 && STRANDED.test(said)) {
     found.push({ rule: 5, says: 'strands a preposition at the end' });
   }
 
