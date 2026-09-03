@@ -270,8 +270,7 @@ body { display: grid; place-items: center; min-height: 100svh; }
 </style></head>
 <body class="bg-dot-grid">
 <div class="cover">
-  <p class="label">Design system</p>
-  <h1 style="margin-top:var(--space-2)">${theme.name}</h1>
+  <h1>${theme.name}</h1>
   <p class="lede" style="margin-top:var(--space-4)">AI delivered in regulated, governed and auditable environments.</p>
   <div class="sw">
     ${['--color-neutral-900', '--color-neutral-600', '--color-neutral-300', '--color-neutral-100', '--color-accent-700', '--color-accent']
@@ -357,8 +356,7 @@ ${THEME_CSS}
 ${THEME_CONTROL}
 <header class="index-hero bg-dot-grid">
   <div class="container section-tight">
-    <p class="label">Design system</p>
-    <h1 style="margin-block-start:var(--space-3)">${theme.name}</h1>
+    <h1>${theme.name}</h1>
     <p class="lede" style="margin-block-start:var(--space-4);max-inline-size:60ch">
       A light, airy interface for delivering AI in regulated, governed and auditable
       environments. One stylesheet, one token source, and the same class names in the
