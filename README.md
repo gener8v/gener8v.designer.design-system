@@ -113,14 +113,26 @@ Use an **Automation** token for CI (it bypasses 2FA); a Publish token is fine lo
 
 ## Who consumes this
 
-Two front ends in
-[gener8v.product-owner.delivery-engine](https://github.com/gener8v/gener8v.product-owner.delivery-engine):
-`studio-web` (TRAISEE, the delivery record) and `console-web` (Triage, the engine console). Both
-import `@gener8v/ui/styles.css` and `@gener8v/tailwind-preset/theme.css` and define no tokens of
-their own.
+**One product, not two.**
+[gener8v.product-owner.traisee](https://github.com/gener8v/gener8v.product-owner.traisee) — the
+delivery record — imports `@gener8v/ui/styles.css` and `@gener8v/tailwind-preset/theme.css` and
+defines no tokens of its own.
 
-**A release does not reach them on its own.** Consumers pin by caret on a `0.x` version, and a
-caret on `0.x` pins MINOR — `^0.46.0` will not take `0.47.0`. Releasing is therefore two steps:
+**And one that does not.**
+[gener8v.product-owner.triage](https://github.com/gener8v/gener8v.product-owner.triage), the engine
+console, is on Radix, lucide-react and recharts, with its own tokens in its own `index.css`. It
+depends on nothing published here.
+
+That is worth stating plainly because this file said the opposite until 2026-09-04, and the same
+wrong sentence had reached two other repositories. The claim was inherited from a handoff note
+about the record and generalised to "both front ends" without anybody checking the second one's
+`package.json` — which names no `@gener8v` package at all.
+
+Whether Triage should adopt the system is a real question and an open one. What it is not is
+already true.
+
+**A release does not reach a consumer on its own.** Consumers pin by caret on a `0.x` version, and
+a caret on `0.x` pins MINOR — `^0.46.0` will not take `0.47.0`. Releasing is therefore two steps:
 publish here, then bump the consumer. Four releases once sat unconsumed because only the first was
 done.
 
