@@ -8,7 +8,7 @@ visual rewrite.
 ```
 pnpm install
 pnpm dev      # the design lab at localhost:4321
-pnpm check    # seven gates
+pnpm check    # every gate below
 ```
 
 ## What is here
@@ -18,7 +18,7 @@ change that holds and one CI reverts.
 
 | Path | What it is | Authored or generated |
 | --- | --- | --- |
-| `packages/tokens/src/theme.mjs` | **The source of truth.** 135 tokens | **Authored** — start here |
+| `packages/tokens/src/theme.mjs` | **The source of truth.** 143 tokens | **Authored** — start here |
 | `packages/tokens/src/base.css` | Reset, base type, focus ring, layout utilities | **Authored** |
 | `packages/tokens/src/components/*.css` | The component layer, one file per family | **Authored** |
 | `design/components/*.html` | Every component rendered, as plain HTML | **Authored** |
@@ -76,7 +76,7 @@ lint-gated against the stylesheet, so it cannot claim a class that does not exis
 | `lint:parity` | The static HTML using a class no React component can emit |
 | `smoke` | The **built** package failing to render, or an ARIA reference not resolving |
 | `verify:consumer` | A broken `exports` map, a missing `files` entry, or an undefined export reaching an engagement — it resolves the packages by name from outside the workspace and **executes**, which the in-repo tests cannot |
-| `test` | 118 tests: keyboard contracts, focus management, axe across every component family, and a harness test proving axe can actually fail |
+| `test` | 400 tests: keyboard contracts, focus management, axe across every component family, the product language rules, and a harness test proving axe can actually fail |
 | `bench:graph` | The knowledge graph missing its 60fps budget, or the layout diverging |
 
 Plus a responsive harness (`design/_responsive.html`) that measures every page at a true
@@ -110,6 +110,30 @@ default, and publishing brand IP to the public registry is not undoable.
 | GitHub Actions | `gh secret set NPM_TOKEN` — the release workflow reads it as `NODE_AUTH_TOKEN`; `actions/setup-node` generates the `.npmrc` at runtime. |
 
 Use an **Automation** token for CI (it bypasses 2FA); a Publish token is fine locally.
+
+## Who consumes this
+
+Two front ends in
+[gener8v.product-owner.delivery-engine](https://github.com/gener8v/gener8v.product-owner.delivery-engine):
+`studio-web` (TRAISEE, the delivery record) and `console-web` (Triage, the engine console). Both
+import `@gener8v/ui/styles.css` and `@gener8v/tailwind-preset/theme.css` and define no tokens of
+their own.
+
+**A release does not reach them on its own.** Consumers pin by caret on a `0.x` version, and a
+caret on `0.x` pins MINOR — `^0.46.0` will not take `0.47.0`. Releasing is therefore two steps:
+publish here, then bump the consumer. Four releases once sat unconsumed because only the first was
+done.
+
+## The product language rules
+
+`packages/ui/src/language.ts` exports `problems(text, surface)`, which reads a label and returns
+which of the eleven rules it breaks — grammatical form per surface, no gerunds on actionable
+surfaces, no articles, Title Case on buttons and column headers, sentence case elsewhere.
+
+It is a **check, not a document**, because a style guide nothing runs is a style guide nobody
+follows. Rule 10 is the one that makes it usable: when a rule and clarity conflict, clarity wins and
+the exception gets logged. A consumer runs `problems()` over its own labels and keeps a named
+exception list; a list that grows is evidence the rule needs revising, not that the labels do.
 
 ## Starting a new project
 
