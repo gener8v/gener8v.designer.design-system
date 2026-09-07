@@ -256,3 +256,64 @@ describe('Combobox — an empty list is not a failed search', () => {
     expect(screen.queryByText('Nothing to choose from yet')).toBeNull();
   });
 });
+
+describe('Combobox — the caller does not have to hold its list still', () => {
+  /**
+   * A NEW ARRAY OF THE SAME OPTIONS IS THE SAME OPTIONS.
+   *
+   * `options={xs.map(...)}` is what nearly every caller writes, and it hands a
+   * fresh array on every render. This derived the committed option from that
+   * array and synced the input's text from the OBJECT it found, so a new array
+   * meant a new object, the effect fired on every render, and each fire
+   * scheduled another. In a browser React ends it with "Maximum update depth
+   * exceeded" and the field is dead from the moment somebody picks something.
+   *
+   * That loop needs a real layout to start — under jsdom the width measured on
+   * opening never changes, so the render that feeds the cycle never happens.
+   * What IS reproducible here is the same effect firing when it should not, and
+   * it is visible as the thing it does: it throws away what is being typed.
+   */
+  function Field({ tick }: { tick: number }) {
+    const [value, setValue] = useState<string | null>(null);
+    return (
+      <div data-tick={tick}>
+        <Combobox label="Client" placeholder="Search clients"
+          options={OPTIONS.map((o) => ({ ...o }))} value={value} onChange={setValue} />
+      </div>
+    );
+  }
+
+  it('keeps what is being typed when the caller re-renders around it', async () => {
+    const u = userEvent.setup();
+    const { rerender } = render(<Field tick={1} />);
+
+    // Something committed, because that is when the array actually holds an
+    // object to be found again: with nothing chosen the lookup answers null
+    // either way, and null compares equal to null.
+    await u.click(box());
+    await u.click(screen.getByRole('option', { name: /Atlas Logistics/ }));
+
+    await u.click(box());
+    await u.clear(box());
+    await u.keyboard('North');
+
+    // Anything at all in the parent: a poll answering, a sibling's state.
+    rerender(<Field tick={2} />);
+
+    expect(box()).toHaveValue('North');
+    expect(screen.getByRole('option', { name: /Northlake Health/ })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: /Atlas Logistics/ })).toBeNull();
+  });
+
+  it('still reverts to the committed label when the field is left', async () => {
+    const u = userEvent.setup();
+    render(<Harness />);
+    await u.click(box());
+    await u.click(screen.getByRole('option', { name: /Northlake Health/ }));
+    await u.click(box());
+    await u.keyboard('zzz');
+    await u.tab();
+
+    expect(box()).toHaveValue('Northlake Health');
+  });
+});
