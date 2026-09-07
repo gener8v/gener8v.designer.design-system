@@ -3941,15 +3941,31 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 
 /* --- drawer --------------------------------------------------------- */
 
+/* A MODAL NAMES THE LAYER IT IS ON, OR IT IS NOT MODAL.
+   Both of these were positioned with no `z-index`, so the drawer sat above the
+   page only for as long as nothing else on it was raised — and the panel says
+   `aria-modal="true"`, which is a promise about the whole surface. A sticky
+   page header at `z-index: 2` is the most ordinary thing a screen has, and it
+   painted its own white band straight across an open drawer in the product that
+   reads this system: the panel's heading came out sliced in half and the two
+   lines under it were gone. Nothing about the layout was wrong — every box
+   measured where it should be. It was the paint order.
+
+   50 is the layer this system already gives `.dialog-backdrop`, because a
+   drawer and a dialog are the same kind of thing: the surface, taken. The panel
+   comes after the scrim in the DOM, so it stacks above it without a second
+   number. */
 .drawer-scrim {
   position: absolute;
   inset: 0;
+  z-index: 50;
   background: color-mix(in srgb, var(--color-neutral-900) 32%, transparent);
 }
 .drawer-panel {
   position: absolute;
   inset-block: 0;
   inset-inline-end: 0;
+  z-index: 50;
   inline-size: min(320px, 82%);
   padding: var(--space-6);
   background: var(--color-bg);
