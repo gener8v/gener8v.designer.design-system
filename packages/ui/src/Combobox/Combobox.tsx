@@ -77,14 +77,36 @@ export function Combobox({
   const inputId = id ?? autoId;
   const listId = `${inputId}-listbox`;
 
-  const selected = useMemo(() => {
+  /**
+   * WHAT THE COMMITTED VALUE IS CALLED — A STRING, NOT THE OPTION IT CAME FROM.
+   *
+   * This was the matched option, and every reader of it below wanted only its
+   * label. The effect that syncs the input's text depended on that object, so a
+   * caller writing `options={xs.map(...)}` — a fresh array holding the same
+   * things — got a fresh match on every render, the effect firing on every
+   * render, and a render scheduled by every fire. React ends that with "Maximum
+   * update depth exceeded", and the field is dead from the moment somebody
+   * picks something.
+   *
+   * **It made every consumer responsible for holding a list still**, and it did
+   * not say so: the fault appears only in a real browser, because under jsdom
+   * the width measured on opening never changes and the render that feeds the
+   * cycle never happens. Ten pickers in one consuming application had it.
+   *
+   * A label is a string. Two renders that mean the same thing compare equal,
+   * and no caller has to arrange that.
+   *
+   * Not memoised, deliberately: a value that compares by equality needs no
+   * cached identity, and a `useMemo` here would only suggest it has one.
+   */
+  const selectedLabel = ((): string => {
     const match = options.find((o) => o.value === value) ?? null;
+    if (match) return match.label;
     // A custom value is its own label. Without this the effect below resets the
     // query to '' on every render and the text disappears as it is typed.
-    if (match || !allowCustom || !value) return match;
-    return { value, label: value } as ComboboxOption;
-  }, [options, value, allowCustom]);
-  const [query, setQuery] = useState(selected?.label ?? '');
+    return allowCustom && value ? value : '';
+  })();
+  const [query, setQuery] = useState(selectedLabel);
   const [open, setOpen] = useState(false);
   // -1 means "open, but nothing highlighted yet". Opening the list must not
   // pre-select, or the first ArrowDown silently skips the first option.
@@ -111,7 +133,7 @@ export function Combobox({
 
   // The query is a draft; the committed value stays authoritative until the
   // user picks something, so an abandoned edit reverts rather than clearing.
-  useEffect(() => { setQuery(selected?.label ?? ''); }, [selected]);
+  useEffect(() => { setQuery(selectedLabel); }, [selectedLabel]);
 
   /**
    * WHAT THE FIELD WILL TAKE, AS A THING YOU CAN PICK.
@@ -128,18 +150,18 @@ export function Combobox({
   const custom = useMemo(() => {
     if (!allowCustom) return null;
     const typed = query.trim();
-    if (!typed || typed === selected?.label) return null;
+    if (!typed || typed === selectedLabel) return null;
     if (options.some((o) => o.label.toLowerCase() === typed.toLowerCase())) return null;
     return { value: typed, label: typed, note: 'use as typed' } as ComboboxOption;
-  }, [allowCustom, query, options, selected]);
+  }, [allowCustom, query, options, selectedLabel]);
 
   const matches = useMemo(() => {
-    const found = query && query !== selected?.label ? options.filter((o) => filter(o, query)) : options;
+    const found = query && query !== selectedLabel ? options.filter((o) => filter(o, query)) : options;
     // LAST. What the list already holds is the better answer when it holds one — the whole reason
     // the picker exists is that a second name for a thing the record already names is a thing
     // nobody finds later.
     return custom ? [...found, custom] : found;
-  }, [options, query, filter, selected, custom]);
+  }, [options, query, filter, selectedLabel, custom]);
   const enabled = useMemo(() => matches.filter((o) => !o.disabled), [matches]);
 
   const commit = useCallback((option: ComboboxOption) => {
@@ -160,14 +182,14 @@ export function Combobox({
   /** Leaving the field with text the list does not hold. With `allowCustom`
    *  that text IS the answer, so reverting it would discard what was typed. */
   const leaving = useCallback(() => {
-    if (allowCustom && query !== (selected?.label ?? '')) { commitText(query); return true; }
+    if (allowCustom && query !== selectedLabel) { commitText(query); return true; }
     return false;
-  }, [allowCustom, query, selected, commitText]);
+  }, [allowCustom, query, selectedLabel, commitText]);
 
   const close = useCallback((revert: boolean) => {
     setOpen(false);
-    if (revert) setQuery(selected?.label ?? '');
-  }, [selected]);
+    if (revert) setQuery(selectedLabel);
+  }, [selectedLabel]);
 
   useEffect(() => {
     if (!open) return;
