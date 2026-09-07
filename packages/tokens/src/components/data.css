@@ -89,13 +89,13 @@
   margin: 0;
   font-size: var(--text-sm);
 }
+/* A row's name is a heading, and set like one — the same rule as `.table thead
+   th`. Mono is for values a reader compares character by character. */
 .dl dt {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--color-neutral-600);
-  padding-block-start: 0.15em;
+  padding-block-start: 0;
 }
 .dl dd { margin: 0; color: var(--color-neutral-800); }
 .dl-stacked { grid-template-columns: 1fr; gap: var(--space-1); }

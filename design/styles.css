@@ -1892,13 +1892,13 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   margin: 0;
   font-size: var(--text-sm);
 }
+/* A row's name is a heading, and set like one — the same rule as `.table thead
+   th`. Mono is for values a reader compares character by character. */
 .dl dt {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--color-neutral-600);
-  padding-block-start: 0.15em;
+  padding-block-start: 0;
 }
 .dl dd { margin: 0; color: var(--color-neutral-800); }
 .dl-stacked { grid-template-columns: 1fr; gap: var(--space-1); }
@@ -3702,7 +3702,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 .reader .table-wrap { margin-block: var(--space-4); }
 .reader .table-wrap > table { margin-block: 0; }
 .reader th, .reader td { padding: var(--space-2) var(--space-3); border-block-end: 1px solid var(--color-divider); text-align: start; }
-.reader th { font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-neutral-600); }
+.reader th { font-size: var(--text-sm); font-weight: 600; color: var(--color-neutral-600); }
 
 /* Sheet preview — a spreadsheet is a grid, so show it as one. */
 .sheet { border-collapse: collapse; font-family: var(--font-mono); font-size: var(--text-xs); font-variant-numeric: tabular-nums; }
@@ -4843,15 +4843,18 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   text-align: start;
 }
 
+/* A column heading is a heading, so it is set in the text face.
+   It was monospaced, upper-cased and letter-spaced 0.08em — a treatment that
+   reads as a terminal, not a report. Three signals were doing the work of one:
+   the weight alone separates a heading from the rows under it, and the face
+   stays the one the rest of the page is set in. Mono is for values a reader
+   compares character by character, and a column's name is not one. */
 .table thead th {
   padding: var(--space-3) var(--space-4);
   border-block-end: 1px solid var(--color-neutral-200);
   background: var(--color-surface);
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: var(--text-sm);
+  font-weight: 600;
   color: var(--color-neutral-600);
   text-align: start;
   white-space: nowrap;
