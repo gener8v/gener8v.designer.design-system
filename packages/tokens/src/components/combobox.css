@@ -1,6 +1,26 @@
 /* ---------------------------------------------------------------- combobox */
 
-.combobox { position: relative; }
+/* A LABELLED FIELD STACKS THE SAME WAY WHOEVER DRAWS IT.
+ *
+ * `.field` is a grid with `gap: var(--space-2)` between a label and its
+ * control. This was `display: block`, so its own label sat flush on its input
+ * and its input — `display: inline-block` — carried a line box's descender
+ * space underneath instead. Same total height, control 8px lower.
+ *
+ * Nobody sees that until a Field and a Combobox stand in one row, and then it
+ * is unmistakable: measured on a consumer's filter row, two comboboxes with
+ * their inputs at y=639 beside a search field with its input at y=647, under
+ * three labels that agreed exactly.
+ *
+ * The same grid as `.field`, so the two agree by construction rather than by
+ * both being adjusted until they matched. The trigger is absolutely positioned
+ * and the listbox is fixed, so neither is a grid item and neither moves. */
+.combobox {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
 
 /* The clear/expand affordance sits inside the field, so it must not overlap
    the text. The input reserves room for it rather than the button covering it. */
