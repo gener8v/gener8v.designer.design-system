@@ -37,6 +37,37 @@
     word for it the step sits at <code>current</code> forever or is marked done, which is a lie
     about what happened. The connector stays neutral: nothing left that step.</p>
 
+  <p class="demo-head label">Stepper — the rail form</p>
+  <div class="stepper stepper-rail">
+    <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Setup</span></div>
+    <div class="step" data-state="complete"><span class="step-marker">2</span><span class="step-label">Data</span></div>
+    <div class="step" aria-current="step"><span class="step-marker">3</span><span class="step-label">Activities</span></div>
+    <div class="step"><span class="step-marker">4</span><span class="step-label">Confirming</span></div>
+    <div class="step"><span class="step-marker">5</span><span class="step-label">Reporting</span></div>
+    <div class="step"><span class="step-marker">6</span><span class="step-label">Closed</span></div>
+  </div>
+  <p class="note">Same four states and the same <code>data-state</code>, drawn as a filled span. A
+    marker and its label are a pair, and the pairing breaks when a sequence spans a page — six
+    stages on a wide screen put a quarter of the width between one circle and the next, and how far
+    along the sequence is cannot be seen at all, because every circle but one is the same grey. Use
+    the markers when each step is an act a reader performs; use the rail when the sequence is a
+    position they are somewhere in.</p>
+
+  <p class="demo-head label">Stepper — the rail, with what is behind retinted</p>
+  <div class="stepper stepper-rail" style="--stepper-complete: var(--color-success-700)">
+    <div class="step" data-state="complete"><span class="step-marker">1</span><span class="step-label">Setup</span></div>
+    <div class="step" data-state="complete"><span class="step-marker">2</span><span class="step-label">Data</span></div>
+    <div class="step" aria-current="step"><span class="step-marker">3</span><span class="step-label">Activities</span></div>
+    <div class="step"><span class="step-marker">4</span><span class="step-label">Confirming</span></div>
+    <div class="step"><span class="step-marker">5</span><span class="step-label">Reporting</span></div>
+    <div class="step"><span class="step-marker">6</span><span class="step-label">Closed</span></div>
+  </div>
+  <p class="note"><code>--stepper-complete</code> is declared nowhere and referenced with a
+    fallback, which is this system's signal for a property the caller sets. A brand owning a second
+    colour can fill what is behind with it — the colour that is not the action colour is often
+    exactly what a product reserves for progress — and the sequence's own vocabulary does not
+    change.</p>
+
   <p class="demo-head label">Progress</p>
   <div class="progress" role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" aria-label="Upload">
     <div class="progress-bar" style="inline-size:62%"></div>

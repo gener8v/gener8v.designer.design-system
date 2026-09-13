@@ -16,7 +16,7 @@ add it to the system, not to the consuming app.
 | `.card-kicker`, `.card-title`, `.card-body`, `.card-meta` | Card parts; the kicker is the mono voice | components/cards.html |
 | `.panel` with `.panel-header`, `.panel-title`, `.panel-body` | Hosts a region — a table, a form, a list | components/cards.html |
 | `.tag` with `.tag-neutral`, `.tag-accent`, `.tag-success`, `.tag-warning`, `.tag-danger`, `.tag-outline`, `.tag-dot` | Status labels — every variant maps to a meaning | components/cards.html |
-| `.stepper` / `.stepper-vertical` with `.step`, `.step-marker`, `.step-label`, `.step-connector` | Step position via `data-state` + `aria-current="step"` | components/flow.html |
+| `.stepper` / `.stepper-vertical` / `.stepper-rail` with `.step`, `.step-marker`, `.step-label`, `.step-connector` | Step position via `data-state` + `aria-current="step"`. Markers when each step is an act; the rail when the sequence is a position. `--stepper-complete` retints what is behind | components/flow.html |
 | `.progress` with `.progress-bar`, `.progress-indeterminate`; `.progress-ring` | Real `role="progressbar"`, never decoration | components/flow.html |
 | `.pagination` with `.pagination-item`, `.pagination-gap` | Paged navigation | components/flow.html |
 | `.timeline` with `.timeline-item`, `.timeline-marker`, `.timeline-time`, `.timeline-title`, `.timeline-body` | Chronology | components/flow.html |

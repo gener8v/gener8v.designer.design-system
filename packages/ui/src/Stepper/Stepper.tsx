@@ -3,15 +3,30 @@ import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
 
 export interface StepperProps extends HTMLAttributes<HTMLDivElement> {
-  /** The rail form used by the .flow shell. */
+  /** The vertical form used by the .flow shell. */
   vertical?: boolean;
+  /**
+   * Segments rather than numbered markers.
+   *
+   * **The two forms answer different questions.** A marker and its label are a
+   * pair, and the pairing breaks when a sequence spans a page: six stages on a
+   * wide screen put a quarter of the width between one circle and the next, and
+   * how far along the sequence is cannot be seen at all, because every circle
+   * but one is the same grey.
+   *
+   * The rail fills what is behind, so position reads without counting, and each
+   * label sits under its own segment. Use the markers when a reader steps
+   * through and each step is an act they perform; use the rail when the
+   * sequence is a position they are somewhere in.
+   */
+  rail?: boolean;
 }
 
 export const Stepper = forwardRef<HTMLDivElement, StepperProps>(function Stepper(
-  { vertical = false, className, ...rest }, ref,
+  { vertical = false, rail = false, className, ...rest }, ref,
 ) {
   return <div {...rest} ref={ref}
-    className={cx('stepper', vertical && 'stepper-vertical', className)} />;
+    className={cx('stepper', vertical && 'stepper-vertical', rail && 'stepper-rail', className)} />;
 });
 
 /**
