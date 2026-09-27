@@ -39,15 +39,41 @@ export const StatNote = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPara
 
 export interface StatDeltaProps extends HTMLAttributes<HTMLParagraphElement> {
   direction: 'up' | 'down';
-  /** Whether up is good. Colour alone must not carry the judgement. */
+  /**
+   * Whether up is the good news. Defaults to true.
+   *
+   * **It was declared and never read.** The component did not destructure it,
+   * so it landed in the rest props and was spread onto the `<p>` — React warned
+   * *Received `false` for a non-boolean attribute `good`*, and the colour went
+   * on coming from `direction` alone. A consumer asking for a falling figure to
+   * read as good got a console error and a red number.
+   *
+   * Direction and judgement are two facts. A book that shed a hundred and fifty
+   * policies is down and bad; a loss ratio that fell four points is down and
+   * good. Colouring by direction alone asserts the first about both.
+   */
   good?: boolean;
 }
 
 /**
- * Direction sets the colour, but the text must also say which way it moved —
- * a red number is not a sentence, and colour alone fails WCAG 1.4.1.
+ * Direction says which way it moved, and `good` says what to make of that.
+ *
+ * The text must still say which way — a red number is not a sentence, and
+ * colour alone fails WCAG 1.4.1. `data-dir` stays for anything styling on the
+ * direction itself; `data-tone` is what carries the colour.
  */
 export const StatDelta = forwardRef<HTMLParagraphElement, StatDeltaProps>(
-  function StatDelta({ direction, className, ...rest }, ref) {
-    return <p {...rest} ref={ref} data-dir={direction} className={cx('stat-delta', className)} />;
+  function StatDelta({ direction, good = true, className, ...rest }, ref) {
+    /* Up and good, or down and not good. Defaulting `good` to true leaves every
+       existing caller exactly where it was: up green, down red. */
+    const tone = (direction === 'up') === good ? 'good' : 'bad';
+    return (
+      <p
+        {...rest}
+        ref={ref}
+        data-dir={direction}
+        data-tone={tone}
+        className={cx('stat-delta', className)}
+      />
+    );
   });
