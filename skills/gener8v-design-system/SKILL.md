@@ -25,6 +25,34 @@ import { Button, Card, Flow, BarChart } from '@gener8v/ui';
 The React components render the **same class names** as the static HTML, so markup written
 against this system ports either direction without a visual rewrite.
 
+## A client's colours
+
+The palette above is GENER8V's own — its theme file says so, hue 263 matching the cool ink of
+the firm's site. A client engagement wears the client's. That is a **brand**, and it is a
+palette and nothing else:
+
+```css
+@import "@gener8v/ui/styles.css";
+@import "@gener8v/tokens/brands/mutual-assurance.css";
+```
+
+Declare one in `packages/tokens/src/brands.mjs` — a hue, a chroma, the three pinned grounds, and
+optionally an action colour. The build generates its sheet from the same `neutralRamp` the house
+theme uses, so a brand's nine steps are this system's lightness curve in another hue rather than
+hexes taken off a screenshot. `pnpm check` holds every brand to the same contrast ratios as the
+house, against its own ground.
+
+**A brand may not move anything but colour.** Not the space scale, not the radii, not the type
+scale, not a class name — those are what make a product recognisable as one of these whoever's
+colours it wears, and a brand that could move them would be a fork.
+
+It is light-only unless the brand pins a dark ground. A warm paper has no dark counterpart that
+is still paper, and the system will not invent one.
+
+Without this, a client product hand-rolls nine neutral steps in its own stylesheet, picks the two
+selectors that scope them to light mode, and keeps a lint exemption so it can hold raw hexes.
+Every later engagement then does that work again, differently.
+
 ## Hard rules
 
 These are not preferences. Breaking one produces work that is off-brand or inaccessible.
