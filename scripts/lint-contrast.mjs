@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // WCAG 2.2 contrast gate over the pairs the system actually renders.
-import { contrast } from '../packages/tokens/src/color.mjs';
+import { contrast, neutralRamp } from '../packages/tokens/src/color.mjs';
+import { brands } from '../packages/tokens/src/brands.mjs';
 import tokens, { darkTokens } from '../packages/tokens/dist/tokens.mjs';
 
 const t = (n) => tokens[n];
@@ -77,6 +78,40 @@ pairs.push(
   ['dark: border on ground',      d('--color-neutral-300'),   DARK_BG,      1.5],
   ['dark: text on the inverse panel', d('--color-on-inverse'), d('--color-inverse'),    4.5],
 );
+
+/* ------------------------------------------------------------------ brands */
+
+/**
+ * Every client brand, on the pairs that decide whether text can be read.
+ *
+ * **A brand is a palette the house gate never sees.** It re-points the ground, the ink and the
+ * nine neutral steps, so a brand with a handsome paper and a muted ink is a product nobody can
+ * read — and all seven gates would still pass, because they check the house theme.
+ *
+ * The same ratios the house is held to, against the brand's own ground rather than white: that
+ * is the surface its text actually lands on.
+ */
+for (const b of brands) {
+  const n = neutralRamp(b.palette.hue, b.palette.neutralChroma);
+  const { pin, action, ink } = b.palette;
+  pairs.push(
+    [`${b.slug}: body on ground`, pin.text, pin.bg, 4.5],
+    [`${b.slug}: body on surface`, pin.text, pin.surface, 4.5],
+    [`${b.slug}: paragraph`, n[700], pin.bg, 4.5],
+    [`${b.slug}: muted / label`, n[600], pin.bg, 4.5],
+    /* Rule 3: 500 carries chrome, never text. Held to the chrome ratio so a brand
+       cannot quietly promote it. */
+    [`${b.slug}: neutral-500 chrome`, n[500], pin.bg, 3.0],
+    [`${b.slug}: secondary label`, n[800], pin.bg, 4.5],
+    [`${b.slug}: tag neutral`, n[700], n[100], 4.5],
+    ...(action
+      ? [
+          [`${b.slug}: primary label`, WHITE, action, 4.5],
+          [`${b.slug}: link on ground`, ink ?? action, pin.bg, 4.5],
+        ]
+      : []),
+  );
+}
 
 let bad = 0;
 for (const [name, fg, bg, min] of pairs) {

@@ -11,11 +11,13 @@
       "default": "./dist/tokens.mjs"
     },
     "./tokens.json": "./dist/tokens.json",
-    "./styles.css": "./styles.css"
+    "./styles.css": "./styles.css",
+    "./brands/*.css": "./brands/*.css"
   },
   "files": [
     "dist",
     "styles.css",
+    "brands",
     "README.md"
   ],
   "scripts": {
