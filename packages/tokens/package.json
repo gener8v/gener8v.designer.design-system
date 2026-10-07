@@ -1,6 +1,6 @@
 {
   "name": "@gener8v/tokens",
-  "version": "0.53.1",
+  "version": "0.54.0",
   "description": "GENER8V design tokens \u2014 one source, generated to CSS, TypeScript, Tailwind and DTCG.",
   "type": "module",
   "license": "MIT",
