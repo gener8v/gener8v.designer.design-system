@@ -1888,13 +1888,20 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  * and four lines each. Nothing lined up and the band was taller than it was
  * worth.
  *
- * `grid-auto-columns: 1fr` makes the figures a measure a reader can scan down,
- * and makes a long note the author's problem rather than the layout's. Wrapping
- * to a second line at narrow widths is `grid-template-columns` with `auto-fit`,
- * so the band reflows instead of squeezing to nothing. */
+ * `grid-auto-columns` makes the figures a measure a reader can scan down, and
+ * makes a long note the author's problem rather than the layout's.
+ *
+ * **Flowed in columns rather than templated with `auto-fit`.** A row of figures
+ * is often a flex item — beside a verdict and a set of actions — and `auto-fit`
+ * resolves against an indefinite width by collapsing to a single column, so the
+ * band's max-content became one stat wide and four figures stacked vertically
+ * down the middle of a reconciliation header. `grid-auto-flow: column` keeps
+ * max-content at the sum of the figures, which is what the flex row it sits in
+ * needs in order to give it the room. */
 .stat-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   align-items: start;
   gap: var(--space-5) 0;
 }
