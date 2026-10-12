@@ -9,11 +9,19 @@ export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
   /** Names the dialog for assistive tech. */
   'aria-label': string;
   children?: ReactNode;
+  /**
+   * What the close button is called. Defaults to `Close`.
+   *
+   * The drawer always draws one. Escape and the scrim both close it and
+   * neither is visible, so a reader looking for the way out had to guess at a
+   * convention or click into the dimmed page and hope.
+   */
+  closeLabel?: string;
 }
 
 /** A modal side panel. Behaviour comes from useModalBehavior — see that file. */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
-  { open, onClose, className, children, ...rest }, ref,
+  { open, onClose, className, children, closeLabel = 'Close', ...rest }, ref,
 ) {
   const panelRef = useModalBehavior(open, onClose);
   if (!open) return null;
@@ -23,6 +31,14 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
       <div {...rest} ref={mergeRefs(panelRef, ref)}
         role="dialog" aria-modal="true" tabIndex={-1}
         className={cx('drawer-panel', className)}>
+        {/* First in the DOM so it is the first thing tab reaches, and pinned by
+            the stylesheet so it does not scroll away from a long panel. */}
+        <button type="button" className="drawer-close" aria-label={closeLabel} onClick={onClose}>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" strokeWidth="1.5"
+              strokeLinecap="round" fill="none" />
+          </svg>
+        </button>
         {children}
       </div>
     </>
