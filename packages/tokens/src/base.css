@@ -146,12 +146,8 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 
 ::selection { background: var(--color-accent-200); color: var(--color-accent-900); }
 
-:focus-visible {
-  outline: var(--ring-width) solid var(--ring-color);
-  outline-offset: var(--ring-offset);
-  border-radius: var(--radius-xs);
-}
-:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: none; }
+:focus { outline: none; }
 
 [disabled], .is-disabled { opacity: 0.45; cursor: not-allowed; }
 

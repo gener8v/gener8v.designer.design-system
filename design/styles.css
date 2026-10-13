@@ -475,12 +475,8 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 
 ::selection { background: var(--color-accent-200); color: var(--color-accent-900); }
 
-:focus-visible {
-  outline: var(--ring-width) solid var(--ring-color);
-  outline-offset: var(--ring-offset);
-  border-radius: var(--radius-xs);
-}
-:focus:not(:focus-visible) { outline: none; }
+:focus-visible { outline: none; }
+:focus { outline: none; }
 
 [disabled], .is-disabled { opacity: 0.45; cursor: not-allowed; }
 
@@ -1702,7 +1698,7 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 }
 .radio-card:hover { border-color: var(--color-neutral-300); }
 .radio-card:has(:checked) { border-color: var(--color-action); background: var(--color-accent-100); }
-.radio-card:has(:focus-visible) { outline: var(--ring-width) solid var(--ring-color); outline-offset: var(--ring-offset); }
+.radio-card:has(:focus-visible) { outline: none; }
 .radio-card-body { flex: 1; min-inline-size: 0; }
 /* BLOCK, BECAUSE THE COMPONENT RENDERS THESE AS SPANS.
    `RadioCard` puts the title and the note in `<span>`s, and a span is an inline box — vertical
@@ -4136,12 +4132,6 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 }
 .drawer-panel .nav-item { padding-block: var(--space-3); font-size: var(--text-base); }
 
-/* THE WAY OUT, DRAWN.
- *
- * Escape closes it and so does the scrim, and a reader can see neither. Pinned to the panel rather
- * than placed in the flow, because a panel long enough to scroll would otherwise carry its own
- * close button off the top of itself — which is the moment somebody most wants it. It sits in the
- * panel's own padding, so nothing below has to leave a gap for it. */
 .drawer-close {
   position: absolute;
   inset-block-start: var(--space-4);
@@ -4160,7 +4150,6 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 }
 .drawer-close svg { inline-size: var(--space-4); block-size: var(--space-4); }
 .drawer-close:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
-.drawer-close:focus-visible { outline: 2px solid var(--color-action); outline-offset: 2px; }
 
 /* --- sidebar -------------------------------------------------------- */
 
@@ -4355,12 +4344,6 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
               color var(--dur-fast) var(--ease-out);
 }
 .sidebar-item:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
-/* Where you are, marked at the edge rather than by a box.
-   A filled panel with a drop shadow behind one row reads as a button somebody left pressed, and it
-   made the row you were already standing on the heaviest thing in the rail. A rule down the leading
-   edge, a wash of the same accent and a little weight say the same thing and stay a row.
-   `box-shadow: inset` rather than `border-inline-start`, so the current row's text stays in line
-   with every other row instead of shifting three pixels. */
 .sidebar-item[aria-current] {
   background: color-mix(in srgb, var(--color-action) 10%, transparent);
   color: var(--color-action);
@@ -5027,8 +5010,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 
 /* ------------------------------------------------------------------- table */
 
-/* Hairline row rules, never zebra stripes. On a light ground the rule is
-   enough separation, and striping doubles the visual noise of every table. */
+/* Hairline rules, never zebra stripes. */
 
 .table-wrap { inline-size: 100%; overflow-x: auto; }
 
@@ -5064,6 +5046,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 }
 .table tbody tr:last-child td { border-block-end: 0; }
 .table tbody tr:hover td { background: var(--color-neutral-100); }
+
+.table thead th:not(:last-child),
+.table tbody td:not(:last-child) {
+  border-inline-end: 1px solid var(--color-divider);
+}
 
 .table-compact thead th, .table-compact tbody td { padding: var(--space-2) var(--space-3); }
 
