@@ -1858,6 +1858,18 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .stat-delta[data-tone="good"] { color: var(--color-success-700); }
 .stat-delta[data-tone="bad"] { color: var(--color-danger-700); }
 
+/* A FIGURE THAT IS ITSELF THE BAD NEWS.
+ *
+ * `StatDelta` tones the movement; this tones the level. A tie rate of 73.8% has not moved anywhere
+ * and is still the thing on the screen somebody has to deal with, and saying so needed a second
+ * control — a meter under the row repeating the same number so that its fill could be red.
+ *
+ * The note still has to say what makes it bad, because colour alone is not a sentence and fails
+ * WCAG 1.4.1. */
+.stat[data-tone="success"] .stat-value { color: var(--color-success-700); }
+.stat[data-tone="warning"] .stat-value { color: var(--color-warning-700); }
+.stat[data-tone="danger"]  .stat-value { color: var(--color-danger-700); }
+
 /* A ROW OF FIGURES IS ONE READING, NOT FOUR.
  *
  * Four `.stat`s side by side are four columns floating in a gap, and a reader has to decide for
@@ -1865,12 +1877,33 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
  * nobody has looked" is one sentence about one thing, and the rules between them say so.
  *
  * A rule between rather than a box around: a box would make the figures compete with the content
- * beneath them, and they are a summary of it rather than a panel beside it. */
-.stat-row { display: flex; align-items: start; gap: var(--space-6); }
-.stat-row > .stat + .stat {
-  padding-inline-start: var(--space-6);
+ * beneath them, and they are a summary of it rather than a panel beside it.
+ *
+ * EQUAL COLUMNS, BECAUSE A ROW OF FIGURES IS A RHYTHM. As a flex row with nothing sizing the
+ * children, each figure took the width of its own longest line — seven of them came out at seven
+ * widths, one whose note ran to a sentence took a quarter of the screen, and the rest were squeezed
+ * into columns too narrow for their own captions, which then wrapped onto three and four lines
+ * each.
+ *
+ * Flowed in columns rather than templated with `auto-fit`: a row of figures is often a flex item,
+ * beside a verdict and a set of actions, and `auto-fit` resolves against an indefinite width by
+ * collapsing to a single column — so the band's max-content became one figure wide and four figures
+ * stacked vertically down the middle of a reconciliation header. `grid-auto-flow: column` keeps
+ * max-content at the sum of the figures, which is what the flex row around it needs in order to
+ * give it the room. */
+.stat-row {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-5) 0;
+}
+.stat-row > .stat {
+  padding-inline: var(--space-5);
   border-inline-start: 1px solid var(--color-divider);
 }
+/* The first column carries no rule, because there is nothing to its left to be divided from. */
+.stat-row > .stat:first-child { padding-inline-start: 0; border-inline-start: 0; }
 
 /* --- meter — the capability bar, generalised ------------------------ */
 
@@ -1904,18 +1937,48 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
 .meter-compact .meter-track { inline-size: var(--space-24); }
 .meter-compact .meter-value { margin-inline-start: 0; }
 
+/* A METER IN A TABLE CELL.
+ *
+ * Stacked, the figure sits on its own line above the track and pushes itself to the right-hand end
+ * of it — so a column of these reads as a column of bars with a column of numbers floating over it
+ * at a second alignment, and the row is twice as tall as every other cell in it.
+ *
+ * Track first and figure after, both on one line: the bars are compared by length down the column,
+ * the figures line up as a numeric column does, and the cell is one line like its neighbours.
+ * Placed rather than ordered, because the head comes first in the DOM — which is right for a screen
+ * reader and backwards for the eye. */
+.meter.in-a-cell {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-2);
+}
+.meter.in-a-cell .meter-track { grid-row: 1; grid-column: 1; }
+.meter.in-a-cell .meter-head { grid-row: 1; grid-column: 2; }
+.meter.in-a-cell .meter-value { margin-inline-start: 0; }
+
 .meter[data-tone="success"] .meter-fill { background: var(--color-success); }
 .meter[data-tone="warning"] .meter-fill { background: var(--color-warning); }
 .meter[data-tone="danger"]  .meter-fill { background: var(--color-danger); }
 
 /* --- description list ----------------------------------------------- */
 
+/* A PAIR IS A ROW, AND A ROW HAS CELLS.
+ *
+ * Set as a bare grid with a gap, a name and its value were two pieces of text at two indents with
+ * nothing joining them, and a reader scanning for one name had to track across whitespace to find
+ * which value belonged to it. Nothing said where a pair ended either, so a value that ran to two
+ * lines merged into the next name.
+ *
+ * A rule under each pair and padding inside it: the same cell the table draws, for the same reason.
+ * The gap goes, because the padding is now what spaces them, and a gap on top of padding doubles
+ * the rhythm. */
 .dl {
   display: grid;
   grid-template-columns: minmax(9rem, 28%) 1fr;
-  gap: var(--space-3) var(--space-5);
+  gap: 0;
   margin: 0;
   font-size: var(--text-sm);
+  border-block-start: 1px solid var(--color-divider);
 }
 /* A row's name is a heading, and set like one — the same rule as `.table thead
    th`. Mono is for values a reader compares character by character. */
@@ -1923,11 +1986,20 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--color-neutral-600);
-  padding-block-start: 0;
+  padding: var(--space-3) var(--space-5) var(--space-3) 0;
+  border-block-end: 1px solid var(--color-divider);
 }
-.dl dd { margin: 0; color: var(--color-neutral-800); }
-.dl-stacked { grid-template-columns: 1fr; gap: var(--space-1); }
-.dl-stacked dd { margin-block-end: var(--space-3); }
+.dl dd {
+  margin: 0;
+  color: var(--color-neutral-800);
+  padding-block: var(--space-3);
+  border-block-end: 1px solid var(--color-divider);
+}
+/* Stacked is a narrow column, where a name over its value is the only thing that fits. The rule
+   stays and goes under the pair rather than between the two halves of it. */
+.dl-stacked { grid-template-columns: 1fr; border-block-start: 0; }
+.dl-stacked dt { padding: var(--space-3) 0 0; border-block-end: 0; }
+.dl-stacked dd { margin-block-end: 0; padding-block: var(--space-1) var(--space-3); }
 
 /* --- avatar ---------------------------------------------------------- */
 
@@ -4064,6 +4136,32 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 }
 .drawer-panel .nav-item { padding-block: var(--space-3); font-size: var(--text-base); }
 
+/* THE WAY OUT, DRAWN.
+ *
+ * Escape closes it and so does the scrim, and a reader can see neither. Pinned to the panel rather
+ * than placed in the flow, because a panel long enough to scroll would otherwise carry its own
+ * close button off the top of itself — which is the moment somebody most wants it. It sits in the
+ * panel's own padding, so nothing below has to leave a gap for it. */
+.drawer-close {
+  position: absolute;
+  inset-block-start: var(--space-4);
+  inset-inline-end: var(--space-4);
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-neutral-600);
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+}
+.drawer-close svg { inline-size: var(--space-4); block-size: var(--space-4); }
+.drawer-close:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
+.drawer-close:focus-visible { outline: 2px solid var(--color-action); outline-offset: 2px; }
+
 /* --- sidebar -------------------------------------------------------- */
 
 .sidebar {
@@ -4257,7 +4355,18 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
               color var(--dur-fast) var(--ease-out);
 }
 .sidebar-item:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
-.sidebar-item[aria-current] { background: var(--color-bg); color: var(--color-action); font-weight: 500; box-shadow: var(--shadow-sm); }
+/* Where you are, marked at the edge rather than by a box.
+   A filled panel with a drop shadow behind one row reads as a button somebody left pressed, and it
+   made the row you were already standing on the heaviest thing in the rail. A rule down the leading
+   edge, a wash of the same accent and a little weight say the same thing and stay a row.
+   `box-shadow: inset` rather than `border-inline-start`, so the current row's text stays in line
+   with every other row instead of shifting three pixels. */
+.sidebar-item[aria-current] {
+  background: color-mix(in srgb, var(--color-action) 10%, transparent);
+  color: var(--color-action);
+  font-weight: 600;
+  box-shadow: inset 3px 0 0 var(--color-action);
+}
 .sidebar-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; }
 
 /* A DESTINATION THAT IS NOT READY YET.
