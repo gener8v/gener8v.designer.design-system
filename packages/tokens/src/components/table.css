@@ -19,11 +19,12 @@
    compares character by character, and a column's name is not one. */
 .table thead th {
   padding: var(--space-3) var(--space-4);
+  border-block-start: 1px solid var(--color-neutral-200);
   border-block-end: 1px solid var(--color-neutral-200);
   background: var(--color-surface);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-900);
   text-align: start;
   white-space: nowrap;
 }
