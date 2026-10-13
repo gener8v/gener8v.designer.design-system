@@ -87,10 +87,14 @@ export const TYPE_SCALE = {
   '6xl':['60px', '1.05', '-0.03em'],
 };
 
-// Interactive control heights. Deliberately NOT density-scaled: 44px is an
-// ergonomic floor from WCAG 2.2 target-size, not part of the visual rhythm.
-// Buttons, inputs and selects all sit on these, so they line up in a row.
-export const CONTROL_H = { xs: 28, sm: 36, md: 44, lg: 52, xl: 60 };
+// Interactive control heights. Deliberately NOT density-scaled: these are
+// ergonomics rather than visual rhythm, and buttons, inputs and selects all
+// sit on them so they line up in a row.
+//
+// The floor is WCAG 2.2 2.5.8 Target Size (Minimum) at 24px. 2.5.5 asks 44 at
+// AAA and the default sat there; at that height a button is the heaviest thing
+// on a dense screen of figures.
+export const CONTROL_H = { xs: 24, sm: 30, md: 36, lg: 44, xl: 52 };
 
 export const MOTION = {
   '--ease-out': 'cubic-bezier(0.16, 1, 0.3, 1)',   // already the site's easing

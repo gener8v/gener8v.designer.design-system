@@ -165,11 +165,11 @@
   --dur-slow: 420ms;
 
   /* Controls */
-  --control-h-xs: 28px;
-  --control-h-sm: 36px;
-  --control-h-md: 44px;
-  --control-h-lg: 52px;
-  --control-h-xl: 60px;
+  --control-h-xs: 24px;
+  --control-h-sm: 30px;
+  --control-h-md: 36px;
+  --control-h-lg: 44px;
+  --control-h-xl: 52px;
 
   /* Layout */
   --rail-w: 260px;
@@ -5029,11 +5029,12 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
    compares character by character, and a column's name is not one. */
 .table thead th {
   padding: var(--space-3) var(--space-4);
+  border-block-start: 1px solid var(--color-neutral-200);
   border-block-end: 1px solid var(--color-neutral-200);
   background: var(--color-surface);
   font-size: var(--text-sm);
   font-weight: 600;
-  color: var(--color-neutral-600);
+  color: var(--color-neutral-900);
   text-align: start;
   white-space: nowrap;
 }
