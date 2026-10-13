@@ -165,11 +165,11 @@
   --dur-slow: 420ms;
 
   /* Controls */
-  --control-h-xs: 28px;
-  --control-h-sm: 36px;
-  --control-h-md: 44px;
-  --control-h-lg: 52px;
-  --control-h-xl: 60px;
+  --control-h-xs: 24px;
+  --control-h-sm: 30px;
+  --control-h-md: 36px;
+  --control-h-lg: 44px;
+  --control-h-xl: 52px;
 
   /* Layout */
   --rail-w: 260px;
