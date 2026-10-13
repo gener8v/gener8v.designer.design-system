@@ -5017,6 +5017,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 .table {
   inline-size: 100%;
   border-collapse: collapse;
+  border: 1px solid var(--color-divider);
   font-size: var(--text-sm);
   text-align: start;
 }
