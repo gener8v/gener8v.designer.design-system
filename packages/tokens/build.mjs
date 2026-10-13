@@ -353,6 +353,7 @@ const brandVars = (b) => {
           `  --color-action-hover: ${action};`,
           `  --color-accent-700: ${ink ?? action};`,
           `  --color-accent-800: ${action};`,
+          `  --color-accent: ${action};`,
         ]
       : []),
   ].join('\n');
