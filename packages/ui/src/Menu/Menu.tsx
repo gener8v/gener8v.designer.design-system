@@ -37,6 +37,13 @@ export interface MenuProps {
  * Escape and Tab close and return focus to the trigger, and a click outside
  * dismisses.
  *
+ * **Choosing an item closes it too, which it did not.** Escape, Tab, a press
+ * outside and a second press of the trigger all dismissed; selecting a value
+ * did not, so the popup sat over the content a reader had just narrowed and
+ * the only ways out were the ones nobody looks for. `MenuSub` already closed
+ * its flyout on a click — the pattern existed one level down and was missing
+ * at the top.
+ *
  * Positioning is fixed-coordinate with an edge flip. It is not a full
  * collision-detection engine — a menu inside a scrolling container with
  * transforms will need Base UI's positioner — but it handles the ordinary
@@ -119,6 +126,24 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
       {open && (
         <div ref={menuRef} id={menuId} role="menu" aria-label={label}
           onKeyDown={onMenuKeyDown}
+          /**
+           * A choice dismisses the menu and hands focus back to the trigger,
+           * which is what the pattern says activating an item does.
+           *
+           * Read off the item rather than the menu, because three of the
+           * things inside one are not choices: a `MenuLabel`, a separator, and
+           * a `MenuSub` trigger — whose press opens a flyout, so closing on it
+           * would shut the menu holding the thing being opened. A disabled row
+           * is not a choice either; its own handler already refuses to select,
+           * and dismissing on it would say the press did something.
+           */
+          onClick={(e) => {
+            const item = (e.target as HTMLElement).closest('.menu-item');
+            if (item === null) return;
+            if (item.classList.contains('menu-sub-trigger')) return;
+            if (item.getAttribute('aria-disabled') === 'true') return;
+            close();
+          }}
           style={style}
           className={cx('menu', 'menu-popup')}>
           {children}
