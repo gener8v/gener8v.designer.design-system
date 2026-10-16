@@ -54,7 +54,7 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const menuId = useId();
-  const { style } = useAnchoredPosition({
+  const { style, available } = useAnchoredPosition({
     open, anchorRef: triggerRef, floatingRef: menuRef, placement: 'bottom', align,
   });
 
@@ -123,6 +123,9 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
   return (
     <>
       {wiredTrigger}
+      {/* Held to the room the chosen side has. A menu longer than that scrolls inside itself;
+          without the cap its last rows sit past the edge of a FIXED element, where nothing can
+          scroll to them. */}
       {open && (
         <div ref={menuRef} id={menuId} role="menu" aria-label={label}
           onKeyDown={onMenuKeyDown}
@@ -144,7 +147,7 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
             if (item.getAttribute('aria-disabled') === 'true') return;
             close();
           }}
-          style={style}
+          style={{ ...style, maxBlockSize: available }}
           className={cx('menu', 'menu-popup')}>
           {children}
         </div>
@@ -231,7 +234,7 @@ export function MenuSub({ label, icon, disabled, children }: MenuSubProps) {
   const subRef = useRef<HTMLDivElement | null>(null);
   const timer = useRef<number | undefined>(undefined);
   const subId = useId();
-  const { style } = useAnchoredPosition({
+  const { style, available } = useAnchoredPosition({
     open, anchorRef: itemRef, floatingRef: subRef, placement: 'right', align: 'start', offset: 2,
   });
 
@@ -302,7 +305,7 @@ export function MenuSub({ label, icon, disabled, children }: MenuSubProps) {
           id={subId}
           role="menu"
           aria-label={typeof label === 'string' ? label : undefined}
-          style={style}
+          style={{ ...style, maxBlockSize: available }}
           className={cx('menu', 'menu-popup')}
           onKeyDown={(e) => {
             const items = ownItems(subRef.current);
