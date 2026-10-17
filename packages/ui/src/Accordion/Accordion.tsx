@@ -58,6 +58,7 @@ export function AccordionItem({ title, children, value, unmountClosed = false, c
   const auto = useId();
   const id = value ?? auto;
   const panelId = `${id}-panel`;
+  const triggerId = `${id}-trigger`;
   const ctx = useContext(AccordionCtx);
   const [localOpen, setLocalOpen] = useState(false);
 
@@ -66,13 +67,20 @@ export function AccordionItem({ title, children, value, unmountClosed = false, c
 
   return (
     <div {...rest} className={cx('accordion-item', className)}>
-      <button type="button" className="accordion-trigger"
+      <button type="button" id={triggerId} className="accordion-trigger"
         aria-expanded={isOpen} aria-controls={panelId} onClick={onToggle}>
         {title}
       </button>
       {/* The panel element itself always exists, so `aria-controls` always resolves
-          to something — an id pointing at nothing is worse than an empty region. */}
-      <div id={panelId} className="accordion-panel" hidden={!isOpen} role="region">
+          to something — an id pointing at nothing is worse than an empty region.
+
+          And it is named by the trigger that opens it, which is what the WAI-ARIA
+          accordion pattern asks of a panel given `role="region"`. A region is a
+          landmark: unnamed, it is announced as "region" and nothing else, and a
+          page of six discloses six of them. The heading a reader presses is the
+          name they already have for what is inside. */}
+      <div id={panelId} className="accordion-panel" hidden={!isOpen} role="region"
+        aria-labelledby={triggerId}>
         {unmountClosed && !isOpen ? null : children}
       </div>
     </div>
