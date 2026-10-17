@@ -5,9 +5,20 @@
    in flow, without it. */
 .menu-popup { position: fixed; z-index: 70; }
 
+/* A MENU LONGER THAN ITS SIDE HAS ROOM FOR SCROLLS INSIDE ITSELF.
+ *
+ * The width was held against the viewport and the height was not, so twelve rows of a version
+ * picker filled a laptop screen and ran past the bottom of it. `.menu-popup` is FIXED: the page
+ * scrolls under it and the rows past the edge can never be reached, by pointer or by arrow key.
+ *
+ * The ceiling itself is the React Menu's, from `useAnchoredPosition` — it is the room the chosen
+ * side actually has, which no static value can know. This is where the overflow goes once there
+ * is one. `overscroll-behavior` keeps the page still when the list hits its end. */
 .menu {
   min-inline-size: 220px;
   max-inline-size: min(320px, calc(100vw - var(--space-8)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: var(--space-1);
   background: var(--color-bg);
   border: 1px solid var(--color-neutral-200);

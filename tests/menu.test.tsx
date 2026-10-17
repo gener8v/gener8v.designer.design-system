@@ -98,3 +98,79 @@ describe('Menu — WAI-ARIA menu button', () => {
     expect(screen.queryByRole('menu')).toBeNull();
   });
 });
+
+/**
+ * A menu longer than its side has room for.
+ *
+ * The width was held against the viewport and the height was not, so a long menu — a dozen draft
+ * versions, say — ran past the bottom of a laptop screen. `.menu-popup` is FIXED: the page scrolls
+ * under it, so the rows past the edge could not be reached by pointer or by arrow key.
+ *
+ * The cap is the room the chosen side actually has, which is why it is measured rather than typed:
+ * no static value knows where the trigger is.
+ */
+describe('Menu — held to the room it has', () => {
+  // The hook's defaults for the gap to the anchor and the distance kept from the viewport edge.
+  // Written out because the arithmetic is the whole of what these cases check.
+  const OFFSET = 6;
+  const PADDING = 8;
+  // jsdom reports a nought-high document and a nought-sized rect for everything, so a case about
+  // room has to say how much room there is.
+  const VIEWPORT = 800;
+
+  const rect = (top: number, height: number): DOMRect => ({
+    top, bottom: top + height, left: 0, right: 120, width: 120, height,
+    x: 0, y: top, toJSON: () => ({}),
+  }) as DOMRect;
+
+  const viewport = () =>
+    vi.spyOn(document.documentElement, 'clientHeight', 'get').mockReturnValue(VIEWPORT);
+
+  it('is capped to the room below its trigger', async () => {
+    const u = userEvent.setup();
+    viewport();
+    const { trigger } = setup();
+    vi.spyOn(trigger, 'getBoundingClientRect').mockReturnValue(rect(0, 20));
+
+    await u.click(trigger);
+
+    expect(screen.getByRole('menu').style.maxBlockSize)
+      .toBe(`${VIEWPORT - 20 - OFFSET - PADDING}px`);
+  });
+
+  it('shrinks the cap as the trigger moves down the screen', async () => {
+    const u = userEvent.setup();
+    viewport();
+    const { trigger } = setup();
+    const room = 40;
+    vi.spyOn(trigger, 'getBoundingClientRect').mockReturnValue(rect(VIEWPORT - room - 20, 20));
+
+    await u.click(trigger);
+
+    expect(screen.getByRole('menu').style.maxBlockSize).toBe(`${room - OFFSET - PADDING}px`);
+  });
+
+  /**
+   * The one that was unreachable rather than merely clipped.
+   *
+   * A menu taller than the screen, triggered at the bottom, flips above its anchor — and the
+   * placement subtracted the height it WANTED. The top came out negative, which on a fixed element
+   * is off the edge of the window with nothing able to scroll to it.
+   */
+  it('never places itself above the top of the screen', async () => {
+    const u = userEvent.setup();
+    viewport();
+    const { trigger } = setup();
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+      if (this === trigger) return rect(VIEWPORT - 2, 4);
+      if (this.getAttribute('role') === 'menu') return rect(0, 900);
+      return rect(0, 0);
+    });
+
+    await u.click(trigger);
+
+    const menu = screen.getByRole('menu');
+    expect(Number.parseFloat(menu.style.top)).toBeGreaterThanOrEqual(0);
+    expect(menu.style.maxBlockSize).toBe(`${VIEWPORT - 2 - OFFSET - PADDING}px`);
+  });
+});

@@ -33,8 +33,10 @@ const OPPOSITE: Record<Placement, Placement> = {
 export function useAnchoredPosition({
   open, anchorRef, floatingRef,
   placement = 'bottom', align = 'start', offset = 6, padding = 8,
-}: AnchoredOptions): { style: CSSProperties; placement: Placement } {
-  const [state, setState] = useState<{ top: number; left: number; placement: Placement } | null>(null);
+}: AnchoredOptions): { style: CSSProperties; placement: Placement; available: number } {
+  const [state, setState] = useState<
+    { top: number; left: number; placement: Placement; available: number } | null
+  >(null);
 
   const compute = useCallback(() => {
     const anchor = anchorRef.current;
@@ -54,23 +56,36 @@ export function useAnchoredPosition({
     let side = placement;
     if (room[placement] < need && room[OPPOSITE[placement]] > room[placement]) side = OPPOSITE[placement];
 
+    // HOW TALL THE CHOSEN SIDE CAN ACTUALLY GO.
+    //
+    // Flipping finds the side with more room; it does not make the room enough. A menu of twelve
+    // rows opens past the bottom of the screen, and flipped above an anchor near the top it is
+    // placed at a NEGATIVE top — rows a fixed element can never be scrolled to. Returned rather
+    // than imposed, because what a caller does with the overflow is the caller's: a menu scrolls,
+    // a tooltip would rather be short.
+    const available = side === 'top' || side === 'bottom'
+      ? Math.max(0, room[side] - offset - padding)
+      : Math.max(0, vh - padding * 2);
+    // The placement maths use the height it will have, not the height it wants.
+    const height = Math.min(f.height, available);
+
     let top: number;
     let left: number;
     if (side === 'top' || side === 'bottom') {
-      top = side === 'bottom' ? a.bottom + offset : a.top - offset - f.height;
+      top = side === 'bottom' ? a.bottom + offset : a.top - offset - height;
       left = align === 'end' ? a.right - f.width
         : align === 'center' ? a.left + a.width / 2 - f.width / 2
         : a.left;
       left = Math.max(padding, Math.min(left, vw - f.width - padding));
     } else {
       left = side === 'right' ? a.right + offset : a.left - offset - f.width;
-      top = align === 'end' ? a.bottom - f.height
-        : align === 'center' ? a.top + a.height / 2 - f.height / 2
+      top = align === 'end' ? a.bottom - height
+        : align === 'center' ? a.top + a.height / 2 - height / 2
         : a.top;
-      top = Math.max(padding, Math.min(top, vh - f.height - padding));
+      top = Math.max(padding, Math.min(top, vh - height - padding));
     }
 
-    setState({ top, left, placement: side });
+    setState({ top, left, placement: side, available });
   }, [anchorRef, floatingRef, placement, align, offset, padding]);
 
   useLayoutEffect(() => {
@@ -91,5 +106,8 @@ export function useAnchoredPosition({
       ? { position: 'fixed', top: state.top, left: state.left }
       : { position: 'fixed', top: 0, left: 0, visibility: 'hidden' },
     placement: state?.placement ?? placement,
+    // Before the first measurement there is no answer, and `Infinity` is the
+    // honest one: nothing is capped by a number nobody has worked out yet.
+    available: state?.available ?? Infinity,
   };
 }
