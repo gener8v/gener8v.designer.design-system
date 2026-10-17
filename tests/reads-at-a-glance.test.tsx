@@ -38,6 +38,18 @@ describe('an alert', () => {
     expect(getComputedStyle(container.querySelector('.alert-title')!).borderBlockEnd).toMatch(/1px solid/);
   });
 
+  it('gives that stack the width the alert has', () => {
+    // The rule under the title spans the TITLE'S box, and the title is as wide as the stack around
+    // it. Left at the default `flex: 0 1 auto` the stack sits at its own longest line while the
+    // alert fills whatever it is given, so the rule stopped partway across a band of colour and
+    // read as something half drawn.
+    const { container } = render(
+      <Alert tone="warning"><AlertTitle>Saved</AlertTitle><AlertBody>It took.</AlertBody></Alert>,
+    );
+
+    expect(getComputedStyle(container.querySelector('.alert-content')!).flexGrow).toBe('1');
+  });
+
   it('leaves a title-only alert without a rule hanging in space', () => {
     // Nothing follows it, so there is nothing to be separated from.
     const { container } = render(<Alert tone="warning"><AlertTitle>Saved</AlertTitle></Alert>);

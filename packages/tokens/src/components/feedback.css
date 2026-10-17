@@ -98,8 +98,13 @@
  * title ran into its own description, on the component whose job is to be read quickly.
  *
  * The documented HTML always wrapped them in a bare `<div>`. This gives that wrapper a name, so
- * the markup and the component can no longer disagree about it. */
-.alert-content { min-inline-size: 0; }
+ * the markup and the component can no longer disagree about it.
+ *
+ * AND IT TAKES THE WIDTH THAT IS LEFT. At the default `flex: 0 1 auto` the stack sits at its own
+ * longest line while the alert fills whatever it is given — so the rule under the title, which
+ * spans the title's box, stopped partway across a band of colour and read as something half
+ * drawn. Every alert whose longest line is shorter than its measure drew it that way. */
+.alert-content { flex: 1 1 auto; min-inline-size: 0; }
 .alert-title { font-weight: 500; color: var(--color-neutral-900); }
 /* A RULE UNDER THE TITLE, AND ONLY WHERE SOMETHING FOLLOWS IT.
  *
