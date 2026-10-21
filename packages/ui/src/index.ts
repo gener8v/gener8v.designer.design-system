@@ -36,6 +36,8 @@ export { Tabs, Tab } from './Tabs/index.js';
 export type { TabsProps, TabProps, TabsOrientation } from './Tabs/index.js';
 export { TableWrap, Table, TableToolbar, Th, Td, TableEmpty, TableEmptyTitle, useTableSort } from './Table/index.js';
 export type { TableProps, TableToolbarProps, ThProps, TdProps, SortDirection, TableSort, TableSortResult } from './Table/index.js';
+export { GridTable, GridHead, GridCell, GridProgress } from './GridTable/index.js';
+export type { GridTableProps, GridHeadProps, GridCellProps, GridProgressProps } from './GridTable/index.js';
 export { Stepper, Step } from './Stepper/index.js';
 export type { StepperProps, StepProps, StepState } from './Stepper/index.js';
 export { Progress, ProgressRing } from './Progress/index.js';

@@ -5196,6 +5196,74 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 }
 .table-empty-title { font-family: var(--font-heading); font-weight: var(--font-heading-weight); font-size: var(--text-base); color: var(--color-neutral-900); }
 
+/* --- a table somebody writes into --- */
+
+/* THE KEYS ARE KNOWN AND THE FACTS ARE NOT.
+ *
+ * A grid is `.table` with the cells opened up: the rows already exist, their keys came out of the
+ * data, and what is missing is what only the business holds. So the chrome is the table's and the
+ * only thing added is the writing. */
+.grid-table td { padding-block: var(--space-1); }
+
+/* OWNED SAYS WHO FILLS IT.
+ *
+ * In twenty columns, which ones a source sends and which ones somebody has to key is the whole map
+ * of the work — and a tint alone leaves it to be guessed at, so the head says the words. */
+.grid-table th[data-owned] { background: var(--color-accent-100); }
+.grid-head-owned {
+  display: block;
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-neutral-600);
+}
+
+/* A CELL IS A CELL UNTIL SOMEBODY REACHES FOR IT.
+ *
+ * Two hundred boxed inputs is a wall of boxes, and the values a reader came to compare are lost
+ * between the edges. The border is drawn on hover and on focus, which is when it is the
+ * affordance rather than decoration. */
+.grid-cell {
+  inline-size: 100%;
+  /* An input has no intrinsic width, so its column would clip every value. */
+  min-inline-size: 11rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1) var(--space-2);
+  font: inherit;
+  text-align: start;
+  color: inherit;
+  background: none;
+  outline: none;
+}
+.grid-cell::placeholder { color: var(--color-neutral-400); }
+.grid-cell:hover { background: var(--color-bg); border-color: var(--color-neutral-200); }
+.grid-cell:focus {
+  background: var(--color-bg);
+  border-color: var(--color-action);
+  box-shadow: 0 0 0 var(--ring-width) var(--color-accent-200);
+}
+
+/* HOW FAR THE KEYING HAS GOT, on the grid's own edge: a scrollbar says how much page is left and
+   not how much work, and the two stop agreeing the moment half the cells are filled. */
+.grid-progress {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+}
+.grid-progress strong { font-variant-numeric: tabular-nums; color: var(--color-neutral-900); }
+.grid-progress-share {
+  margin-inline-start: auto;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-600);
+}
+.grid-progress-share[data-done] { color: var(--color-success-700); font-weight: 500; }
+
 /* --------------------------------------------------------------------- tag */
 
 /* Tags carry status, not decoration. Every variant here maps to a meaning;

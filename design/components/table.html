@@ -96,10 +96,56 @@
     </div>
   </div>
 
+  <p class="demo-head label">Written into</p>
+  <div class="panel">
+    <div class="table-wrap">
+      <table class="table table-compact grid-table">
+        <thead>
+          <tr>
+            <th scope="col" data-nowrap>Agency</th>
+            <th scope="col" data-owned>Name<span class="grid-head-owned">Yours to fill</span></th>
+            <th scope="col" data-owned>Territory<span class="grid-head-owned">Yours to fill</span></th>
+            <th scope="col" data-numeric>Rows</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td data-nowrap>AG-114</td>
+            <td><input class="grid-cell" aria-label="Name for AG-114" data-cell="0-0" value="Ruffin &amp; Co" list="grid-demo-name"></td>
+            <td><input class="grid-cell" aria-label="Territory for AG-114" data-cell="0-1" value="Piedmont" list="grid-demo-territory"></td>
+            <td data-numeric>84,201</td>
+          </tr>
+          <tr>
+            <td data-nowrap>AG-221</td>
+            <td><input class="grid-cell" aria-label="Name for AG-221" data-cell="1-0" value="" placeholder="—"></td>
+            <td><input class="grid-cell" aria-label="Territory for AG-221" data-cell="1-1" value="" placeholder="—"></td>
+            <td data-numeric>11,908</td>
+          </tr>
+          <tr>
+            <td data-nowrap>AG-307</td>
+            <td><input class="grid-cell" aria-label="Name for AG-307" data-cell="2-0" value="Tidewater Mutual"></td>
+            <td><input class="grid-cell" aria-label="Territory for AG-307" data-cell="2-1" value="" placeholder="—"></td>
+            <td data-numeric>6,440</td>
+          </tr>
+        </tbody>
+      </table>
+      <datalist id="grid-demo-name"><option value="Ruffin &amp; Co"></option><option value="Tidewater Mutual"></option></datalist>
+      <datalist id="grid-demo-territory"><option value="Piedmont"></option><option value="Tidewater"></option></datalist>
+    </div>
+    <p class="grid-progress" role="status"><strong>3</strong> of 6 cells<span class="grid-progress-share">50%</span></p>
+  </div>
+
   <p class="note">Rules, not stripes — on a light ground a hairline is enough separation and striping
   doubles the noise. Headers are the mono voice. Figures are tabular and end-aligned, so digits line
   up down the column. Sort state lives in <code>aria-sort</code> and selection in
   <code>aria-selected</code>, so a screen reader and the styling read the same source.</p>
+
+  <p class="note">The last one is a table somebody writes <em>into</em>. The keys down the left came
+  out of the data and the columns marked <em>Yours to fill</em> are the facts no file will ever
+  carry, so the head says who owes what. <code>Enter</code> and <code>↓</code> go down the column,
+  <code>↑</code> goes up, <code>⌘D</code> repeats the cell above, and each column offers back what
+  it already holds — because the alternative is one territory acquiring three spellings. Cells are
+  written on the way out rather than per keystroke.</p>
 
 </main>
 </body>
