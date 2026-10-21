@@ -5,9 +5,30 @@
 
 /* Position is carried by aria-current="step" and data-state, so the marker,
    the connector and the screen-reader announcement read one source. */
-.stepper { display: flex; align-items: flex-start; gap: var(--space-2); }
 
-.step { display: flex; align-items: center; gap: var(--space-3); flex: 1; min-inline-size: 0; }
+/* THE AIR EITHER SIDE OF A CONNECTOR IS THE SAME AIR.
+ *
+ * A connector sits after the label of the step it leaves and before the marker of
+ * the step it points at, so the space on its two sides comes from two different
+ * rules: `.step`'s own gap on the left, the `.stepper`'s gap on the right. At 12px
+ * and 8px those are visibly different, and the step a connector points at wears a
+ * `box-shadow: 0 0 0 3px` ring when it is current — which eats half of what is
+ * left. Measured on a four-step rail at 8px: 12 / 16 / 1, 12 / 16 / 7, 12 / 23 / 8.
+ * The 1px case put the line 2px under the ring, so the rail read as one node
+ * overlapping the next rather than as a sequence.
+ *
+ * One gap for both sides, and `align-items: center` so a rail of labels at one
+ * size draws a line through the middle of its markers rather than near their tops. */
+.stepper { display: flex; align-items: center; gap: var(--space-3); }
+
+/* A CONNECTOR IS A LENGTH, NOT WHATEVER THE LABELS LEFT OVER.
+ *
+ * `flex: 1` with a 16px floor hands each connector the free space its own step did
+ * not use, so a rail whose labels differ in width — Ingested, Identify, Define,
+ * Reference — draws its lines at three different lengths and reads as a rhythm
+ * somebody got wrong. A basis of its own makes every connector the same length
+ * until the rail runs out of room, and then they all shorten together. */
+.step { display: flex; align-items: center; gap: var(--space-3); flex: 1 1 auto; min-inline-size: 0; }
 .step:last-child { flex: none; }
 
 .step-marker {
@@ -28,7 +49,7 @@
               color var(--dur-base) var(--ease-out);
 }
 .step-label { font-size: var(--text-sm); color: var(--color-neutral-600); white-space: nowrap; }
-.step-connector { flex: 1; block-size: 1px; background: var(--color-neutral-200); min-inline-size: var(--space-4); }
+.step-connector { flex: 1 1 var(--space-8); block-size: 1px; background: var(--color-neutral-200); min-inline-size: var(--space-8); }
 
 .step[data-state="complete"] .step-marker {
   background: var(--color-action);
