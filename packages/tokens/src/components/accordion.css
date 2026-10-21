@@ -35,9 +35,10 @@
 }
 .accordion-trigger[aria-expanded="true"]::after { transform: translateY(0.1em) rotate(-135deg); }
 
+/* No `[hidden]` rule of its own: the base layer answers for the attribute everywhere now, and a
+   second rule here would be one component's local fix for a thing the system handles. */
 .accordion-panel {
   padding-block-end: var(--space-4);
   font-size: var(--text-sm);
   color: var(--color-neutral-700);
 }
-.accordion-panel[hidden] { display: none; }

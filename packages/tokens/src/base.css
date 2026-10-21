@@ -3,6 +3,20 @@
 *, *::before, *::after { box-sizing: border-box; }
 * { margin: 0; }
 
+/* `[hidden]` HAS TO BEAT THE COMPONENT LAYER, OR IT BEATS NOTHING.
+ *
+ * The user agent hides `[hidden]` with `display: none` from its own origin, which any author rule
+ * setting `display` outranks — and 100 classes in this system set one. So `<div class="tabs"
+ * hidden>` computes `display: flex` and draws, and a consumer reaching for the platform's own way
+ * of hiding something gets a panel that is still on the page. Measured: `.tabs`, `.stepper`,
+ * `.tag`, `.alert` and `.summary` all kept drawing; `.panel` and a bare `<p>` did not — which is
+ * the worst version of this, because it works until the element happens to be a flex container.
+ *
+ * `!important` is the only weapon that reaches, the competition being specificity rather than
+ * order. It is scoped to one attribute nothing else should be fighting over, and anything that
+ * genuinely wants a hidden element laid out has `visibility` and `.sr-only` below. */
+[hidden] { display: none !important; }
+
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
