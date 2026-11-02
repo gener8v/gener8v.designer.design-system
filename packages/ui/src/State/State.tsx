@@ -1,6 +1,8 @@
-import { forwardRef } from 'react';
-import type { HTMLAttributes } from 'react';
+import { forwardRef, isValidElement } from 'react';
+import type { HTMLAttributes, ReactElement } from 'react';
 import { cx } from '../cx.js';
+import { StateArt } from './StateArt.js';
+import type { StateArtName } from './StateArt.js';
 
 /**
  * The six states every flow passes through. `partial` is the one most systems
@@ -22,16 +24,26 @@ export interface StateProps extends HTMLAttributes<HTMLDivElement> {
   /** Overrides the tone implied by `kind`. */
   tone?: StateTone;
   tight?: boolean;
+  /**
+   * A line drawing above the title — one of the house set by name, or your own element (it is
+   * wrapped in `.state-art` and hidden from assistive tech). Meant for `empty`: a picture on an
+   * error makes a failure look designed-for, which is the wrong thing to reassure somebody about.
+   * Use it instead of a `StateIcon`, not as well.
+   */
+  art?: StateArtName | ReactElement;
 }
 
 export const State = forwardRef<HTMLDivElement, StateProps>(function State(
-  { kind, tone, tight = false, className, ...rest }, ref,
+  { kind, tone, tight = false, art, className, children, ...rest }, ref,
 ) {
   const resolved = tone ?? TONE[kind];
+  const picture = art === undefined ? null
+    : isValidElement(art) ? <span aria-hidden="true" className="state-art">{art}</span>
+    : <StateArt name={art as StateArtName} />;
   return <div {...rest} ref={ref}
     data-tone={resolved === 'neutral' ? undefined : resolved}
     aria-busy={kind === 'loading' || undefined}
-    className={cx('state', tight && 'state-tight', className)} />;
+    className={cx('state', tight && 'state-tight', className)}>{picture}{children}</div>;
 });
 
 export const StateIcon = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpanElement>>(

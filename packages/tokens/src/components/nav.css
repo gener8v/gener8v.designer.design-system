@@ -154,6 +154,32 @@
 .drawer-close svg { inline-size: var(--space-4); block-size: var(--space-4); }
 .drawer-close:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
 
+/* FROM THE START EDGE, for navigation that is a rail on a wide screen and a drawer on a phone: it
+   should arrive from the side it lives on, or the reader loses where it went. */
+.drawer-panel[data-side="start"] {
+  inset-inline-end: auto;
+  inset-inline-start: 0;
+  border-inline-start: 0;
+  border-inline-end: 1px solid var(--color-neutral-200);
+}
+
+/* A RAIL INSIDE A DRAWER. The same `Sidebar` the wide screen shows, so a destination, a count or a
+   folded group is the same object at both sizes — but the drawer is already the surface, so the
+   rail drops its own width, ground and edge, and starts below the close button rather than under
+   it. It scrolls inside the drawer when the groups are longer than a phone is tall. */
+.drawer-panel > .sidebar {
+  inline-size: auto;
+  flex: 1 1 auto;
+  min-block-size: 0;
+  overflow-y: auto;
+  margin-block-start: var(--space-8);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  transition: none;
+}
+.drawer-panel > .sidebar .sidebar-item { padding-block: var(--space-3); }
+
 /* --- sidebar -------------------------------------------------------- */
 
 .sidebar {

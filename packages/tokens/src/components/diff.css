@@ -1,0 +1,68 @@
+/* -------------------------------------------------------------------- diff */
+
+/* Two versions of a text and what changed. A removal is struck through and an addition underlined
+   — the tint is the second signal, never the only one, so the change survives greyscale, a
+   colour-blind reader, print and forced colours. Tints come off the status ramps, which mirror for
+   dark mode, so a dark page gets a dark tint and light text with no second rule. */
+.diff {
+  display: grid;
+  gap: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+  min-inline-size: 0;
+}
+/* Side by side where there is room, stacked where there is not — never a pane squeezed to a word. */
+.diff[data-mode="split"] { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.diff-pane {
+  min-inline-size: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.diff-pane-head {
+  margin-block-end: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+.diff-text { white-space: pre-wrap; overflow-wrap: anywhere; line-height: var(--leading-sm); }
+
+.diff-del, .diff-ins {
+  border-radius: var(--radius-sm);
+  padding-inline: 1px;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+.diff-del {
+  background: var(--color-danger-100);
+  color: var(--color-danger-800);
+  text-decoration-line: line-through;
+}
+.diff-ins {
+  background: var(--color-success-100);
+  color: var(--color-success-800);
+  text-decoration-line: underline;
+}
+
+/* Line granularity: a gutter carries + and −, so a changed line is marked before it is read. */
+.diff-lines {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  overflow-x: auto;
+}
+.diff-line {
+  display: grid;
+  grid-template-columns: var(--space-5) minmax(0, 1fr);
+  border-radius: var(--radius-sm);
+}
+.diff-sign { text-align: center; color: var(--color-neutral-600); user-select: none; }
+.diff-line-text { white-space: pre-wrap; overflow-wrap: anywhere; padding-inline-end: var(--space-2); }
+.diff-line[data-change="removed"] { background: var(--color-danger-100); }
+.diff-line[data-change="added"] { background: var(--color-success-100); }
+.diff-line[data-change="removed"] .diff-sign { color: var(--color-danger-800); }
+.diff-line[data-change="added"] .diff-sign { color: var(--color-success-800); }
+/* The row already carries the tint; the words inside keep only the line. */
+.diff-line .diff-del, .diff-line .diff-ins { background: transparent; padding-inline: 0; }

@@ -17,11 +17,17 @@ export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
    * convention or click into the dimmed page and hope.
    */
   closeLabel?: string;
+  /**
+   * Which edge it comes from. `end` by default — a menu of page links, opened from the hamburger
+   * at the end of the header. `start` for navigation that lives in a rail on wide screens: on a
+   * phone the rail becomes a drawer, and it should arrive from the side it lives on.
+   */
+  side?: 'start' | 'end';
 }
 
 /** A modal side panel. Behaviour comes from useModalBehavior — see that file. */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
-  { open, onClose, className, children, closeLabel = 'Close', ...rest }, ref,
+  { open, onClose, className, children, closeLabel = 'Close', side = 'end', ...rest }, ref,
 ) {
   const panelRef = useModalBehavior(open, onClose);
   if (!open) return null;
@@ -30,6 +36,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
       <div className="drawer-scrim" onClick={onClose} aria-hidden="true" />
       <div {...rest} ref={mergeRefs(panelRef, ref)}
         role="dialog" aria-modal="true" tabIndex={-1}
+        data-side={side === 'start' ? 'start' : undefined}
         className={cx('drawer-panel', className)}>
         {/* First in the DOM so it is the first thing tab reaches, and pinned by
             the stylesheet so it does not scroll away from a long panel. */}

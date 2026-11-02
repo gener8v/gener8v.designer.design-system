@@ -133,6 +133,30 @@
 .meter.in-a-cell .meter-head { grid-row: 1; grid-column: 2; }
 .meter.in-a-cell .meter-value { margin-inline-start: 0; }
 
+/* A LEVEL AGAINST WHERE IT OUGHT TO BE.
+ *
+ * Colour alone cannot say "below target": a warning-tinted bar reads as a warning about something,
+ * and the reader still has to guess what. So the target is said twice — a tick across the track for
+ * the eye that compares lengths, and the words beside the figure for everybody else (the meter
+ * points at them with `aria-describedby`). The tick overhangs the track, so the track stops
+ * clipping; the fill carries its own radius and never needed the clip. */
+.meter-target {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-600);
+}
+.meter-track:has(.meter-threshold) { position: relative; overflow: visible; }
+.meter-threshold {
+  position: absolute;
+  inset-block: calc(-1 * var(--space-1));
+  inline-size: 2px;
+  margin-inline-start: -1px;
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-800);
+}
+.meter.in-a-cell .meter-target { display: none; }
+
 .meter[data-tone="success"] .meter-fill { background: var(--color-success); }
 .meter[data-tone="warning"] .meter-fill { background: var(--color-warning); }
 .meter[data-tone="danger"]  .meter-fill { background: var(--color-danger); }

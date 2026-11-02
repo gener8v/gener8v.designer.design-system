@@ -23,3 +23,11 @@
   margin-block-end: var(--space-2);
 }
 .popover-actions { display: flex; justify-content: flex-end; gap: var(--space-2); margin-block-start: var(--space-4); }
+
+/* A popover summoned by pointing. The same surface — it is the same kind of thing, a panel over
+   the page that does not take it — set a step tighter, because a preview is glanced at rather
+   than worked in, and a card that fills the screen on a hover is a card that gets in the way. */
+.hover-card {
+  padding: var(--space-3) var(--space-4);
+  max-inline-size: 320px;
+}
