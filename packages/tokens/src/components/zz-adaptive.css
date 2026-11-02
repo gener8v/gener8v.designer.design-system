@@ -55,6 +55,13 @@
   .bg-dot-grid, .bg-noise { background-image: none; }
   .section-band { background: Canvas; color: CanvasText; border: 1px solid CanvasText; }
   .skeleton { animation: none; background: Canvas; border: 1px solid GrayText; }
+
+  /* A target tick is a filled bar; the system draws it in text colour or it is gone. */
+  .meter-threshold { background: CanvasText; forced-color-adjust: none; }
+  /* Tints vanish, which is why a matrix cell and a diff never rest on them: the mark, the strike
+     and the underline remain. The focused cell still needs an edge. */
+  .matrix-cell:focus-visible { outline: 2px solid Highlight; }
+  .diff-ins, .diff-del { forced-color-adjust: auto; }
 }
 
 /* --- print ------------------------------------------------------------ */
@@ -90,7 +97,9 @@
 
   /* A long table must repeat its header on each page. */
   thead { display: table-header-group; }
-  .table-wrap { overflow: visible; }
+  .table-wrap, .matrix-wrap { overflow: visible; }
+  .hover-card { display: none !important; }
+  .matrix th, .matrix td { position: static !important; }
 
   /* A printed link whose target is invisible is a dead reference. */
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; color: #555; }

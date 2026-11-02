@@ -46,3 +46,19 @@
   font-size: var(--text-xs);
   color: var(--color-neutral-600);
 }
+
+/* --- the empty state's picture ---------------------------------------- */
+
+/* A line drawing, not an illustration: one stroke weight, the quiet neutral of a border, and a
+   single accent mark on the part that is missing. Drawn on `currentColor`, so the ramps mirroring
+   for dark mode is all the dark theme needs. Hidden from assistive tech — the title says what is
+   empty; the picture only makes the screen recognisable at a glance. */
+.state-art {
+  display: block;
+  inline-size: calc(var(--space-24) + var(--space-6));
+  color: var(--color-neutral-400);
+  margin-block-end: var(--space-1);
+}
+.state-art svg { display: block; inline-size: 100%; block-size: auto; }
+.state-art .state-art-mark { stroke: var(--color-accent); }
+.state-tight .state-art { inline-size: var(--space-24); }

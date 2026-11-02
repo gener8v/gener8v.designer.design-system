@@ -30,18 +30,31 @@ export interface SidebarSectionProps extends Omit<HTMLAttributes<HTMLDivElement>
   collapsible?: boolean;
   /** Uncontrolled starting state. A section holding the current page should start open. */
   defaultOpen?: boolean;
+  /**
+   * Controlled state, for a shell that remembers which groups a reader folded across visits.
+   * Pair with `onOpenChange`; omit both and the section keeps its own state as before.
+   */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export const SidebarSection = forwardRef<HTMLDivElement, SidebarSectionProps>(
-  function SidebarSection({ label, collapsible = false, defaultOpen = true, className, children, ...rest }, ref) {
+  function SidebarSection({
+    label, collapsible = false, defaultOpen = true, open: controlled, onOpenChange, className, children, ...rest
+  }, ref) {
     const id = useId();
-    const [open, setOpen] = useState(defaultOpen);
+    const [own, setOwn] = useState(defaultOpen);
+    const open = controlled ?? own;
+    const toggle = () => {
+      if (controlled === undefined) setOwn(!open);
+      onOpenChange?.(!open);
+    };
 
     return (
       <div {...rest} ref={ref} className={cx('sidebar-section', className)}>
         {collapsible ? (
           <button type="button" className="sidebar-group sidebar-group-toggle"
-            aria-expanded={open} aria-controls={id} onClick={() => setOpen((v) => !v)}>
+            aria-expanded={open} aria-controls={id} onClick={toggle}>
             {label}
           </button>
         ) : (

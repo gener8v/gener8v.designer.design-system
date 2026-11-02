@@ -4,7 +4,7 @@ import type { ButtonHTMLAttributes, HTMLAttributes, ReactElement, ReactNode } fr
 import { Avatar } from '../Avatar/Avatar.js';
 import { cx } from '../cx.js';
 
-const ITEMS = '[role="menuitem"],[role="menuitemradio"]';
+const ITEMS = '[role="menuitem"],[role="menuitemradio"],[role="menuitemcheckbox"]';
 
 /**
  * The items this menu steers, which is not every item inside it.
@@ -145,6 +145,9 @@ export function Menu({ trigger, label, children, align = 'start' }: MenuProps) {
             if (item === null) return;
             if (item.classList.contains('menu-sub-trigger')) return;
             if (item.getAttribute('aria-disabled') === 'true') return;
+            // A box ticked among several is one step of a choice, not the end of it: the reader
+            // who wants two answer kinds ticks the second without reopening the menu.
+            if (item.getAttribute('role') === 'menuitemcheckbox') return;
             close();
           }}
           style={{ ...style, maxBlockSize: available }}
@@ -174,14 +177,24 @@ export interface MenuItemProps extends Omit<ButtonHTMLAttributes<HTMLButtonEleme
    * what a screen reader needs in order to say "2 of 3, checked".
    */
   selected?: boolean;
+  /**
+   * This item is ONE OF the current choices — several can be ticked at once.
+   *
+   * Pass it on every item in the group, as with `selected`. It makes the row a
+   * `role="menuitemcheckbox"`, and pressing one leaves the menu open, because
+   * ticking a second box is the next thing somebody choosing several does.
+   * Escape, Tab or a press outside closes it. Takes precedence over `selected`.
+   */
+  checked?: boolean;
 }
 
-export function MenuItem({ danger, disabled, selected, onSelect, className, onClick, children, ...rest }: MenuItemProps) {
-  const choice = selected !== undefined;
+export function MenuItem({ danger, disabled, selected, checked, onSelect, className, onClick, children, ...rest }: MenuItemProps) {
+  const many = checked !== undefined;
+  const choice = many || selected !== undefined;
   return (
     <button {...rest} type="button"
-      role={choice ? 'menuitemradio' : 'menuitem'}
-      aria-checked={choice ? Boolean(selected) : undefined}
+      role={many ? 'menuitemcheckbox' : choice ? 'menuitemradio' : 'menuitem'}
+      aria-checked={choice ? Boolean(many ? checked : selected) : undefined}
       tabIndex={-1}
       aria-disabled={disabled || undefined}
       onClick={(e) => { onClick?.(e); if (!disabled) onSelect?.(); }}

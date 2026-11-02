@@ -21,6 +21,7 @@ add it to the system, not to the consuming app.
 | `.pagination` with `.pagination-item`, `.pagination-gap` | Paged navigation | components/flow.html |
 | `.timeline` with `.timeline-item`, `.timeline-marker`, `.timeline-time`, `.timeline-title`, `.timeline-body` | Chronology | components/flow.html |
 | `.state` with `.state-icon`, `.state-title`, `.state-body`, `.state-actions`, `.state-detail` | The six states, tone via `data-tone` | components/states.html |
+| `.state-art` with `.state-art-mark` | A line drawing for an empty state — grid, history, library, inbox, search. `currentColor` plus one accent mark; hidden from assistive tech | components/states.html |
 | `.flow` shell: `.flow-rail`, `.flow-main`, `.flow-header`, `.flow-content`, `.flow-fields`, `.flow-footer` | The prescribed multi-step structure | templates/intake/ |
 | `.dialog-backdrop` + `.dialog` with `.dialog-title`, `.dialog-body`, `.dialog-actions` | Modal at the top elevation | components/feedback.html |
 | `.alert` with `.alert-title`, `.alert-body`, `.alert-actions` | Inline banner, tone via `data-tone` | components/feedback.html |
@@ -31,6 +32,7 @@ add it to the system, not to the consuming app.
 | `.segmented` with `.segmented-item` | A radiogroup, not a tablist — it filters, it does not swap panels | components/disclosure.html |
 | `.stat` with `.stat-label`, `.stat-value`, `.stat-note`, `.stat-delta` | KPI tile; figures tabular | components/data.html |
 | `.meter` with `.meter-track`, `.meter-fill` | A level that is true — not `.progress`, which is a task advancing | components/data.html |
+| `.meter-threshold`, `.meter-target` | A meter's target: a tick across the track and the words beside the figure — never the tick alone | components/data.html |
 | `.paper` with `.paper-ground`, `.paper-aside` | A sheet a document sits on, and the page behind it. Prose is read; a table is scanned — only the first gets a sheet, and navigation goes on the ground beside it | — |
 | `.shelf` with `.shelf-zone`, `.shelf-item`, `.shelf-grip` | Moving a thing between two places. Drag by the grip, or space/arrows/space by keyboard; the row itself opens the item | — |
 | `.conversation` with `.turn`, `.turn-body`, `.turn-meta`, `.turn-pending` | A person asking and a system answering — `data-side="sent"` is a bubble, `received` is prose at full measure | — |
@@ -63,6 +65,8 @@ add it to the system, not to the consuming app.
 | `.label` | The mono label — section markers, figures and data labels. NEVER above a heading: an eyebrow is a quiet line the eye reaches before the loud one, and it names something the reader can already see | foundations/type.html |
 | `.lede`, `.muted`, `.num`, `.mono` | Intro paragraph, secondary text, tabular figures, technical identifiers | foundations/type.html |
 | `.table` in `.table-wrap`, with `.table-compact`, `.table-sticky`, `.table-empty` | Data tables — hairline rules, mono headers, `aria-sort` | components/table.html |
+| `.matrix` in `.matrix-wrap`, with `.matrix-col`, `.matrix-row`, `.matrix-cell`, `.matrix-total`, `.matrix-flag` | Coverage grid — a real table, one Tab stop with arrow keys, pinned headings, scrolls in its own frame. Tone via `data-tone`, never without a mark | components/table.html |
+| `.diff` with `.diff-ins`, `.diff-del`, `.diff-pane`, `.diff-line`, `.diff-sign` | Before and after — struck through and underlined, so a change never rests on colour alone | components/library.html |
 | `.container`, `.section`, `.stack`, `.row`, `.hr` | Layout primitives and the section rhythm | foundations/layout.html |
 | `.section-band` | The one full-bleed deep-ink band per page — a flat field, never a gradient | foundations/image.html |
 | `.bg-dot-grid`, `.bg-noise` | Atmosphere on otherwise empty ground | foundations/image.html |

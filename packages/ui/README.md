@@ -51,7 +51,7 @@ packages/tokens/src/theme.mjs      the source of truth — 135 tokens
 
 ## What is in here
 
-183 exports across 40 families. The ones worth knowing:
+237 exports across 45 families. The ones worth knowing:
 
 | Area | Exports |
 | --- | --- |
@@ -59,9 +59,9 @@ packages/tokens/src/theme.mjs      the source of truth — 135 tokens
 | Surfaces | `Card` `CardLink` `Panel` `Tag` |
 | Forms | `Field` `Input` `Textarea` `Select` `Combobox` `Checkbox` `Radio` `Switch` `Slider` `FileUpload` `TokenInput` `Quantity` `RadioCard` |
 | Navigation | `Nav` `Sidebar` `Breadcrumbs` `Tabs` `Tree` `Hamburger` `Drawer` `Menu` `CommandPalette` |
-| Flow | `Flow` `Stepper` `Progress` `Meter` `Timeline` `State` `useStepValidation` `ErrorSummary` |
-| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `Callout` |
-| Data | `Table` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` |
+| Flow | `Flow` `Stepper` `Progress` `Meter` `Timeline` `Feed` `State` `StateArt` `useStepValidation` `ErrorSummary` |
+| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `HoverCard` `Callout` |
+| Data | `Table` `Matrix` `Diff` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` |
 | Library & integrations | `DocList` `DocPreview` `Reader` `Connection` `Credential` `KeyRow` `Rule` |
 
 `design/components/*.html` shows every one of them rendered. View source and copy the markup.

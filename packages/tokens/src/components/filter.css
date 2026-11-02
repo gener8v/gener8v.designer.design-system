@@ -65,3 +65,21 @@
   line-height: var(--leading-xs);
   color: var(--color-neutral-600);
 }
+
+/* SEVERAL CHOSEN READS AS HOW MANY. "Kind · 2" — the dimension at full text weight, because with
+   no single value to show, the dimension IS what the control says; and no colon, because a count
+   is not an answer to it. */
+.filter-on[data-many] .filter-name { color: var(--color-text); }
+.filter-on[data-many] .filter-name::after { content: none; }
+.filter-on[data-many] .filter-value { font-variant-numeric: tabular-nums; }
+
+/* How many rows carry a value, at the end of its row in the menu — mono and tabular so a column
+   of them lines up and can be compared down the list. */
+.filter-option-count {
+  margin-inline-start: auto;
+  padding-inline-start: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-600);
+}

@@ -156,7 +156,9 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.spinner`, `.skeleton` (+ `-text`, `-title`, `-circle`) | Busy and placeholder | components/flow.html |
 | `.pagination` with `.pagination-item`, `.pagination-gap` | Paged navigation | components/flow.html |
 | `.timeline` with `.timeline-item`, `.timeline-marker`, `.timeline-time`, `.timeline-title`, `.timeline-body` | Chronology | components/flow.html |
+| `.feed` with `.feed-group`, `.feed-head`, `.feed-actor`, `.feed-when`, `.feed-items`, `.feed-item`, `.feed-marker`, `.feed-kind`, `.feed-time`, `.feed-body` | Who did what, grouped by who — a timeline with people in it. Marker is `data-marker="dot|number|icon"` | components/flow.html |
 | `.state` with `.state-icon`, `.state-title`, `.state-body`, `.state-actions`, `.state-detail` | The six states, tone via `data-tone` | components/states.html |
+| `.state-art` with `.state-art-mark` | A line drawing for an empty state — grid, history, library, inbox, search. `currentColor` plus one accent mark; hidden from assistive tech | components/states.html |
 | `.flow` shell: `.flow-rail`, `.flow-main`, `.flow-header`, `.flow-content`, `.flow-fields`, `.flow-footer` | The prescribed multi-step structure | templates/intake/ |
 | `.dialog-backdrop` + `.dialog` with `.dialog-title`, `.dialog-body`, `.dialog-actions` | Modal at the top elevation | components/feedback.html |
 | `.alert` with `.alert-title`, `.alert-body`, `.alert-actions` | Inline banner, tone via `data-tone` | components/feedback.html |
@@ -167,6 +169,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.segmented` with `.segmented-item` | A radiogroup, not a tablist — it filters, it does not swap panels | components/disclosure.html |
 | `.stat` with `.stat-label`, `.stat-value`, `.stat-note`, `.stat-delta` | KPI tile; figures tabular | components/data.html |
 | `.meter` with `.meter-track`, `.meter-fill` | A level that is true — not `.progress`, which is a task advancing | components/data.html |
+| `.meter-threshold`, `.meter-target` | A meter's target: a tick across the track and the words beside the figure — never the tick alone | components/data.html |
 | `.dl` (+ `.dl-stacked`) | Record detail | components/data.html |
 | `.avatar` (+ `-sm`, `-lg`, `.avatar-group`) | Person mark | components/data.html |
 | `.paper` with `.paper-ground`, `.paper-aside` | A sheet a document sits on, and the page behind it. Prose is read; a table is scanned — only the first gets a sheet, and navigation goes on the ground beside it | — |
@@ -178,6 +181,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
 | `.popover` with `.popover-title`, `.popover-actions` | Non-modal floating panel — Tab is not trapped | — |
+| `.hover-card` (on `.popover`) | A popover opened by hover or keyboard focus after a dwell; Escape closes. A preview, never the only home of a fact or an action | components/feedback.html |
 | `.card-media` | Image slot that bleeds to the card's edges | templates/purchase/ |
 | `.qty` with `.qty-btn`, `.qty-input` | Quantity stepper over a real number input | templates/purchase/ |
 | `.radio-cards` with `.radio-card`, `.radio-card-title`, `.radio-card-note`, `.radio-card-meta` | A choice that carries a description and a figure | templates/purchase/ |
@@ -202,6 +206,8 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.label` | The mono label — section markers, figures and data labels. NEVER above a heading: an eyebrow is a quiet line the eye reaches before the loud one, and it names something the reader can already see | foundations/type.html |
 | `.lede`, `.muted`, `.num`, `.mono` | Intro paragraph, secondary text, tabular figures, technical identifiers | foundations/type.html |
 | `.table` in `.table-wrap`, with `.table-compact`, `.table-sticky`, `.table-empty` | Data tables — hairline rules, mono headers, `aria-sort` | components/table.html |
+| `.matrix` in `.matrix-wrap`, with `.matrix-col`, `.matrix-row`, `.matrix-cell`, `.matrix-total`, `.matrix-flag` | Coverage grid — a real table, one Tab stop with arrow keys, pinned headings, scrolls in its own frame. Tone via `data-tone`, never without a mark | components/table.html |
+| `.diff` with `.diff-ins`, `.diff-del`, `.diff-pane`, `.diff-line`, `.diff-sign` | Before and after — struck through and underlined, so a change never rests on colour alone | components/library.html |
 | `.container`, `.section`, `.stack`, `.row`, `.hr` | Layout primitives and the section rhythm | foundations/layout.html |
 | `.section-band` | The one full-bleed deep-ink band per page — a flat field, never a gradient | foundations/image.html |
 | `.bg-dot-grid`, `.bg-noise` | Atmosphere on otherwise empty ground | foundations/image.html |
@@ -227,6 +233,8 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - Do not ship a flow that handles only the happy path. All six states or none.
 - Do not move the forward action. Back is left, forward is right, in every flow.
 - Do not use `.progress` for a level or `.meter` for a task. They mean different things.
+- Do not tint a matrix cell or a diff without a mark or a line to go with it. Colour is the second
+  signal, never the only one.
 - Do not pass a `Date` across a date-picker boundary. Calendar dates are `YYYY-MM-DD`
   strings; a `Date` carries a time and a zone and will eventually move a deadline by a day.
 - Do not hide a file input with `display: none` — it leaves the tab order. Use `.sr-only`.

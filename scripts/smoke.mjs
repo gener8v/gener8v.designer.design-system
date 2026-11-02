@@ -173,5 +173,32 @@ check('CodeBlock',
   'class="code"', 'code-head', 'code-copy', 'npm i');
 
 const exported = Object.keys(ui).length;
+check('Meter/threshold',
+  renderToStaticMarkup(h(ui.Meter, { value: 62, threshold: 80, tone: 'auto', label: 'Coverage' })),
+  'meter-threshold', 'meter-target', 'data-tone="warning"', 'aria-describedby=');
+
+check('Matrix',
+  renderToStaticMarkup(h(ui.Matrix, {
+    label: 'Coverage', rows: [{ id: 'a', label: 'AU-6' }], cols: [{ id: 'u', label: 'Unit' }],
+    cell: () => ({ mark: '●', title: 'Covered' }), rowTotals: true,
+  })),
+  '<table aria-label="Coverage"', 'class="matrix"', 'scope="row"', 'scope="col"', 'matrix-cell', 'matrix-total');
+
+check('HoverCard/closed',
+  renderToStaticMarkup(h(ui.HoverCard, { trigger: h('a', { href: '#' }, 'AU-6'), content: 'Preview' })),
+  '<a href="#">AU-6</a>');
+
+check('Feed',
+  renderToStaticMarkup(h(ui.Feed, null, h(ui.FeedGroup, { actor: 'Dana' }, h(ui.FeedItem, { kind: 'Opened', marker: 'number' })))),
+  '<ol class="feed">', 'feed-group', 'feed-actor', 'data-marker="number"');
+
+check('Diff',
+  renderToStaticMarkup(h(ui.Diff, { before: 'reviewed quarterly', after: 'reviewed monthly' })),
+  '<del class="diff-del">', '<ins class="diff-ins">', 'sr-only');
+
+check('State/art',
+  renderToStaticMarkup(h(ui.State, { kind: 'empty', art: 'inbox' })),
+  'class="state-art"', 'data-art="inbox"', 'state-art-mark');
+
 if (fails.length) { console.error(`✗ smoke\n${fails.map((f) => '  · ' + f).join('\n')}`); process.exit(1); }
 console.log(`✓ smoke — ${exported} exports import from dist; 36 render assertions pass`);
