@@ -20,6 +20,13 @@ add it to the system, not to the consuming app.
 | `.progress` with `.progress-bar`, `.progress-indeterminate`; `.progress-ring` | Real `role="progressbar"`, never decoration | components/flow.html |
 | `.pagination` with `.pagination-item`, `.pagination-gap` | Paged navigation | components/flow.html |
 | `.timeline` with `.timeline-item`, `.timeline-marker`, `.timeline-time`, `.timeline-title`, `.timeline-body` | Chronology | components/flow.html |
+| `.live-pulse`, `.live-indicator`, `.live-mark`, `.live-section` (`data-live`), `.live-progress` with `.live-progress-where`, `.live-progress-bar`, `.live-progress-count` | Work happening now, drawn where the work is. The pulse always sits beside words; under reduced motion it is a still halo | components/live.html |
+| `.lanes` with `.lane`, `.lane-name`, `.lane-count`, `.lane-items`, `.lane-item`, `.lane-item-detail`, `.lane-more` | Swimlanes of pills by state; a pill that changes lane slides there, except under reduced motion | components/live.html |
+| `.contents` with `.contents-head`, `.contents-count`, `.contents-list`, `.contents-item`, `.contents-link`, `.contents-check` | A document's contents — `aria-current="location"`, optional reviewed boxes, the same live marks as the sections | components/reading.html |
+| `.kbd`, `.shortcut-list` with `.shortcut`, `.shortcut-keys`, `.shortcut-does` | A key drawn as a key, and keys with what they do. Not `.key-list`, which is API keys | components/reading.html |
+| `.pager-chip` with `.pager-chip-step`, `.pager-chip-label`; `.drawer-head`, `.drawer-body` | Stepping through a set in place (`S4 of 19`), in a drawer whose head is pinned above a scrolling body | components/reading.html |
+| `.table-pager` with `.table-pager-range` | Under a paged table: the range on show and the pages. Nothing for a table that fits on one page | components/table.html |
+| `.chart-hbars` with `.chart-hbar-row`, `.chart-hbar-label`, `.chart-hbar-track`, `.chart-hbar`, `.chart-hbar-value` | Bars across the page — the name above, the figure at the end | components/charts.html |
 | `.state` with `.state-icon`, `.state-title`, `.state-body`, `.state-actions`, `.state-detail` | The six states, tone via `data-tone` | components/states.html |
 | `.state-art` with `.state-art-mark` | A line drawing for an empty state — grid, history, library, inbox, search. `currentColor` plus one accent mark; hidden from assistive tech | components/states.html |
 | `.flow` shell: `.flow-rail`, `.flow-main`, `.flow-header`, `.flow-content`, `.flow-fields`, `.flow-footer` | The prescribed multi-step structure | templates/intake/ |
@@ -41,6 +48,8 @@ add it to the system, not to the consuming app.
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
 | `.popover` with `.popover-title`, `.popover-actions` | Non-modal floating panel — Tab is not trapped | — |
+| `.popover-sm`, `.popover-md`, `.popover-lg` | Popover and hover card widths — `lg` is a reading width capped to the window that scrolls inside itself | components/live.html |
+| `.citation` (+ `data-missing`) with `.source-card`, `.source-card-file`, `.source-card-id`, `.source-card-locator`, `.source-card-excerpt`, `.source-card-action` | A citation marker in prose and what it points at. A missing source is dashed, unlinked and says so in words | components/reading.html |
 | `.card-media` | Image slot that bleeds to the card's edges | templates/purchase/ |
 | `.qty` with `.qty-btn`, `.qty-input` | Quantity stepper over a real number input | templates/purchase/ |
 | `.radio-cards` with `.radio-card`, `.radio-card-title`, `.radio-card-note`, `.radio-card-meta` | A choice that carries a description and a figure | templates/purchase/ |

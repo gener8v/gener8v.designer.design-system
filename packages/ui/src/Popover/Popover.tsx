@@ -4,12 +4,22 @@ import { cx } from '../cx.js';
 import { useAnchoredPosition } from '../useAnchoredPosition.js';
 import type { Align, Placement } from '../useAnchoredPosition.js';
 
+/**
+ * How wide the panel may grow. `md` is the default menu-sized panel; `sm` is a hover card's
+ * glance; `lg` is for a panel with a reading width of its own — a run's lanes and what is
+ * happening — capped to the window, never taller than the screen, and scrolling inside itself.
+ */
+export type PopoverSize = 'sm' | 'md' | 'lg';
+
 export interface PopoverProps {
   trigger: ReactElement<ButtonHTMLAttributes<HTMLButtonElement>>;
   label: string;
   children?: ReactNode;
   placement?: Placement;
   align?: Align;
+  /** `md` by default. */
+  size?: PopoverSize;
+  className?: string;
 }
 
 /**
@@ -18,7 +28,9 @@ export interface PopoverProps {
  * it would make this a dialog, and a popover the user cannot Tab out of is a
  * dialog wearing the wrong clothes.
  */
-export function Popover({ trigger, label, children, placement = 'bottom', align = 'start' }: PopoverProps) {
+export function Popover({
+  trigger, label, children, placement = 'bottom', align = 'start', size = 'md', className,
+}: PopoverProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -62,7 +74,7 @@ export function Popover({ trigger, label, children, placement = 'bottom', align 
       {wired}
       {open && (
         <div ref={panelRef} id={id} role="dialog" aria-label={label} tabIndex={-1}
-          style={style} className="popover">
+          style={style} className={cx('popover', size !== 'md' && `popover-${size}`, className)}>
           {children}
         </div>
       )}

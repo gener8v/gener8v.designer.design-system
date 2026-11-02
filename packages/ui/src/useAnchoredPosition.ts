@@ -14,6 +14,11 @@ export interface AnchoredOptions {
   offset?: number;
   /** Minimum distance kept from the viewport edge. */
   padding?: number;
+  /**
+   * Re-measure when this changes while open. For one floating element that moves between anchors
+   * without closing — a delegated hover card going from one citation to the next.
+   */
+  anchorKey?: unknown;
 }
 
 const OPPOSITE: Record<Placement, Placement> = {
@@ -32,7 +37,7 @@ const OPPOSITE: Record<Placement, Placement> = {
  */
 export function useAnchoredPosition({
   open, anchorRef, floatingRef,
-  placement = 'bottom', align = 'start', offset = 6, padding = 8,
+  placement = 'bottom', align = 'start', offset = 6, padding = 8, anchorKey,
 }: AnchoredOptions): { style: CSSProperties; placement: Placement; available: number } {
   const [state, setState] = useState<
     { top: number; left: number; placement: Placement; available: number } | null
@@ -98,7 +103,7 @@ export function useAnchoredPosition({
       window.removeEventListener('scroll', compute, true);
       window.removeEventListener('resize', compute);
     };
-  }, [open, compute]);
+  }, [open, compute, anchorKey]);
 
   return {
     // Hidden until measured, so nothing is ever painted at the wrong place.

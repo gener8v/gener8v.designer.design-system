@@ -1,0 +1,53 @@
+/* ------------------------------------------------------------------- pager */
+
+/* STEPPING THROUGH A SET WITHOUT LEAVING THE PLACE YOU ARE IN: `‹ S4 of 19 ›`.
+   One bordered control, so the position and the two ways to change it read as
+   one thing. At either end the dead button is disabled, not hidden, so the chip
+   does not change shape under the pointer. */
+.pager-chip {
+  display: inline-flex;
+  align-items: stretch;
+  block-size: var(--control-h-sm);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  overflow: hidden;
+}
+.pager-chip-label {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--space-3);
+  border-inline: 1px solid var(--color-neutral-200);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-800);
+  white-space: nowrap;
+}
+.pager-chip-step {
+  display: inline-grid;
+  place-items: center;
+  inline-size: var(--control-h-sm);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.pager-chip-step svg { inline-size: var(--space-4); block-size: var(--space-4); }
+.pager-chip-step:hover:not([disabled]) { background: var(--color-neutral-100); color: var(--color-neutral-900); }
+.pager-chip-step:active:not([disabled]) { background: var(--color-neutral-200); }
+
+/* UNDER A PAGED TABLE: how much of it you are looking at, and the pages. The
+   range is on the start edge, the pages on the end; on a phone they stack. */
+.table-pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-block-start: var(--space-3);
+}
+.table-pager-range { margin: 0; font-size: var(--text-xs); color: var(--color-neutral-600); }
+.table-pager .pagination { flex-wrap: wrap; }
+.pagination-item svg { inline-size: var(--space-4); block-size: var(--space-4); }

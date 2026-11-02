@@ -51,18 +51,18 @@ packages/tokens/src/theme.mjs      the source of truth — 135 tokens
 
 ## What is in here
 
-237 exports across 45 families. The ones worth knowing:
+258 exports across 50 families. The ones worth knowing:
 
 | Area | Exports |
 | --- | --- |
 | Actions | `Button` `ButtonGroup` |
 | Surfaces | `Card` `CardLink` `Panel` `Tag` |
 | Forms | `Field` `Input` `Textarea` `Select` `Combobox` `Checkbox` `Radio` `Switch` `Slider` `FileUpload` `TokenInput` `Quantity` `RadioCard` |
-| Navigation | `Nav` `Sidebar` `Breadcrumbs` `Tabs` `Tree` `Hamburger` `Drawer` `Menu` `CommandPalette` |
-| Flow | `Flow` `Stepper` `Progress` `Meter` `Timeline` `Feed` `State` `StateArt` `useStepValidation` `ErrorSummary` |
-| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `HoverCard` `Callout` |
-| Data | `Table` `Matrix` `Diff` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` |
-| Library & integrations | `DocList` `DocPreview` `Reader` `Connection` `Credential` `KeyRow` `Rule` |
+| Navigation | `Nav` `Sidebar` `Breadcrumbs` `Tabs` `Tree` `Hamburger` `Drawer` `PagerChip` `Contents` `Menu` `CommandPalette` `Kbd` `ShortcutList` `useListKeys` |
+| Flow | `Flow` `Stepper` `Progress` `Meter` `Timeline` `Feed` `Lanes` `LiveProgress` `LiveIndicator` `Pulse` `LiveMark` `LiveSection` `State` `StateArt` `useStepValidation` `ErrorSummary` |
+| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `HoverCard` `useDelegatedHoverCard` `Callout` |
+| Data | `Table` `usePagedTable` `TablePager` `Matrix` `Diff` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` |
+| Library & integrations | `DocList` `DocPreview` `Reader` `Citation` `SourceCard` `Connection` `Credential` `KeyRow` `Rule` |
 
 `design/components/*.html` shows every one of them rendered. View source and copy the markup.
 

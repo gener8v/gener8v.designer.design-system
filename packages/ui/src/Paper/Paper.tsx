@@ -31,6 +31,10 @@ export const Paper = ({ className, ...rest }: HTMLAttributes<HTMLElement>) => (
  *
  * It does not print, for the same reason: a contents list on paper is a list of places that are
  * not links to anything.
+ *
+ * It is held to the window and scrolls inside itself, so a contents list taller than the screen
+ * still reaches its last entry. An app with a fixed top bar sets `--paper-aside-top` to the bar's
+ * height plus a gap; the rail's sticky offset and its height both follow.
  */
 export const PaperAside = ({ className, ...rest }: HTMLAttributes<HTMLElement>) => (
   <aside {...rest} className={cx('paper-aside', className)} />

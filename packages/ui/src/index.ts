@@ -34,8 +34,14 @@ export { Breadcrumbs, Breadcrumb } from './Breadcrumbs/index.js';
 export type { BreadcrumbsProps, BreadcrumbProps } from './Breadcrumbs/index.js';
 export { Tabs, Tab } from './Tabs/index.js';
 export type { TabsProps, TabProps, TabsOrientation } from './Tabs/index.js';
-export { TableWrap, Table, TableToolbar, Th, Td, TableEmpty, TableEmptyTitle, useTableSort } from './Table/index.js';
-export type { TableProps, TableToolbarProps, ThProps, TdProps, SortDirection, TableSort, TableSortResult } from './Table/index.js';
+export {
+  TableWrap, Table, TableToolbar, Th, Td, TableEmpty, TableEmptyTitle, useTableSort,
+  usePagedTable, pageRange, TablePager,
+} from './Table/index.js';
+export type {
+  TableProps, TableToolbarProps, ThProps, TdProps, SortDirection, TableSort, TableSortResult,
+  PagedTable, PagedTableOptions, TablePagerProps,
+} from './Table/index.js';
 export { Matrix } from './Matrix/index.js';
 export type { MatrixProps, MatrixRow, MatrixCol, MatrixCell, MatrixTone } from './Matrix/index.js';
 export { Diff, diff, tokenize } from './Diff/index.js';
@@ -57,6 +63,17 @@ export { Pagination, PaginationItem, PaginationGap } from './Pagination/index.js
 export type { PaginationItemProps } from './Pagination/index.js';
 export { Timeline, TimelineItem } from './Timeline/index.js';
 export type { TimelineItemProps } from './Timeline/index.js';
+export { Pulse, LiveIndicator, LiveMark, LiveSection, liveWhere, LiveProgress, Lanes, AGENT_LANES } from './Live/index.js';
+export type {
+  PulseProps, PulseTone, LiveIndicatorProps, LiveMarkProps, LiveMarkLabels, LiveSectionProps, LiveState,
+  LiveProgressProps, LiveProgressState, LiveProgressLabels, LanesProps, Lane, LaneItem, LaneTone,
+} from './Live/index.js';
+export { Kbd, ShortcutList, useListKeys, stepIndex, isTypingTarget } from './Keys/index.js';
+export type { Shortcut, ShortcutListProps, KeyChord, ListKeys, ListKeysOptions, ListKeyItemProps } from './Keys/index.js';
+export { Contents } from './Contents/index.js';
+export type { ContentsProps, ContentsItem } from './Contents/index.js';
+export { PagerChip } from './Pager/index.js';
+export type { PagerChipProps } from './Pager/index.js';
 export { Feed, FeedGroup, FeedItem } from './Feed/index.js';
 export type { FeedGroupProps, FeedItemProps, FeedMarker } from './Feed/index.js';
 export { State, StateIcon, StateTitle, StateBody, StateActions, StateDetail } from './State/index.js';
@@ -88,9 +105,11 @@ export type { TranscriptProps, TranscriptTurnProps } from './Transcript/index.js
 export { Tooltip } from './Tooltip/index.js';
 export type { TooltipProps } from './Tooltip/index.js';
 export { Popover, PopoverTitle, PopoverActions } from './Popover/index.js';
-export type { PopoverProps } from './Popover/index.js';
-export { HoverCard } from './HoverCard/index.js';
-export type { HoverCardProps } from './HoverCard/index.js';
+export type { PopoverProps, PopoverSize } from './Popover/index.js';
+export { HoverCard, useDelegatedHoverCard } from './HoverCard/index.js';
+export type { HoverCardProps, DelegatedHoverCardOptions, DelegatedHoverCard } from './HoverCard/index.js';
+export { Citation, SourceCard } from './Citation/index.js';
+export type { CitationProps, SourceCardProps, SourceCardAction } from './Citation/index.js';
 export { useAnchoredPosition } from './useAnchoredPosition.js';
 export type { Placement, Align } from './useAnchoredPosition.js';
 export { Callout, CalloutTitle } from './Callout/index.js';

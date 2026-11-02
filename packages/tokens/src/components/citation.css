@@ -1,0 +1,76 @@
+/* ---------------------------------------------------------------- citation */
+
+/* A SOURCE NUMBER IN PROSE, followed in place to what it names. A small tinted
+   chip that sits on the line rather than raising it. A source that could not be
+   found is dashed, unlinked and says so in words — never a link to a page that
+   will not load. */
+.citation {
+  display: inline-block;
+  margin-inline: 1px;
+  padding: 0 var(--space-1);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent-100);
+  color: var(--color-accent-700);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+  vertical-align: baseline;
+  white-space: nowrap;
+}
+a.citation:hover { background: var(--color-accent-200); color: var(--color-accent-800); }
+a.citation[aria-describedby] { border-color: var(--color-accent-300); }
+.citation[data-missing] {
+  background: transparent;
+  border: 1px dashed var(--color-neutral-300);
+  color: var(--color-neutral-600);
+  cursor: help;
+}
+
+/* WHAT IT POINTS AT: the file, the place in it, the words cited, a way to open
+   it there. Held to a reading measure inside a hover card or a list. */
+.source-card { display: grid; gap: var(--space-2); font-size: var(--text-sm); }
+.source-card-file {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--color-neutral-900);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+.source-card-id { flex: none; font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 400; color: var(--color-neutral-600); }
+.source-card-locator { margin: 0; }
+.source-card-excerpt {
+  margin: 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--color-neutral-200);
+  color: var(--color-neutral-700);
+  line-height: 1.55;
+}
+.source-card[data-missing] .source-card-excerpt { border-inline-start-style: dashed; color: var(--color-neutral-600); }
+.source-card .skeleton { inline-size: 100%; }
+.source-card-action {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-accent-700);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.source-card-action:hover { text-decoration: underline; }
+
+/* THE PASSAGE A CITATION POINTED AT, marked where it opens. The browser's own
+   yellow is a highlighter on a light page and a glare on a dark one; this is the
+   accent's tint, in both themes, with the text keeping its own colour. */
+mark {
+  background: var(--color-accent-100);
+  color: inherit;
+  border-radius: var(--radius-xs);
+  box-shadow: 0 0 0 2px var(--color-accent-100);
+}
