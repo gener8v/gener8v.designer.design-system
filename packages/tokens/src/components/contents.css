@@ -82,6 +82,9 @@ nav.contents, .contents-nav { display: block; }
 /* "Rewritten in this run" is a dot, not a tick: a tick is what the review box draws. */
 svg.contents-live { inline-size: 1em; block-size: 1em; color: var(--color-success-700); vertical-align: -0.125em; }
 svg.contents-written { inline-size: 0.9em; block-size: 0.9em; }
+/* The pulse's ring spreads past the dot, so it needs more room than a still mark or it sits on
+   the section number. */
+.live-pulse.contents-live { margin-inline-end: var(--space-3); }
 .contents-item[data-live="writing"] .contents-link { color: var(--color-accent-700); font-weight: 500; }
 .contents-item[data-live="queued"] .contents-link { color: var(--color-neutral-600); opacity: 0.7; }
 .contents-item[data-live="failed"] .contents-link { color: var(--color-danger-700); }
