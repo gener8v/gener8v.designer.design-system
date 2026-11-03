@@ -62,6 +62,21 @@
      and the underline remain. The focused cell still needs an edge. */
   .matrix-cell:focus-visible { outline: 2px solid Highlight; }
   .diff-ins, .diff-del { forced-color-adjust: auto; }
+
+  /* Live work. The pulse is a filled dot; it is drawn in the highlight or it is gone. The lanes
+     and the section being written lose their tint, so each keeps an edge; the words were always
+     there. */
+  .live-pulse, .live-pulse::after { background: Highlight; forced-color-adjust: none; }
+  .lane { border: 1px solid CanvasText; }
+  .live-section[data-live="writing"] { border-inline-start-color: Highlight; }
+  .live-section[data-live="written"], .live-section[data-live="queued"],
+  .live-section[data-live="failed"] { border-inline-start-color: CanvasText; }
+  .table tbody tr:has(.live-progress[data-state="active"]) > :first-child { box-shadow: inset 4px 0 0 Highlight; }
+  /* A key, a citation and the stepping chip are tinted boxes; they keep their edges. */
+  .kbd, .citation, .pager-chip { border-color: CanvasText; }
+  .contents-item:has(.contents-link[aria-current]) { border-inline-start-color: Highlight; }
+  .contents-link[aria-current] { color: Highlight; }
+  [data-list-item]:focus-visible { outline: 2px solid Highlight; }
 }
 
 /* --- print ------------------------------------------------------------ */
@@ -99,6 +114,13 @@
   thead { display: table-header-group; }
   .table-wrap, .matrix-wrap { overflow: visible; }
   .hover-card { display: none !important; }
+
+  /* A run in progress is a screen's state, not the document's. The section prints as text, at
+     full ink; a pulse prints as nothing. A contents rail and a stepping chip are navigation. */
+  .live-pulse, .pager-chip, .table-pager, .contents-check { display: none !important; }
+  .live-section { background: none !important; opacity: 1 !important; border-inline-start-color: transparent !important; }
+  .live-section > * { animation: none !important; }
+  .citation { background: none; border: 1px solid #999; color: #000; }
   .matrix th, .matrix td { position: static !important; }
 
   /* A printed link whose target is invisible is a dead reference. */
@@ -135,5 +157,15 @@
     animation: progress-breathe 2.4s var(--ease-in-out) infinite !important;
     inline-size: 100%;
   }
+
+  /* A PULSE IS NOT ONE OF THE THREE. It always sits beside words that say the same thing, so it
+     can stand still — but a still dot reads as a plain status dot, so the ring stays, as a halo,
+     rather than vanishing at the end of a collapsed animation. */
+  .live-pulse::after {
+    animation: none !important;
+    transform: scale(2);
+    opacity: 0.25;
+  }
+  .live-pulse[data-still]::after { opacity: 0; }
 }
 @keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }

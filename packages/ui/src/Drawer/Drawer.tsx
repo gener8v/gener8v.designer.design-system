@@ -23,11 +23,22 @@ export interface DrawerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'child
    * phone the rail becomes a drawer, and it should arrive from the side it lives on.
    */
   side?: 'start' | 'end';
+  /**
+   * A header pinned above the body: a title, a `PagerChip`, the actions that belong to what is
+   * shown. With it, the children become a body that scrolls on its own, so the header — and the
+   * way to step to the next item — never scrolls away from a long transcript.
+   */
+  header?: ReactNode;
+  /**
+   * `md` is a menu's width. `lg` is a reading width — a transcript beside the document that cites
+   * it — and takes the whole screen on a phone, where there is no "beside".
+   */
+  size?: 'md' | 'lg';
 }
 
 /** A modal side panel. Behaviour comes from useModalBehavior — see that file. */
 export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
-  { open, onClose, className, children, closeLabel = 'Close', side = 'end', ...rest }, ref,
+  { open, onClose, className, children, closeLabel = 'Close', side = 'end', header, size = 'md', ...rest }, ref,
 ) {
   const panelRef = useModalBehavior(open, onClose);
   if (!open) return null;
@@ -37,6 +48,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
       <div {...rest} ref={mergeRefs(panelRef, ref)}
         role="dialog" aria-modal="true" tabIndex={-1}
         data-side={side === 'start' ? 'start' : undefined}
+        data-size={size === 'lg' ? 'lg' : undefined}
         className={cx('drawer-panel', className)}>
         {/* First in the DOM so it is the first thing tab reaches, and pinned by
             the stylesheet so it does not scroll away from a long panel. */}
@@ -46,7 +58,12 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
               strokeLinecap="round" fill="none" />
           </svg>
         </button>
-        {children}
+        {header === undefined ? children : (
+          <>
+            <div className="drawer-head">{header}</div>
+            <div className="drawer-body">{children}</div>
+          </>
+        )}
       </div>
     </>
   );

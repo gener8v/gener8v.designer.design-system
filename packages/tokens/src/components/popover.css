@@ -31,3 +31,18 @@
   padding: var(--space-3) var(--space-4);
   max-inline-size: 320px;
 }
+
+/* SIZES. `md` is the menu-sized default above and adds no class. `sm` is a
+   hover card's glance. `md` on a hover card gives a cited sentence room — at
+   320px most of them broke across five lines. `lg` is a panel with a reading
+   width of its own (a run's lanes and what is happening): capped to the window,
+   never taller than the screen, and scrolling inside itself. */
+.popover-sm { max-inline-size: 320px; }
+.popover.popover-md { max-inline-size: min(24rem, calc(100vw - var(--space-8))); }
+.popover.popover-lg {
+  inline-size: min(36rem, calc(100vw - var(--space-8)));
+  max-inline-size: min(36rem, calc(100vw - var(--space-8)));
+  max-block-size: min(40rem, calc(100dvh - var(--space-16)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

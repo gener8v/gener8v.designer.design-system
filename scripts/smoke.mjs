@@ -200,5 +200,54 @@ check('State/art',
   renderToStaticMarkup(h(ui.State, { kind: 'empty', art: 'inbox' })),
   'class="state-art"', 'data-art="inbox"', 'state-art-mark');
 
+check('Pulse+LiveIndicator',
+  renderToStaticMarkup(h(ui.LiveIndicator, { label: 'Agents Working' })),
+  'role="status"', 'class="live-indicator"', 'class="live-pulse"', 'aria-hidden="true"');
+
+check('LiveMark',
+  renderToStaticMarkup(h(ui.LiveMark, { state: 'writing' })),
+  'tag tag-accent live-mark', 'data-live="writing"', 'Writing Now');
+
+check('LiveSection',
+  renderToStaticMarkup(h(ui.LiveSection, { live: 'writing' }, 'x')),
+  'class="live-section"', 'aria-busy="true"');
+
+check('LiveProgress',
+  renderToStaticMarkup(h(ui.LiveProgress, { state: 'active', where: ui.liveWhere(['2.5', '2.6']), value: 4, max: 6, noun: 'sections' })),
+  'class="live-progress"', '§2.5 +1', 'aria-label="4 of 6 sections done"', '4/6');
+
+check('Lanes',
+  renderToStaticMarkup(h(ui.Lanes, { 'aria-label': 'Agents', max: 1, items: [
+    { id: 'a', label: 'Theme finder', lane: 'running' },
+    { id: 'b', label: 'Milestone writer', lane: 'done' }, { id: 'c', label: 'Transcript reader', lane: 'done' }] })),
+  'class="lanes"', 'class="lane"', 'data-tone="accent"', 'lane-item', 'lane-more', '+1');
+
+check('Kbd+ShortcutList',
+  renderToStaticMarkup(h(ui.ShortcutList, { items: [{ keys: ['J', '↓'], does: 'Next finding' }] })),
+  '<dl class="shortcut-list">', '<kbd class="kbd">J</kbd>', 'shortcut-or', 'Down Arrow');
+
+check('Contents',
+  renderToStaticMarkup(h(ui.Contents, { current: 'b', reviewed: ['a'], onReviewedChange: () => {}, items: [
+    { id: 'a', text: '1 Scope' }, { id: 'b', text: '2.5 Account Hierarchy', depth: 2, live: 'writing' }, { id: 'c', text: '3 Findings' }] })),
+  'class="contents"', 'aria-current="location"', '1/3 reviewed', 'contents-check', 'data-live="writing"');
+
+check('Citation+SourceCard',
+  renderToStaticMarkup(h('div', null, h(ui.Citation, { href: '#s4' }, 'S4'),
+    h(ui.SourceCard, { id: 'S4', file: 'Running Notes.docx', locator: 'Page 3', excerpt: 'they disagree', action: { label: 'Open at Passage', href: '#e' } }))),
+  'class="citation"', 'class="source-card"', 'source-card-excerpt', 'Open at Passage');
+
+check('PagerChip+Drawer/header',
+  renderToStaticMarkup(h(ui.Drawer, { open: true, onClose: () => {}, 'aria-label': 'Cited evidence', size: 'lg',
+    header: h(ui.PagerChip, { label: 'S4 of 19', onNext: () => {} }) }, 'Body')),
+  'data-size="lg"', 'class="drawer-head"', 'class="drawer-body"', 'class="pager-chip"', 'disabled=""');
+
+check('TablePager',
+  renderToStaticMarkup(h(ui.TablePager, { label: 'Documents pages', noun: 'documents', paged: { page: 2, pages: 3, total: 61, from: 26, to: 50, setPage: () => {} } })),
+  'class="table-pager"', 'Showing 26–50 of 61 documents', 'aria-current="page"', 'Page 3 of 3');
+
+check('BarChart/horizontal',
+  renderToStaticMarkup(h(ui.BarChart, { orientation: 'horizontal', title: 'Impact by kind', categories: ['Process friction'], series: [{ label: 'Findings', values: [14] }] })),
+  'class="chart-hbars"', 'chart-hbar-row', 'chart-hbar-value');
+
 if (fails.length) { console.error(`✗ smoke\n${fails.map((f) => '  · ' + f).join('\n')}`); process.exit(1); }
-console.log(`✓ smoke — ${exported} exports import from dist; 36 render assertions pass`);
+console.log(`✓ smoke — ${exported} exports import from dist; 47 render assertions pass`);

@@ -51,15 +51,26 @@
   /* A heading is one long word more often than anybody expects. */
   overflow-wrap: anywhere;
   position: sticky;
-  inset-block-start: var(--space-8);
+  inset-block-start: var(--paper-aside-top, var(--space-8));
   font-size: var(--text-sm);
+  /* A RAIL TALLER THAN THE WINDOW. A contents list of seventy-eight sections is
+     longer than any screen, and a sticky element taller than its viewport
+     cannot be scrolled to its end — the last entries were unreachable until the
+     page itself ran out. So the rail is held to the window and scrolls inside
+     itself, and its scrolling stops at its own ends rather than carrying on
+     into the page. An app with a fixed top bar sets `--paper-aside-top` to the
+     bar's height plus a gap, and the rail's height follows. */
+  max-block-size: calc(100dvh - var(--paper-aside-top, var(--space-8)) - var(--space-8));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
 }
 
 @media (max-width: 1100px) {
   /* Below this the rail steals width the document needs. It goes above, where
      a contents list is still useful and costs the prose nothing. */
   .paper-ground { flex-direction: column; align-items: stretch; }
-  .paper-aside { position: static; inline-size: auto; order: -1; }
+  .paper-aside { position: static; inline-size: auto; order: -1; max-block-size: none; overflow: visible; }
 }
 
 .paper {

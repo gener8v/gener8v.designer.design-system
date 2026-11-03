@@ -3,6 +3,15 @@ import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { cx } from '../cx.js';
 import { useAnchoredPosition } from '../useAnchoredPosition.js';
 import type { Align, Placement } from '../useAnchoredPosition.js';
+import type { PopoverSize } from '../Popover/Popover.js';
+
+/** Dwell before a hover card opens and grace before it closes — shared with the delegated form. */
+export const HOVER_OPEN_MS = 400;
+export const HOVER_CLOSE_MS = 150;
+
+/** The class a size adds. `sm` is a hover card's own width and adds nothing. */
+export const hoverSizeClass = (size: PopoverSize) =>
+  size === 'md' ? 'popover-md' : size === 'lg' ? 'popover-lg' : undefined;
 
 export interface HoverCardProps {
   /**
@@ -19,6 +28,11 @@ export interface HoverCardProps {
   placement?: Placement;
   align?: Align;
   onOpenChange?: (open: boolean) => void;
+  /**
+   * `sm` by default — a glance. `md` when the card holds a sentence of quoted text, which at the
+   * glance width breaks across five lines.
+   */
+  size?: PopoverSize;
   className?: string;
 }
 
@@ -37,8 +51,8 @@ export interface HoverCardProps {
  * card, it is a `Popover`.
  */
 export function HoverCard({
-  trigger, content, openDelay = 400, closeDelay = 150, placement = 'bottom', align = 'start',
-  onOpenChange, className,
+  trigger, content, openDelay = HOVER_OPEN_MS, closeDelay = HOVER_CLOSE_MS, placement = 'bottom',
+  align = 'start', onOpenChange, size = 'sm', className,
 }: HoverCardProps) {
   const [open, setOpenState] = useState(false);
   const anchorRef = useRef<HTMLElement | null>(null);
@@ -83,7 +97,7 @@ export function HoverCard({
     <>
       {wired}
       {open && (
-        <div ref={cardRef} id={id} style={style} className={cx('popover', 'hover-card', className)}
+        <div ref={cardRef} id={id} style={style} className={cx('popover', 'hover-card', hoverSizeClass(size), className)}
           onMouseEnter={clear} onMouseLeave={() => schedule(false, closeDelay)}>
           {content}
         </div>

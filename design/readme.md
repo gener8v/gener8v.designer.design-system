@@ -156,6 +156,13 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.spinner`, `.skeleton` (+ `-text`, `-title`, `-circle`) | Busy and placeholder | components/flow.html |
 | `.pagination` with `.pagination-item`, `.pagination-gap` | Paged navigation | components/flow.html |
 | `.timeline` with `.timeline-item`, `.timeline-marker`, `.timeline-time`, `.timeline-title`, `.timeline-body` | Chronology | components/flow.html |
+| `.live-pulse`, `.live-indicator`, `.live-mark`, `.live-section` (`data-live`), `.live-progress` with `.live-progress-where`, `.live-progress-bar`, `.live-progress-count` | Work happening now, drawn where the work is. The pulse always sits beside words; under reduced motion it is a still halo | components/live.html |
+| `.lanes` with `.lane`, `.lane-name`, `.lane-count`, `.lane-items`, `.lane-item`, `.lane-item-detail`, `.lane-more` | Swimlanes of pills by state; a pill that changes lane slides there, except under reduced motion | components/live.html |
+| `.contents` with `.contents-head`, `.contents-count`, `.contents-list`, `.contents-item`, `.contents-link`, `.contents-check` | A document's contents — `aria-current="location"`, optional reviewed boxes, the same live marks as the sections | components/reading.html |
+| `.kbd`, `.shortcut-list` with `.shortcut`, `.shortcut-keys`, `.shortcut-does` | A key drawn as a key, and keys with what they do. Not `.key-list`, which is API keys | components/reading.html |
+| `.pager-chip` with `.pager-chip-step`, `.pager-chip-label`; `.drawer-head`, `.drawer-body` | Stepping through a set in place (`S4 of 19`), in a drawer whose head is pinned above a scrolling body | components/reading.html |
+| `.table-pager` with `.table-pager-range` | Under a paged table: the range on show and the pages. Nothing for a table that fits on one page | components/table.html |
+| `.chart-hbars` with `.chart-hbar-row`, `.chart-hbar-label`, `.chart-hbar-track`, `.chart-hbar`, `.chart-hbar-value` | Bars across the page — the name above, the figure at the end | components/charts.html |
 | `.feed` with `.feed-group`, `.feed-head`, `.feed-actor`, `.feed-when`, `.feed-items`, `.feed-item`, `.feed-marker`, `.feed-kind`, `.feed-time`, `.feed-body` | Who did what, grouped by who — a timeline with people in it. Marker is `data-marker="dot|number|icon"` | components/flow.html |
 | `.state` with `.state-icon`, `.state-title`, `.state-body`, `.state-actions`, `.state-detail` | The six states, tone via `data-tone` | components/states.html |
 | `.state-art` with `.state-art-mark` | A line drawing for an empty state — grid, history, library, inbox, search. `currentColor` plus one accent mark; hidden from assistive tech | components/states.html |
@@ -181,6 +188,8 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
 | `.popover` with `.popover-title`, `.popover-actions` | Non-modal floating panel — Tab is not trapped | — |
+| `.popover-sm`, `.popover-md`, `.popover-lg` | Popover and hover card widths — `lg` is a reading width capped to the window that scrolls inside itself | components/live.html |
+| `.citation` (+ `data-missing`) with `.source-card`, `.source-card-file`, `.source-card-id`, `.source-card-locator`, `.source-card-excerpt`, `.source-card-action` | A citation marker in prose and what it points at. A missing source is dashed, unlinked and says so in words | components/reading.html |
 | `.hover-card` (on `.popover`) | A popover opened by hover or keyboard focus after a dwell; Escape closes. A preview, never the only home of a fact or an action | components/feedback.html |
 | `.card-media` | Image slot that bleeds to the card's edges | templates/purchase/ |
 | `.qty` with `.qty-btn`, `.qty-input` | Quantity stepper over a real number input | templates/purchase/ |
@@ -233,6 +242,8 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - Do not ship a flow that handles only the happy path. All six states or none.
 - Do not move the forward action. Back is left, forward is right, in every flow.
 - Do not use `.progress` for a level or `.meter` for a task. They mean different things.
+- Do not let a pulse, a lane's tint or a section's breathing be the only sign of live work. A word
+  goes beside every one of them.
 - Do not tint a matrix cell or a diff without a mark or a line to go with it. Colour is the second
   signal, never the only one.
 - Do not pass a `Date` across a date-picker boundary. Calendar dates are `YYYY-MM-DD`

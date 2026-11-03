@@ -1,0 +1,84 @@
+<!-- @dsCard group="Components" name="Reading and review" subtitle="Contents with review marks, citations and their source card, a drawer that steps through sources, and keys" viewport="1200x1600" -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>GENER8V — Reading and review</title>
+<link rel="stylesheet" href="../styles.css" />
+<style>
+/* Demo scaffolding only — everything visual comes from ../styles.css. */
+.demo { max-width: 1200px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+.demo-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); }
+.demo-static { position: static; }
+.demo-ground { border-radius: var(--radius-lg); overflow: hidden; }
+.demo-paper-section + .demo-paper-section { margin-block-start: var(--space-6); }
+.demo-cards { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
+.demo-stage { position: relative; block-size: calc(var(--space-32) * 3.5); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; background: var(--color-surface); }
+.demo-stage .drawer-panel { position: absolute; }
+.demo-drawer-title { font-size: var(--text-lg); margin: 0; }
+.demo-split { display: grid; gap: var(--space-8); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); align-items: start; }
+</style>
+</head>
+<body>
+<main class="demo">
+
+  <p class="demo-head label">Contents beside the sheet — reviewed, live, current</p>
+  <div class="paper-ground demo-ground">
+    <aside class="paper-aside"><nav aria-label="Contents" class="contents"><p class="contents-head"><span class="contents-title">Contents</span><span class="contents-count num">4/8 reviewed</span></p><ol class="contents-list"><li class="contents-item" data-depth="1"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 1 Purpose and Scope" checked=""/><a class="contents-link" href="#s1" title="1 Purpose and Scope"><span class="contents-text">1 Purpose and Scope</span></a></li><li class="contents-item" data-depth="1"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 2 Current State" checked=""/><a class="contents-link" href="#s2" title="2 Current State"><span class="contents-text">2 Current State</span></a></li><li class="contents-item" data-depth="2"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 2.1 Systems in Use" checked=""/><a class="contents-link" href="#s2-1" title="2.1 Systems in Use"><span class="contents-text">2.1 Systems in Use</span></a></li><li class="contents-item" data-depth="2" data-live="written"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 2.4 Data Lineage" checked=""/><a class="contents-link" href="#s2-4" title="2.4 Data Lineage"><svg class="contents-live" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 8.5l3 3 6-7" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg><span class="contents-text">2.4 Data Lineage</span><span class="sr-only">, rewritten in this run</span></a></li><li class="contents-item" data-depth="2" data-live="writing"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 2.5 Account Hierarchy"/><a class="contents-link" href="#s2-5" title="2.5 Account Hierarchy" aria-current="location"><span aria-hidden="true" data-tone="accent" class="live-pulse contents-live"></span><span class="contents-text">2.5 Account Hierarchy</span><span class="sr-only">, being written now</span></a></li><li class="contents-item" data-depth="2" data-live="queued"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 2.6 Reporting Cadence"/><a class="contents-link" href="#s2-6" title="2.6 Reporting Cadence"><span class="contents-text">2.6 Reporting Cadence</span><span class="sr-only">, queued</span></a></li><li class="contents-item" data-depth="1"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 3 Frictions Observed in Internal Operations Meetings and Their Downstream Effect on Reporting"/><a class="contents-link" href="#s3" title="3 Frictions Observed in Internal Operations Meetings and Their Downstream Effect on Reporting"><span class="contents-text">3 Frictions Observed in Internal Operations Meetings and Their Downstream Effect on Reporting</span></a></li><li class="contents-item" data-depth="1"><input type="checkbox" class="checkbox contents-check" aria-label="Reviewed: 4 Recommendations"/><a class="contents-link" href="#s4" title="4 Recommendations"><span class="contents-text">4 Recommendations</span></a></li></ol></nav></aside>
+    <article class="paper">
+      <div class="reader">
+        <h2>Account Hierarchy</h2>
+        <p>Three hierarchies are in use at once <a data-source="4" href="#source-4" class="citation">S4</a>, and the reporting team rebuilds its own every quarter <a data-source="7" href="#source-7" class="citation">S7</a>. A fourth was mentioned once and never produced <span class="citation" data-missing="">S12<span class="sr-only"> (source not found)</span></span>.</p>
+        <p>Each hierarchy is correct for the team that keeps it. The disagreement surfaces only at
+        month-end, when the board pack rolls them up together.</p>
+      </div>
+    </article>
+  </div>
+  <p class="note">The rail is held to the window and scrolls inside itself, so a contents list of
+  seventy-eight sections reaches its last entry. The current entry is <code>aria-current="location"</code>;
+  a long heading is held to two lines with the rest in its title. Reviewed marks are the caller's
+  keys, so a mark can lapse when the section is rewritten. Below 1100px the rail goes above the sheet.</p>
+
+  <div class="demo-split">
+    <div>
+      <p class="demo-head label">Contents — plain</p>
+      <nav aria-label="Contents" class="contents"><p class="contents-head"><span class="contents-title">Contents</span></p><ol class="contents-list"><li class="contents-item" data-depth="1"><a class="contents-link" href="#s1" title="1 Purpose and Scope"><span class="contents-text">1 Purpose and Scope</span></a></li><li class="contents-item" data-depth="1"><a class="contents-link" href="#s2" title="2 Current State" aria-current="location"><span class="contents-text">2 Current State</span></a></li><li class="contents-item" data-depth="2"><a class="contents-link" href="#s2-1" title="2.1 Systems in Use"><span class="contents-text">2.1 Systems in Use</span></a></li><li class="contents-item" data-depth="2"><a class="contents-link" href="#s2-4" title="2.4 Data Lineage"><span class="contents-text">2.4 Data Lineage</span></a></li><li class="contents-item" data-depth="2"><a class="contents-link" href="#s2-5" title="2.5 Account Hierarchy"><span class="contents-text">2.5 Account Hierarchy</span></a></li><li class="contents-item" data-depth="2"><a class="contents-link" href="#s2-6" title="2.6 Reporting Cadence"><span class="contents-text">2.6 Reporting Cadence</span></a></li><li class="contents-item" data-depth="1"><a class="contents-link" href="#s3" title="3 Frictions Observed in Internal Operations Meetings and Their Downstream Effect on Reporting"><span class="contents-text">3 Frictions Observed in Internal Operations Meetings and Their Downstream Effect on Reporting</span></a></li><li class="contents-item" data-depth="1"><a class="contents-link" href="#s4" title="4 Recommendations"><span class="contents-text">4 Recommendations</span></a></li></ol></nav>
+    </div>
+    <div>
+      <p class="demo-head label">Contents — arriving</p>
+      <nav aria-label="Contents" aria-busy="true" class="contents"><p class="contents-head"><span class="contents-title">Contents</span></p><ol class="contents-list"><li class="contents-item" data-depth="1"><span class="skeleton skeleton-text" aria-hidden="true"></span></li><li class="contents-item" data-depth="2"><span class="skeleton skeleton-text" aria-hidden="true"></span></li><li class="contents-item" data-depth="2"><span class="skeleton skeleton-text" aria-hidden="true"></span></li><li class="contents-item" data-depth="1"><span class="skeleton skeleton-text" aria-hidden="true"></span></li><li class="contents-item" data-depth="2"><span class="skeleton skeleton-text" aria-hidden="true"></span></li></ol></nav>
+    </div>
+  </div>
+
+  <p class="demo-head label">Source card — in a hover card on a citation</p>
+  <div class="demo-cards">
+    <div class="popover hover-card popover-md demo-static"><div class="source-card"><p class="source-card-file"><span class="source-card-id">S4</span><span>Internal Ops Meetings — Running Notes.docx</span></p><p class="source-card-locator"><span class="tag tag-neutral">Page 3</span></p><blockquote class="source-card-excerpt">“We have the ledger hierarchy, the reporting one, and whatever sales ops keeps in their sheet — and they all disagree about who rolls up to whom…”</blockquote><a class="source-card-action" href="#evidence">Open at Passage</a></div></div>
+    <div class="popover hover-card popover-md demo-static"><div class="source-card" aria-busy="true"><p class="source-card-file"><span class="source-card-id">S7</span><span>Reporting Team Interview — 14 Oct.m4a</span></p><span class="skeleton skeleton-text" aria-hidden="true"></span><span class="skeleton skeleton-text" aria-hidden="true"></span></div></div>
+    <div class="popover hover-card popover-md demo-static"><div class="source-card" data-missing=""><p class="source-card-file"><span class="source-card-id">S12</span><span>Q3 Hierarchy Review.xlsx</span></p><p class="source-card-excerpt">This source is not in the corpus, so the passage cannot be shown.</p></div></div>
+  </div>
+  <p class="note">The markers live in sanitised HTML, so the card is opened by
+  <code>useDelegatedHoverCard</code>: delegated events on the container, the same dwell, grace,
+  Escape and placement as <code>HoverCard</code>. A missing source is a dashed marker that says so,
+  never a link to a page that will not load.</p>
+
+  <p class="demo-head label">Drawer with a head — stepping through sources</p>
+  <div class="demo-stage"><div class="drawer-panel demo-drawer" data-size="lg" role="dialog" aria-label="Cited evidence"><button type="button" class="drawer-close" aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M4 4l8 8M12 4l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"></path></svg></button><div class="drawer-head"><div class="demo-row"><div role="group" aria-label="Sources" class="pager-chip"><button type="button" class="pager-chip-step" aria-label="Previous Source"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5L5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button><span class="pager-chip-label num" aria-live="polite">S4 of 19</span><button type="button" class="pager-chip-step" aria-label="Next Source"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button></div><a href="#evidence" class="btn btn-ghost btn-sm">Open Full Page</a></div><h2 class="demo-drawer-title">Internal Ops Meetings — Running Notes.docx</h2><p><span class="tag tag-neutral">Page 3</span></p></div><div class="drawer-body"><p>Attendees: finance operations, reporting, sales operations.</p><p>Discussion of the month-end variance. Reporting traced it to a reclassification in the ledger that had not reached the sales operations sheet.</p><p><mark>We have the ledger hierarchy, the reporting one, and whatever sales ops keeps in their sheet — and they all disagree about who rolls up to whom.</mark></p><p>Action: reporting to propose a single owner for the hierarchy before the next close.</p></div></div></div>
+  <p class="note"><code>Drawer header size="lg"</code>: the head is pinned and the body scrolls
+  beneath it. <code>PagerChip</code> steps with its buttons, or with ← and → when
+  <code>arrowKeys</code> is on — never from inside a field.</p>
+  <div class="demo-row" style="margin-block-start:var(--space-4)"><div class="demo-row"><div role="group" aria-label="Sources" class="pager-chip"><button type="button" class="pager-chip-step" aria-label="Previous Source" disabled=""><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5L5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button><span class="pager-chip-label num" aria-live="polite">S1 of 19</span><button type="button" class="pager-chip-step" aria-label="Next Source"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button></div><div role="group" aria-label="Findings" class="pager-chip"><button type="button" class="pager-chip-step" aria-label="Previous Finding"><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M10 3.5L5.5 8l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button><span class="pager-chip-label num" aria-live="polite">Finding 7 of 7</span><button type="button" class="pager-chip-step" aria-label="Next Finding" disabled=""><svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M6 3.5L10.5 8 6 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg></button></div></div></div>
+
+  <p class="demo-head label">Keys</p>
+  <p>Press <kbd class="kbd">J</kbd> and <kbd class="kbd">K</kbd> to move through findings, <kbd class="kbd">Enter</kbd> to open one.</p>
+  <div class="card" style="margin-block-start:var(--space-4); max-inline-size:32rem"><dl class="shortcut-list"><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd">J</kbd><span class="shortcut-or">or</span><kbd class="kbd"><span aria-hidden="true">↓</span><span class="sr-only">Down Arrow</span></kbd></dt><dd class="shortcut-does">Next finding</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd">K</kbd><span class="shortcut-or">or</span><kbd class="kbd"><span aria-hidden="true">↑</span><span class="sr-only">Up Arrow</span></kbd></dt><dd class="shortcut-does">Previous finding</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd">Enter</kbd></dt><dd class="shortcut-does">Open the finding</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd">A</kbd></dt><dd class="shortcut-does">Accept</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd">R</kbd></dt><dd class="shortcut-does">Reject, with a reason</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd"><span aria-hidden="true">←</span><span class="sr-only">Left Arrow</span></kbd><span class="shortcut-or">or</span><kbd class="kbd"><span aria-hidden="true">→</span><span class="sr-only">Right Arrow</span></kbd></dt><dd class="shortcut-does">Previous or next source, in the evidence pane</dd></div><div class="shortcut"><dt class="shortcut-keys"><kbd class="kbd"><span aria-hidden="true">⇧</span><span class="sr-only">Shift</span></kbd><span class="shortcut-plus" aria-hidden="true">+</span><kbd class="kbd">?</kbd></dt><dd class="shortcut-does">Show these keys</dd></div></dl></div>
+  <p class="note"><code>useListKeys</code> moves real focus through a list: J and K from anywhere,
+  the arrows, Home and End once in the list, Enter to open, and any single key the page binds. Never
+  while typing in a field, and never under a dialog that does not hold the list.</p>
+
+</main>
+</body>
+</html>

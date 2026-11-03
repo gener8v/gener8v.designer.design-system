@@ -12,6 +12,13 @@ export interface BarChartProps {
   format?: (v: number) => string;
   /** Stacks series instead of grouping them. */
   stacked?: boolean;
+  /**
+   * `vertical` by default. `horizontal` lays categories down the page with their bars running
+   * across — for long category names ("Account hierarchy"), for a ranking, and on a phone. The
+   * label sits above each bar and the value at its end, so nothing is read off an axis. `height`
+   * is ignored: the chart is as tall as its rows.
+   */
+  orientation?: 'vertical' | 'horizontal';
 }
 
 const M = { top: 8, right: 8, bottom: 26, left: 44 };
@@ -21,7 +28,11 @@ const GAP = 2; // surface gap between adjacent fills, per the mark spec
  * Grouped or stacked bars on a zero baseline. The baseline is not optional —
  * a magnitude axis that starts anywhere else makes a 3% gap look like 300%.
  */
-export function BarChart({
+export function BarChart(props: BarChartProps) {
+  return props.orientation === 'horizontal' ? <HorizontalBars {...props} /> : <VerticalBars {...props} />;
+}
+
+function VerticalBars({
   title, note, categories, series, height = 260, format = fmt, stacked = false,
 }: BarChartProps) {
   const [hover, setHover] = useState<number | null>(null);
@@ -108,6 +119,74 @@ export function BarChart({
           ))}
         </div>
       )}
+    </ChartFrame>
+  );
+}
+
+/**
+ * Bars across the page, drawn in HTML rather than in a scaled SVG, so a category label is set at
+ * the body's size on a phone instead of shrinking with the viewBox, and a long one wraps.
+ *
+ * Each row is the category's name, then a bar per series (or one stacked bar) on a shared zero,
+ * with the figure at the bar's end. Values are written, so no axis is drawn; the zero is a rule.
+ */
+function HorizontalBars({
+  title, note, categories, series, format = fmt, stacked = false,
+}: BarChartProps) {
+  const [hover, setHover] = useState<number | null>(null);
+  const values = stacked
+    ? categories.map((_, ci) => series.reduce((sum, s) => sum + Math.max(0, s.values[ci] ?? 0), 0))
+    : series.flatMap((s) => categories.map((_, ci) => s.values[ci] ?? 0));
+  const [min, max] = extent(values);
+  const at = (v: number) => ((v - min) / (max - min)) * 100;
+  const zero = at(0);
+  const bar = (from: number, to: number) => {
+    const a = Math.min(at(from), at(to));
+    return { insetInlineStart: `${a}%`, inlineSize: `${Math.max(0.5, Math.abs(at(to) - at(from)))}%` };
+  };
+
+  return (
+    <ChartFrame title={title} note={note} series={series} categories={categories} format={format}>
+      <div className="chart-hbars" role="img"
+        aria-label={`${title}. ${series.length} series across ${categories.length} categories.`}
+        onMouseLeave={() => setHover(null)}>
+        {categories.map((c, ci) => {
+          let base = 0;
+          return (
+            <div key={c} className="chart-hbar-row" data-dim={hover !== null && hover !== ci ? '' : undefined}
+              onMouseEnter={() => setHover(ci)}>
+              <span className="chart-hbar-label">{c}</span>
+              {stacked ? (
+                <div className="chart-hbar-line">
+                  <span className="chart-hbar-track" style={{ ['--zero' as string]: `${zero}%` }}>
+                    {series.map((s, si) => {
+                      const v = Math.max(0, s.values[ci] ?? 0);
+                      const from = base;
+                      base += v;
+                      return (
+                        <span key={s.label} className="chart-hbar" title={`${c} · ${s.label}: ${format(v)}`}
+                          style={{ ...bar(from, from + v), background: seriesColor(si) }} />
+                      );
+                    })}
+                  </span>
+                  <span className="chart-hbar-value">{format(base)}</span>
+                </div>
+              ) : series.map((s, si) => {
+                const v = s.values[ci] ?? 0;
+                return (
+                  <div key={s.label} className="chart-hbar-line">
+                    <span className="chart-hbar-track" style={{ ['--zero' as string]: `${zero}%` }}>
+                      <span className="chart-hbar" title={`${c} · ${s.label}: ${format(v)}`}
+                        style={{ ...bar(0, v), background: seriesColor(si) }} />
+                    </span>
+                    <span className="chart-hbar-value">{format(v)}</span>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
     </ChartFrame>
   );
 }
