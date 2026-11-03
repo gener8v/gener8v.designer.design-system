@@ -1895,6 +1895,10 @@ mark {
  * between entries, so fifteen two-line headings do not read as one paragraph.
  * Lives on the ground beside the sheet (`.paper-aside`), never on the paper. */
 .contents { font-size: var(--text-xs); }
+/* KEEP THE BOX. Tailwind generates a `.contents { display: contents }` utility whenever any
+   source file contains the word "contents", and a class selector alone does not beat it. The
+   element selector and the second class do, and the tailwind-preset also blocks the utility. */
+nav.contents, .contents-nav { display: block; }
 
 .contents-head {
   display: flex;
@@ -1963,7 +1967,9 @@ mark {
   margin-inline-end: var(--space-1);
   vertical-align: middle;
 }
+/* "Rewritten in this run" is a dot, not a tick: a tick is what the review box draws. */
 svg.contents-live { inline-size: 1em; block-size: 1em; color: var(--color-success-700); vertical-align: -0.125em; }
+svg.contents-written { inline-size: 0.9em; block-size: 0.9em; }
 .contents-item[data-live="writing"] .contents-link { color: var(--color-accent-700); font-weight: 500; }
 .contents-item[data-live="queued"] .contents-link { color: var(--color-neutral-600); opacity: 0.7; }
 .contents-item[data-live="failed"] .contents-link { color: var(--color-danger-700); }
@@ -4432,6 +4438,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   position: relative;
   padding-inline-start: var(--space-4);
   margin-inline-start: calc(-1 * var(--space-4) - var(--space-1));
+  /* The tint reaches as far past the text on the right as on the left, and the
+     negative margin gives that room back, so the text keeps its measure and
+     wraps where a sibling section's does. */
+  padding-inline-end: var(--space-4);
+  margin-inline-end: calc(-1 * var(--space-4));
   border-inline-start: var(--space-1) solid transparent;
   transition:
     opacity var(--dur-slow) var(--ease-out),
@@ -5490,8 +5501,21 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
      page itself ran out. So the rail is held to the window and scrolls inside
      itself, and its scrolling stops at its own ends rather than carrying on
      into the page. An app with a fixed top bar sets `--paper-aside-top` to the
-     bar's height plus a gap, and the rail's height follows. */
-  max-block-size: calc(100dvh - var(--paper-aside-top, var(--space-8)) - var(--space-8));
+     bar's height plus a gap, and the rail's height follows.
+
+     WHEN THE DOCUMENT SCROLLS INSIDE A PANE rather than under the window, the
+     pane itself starts below the bar, so `--paper-aside-top` (the rail's gap
+     from the pane's top edge) is not the whole story: the pane's own offset
+     from the top of the window is lost, and the rail's bottom overflows the
+     window by that much. Set `--paper-aside-viewport-offset` to the pane's
+     distance from the top of the window (a 64px bar: `64px`). It is 0 by
+     default, which is right for a page that scrolls under the window. */
+  max-block-size: calc(
+    100dvh
+    - var(--paper-aside-viewport-offset, 0px)
+    - var(--paper-aside-top, var(--space-8))
+    - var(--space-8)
+  );
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;

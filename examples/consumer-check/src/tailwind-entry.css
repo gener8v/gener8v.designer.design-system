@@ -1,0 +1,5 @@
+/* Consumer fixture: how a Tailwind v4 app pulls in the preset. `tailwind-source.html` holds the word
+   "contents", which is all it takes for Tailwind to generate `display: contents`. */
+@import "tailwindcss";
+@import "@gener8v/tailwind-preset/theme.css";
+@source "./tailwind-source.html";

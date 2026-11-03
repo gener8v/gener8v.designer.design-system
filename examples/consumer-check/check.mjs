@@ -40,3 +40,23 @@ if (missing.length) {
 }
 console.log(`✓ consumer — ${uiCount} ui + ${iconCount} icon exports resolve through the exports map; `
   + `${Object.keys(tokens).length} tokens readable`);
+
+// A Tailwind v4 consumer whose source merely contains the word "contents" must not get Tailwind's
+// `display: contents` utility, which would strip the box from the Contents component. The preset
+// blocks it with `@source not inline("contents")`; the component also keeps its own box.
+import { execFileSync } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const twBin = new URL('./node_modules/@tailwindcss/cli/dist/index.mjs', import.meta.url).pathname;
+const compiled = execFileSync(process.execPath, [twBin, '-i', 'src/tailwind-entry.css'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
+if (/display:\s*contents/.test(compiled)) {
+  console.error('✗ consumer — Tailwind generated `display: contents` for a source holding the word "contents"; the preset must block it');
+  process.exit(1);
+}
+const uiCss = readFileSync(require.resolve('@gener8v/ui/styles.css'), 'utf8');
+if (!/nav\.contents,\s*\.contents-nav\s*\{\s*display:\s*block/.test(uiCss)) {
+  console.error('✗ consumer — styles.css does not keep the Contents component’s box (nav.contents, .contents-nav { display: block })');
+  process.exit(1);
+}
+console.log('✓ consumer — Tailwind does not generate display: contents for the preset’s consumers, and Contents keeps its box');

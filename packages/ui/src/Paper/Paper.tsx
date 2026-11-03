@@ -33,7 +33,8 @@ export const Paper = ({ className, ...rest }: HTMLAttributes<HTMLElement>) => (
  * not links to anything.
  *
  * It is held to the window and scrolls inside itself, so a contents list taller than the screen
- * still reaches its last entry. An app with a fixed top bar sets `--paper-aside-top` to the bar's
+ * still reaches its last entry. In a pane that scrolls below a top bar, also set `--paper-aside-viewport-offset` to the pane's distance
+ * from the top of the window. An app with a fixed top bar sets `--paper-aside-top` to the bar's
  * height plus a gap; the rail's sticky offset and its height both follow.
  */
 export const PaperAside = ({ className, ...rest }: HTMLAttributes<HTMLElement>) => (

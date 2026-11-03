@@ -229,7 +229,7 @@ check('Kbd+ShortcutList',
 check('Contents',
   renderToStaticMarkup(h(ui.Contents, { current: 'b', reviewed: ['a'], onReviewedChange: () => {}, items: [
     { id: 'a', text: '1 Scope' }, { id: 'b', text: '2.5 Account Hierarchy', depth: 2, live: 'writing' }, { id: 'c', text: '3 Findings' }] })),
-  'class="contents"', 'aria-current="location"', '1/3 reviewed', 'contents-check', 'data-live="writing"');
+  'class="contents contents-nav"', 'aria-current="location"', '1/3 reviewed', 'contents-check', 'data-live="writing"');
 
 check('Citation+SourceCard',
   renderToStaticMarkup(h('div', null, h(ui.Citation, { href: '#s4' }, 'S4'),

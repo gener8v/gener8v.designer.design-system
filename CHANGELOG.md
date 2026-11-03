@@ -4,6 +4,36 @@ All four packages (`@gener8v/tokens`, `@gener8v/tailwind-preset`, `@gener8v/icon
 `@gener8v/ui`) release on one version. Entries before 0.58.0 are in the commit history and the
 pull requests behind each `Release x.y.z` commit.
 
+## 0.59.1
+
+Four fixes found adopting 0.59.0 in the delivery record. No API changes; the record can drop its
+workarounds (below).
+
+### Fixed
+
+- **`Contents` drew two ticks on a reviewed, rewritten entry.** "Rewritten in this run" is now a
+  small filled dot (`svg.contents-written`), not a tick, and it is left out where the entry's review
+  box is checked. The screen-reader words ", rewritten in this run" stay either way. Without review
+  wired there is no box, so the dot stays. The record's `reviewedContents()` workaround can go.
+- **Tailwind's `display: contents` utility stripped the `Contents` box.** Tailwind v4 generates it
+  for any source that contains the word "contents", and it beat the component's class, which set no
+  `display`. Three layers: `@gener8v/tailwind-preset/theme.css` now ships
+  `@source not inline("contents")`, so the utility is not generated; the component's root is
+  `class="contents contents-nav"`; and `nav.contents, .contents-nav { display: block }` keeps the
+  box whatever else is generated. The old class stays. Consumers can remove their own
+  `@source not inline('contents')`. Cost: a consumer who really wants Tailwind's `contents` utility
+  must add `@source inline("contents")` after the preset import. The consumer-check package now
+  compiles a Tailwind source holding the word and fails if the utility appears.
+- **`PaperAside` overflowed the window inside a scrolling pane.** Its cap was `100dvh` less the
+  sticky gap, which assumes the page scrolls under the window. New `--paper-aside-viewport-offset`
+  (default `0px`): the pane's distance from the top of the window. The cap is now
+  `100dvh - viewport offset - sticky top - bottom gap`. In an app with a 64px bar over a scrolling
+  pane, set `--paper-aside-viewport-offset: 64px` and drop any `.paper-aside` max-height override.
+  Shown in the reading showcase.
+- **`LiveSection`'s tint ran to the text's right edge.** It now has `--space-4` of inline-end padding,
+  cancelled by an equal negative margin, so the tint reaches as far past the text on the right as on
+  the left and the text keeps its measure and left edge, in step with sibling sections.
+
 ## 0.59.0
 
 Additive. Components the delivery record built for itself and listed as candidates, promoted and
