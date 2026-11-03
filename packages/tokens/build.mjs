@@ -457,6 +457,11 @@ const twColor = tokens.filter((t) => t.kind === 'color' && t.name.startsWith('--
   .map((t) => `  ${t.name}: ${t.value};`);
 write('packages/tailwind-preset/theme.css', `/* GENERATED — do not edit. Tailwind v4 theme over the same tokens.
    Usage:  @import "tailwindcss";  @import "@gener8v/tailwind-preset/theme.css"; */
+
+/* Tailwind generates \`display: contents\` for any source that holds the word "contents", and that
+   utility strips the box from the design system's Contents component. Nothing here uses it. */
+@source not inline("contents");
+
 @theme {
 ${twColor.join('\n')}
 ${twSpace.join('\n')}

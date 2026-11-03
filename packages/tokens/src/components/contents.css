@@ -7,6 +7,10 @@
  * between entries, so fifteen two-line headings do not read as one paragraph.
  * Lives on the ground beside the sheet (`.paper-aside`), never on the paper. */
 .contents { font-size: var(--text-xs); }
+/* KEEP THE BOX. Tailwind generates a `.contents { display: contents }` utility whenever any
+   source file contains the word "contents", and a class selector alone does not beat it. The
+   element selector and the second class do, and the tailwind-preset also blocks the utility. */
+nav.contents, .contents-nav { display: block; }
 
 .contents-head {
   display: flex;
@@ -75,7 +79,12 @@
   margin-inline-end: var(--space-1);
   vertical-align: middle;
 }
+/* "Rewritten in this run" is a dot, not a tick: a tick is what the review box draws. */
 svg.contents-live { inline-size: 1em; block-size: 1em; color: var(--color-success-700); vertical-align: -0.125em; }
+svg.contents-written { inline-size: 0.9em; block-size: 0.9em; }
+/* The pulse's ring spreads past the dot, so it needs more room than a still mark or it sits on
+   the section number. */
+.live-pulse.contents-live { margin-inline-end: var(--space-3); }
 .contents-item[data-live="writing"] .contents-link { color: var(--color-accent-700); font-weight: 500; }
 .contents-item[data-live="queued"] .contents-link { color: var(--color-neutral-600); opacity: 0.7; }
 .contents-item[data-live="failed"] .contents-link { color: var(--color-danger-700); }

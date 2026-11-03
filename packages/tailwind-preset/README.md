@@ -14,6 +14,15 @@ npm i @gener8v/tailwind-preset     # private to the @gener8v npm org
 Then `bg-action`, `p-6`, `rounded-md`, `text-2xl` resolve to the system's values rather than
 Tailwind's defaults.
 
+## The word "contents"
+
+Tailwind v4 generates `display: contents` for any source file that contains the word "contents"
+(prose, a comment, a variable). That utility strips the box from the system's `Contents`
+component. `theme.css` therefore carries `@source not inline("contents");`, so the utility is never
+generated and you need no line of your own. If you do want Tailwind's `contents` utility, add
+`@source inline("contents");` after the preset import. The component also keeps its box with
+`nav.contents, .contents-nav { display: block }`.
+
 ## When to use a utility and when not to
 
 **Prefer the semantic classes for anything the system already names.** `.btn`, `.card`,

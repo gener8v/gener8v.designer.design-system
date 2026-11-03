@@ -71,6 +71,11 @@
   position: relative;
   padding-inline-start: var(--space-4);
   margin-inline-start: calc(-1 * var(--space-4) - var(--space-1));
+  /* The tint reaches as far past the text on the right as on the left, and the
+     negative margin gives that room back, so the text keeps its measure and
+     wraps where a sibling section's does. */
+  padding-inline-end: var(--space-4);
+  margin-inline-end: calc(-1 * var(--space-4));
   border-inline-start: var(--space-1) solid transparent;
   transition:
     opacity var(--dur-slow) var(--ease-out),

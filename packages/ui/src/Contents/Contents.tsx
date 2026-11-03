@@ -60,7 +60,14 @@ const LIVE_WORDS: Record<LiveState, string> = {
  * by the heading. Keys are the caller's, so a mark can lapse when the section is rewritten.
  *
  * LIVE MARKS. While a run writes the document, each entry carries the same mark as its section, so
- * the section being written can be found and jumped to from the contents.
+ * the section being written can be found and jumped to from the contents. "Rewritten in this run" is
+ * a small filled dot, never a tick: a tick is the review box's word. Where the review box is
+ * checked the dot is left out (the box already has the entry's eye); the screen-reader words stay.
+ *
+ * ROOT CLASSES. `contents contents-nav`. Tailwind generates `display: contents` for any source that
+ * contains the word "contents", and that utility turns the nav into a box-less element. The
+ * component sets `display: block` on `nav.contents` / `.contents-nav` so it keeps its box, and the
+ * tailwind-preset ships `@source not inline("contents")` so the utility is not generated at all.
  *
  * Long headings are held to two lines; the full text is the link's `title`.
  */
@@ -92,7 +99,7 @@ export const Contents = forwardRef<HTMLElement, ContentsProps>(function Contents
 
   if (loading) {
     return (
-      <nav {...rest} ref={ref} aria-label={label} aria-busy="true" className={cx('contents', className)}>
+      <nav {...rest} ref={ref} aria-label={label} aria-busy="true" className={cx('contents', 'contents-nav', className)}>
         <p className="contents-head"><span className="contents-title">{title}</span></p>
         <ol className="contents-list">
           {[0, 1, 2, 3, 4].map((i) => (
@@ -125,7 +132,7 @@ export const Contents = forwardRef<HTMLElement, ContentsProps>(function Contents
   };
 
   return (
-    <nav {...rest} ref={ref} aria-label={label} className={cx('contents', className)}>
+    <nav {...rest} ref={ref} aria-label={label} className={cx('contents', 'contents-nav', className)}>
       <p className="contents-head">
         <span className="contents-title">{title}</span>
         {checking && (
@@ -149,10 +156,10 @@ export const Contents = forwardRef<HTMLElement, ContentsProps>(function Contents
                 aria-current={item.id === here ? 'location' : undefined}
                 onClick={go(item)}>
                 {item.live === 'writing' && <Pulse className="contents-live" />}
-                {item.live === 'written' && (
-                  <svg className="contents-live" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                    <path d="M3.5 8.5l3 3 6-7" stroke="currentColor" strokeWidth="1.75"
-                      strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                {item.live === 'written' && !(checking && marks.has(key)) && (
+                  <svg className="contents-live contents-written" viewBox="0 0 16 16" aria-hidden="true"
+                    focusable="false">
+                    <circle cx="8" cy="8" r="3.5" fill="currentColor" />
                   </svg>
                 )}
                 <span className="contents-text">{item.text}</span>

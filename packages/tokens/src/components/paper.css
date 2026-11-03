@@ -59,8 +59,21 @@
      page itself ran out. So the rail is held to the window and scrolls inside
      itself, and its scrolling stops at its own ends rather than carrying on
      into the page. An app with a fixed top bar sets `--paper-aside-top` to the
-     bar's height plus a gap, and the rail's height follows. */
-  max-block-size: calc(100dvh - var(--paper-aside-top, var(--space-8)) - var(--space-8));
+     bar's height plus a gap, and the rail's height follows.
+
+     WHEN THE DOCUMENT SCROLLS INSIDE A PANE rather than under the window, the
+     pane itself starts below the bar, so `--paper-aside-top` (the rail's gap
+     from the pane's top edge) is not the whole story: the pane's own offset
+     from the top of the window is lost, and the rail's bottom overflows the
+     window by that much. Set `--paper-aside-viewport-offset` to the pane's
+     distance from the top of the window (a 64px bar: `64px`). It is 0 by
+     default, which is right for a page that scrolls under the window. */
+  max-block-size: calc(
+    100dvh
+    - var(--paper-aside-viewport-offset, 0px)
+    - var(--paper-aside-top, var(--space-8))
+    - var(--space-8)
+  );
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
