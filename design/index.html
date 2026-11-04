@@ -67,7 +67,8 @@
     </p>
     <div class="index-row" style="margin-block-start:var(--space-6)">
       <a class="btn btn-primary" href="foundations/color.html">Foundations<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
-      <a class="btn btn-secondary" href="readme.md">Read the guide</a>
+      <a class="btn btn-secondary" href="#get-started">Get started</a>
+      <a class="btn btn-ghost" href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>
     </div>
   </div>
 </header>
@@ -80,6 +81,43 @@
     <div class="index-fact"><p class="index-fact-n">6</p><p class="label" style="margin-block-start:var(--space-1)">Foundations</p></div>
     <div class="index-fact"><p class="index-fact-n">6px</p><p class="label" style="margin-block-start:var(--space-1)">Radius</p></div>
   </div>
+
+  <section class="index-sec" id="get-started" aria-labelledby="get-started-title">
+    <p class="label" id="get-started-title">Get started</p>
+    <p class="muted" style="margin-block-start:var(--space-4);max-inline-size:60ch">
+      Open source under MIT. Four public packages on npm — no token, no account. Install them
+      and import one stylesheet.
+    </p>
+    <pre class="code" style="margin-block-start:var(--space-4)"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre>
+    <pre class="code" style="margin-block-start:var(--space-3)"><code data-language="tsx">import '@gener8v/ui/styles.css';
+import { Button, Table, Dialog } from '@gener8v/ui';</code></pre>
+    <div class="index-grid" style="margin-block-start:var(--space-6)">
+      <a class="card card-interactive card-pad-sm" href="https://github.com/gener8v/gener8v.designer.design-system">
+        <p class="card-kicker">Source</p><p class="card-title">GitHub repository</p>
+        <p class="card-body">Tokens, components, templates and the rules that gate them.</p>
+      </a>
+      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/ui">
+        <p class="card-kicker">npm</p><p class="card-title">@gener8v/ui</p>
+        <p class="card-body">React components that render these exact class names.</p>
+      </a>
+      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tokens">
+        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tokens</p>
+        <p class="card-body">One token source, as CSS, TypeScript and DTCG.</p>
+      </a>
+      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/icons">
+        <p class="card-kicker">npm</p><p class="card-title">@gener8v/icons</p>
+        <p class="card-body">The icon subset the system uses, tree-shakeable.</p>
+      </a>
+      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tailwind-preset">
+        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tailwind-preset</p>
+        <p class="card-body">Tailwind v4 theme over the same tokens.</p>
+      </a>
+    </div>
+    <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">
+      Building with Claude Code? <code>/plugin marketplace add gener8v/gener8v.designer.design-system</code>
+      teaches it the rules, the class names, the templates — and which component fits which job.
+    </p>
+  </section>
 
   <section class="index-sec">
     <p class="label">At a glance</p>
@@ -284,20 +322,6 @@
     <p class="card-title" style="font-size:var(--text-lg)">Presentation deck</p>
     <p class="card-body">Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected</p>
   </a></div></div>
-  </section>
-
-  <section class="index-sec">
-    <p class="label">Pick it up</p>
-    <div class="panel" style="margin-block-start:var(--space-4)">
-      <div class="panel-body">
-        <p class="card-body">Link the one stylesheet and take every value from its variables. The
-          React library ships the same class names, so markup written against this system ports
-          without a visual rewrite.</p>
-        <pre class="mono" style="margin-block-start:var(--space-4);padding:var(--space-4);background:var(--color-surface);border-radius:var(--radius-md);overflow-x:auto;white-space:pre"><code>&lt;link rel="stylesheet" href="styles.css"&gt;
-
-npm i @gener8v/ui @gener8v/tokens</code></pre>
-      </div>
-    </div>
   </section>
 
 </main>
