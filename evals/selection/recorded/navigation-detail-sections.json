@@ -1,0 +1,55 @@
+{
+  "case": "navigation-detail-sections",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "skillFired": true,
+  "readPaths": [
+    "<plugin>/skills/gener8v-design-system",
+    "Tabs|tablist",
+    "<project>-sections-to7SGp",
+    "**/*",
+    "<plugin>/skills/gener8v-design-system/references/components.md",
+    "<project>-sections-to7SGp/src/App.tsx",
+    "<project>-sections-to7SGp",
+    "**/node_modules/@gener8v/ui/**/*.d.ts",
+    "<plugin>",
+    "role=\"tab\"|\\.tabs|Tabs\\b|tab-list|\\.tab\\b",
+    "<project>-sections-to7SGp",
+    "node_modules/@gener8v/ui/*",
+    "<plugin>",
+    "packages/ui/src/Tabs/*",
+    "<plugin>/packages/ui/src/Tabs/Tabs.tsx",
+    "<project>-sections-to7SGp/src/main.tsx",
+    "<plugin>/packages/ui/src/index.ts",
+    "export \\* from './(Tag|Button|Panel|Card|Timeline)/",
+    "<plugin>/packages/ui/src/Tag",
+    "export (interface|type) (Tag|Timeline)\\w*Props|variant|tone",
+    "<project>-sections-to7SGp/src/App.tsx"
+  ],
+  "finalText": "I wrote the customer detail page to `src/App.tsx`. I didn't build or run it, and `@gener8v/ui` isn't installed in this project, so I checked the component APIs against the design system's source instead.\n\n- **Components used:**\n  - `Tabs` and `Tab` from `@gener8v/ui` make up the row of labels. They set the `tablist` and `tab` roles, `aria-selected`, `aria-controls` and arrow/Home/End keys.\n  - `Tag` shows the invoice status (Paid, Overdue or Open).\n  - The remaining markup uses the system's plain classes: `.stat`, `.table`, `.timeline`, `.container`, `.stack`, `.row`, `.lede` and `.muted`.\n- **Template:** I didn't start from a template, because none covers tabbed detail sections.\n- **Behaviour:** Only the selected section shows. The other three panels stay in the page but are hidden. Each panel is a `tabpanel` linked to its tab.\n- **Content:** The customer, invoices, contacts and activity entries are placeholder data I made up.\n- **Heading:** The page heading is the customer name, and no heading repeats the selected section.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "content": "import { useState } from 'react';\nimport { Tabs, Tab, Tag } from '@gener8v/ui';\n\nconst SECTIONS = ['Overview', 'Invoices', 'Contacts', 'Activity'] as const;\ntype Section = (typeof SECTIONS)[number];\n\nconst invoices = [\n  { id: 'INV-1042', issued: '2026-10-01', amount: '12,400.00', status: 'Paid' },\n  { id: 'INV-1057', issued: '2026-10-15', amount: '8,250.00', status: 'Overdue' },\n  { id: 'INV-1063', issued: '2026-11-01', amount: '9,900.00', status: 'Open' },\n];\nconst variant = { Paid: 'success', Overdue: 'danger', Open: 'neutral' } as const;\n\nconst contacts = [\n  { name: 'Maya Okafor', role: 'Finance lead', email: 'maya@northwind.example' },\n  { name: 'Jon Reyes', role: 'Procurement', email: 'jon@northwind.example' },\n];\n\nconst activity = [\n  { time: '2026-11-03', title: 'Invoice INV-1063 sent', body: 'Delivered to Maya Okafor.' },\n  { time: '2026-10-22', title: 'Reminder sent', body: 'INV-1057 payment reminder.' },\n  { time: '2026-10-01', title: 'Invoice INV-1042 paid', body: 'Received in full.' },\n];\n\nconst id = (s: Section, part: 'tab' | 'panel') => `customer-${part}-${s.toLowerCase()}`;\n\nexport function App() {\n  const [section, setSection] = useState<Section>('Overview');\n\n  return (\n    <main className=\"container section stack\">\n      <header className=\"stack\">\n        <h1>Northwind Traders</h1>\n        <p className=\"lede muted\">Customer since March 2022 · Account owner Priya Shah</p>\n      </header>\n\n      <Tabs aria-label=\"Customer sections\" onSelectIndex={(i) => setSection(SECTIONS[i]!)}>\n        {SECTIONS.map((s) => (\n          <Tab key={s} id={id(s, 'tab')} controls={id(s, 'panel')} selected={s === section}\n            onClick={() => setSection(s)}>\n            {s}\n          </Tab>\n        ))}\n      </Tabs>\n\n      {SECTIONS.map((s) => (\n        <section key={s} id={id(s, 'panel')} role=\"tabpanel\" aria-labelledby={id(s, 'tab')}\n          hidden={s !== section} tabIndex={0} className=\"stack\">\n          {s === 'Overview' && (\n            <div className=\"row\">\n              <div className=\"stat\">\n                <span className=\"stat-label\">Outstanding</span>\n                <span className=\"stat-value num\">18,150.00</span>\n              </div>\n              <div className=\"stat\">\n                <span className=\"stat-label\">Paid this year</span>\n                <span className=\"stat-value num\">12,400.00</span>\n              </div>\n              <div className=\"stat\">\n                <span className=\"stat-label\">Open invoices</span>\n                <span className=\"stat-value num\">2</span>\n              </div>\n            </div>\n          )}\n          {s === 'Invoices' && (\n            <div className=\"table-wrap\">\n              <table className=\"table\">\n                <thead>\n                  <tr><th>Invoice</th><th>Issued</th><th>Amount</th><th>Status</th></tr>\n                </thead>\n                <tbody>\n                  {invoices.map((i) => (\n                    <tr key={i.id}>\n                      <td className=\"mono\">{i.id}</td>\n                      <td className=\"num\">{i.issued}</td>\n                      <td className=\"num\">{i.amount}</td>\n                      <td><Tag variant={variant[i.status as keyof typeof variant]}>{i.status}</Tag></td>\n                    </tr>\n                  ))}\n                </tbody>\n              </table>\n            </div>\n          )}\n          {s === 'Contacts' && (\n            <div className=\"table-wrap\">\n              <table className=\"table\">\n                <thead><tr><th>Name</th><th>Role</th><th>Email</th></tr></thead>\n                <tbody>\n                  {contacts.map((c) => (\n                    <tr key={c.email}><td>{c.name}</td><td>{c.role}</td><td className=\"mono\">{c.email}</td></tr>\n                  ))}\n                </tbody>\n              </table>\n            </div>\n          )}\n          {s === 'Activity' && (\n            <ol className=\"timeline\">\n              {activity.map((a) => (\n                <li key={a.title} className=\"timeline-item\">\n                  <span className=\"timeline-marker\" aria-hidden=\"true\" />\n                  <time className=\"timeline-time\">{a.time}</time>\n                  <div className=\"timeline-title\">{a.title}</div>\n                  <div className=\"timeline-body\">{a.body}</div>\n                </li>\n              ))}\n            </ol>\n          )}\n        </section>\n      ))}\n    </main>\n  );\n}\n"
+    }
+  ],
+  "rep": 0,
+  "costUsd": 0.15031560000000002,
+  "durationMs": 33393,
+  "turns": 16,
+  "tools": {
+    "Skill": 1,
+    "Grep": 4,
+    "Glob": 4,
+    "Read": 4,
+    "Write": 1
+  },
+  "error": null,
+  "note": "Recorded from the baseline-main run (navigation-detail-sections.0). Used by pnpm eval:selection:dry and the unit test.",
+  "expectedScore": {
+    "pass": true,
+    "missing": [],
+    "forbidHits": []
+  }
+}

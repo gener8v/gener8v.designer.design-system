@@ -3,7 +3,9 @@
 // pick the right components and starting template for a design task?
 //
 //   pnpm eval:selection [--cases <glob>] [--repeat N] [--label name] [--model id]
-//                       [--concurrency N] [--max-turns N] [--dry-run] [--record dir] [--keep]
+//                       [--concurrency N] [--max-turns N] [--record dir] [--keep]
+//   pnpm eval:selection --from <dir>      re-score runs saved with --record, no model
+//   pnpm eval:selection:dry               re-score the fixtures in recorded/, no model
 //
 // See evals/selection/README.md.
 import { execFileSync } from 'node:child_process';
@@ -21,7 +23,7 @@ export const FAMILIES = ['screens', 'status-and-feedback', 'navigation', 'data',
 function parseArgs(argv) {
   const o = {
     cases: '*', repeat: 1, label: null, model: 'sonnet', concurrency: 4, maxTurns: 40,
-    timeoutMs: 15 * 60_000, dryRun: false, record: null, keep: false, out: join(HERE, 'results'),
+    timeoutMs: 15 * 60_000, dryRun: false, from: null, record: null, keep: false, out: join(HERE, 'results'),
   };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -34,6 +36,7 @@ function parseArgs(argv) {
     else if (a === '--max-turns') o.maxTurns = Number(v());
     else if (a === '--timeout') o.timeoutMs = Number(v()) * 1000;
     else if (a === '--dry-run') o.dryRun = true;
+    else if (a === '--from') o.from = resolve(v());
     else if (a === '--record') o.record = resolve(v());
     else if (a === '--keep') o.keep = true;
     else if (a === '--out') o.out = resolve(v());
@@ -41,7 +44,8 @@ function parseArgs(argv) {
     else throw new Error(`Unknown argument: ${a}`);
   }
   if (!(o.repeat >= 1)) throw new Error('--repeat must be at least 1');
-  o.label ??= o.dryRun ? 'dry-run' : o.model;
+  if (o.dryRun) o.from ??= join(HERE, 'recorded');
+  o.label ??= o.dryRun ? 'dry-run' : o.from ? 'rescored' : o.model;
   return o;
 }
 
@@ -75,23 +79,39 @@ async function main() {
   const cases = loadCases(o.cases);
   if (!cases.length) throw new Error(`No case matches ${o.cases}`);
   const jobs = [];
-  for (let r = 0; r < o.repeat; r++) for (const kase of cases) jobs.push({ kase, rep: r });
+  let fromMeta = null;
+  if (o.from) {
+    // Saved runs stand in for the model: re-score them under the current scorer
+    // and cases, without credentials or cost. Files are <case>.json or <case>.<rep>.json.
+    try { fromMeta = JSON.parse(readFileSync(join(o.from, '_meta.json'), 'utf8')); } catch { /* fixtures have none */ }
+    const files = readdirSync(o.from).filter((f) => f.endsWith('.json') && f !== '_meta.json');
+    for (const kase of cases) {
+      for (const f of files) {
+        if (f === `${kase.id}.json`) jobs.push({ kase, rep: 0, file: join(o.from, f) });
+        else if (f.startsWith(`${kase.id}.`)) {
+          const rep = Number(f.slice(kase.id.length + 1, -'.json'.length));
+          if (Number.isInteger(rep)) jobs.push({ kase, rep, file: join(o.from, f) });
+        }
+      }
+    }
+    o.repeat = Math.max(1, ...jobs.map((j) => j.rep + 1));
+  } else {
+    for (let r = 0; r < o.repeat; r++) for (const kase of cases) jobs.push({ kase, rep: r });
+  }
   const started = Date.now();
-  console.error(`${o.dryRun ? 'Dry run' : `Model ${o.model}`}: ${cases.length} cases x ${o.repeat} = ${jobs.length} runs`);
+  console.error(`${o.from ? `Re-scoring ${o.from}` : `Model ${o.model}`}: ${cases.length} cases, ${jobs.length} runs`);
 
-  const runs = await pool(jobs, o.dryRun ? 1 : o.concurrency, async ({ kase, rep }) => {
+  const runs = await pool(jobs, o.from ? 1 : o.concurrency, async ({ kase, rep, file }) => {
     let run;
-    if (o.dryRun) {
-      // Recorded outputs stand in for the model, so the harness can be checked
-      // end to end without credentials or cost.
-      const p = join(HERE, 'recorded', `${kase.id}.json`);
-      try { run = JSON.parse(readFileSync(p, 'utf8')); } catch { return null; }
+    if (file) {
+      run = JSON.parse(readFileSync(file, 'utf8'));
     } else {
       run = await runCase({ kase, model: o.model, pluginRoot: ROOT, fixtureDir: join(HERE, 'fixture/consumer'), maxTurns: o.maxTurns, timeoutMs: o.timeoutMs, keep: o.keep });
       if (o.record) {
         mkdirSync(o.record, { recursive: true });
-        const { files, finalText, readPaths, skillFired, models } = run;
-        writeFileSync(join(o.record, `${kase.id}${o.repeat > 1 ? `.${rep}` : ''}.json`), JSON.stringify({ case: kase.id, models, skillFired, readPaths, finalText, files }, null, 2) + '\n');
+        const { files, finalText, readPaths, skillFired, models, costUsd, durationMs, turns, tools, error } = run;
+        const saved = { case: kase.id, rep, models, costUsd, durationMs, turns, tools, error, skillFired, readPaths, finalText, files };
+        writeFileSync(join(o.record, `${kase.id}.${rep}.json`), JSON.stringify(saved, null, 2) + '\n');
       }
     }
     const score = scoreRun(kase, run);
@@ -106,19 +126,26 @@ async function main() {
   });
 
   const done = runs.filter(Boolean);
-  if (o.dryRun && done.length === 0) throw new Error('Dry run: no recorded outputs match these cases');
+  if (o.from && done.length === 0) throw new Error(`No saved runs in ${o.from} match these cases`);
   const meta = {
     label: o.label,
     date: new Date().toISOString(),
-    model: o.dryRun ? 'recorded' : o.model,
+    model: fromMeta?.model ?? (o.from ? 'recorded' : o.model),
     modelsReported: [...new Set(done.flatMap((r) => r.models))],
     dryRun: o.dryRun,
+    rescoredFrom: o.from && !o.dryRun ? fromMeta?.label ?? o.from : null,
     repeat: o.repeat,
     cases: [...new Set(done.map((r) => r.case))].length,
     runs: done.length,
-    commit: (() => { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { return null; } })(),
-    wallClockMs: Date.now() - started,
+    commit: fromMeta?.commit ?? (() => { try { return execFileSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).trim(); } catch { return null; } })(),
+    wallClockMs: o.from ? fromMeta?.wallClockMs ?? null : Date.now() - started,
+    maxTurns: fromMeta?.maxTurns ?? o.maxTurns,
+    concurrency: o.from ? fromMeta?.concurrency ?? null : o.concurrency,
   };
+  if (o.record && !o.from) {
+    const saved = { label: o.label, model: o.model, repeat: o.repeat, maxTurns: o.maxTurns, concurrency: o.concurrency, wallClockMs: meta.wallClockMs, commit: meta.commit, date: meta.date };
+    writeFileSync(join(o.record, '_meta.json'), JSON.stringify(saved, null, 2) + '\n');
+  }
   const result = aggregate(meta, cases, done);
   mkdirSync(o.out, { recursive: true });
   const stem = join(o.out, `${meta.date.slice(0, 10)}-${o.label.replace(/[^\w.-]+/g, '_')}`);

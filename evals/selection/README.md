@@ -33,9 +33,14 @@ pnpm eval:selection:test                    # unit tests for the scorer and the 
 | `--label <name>` | the model | Sets the name of the result files |
 | `--concurrency N` | 4 | Sets the number of runs at the same time |
 | `--max-turns N` | 40 | Sets the turn limit for each run |
-| `--record <dir>` | — | Saves each run's files and transcript facts, for use as dry-run fixtures |
+| `--record <dir>` | — | Saves each run (the files it wrote, the paths it read, its final message and its cost) as `<case>.<rep>.json`, plus `_meta.json` |
+| `--from <dir>` | — | Scores the saved runs in a `--record` directory again with the current scorer and cases, and does not call the model. Cost and time come from the original runs |
 | `--keep` | — | Keeps each run's temporary project |
-| `--dry-run` | — | Scores `recorded/<case>.json` and does not call the model |
+| `--dry-run` | — | Is the same as `--from recorded/`: it scores the fixtures and does not call the model |
+
+When you change the scorer, use `--record` together with `--from`. Then you can measure the
+change on the same model outputs, and you do not pay for the runs again. The runner replaces
+local paths with `<project>`, `<plugin>` and `~` in everything that it saves.
 
 To run the eval in GitHub, use **Actions → eval-selection → Run workflow**. The workflow starts
 only by hand and needs the `ANTHROPIC_API_KEY` repository secret. The report goes to the job
@@ -140,6 +145,17 @@ The score is deterministic. No model judges the output.
 - **Pass**: recall is 1, there is no forbidden pick, and the template matches (when a template is
   set).
 
+The report also gives these diagnostics. They are not part of the score:
+
+- **Skill invoked**: the rate at which the runs invoked the skill.
+- **Runs importing `@gener8v/ui`**: an answer that writes the system's classes by hand still
+  passes. This rate shows how often the answer used the React components instead.
+- **What the runs read**: for each documentation area (`references/`, `references/choosing/`, `design/readme.md`,
+  `design/components/`, `design/templates/`, `docs/specs/`, `packages/ui/src/`), the share of
+  runs that opened or searched it, and the pass rate with and without that read. Use it to find
+  the cause of a miss. Either the guidance did not reach the model, or the model read the
+  guidance and chose wrong.
+
 The results are aggregated for each family, for each confusable group and overall. For each
 repetition, the runner calculates the pass rate and the mean recall. The report gives the mean
 over the repetitions, with the lowest and the highest repetition in brackets.
@@ -175,7 +191,14 @@ Each run writes these files:
 
 The result files are ignored by git. The exception is a baseline that you save deliberately as
 `results/baseline-<name>.{json,md}`. `baseline-main` is the measurement on `main` before the
-choosing guide.
+choosing guide. It is 38 cases × 3 repeats on Sonnet (`claude-sonnet-5-5`), and it was scored
+again with `--from` after the class aliases for `Button` and the chart marks were added.
+
+To save a new baseline, follow these steps:
+
+1. Run `pnpm eval:selection --repeat 3 --record <dir> --label baseline-<name>`.
+2. Rename the two result files to `results/baseline-<name>.{json,md}`.
+3. Commit the two files.
 
 ## Files
 

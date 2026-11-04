@@ -1,0 +1,64 @@
+{
+  "case": "feedback-partial-data",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "skillFired": true,
+  "readPaths": [
+    "<project>l-data-B7k6wG",
+    "**/*",
+    "<project>l-data-B7k6wG/src/App.tsx",
+    "<project>l-data-B7k6wG/src/main.tsx",
+    "<project>l-data-B7k6wG/node_modules/@gener8v/ui",
+    "**/*.{md,d.ts,css}",
+    "<plugin>",
+    "**/*",
+    "<plugin>",
+    "{design,references,packages/ui/src}/**/*{readme,partial,state,feedback,stat,Tag,Alert,Callout}*",
+    "<plugin>/skills/gener8v-design-system",
+    "*",
+    "<plugin>/design/readme.md",
+    "<plugin>/design/components/states.html",
+    "<plugin>/packages/ui/src/Alert/Alert.tsx",
+    "<plugin>/packages/ui/src/Tag/Tag.tsx",
+    "<plugin>/packages/ui/src",
+    "export (const|function|interface) (State|Stat|Table|Button|Panel|Card)\\w*",
+    "<plugin>/design/components",
+    "class=\"stat|class=\"table|summary-",
+    "<plugin>/packages/ui/src/Table/Table.tsx",
+    "<plugin>/packages/ui/src/Stat/Stat.tsx",
+    "<plugin>/packages/ui/src/Button/Button.tsx",
+    "<project>l-data-B7k6wG/src/App.tsx",
+    "<plugin>/packages/ui/src/index.ts",
+    "Alert|Stat|Table|Tag|Card|Button",
+    "<plugin>/packages/ui/src/index.ts",
+    "AlertTitle|StatLabel"
+  ],
+  "finalText": "I built the revenue summary in `src/App.tsx`. I haven't compiled or run it, because `@gener8v/ui` isn't installed in this project. I checked that every component I import is exported from the package source.\n\n**What the page shows**\n- **Warning banner first:** it reads \"Incomplete: 3 of 5 regions reported\" and names Latin America and Middle East & Africa as not responding. It says the figure is not the full revenue total.\n- **Figure labelled as partial:** the number is labelled \"Partial revenue · 3 of 5 regions\" and carries a \"Partial\" tag. Its note says which regions are excluded and \"Do not quote as the total.\"\n- **No zeros for missing regions:** the table shows \"Not received\" with a \"No response\" tag. It never shows `$0`.\n- **Retry:** there's a retry button in the banner and one on each failed row. In the demo, a retry fills the missing region with a made-up $5.2M. When all five regions are in, the page switches to \"Total revenue · all regions\" with a \"Complete\" tag.\n\n**Components used:** `Alert` (with `AlertTitle`, `AlertBody`, `AlertActions`), `Button`, `Card`, `Stat` (with `StatLabel`, `StatValue`, `StatNote`), `Tag`, and `Table` (with `TableWrap`, `Th`, `Td`).\n\n**Template:** none. I built it from the components and the design system's \"partial\" state pattern: a warning tone, a count of sources, and a retry action.\n\n**Assumptions:** the regions and amounts are mock data, in USD millions.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "content": "import { useState } from 'react';\nimport {\n  Alert, AlertActions, AlertBody, AlertTitle,\n  Button, Card, Stat, StatLabel, StatNote, StatValue, Table, TableWrap, Tag, Td, Th,\n} from '@gener8v/ui';\n\ninterface Region {\n  id: string;\n  name: string;\n  /** USD millions. `null` means the system did not respond — which is not the same as zero. */\n  revenue: number | null;\n}\n\nconst INITIAL: Region[] = [\n  { id: 'na', name: 'North America', revenue: 12.4 },\n  { id: 'eu', name: 'Europe', revenue: 9.8 },\n  { id: 'apac', name: 'Asia Pacific', revenue: 7.1 },\n  { id: 'latam', name: 'Latin America', revenue: null },\n  { id: 'mea', name: 'Middle East & Africa', revenue: null },\n];\n\nconst usd = (m: number) => `$${m.toFixed(1)}M`;\n\nconst WarnIcon = () => (\n  <svg viewBox=\"0 0 256 256\" width=\"20\" height=\"20\" fill=\"currentColor\" aria-hidden=\"true\">\n    <path d=\"M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z\" />\n  </svg>\n);\n\nfunction list(names: string[]) {\n  if (names.length <= 1) return names.join('');\n  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`;\n}\n\nexport function App() {\n  const [regions, setRegions] = useState(INITIAL);\n  const [retrying, setRetrying] = useState<Set<string>>(new Set());\n\n  const received = regions.filter((r) => r.revenue !== null);\n  const missing = regions.filter((r) => r.revenue === null);\n  const partial = missing.length > 0;\n  const sum = received.reduce((s, r) => s + (r.revenue ?? 0), 0);\n\n  // Demo stand-in for re-querying the regional systems.\n  function retry(ids: string[]) {\n    setRetrying((p) => new Set([...p, ...ids]));\n    window.setTimeout(() => {\n      setRegions((rs) => rs.map((r) => (ids.includes(r.id) && r.revenue === null ? { ...r, revenue: 5.2 } : r)));\n      setRetrying((p) => new Set([...p].filter((id) => !ids.includes(id))));\n    }, 1200);\n  }\n\n  const missingIds = missing.map((r) => r.id);\n  const retryingAny = missingIds.some((id) => retrying.has(id));\n\n  return (\n    <main className=\"container stack\">\n      <header>\n        <h1>Revenue summary</h1>\n        <p className=\"lede\">Revenue across the five regional systems, as of today.</p>\n      </header>\n\n      {partial && (\n        <Alert tone=\"warning\" live icon={<WarnIcon />}>\n          <AlertTitle>Incomplete: {received.length} of {regions.length} regions reported</AlertTitle>\n          <AlertBody>\n            {list(missing.map((r) => r.name))} did not respond. The figure below covers only the\n            regions that did and is not the full revenue total.\n          </AlertBody>\n          <AlertActions>\n            <Button variant=\"secondary\" size=\"sm\" loading={retryingAny} onClick={() => retry(missingIds)}>\n              Retry {missing.length === 1 ? 'region' : `${missing.length} regions`}\n            </Button>\n          </AlertActions>\n        </Alert>\n      )}\n\n      <Card className=\"card-pad-sm\">\n        <Stat>\n          <StatLabel>\n            {partial\n              ? `Partial revenue · ${received.length} of ${regions.length} regions`\n              : 'Total revenue · all regions'}\n          </StatLabel>\n          <StatValue>{usd(sum)}</StatValue>\n          <StatNote>\n            {partial ? (\n              <>\n                <Tag variant=\"warning\">Partial</Tag>{' '}\n                Excludes {list(missing.map((r) => r.name))}. Do not quote as the total.\n              </>\n            ) : (\n              <Tag variant=\"success\">Complete</Tag>\n            )}\n          </StatNote>\n        </Stat>\n      </Card>\n\n      <TableWrap>\n        <Table>\n          <caption className=\"sr-only\">Revenue by region</caption>\n          <thead>\n            <tr>\n              <Th>Region</Th>\n              <Th>Status</Th>\n              <Th numeric>Revenue</Th>\n              <Th><span className=\"sr-only\">Action</span></Th>\n            </tr>\n          </thead>\n          <tbody>\n            {regions.map((r) => (\n              <tr key={r.id}>\n                <Td>{r.name}</Td>\n                <Td>\n                  {r.revenue === null\n                    ? <Tag variant=\"warning\">No response</Tag>\n                    : <Tag variant=\"success\">Received</Tag>}\n                </Td>\n                {r.revenue === null\n                  ? <Td numeric className=\"muted\">Not received</Td>\n                  : <Td numeric>{usd(r.revenue)}</Td>}\n                <Td>\n                  {r.revenue === null && (\n                    <Button variant=\"ghost\" size=\"sm\" loading={retrying.has(r.id)}\n                      onClick={() => retry([r.id])} aria-label={`Retry ${r.name}`}>\n                      Retry\n                    </Button>\n                  )}\n                </Td>\n              </tr>\n            ))}\n          </tbody>\n        </Table>\n      </TableWrap>\n    </main>\n  );\n}\n"
+    }
+  ],
+  "rep": 0,
+  "costUsd": 0.3342252,
+  "durationMs": 60495,
+  "turns": 22,
+  "tools": {
+    "Skill": 1,
+    "Glob": 5,
+    "Read": 9,
+    "Grep": 4,
+    "Write": 1
+  },
+  "error": null,
+  "note": "Recorded from the baseline-main run (feedback-partial-data.0). Used by pnpm eval:selection:dry and the unit test.",
+  "expectedScore": {
+    "pass": false,
+    "missing": [
+      "State"
+    ],
+    "forbidHits": []
+  }
+}

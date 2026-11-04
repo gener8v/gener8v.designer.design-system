@@ -1,0 +1,44 @@
+{
+  "case": "data-paged-invoices",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "skillFired": true,
+  "readPaths": [
+    "src/**/*",
+    "<project>es-ygXSQ7/node_modules",
+    "**/@gener8v/ui/**/*.{md,d.ts,html}",
+    "<project>es-ygXSQ7/src/App.tsx",
+    "<plugin>/skills/gener8v-design-system",
+    "Pagination|pagination|Table",
+    "<plugin>/skills/gener8v-design-system/references/components.md",
+    "<plugin>/skills/gener8v-design-system",
+    "**/*",
+    "<project>es-ygXSQ7/src/App.tsx"
+  ],
+  "finalText": "I've written the invoice table to `src/App.tsx`. I haven't run or built it, because the project has no `node_modules` yet.\n\nThe page shows 2,300 generated invoices, 25 per page. Under the table is a row reading \"1–25 of 2,300\", with Previous/Next buttons and numbered pages between them.\n\n**Design-system pieces used:**\n- **Layout:** `.container`, `.section` and `.stack`.\n- **Table:** `.table-wrap` and `.table`, with `.mono` and `.num` on the cells, and `.tag` with `tag-success`, `tag-neutral` and `tag-danger` for status.\n- **Paging:** `.table-pager` with `.table-pager-range` for the range on show, and `.pagination` with `.pagination-item` and `.pagination-gap` for the controls. The current page is marked with `aria-current=\"page\"`.\n- **Template:** I didn't start from a template.\n\n**Caveats:**\n- I used the system's class names directly instead of the `@gener8v/ui` React components. I couldn't see their exports, and the skill says the components render the same classes.\n- I also couldn't open the component HTML, so the markup inside `.table-pager` and `.pagination` is my best reading of the class index. It may need adjusting against `components/table.html` and `components/flow.html`.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "content": "import { useMemo, useState } from 'react';\nimport '@gener8v/ui/styles.css';\n\nconst TOTAL = 2300;\nconst PAGE_SIZE = 25;\nconst PAGES = Math.ceil(TOTAL / PAGE_SIZE);\n\ntype Status = 'Paid' | 'Open' | 'Overdue';\nconst STATUSES: Status[] = ['Paid', 'Open', 'Overdue'];\nconst TAG: Record<Status, string> = {\n  Paid: 'tag-success',\n  Open: 'tag-neutral',\n  Overdue: 'tag-danger',\n};\nconst CUSTOMERS = ['Acme Corp', 'Northwind', 'Globex', 'Initech', 'Umbrella Ltd', 'Hooli', 'Stark Industries'];\n\nconst invoices = Array.from({ length: TOTAL }, (_, i) => ({\n  id: `INV-${String(i + 1).padStart(5, '0')}`,\n  customer: CUSTOMERS[(i * 7) % CUSTOMERS.length],\n  issued: new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10),\n  amount: 120 + ((i * 7919) % 48000) / 10,\n  status: STATUSES[(i * 5) % 3],\n}));\n\nconst fmt = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });\n\nfunction pageItems(current: number): (number | 'gap-l' | 'gap-r')[] {\n  const set = new Set([1, PAGES, current - 1, current, current + 1]);\n  const nums = [...set].filter((n) => n >= 1 && n <= PAGES).sort((a, b) => a - b);\n  const out: (number | 'gap-l' | 'gap-r')[] = [];\n  nums.forEach((n, i) => {\n    if (i > 0 && n - nums[i - 1] > 1) out.push(i === 1 ? 'gap-l' : 'gap-r');\n    out.push(n);\n  });\n  return out;\n}\n\nexport function App() {\n  const [page, setPage] = useState(1);\n  const start = (page - 1) * PAGE_SIZE;\n  const rows = invoices.slice(start, start + PAGE_SIZE);\n  const items = useMemo(() => pageItems(page), [page]);\n\n  return (\n    <main className=\"container section stack\">\n      <h1>Invoices</h1>\n\n      <div className=\"table-wrap\">\n        <table className=\"table\">\n          <caption className=\"muted\">Invoices, page {page} of {PAGES}</caption>\n          <thead>\n            <tr>\n              <th scope=\"col\">Invoice</th>\n              <th scope=\"col\">Customer</th>\n              <th scope=\"col\">Issued</th>\n              <th scope=\"col\" className=\"num\">Amount</th>\n              <th scope=\"col\">Status</th>\n            </tr>\n          </thead>\n          <tbody>\n            {rows.map((r) => (\n              <tr key={r.id}>\n                <td className=\"mono\">{r.id}</td>\n                <td>{r.customer}</td>\n                <td className=\"num\">{r.issued}</td>\n                <td className=\"num\">{fmt.format(r.amount)}</td>\n                <td><span className={`tag ${TAG[r.status]}`}>{r.status}</span></td>\n              </tr>\n            ))}\n          </tbody>\n        </table>\n      </div>\n\n      <div className=\"table-pager\">\n        <p className=\"table-pager-range muted\" aria-live=\"polite\">\n          {start + 1}–{start + rows.length} of {TOTAL.toLocaleString('en-US')}\n        </p>\n        <nav className=\"pagination\" aria-label=\"Invoice pages\">\n          <button\n            type=\"button\"\n            className=\"pagination-item\"\n            disabled={page === 1}\n            onClick={() => setPage(page - 1)}\n          >\n            Previous\n          </button>\n          {items.map((it) =>\n            typeof it === 'string' ? (\n              <span key={it} className=\"pagination-gap\" aria-hidden=\"true\">…</span>\n            ) : (\n              <button\n                key={it}\n                type=\"button\"\n                className=\"pagination-item\"\n                aria-current={it === page ? 'page' : undefined}\n                aria-label={`Page ${it}`}\n                onClick={() => setPage(it)}\n              >\n                {it}\n              </button>\n            ),\n          )}\n          <button\n            type=\"button\"\n            className=\"pagination-item\"\n            disabled={page === PAGES}\n            onClick={() => setPage(page + 1)}\n          >\n            Next\n          </button>\n        </nav>\n      </div>\n    </main>\n  );\n}\n"
+    }
+  ],
+  "rep": 0,
+  "costUsd": 0.1102683,
+  "durationMs": 28079,
+  "turns": 10,
+  "tools": {
+    "Skill": 1,
+    "Glob": 3,
+    "Read": 2,
+    "Grep": 1,
+    "Write": 1
+  },
+  "error": null,
+  "note": "Recorded from the baseline-main run (data-paged-invoices.0). Used by pnpm eval:selection:dry and the unit test.",
+  "expectedScore": {
+    "pass": true,
+    "missing": [],
+    "forbidHits": []
+  }
+}

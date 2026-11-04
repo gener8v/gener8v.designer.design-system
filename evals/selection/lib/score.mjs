@@ -23,7 +23,9 @@ export const CLASS_ALIASES = {
   Accordion: ['accordion'], Contents: ['contents'], Paper: ['paper'], Citation: ['citation'], SourceCard: ['source-card'],
   Conversation: ['conversation'], ToolChip: ['tool-chip'], ConfirmCard: ['confirm-card'],
   Timeline: ['timeline'], Feed: ['feed'], Entry: ['entry'], Calendar: ['calendar'], Field: ['field'],
-  Switch: ['switch'], Checkbox: ['checkbox'],
+  Switch: ['switch'], Checkbox: ['checkbox'], Button: ['btn'],
+  // The mark tells the chart forms apart even though their frame classes are shared.
+  LineChart: ['chart-line'], BarChart: ['chart-bar', 'chart-hbars'], Sparkline: ['sparkline'],
 };
 
 const TEMPLATE_RE = /design\/templates\/([a-z0-9-]+)/g;
@@ -94,6 +96,25 @@ export function uses(u, token) {
 }
 
 /**
+ * Which parts of the plugin's documentation a run opened or searched. A diagnostic, not part of
+ * the score: it says whether a miss came from reading the guidance and choosing wrong, or from
+ * never reaching it.
+ */
+export const DOC_AREAS = {
+  references: /skills\/gener8v-design-system\/references\//,
+  // The per-family choosing guides, once they exist. Zero until then.
+  choosing: /references\/choosing\//,
+  readme: /design\/readme\.md/,
+  componentPages: /design\/components\//,
+  templates: /design\/templates\//,
+  specs: /docs\/specs\//,
+  source: /packages\/ui\/src\//,
+};
+export function docsRead(paths) {
+  return Object.fromEntries(Object.entries(DOC_AREAS).map(([k, re]) => [k, paths.some((p) => re.test(p))]));
+}
+
+/**
  * Score one run.
  * @param {object} kase   the case definition
  * @param {{files: {path:string, content:string}[], finalText: string, readPaths: string[], skillFired: boolean}} run
@@ -125,6 +146,10 @@ export function scoreRun(kase, run) {
     templateMatch,
     templatesSeen: [...seen].sort(),
     used: [...u.ds].sort(),
+    // Components matched only by writing their classes by hand, not by importing them.
+    usedViaClass: Object.keys(CLASS_ALIASES).filter((k) => !u.ds.has(k) && uses(u, k)).sort(),
+    importsReact: u.ds.size > 0,
+    docsRead: docsRead(run.readPaths ?? []),
     otherJsx: [...u.jsx].filter((n) => !u.ds.has(n)).sort(),
     packages: [...u.packages].filter((p) => !p.startsWith('.')).sort(),
     nativeSelect: u.elements.has('select'),

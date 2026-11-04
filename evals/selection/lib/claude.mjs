@@ -1,8 +1,8 @@
 // One headless Claude Code run of one case, in a throwaway consumer project
 // with this repository loaded as a plugin.
 import { spawn } from 'node:child_process';
-import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { cpSync, mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { join, relative } from 'node:path';
 
 const TEXT = /\.(tsx?|jsx?|mjs|html|css)$/;
@@ -99,8 +99,15 @@ export function runCase(o) {
     child.stderr.on('data', (d) => { err += d; });
     child.on('close', (code) => {
       clearTimeout(timer);
+      // Local paths name the machine and the user; results and recordings may be committed.
+      // macOS reaches /tmp and /var through /private, and a run may print either spelling.
+      const spellings = (p) => { const r = realpathSync(p); return [...new Set([r, p, r.replace(/^\/private\//, '/')])].sort((a, b) => b.length - a.length); };
+      const swaps = [...spellings(workdir).map((p) => [p, '<project>']), ...spellings(o.pluginRoot).map((p) => [p, '<plugin>']), [homedir(), '~']];
+      const anon = (s) => swaps.reduce((acc, [from, to]) => acc.split(from).join(to), s);
       const t = parseTranscript(out.split('\n'));
-      const files = producedFiles(workdir, o.fixtureDir);
+      t.readPaths = t.readPaths.map(anon);
+      t.finalText = anon(t.finalText);
+      const files = producedFiles(workdir, o.fixtureDir).map((f) => ({ ...f, content: anon(f.content) }));
       if (!o.keep) rmSync(workdir, { recursive: true, force: true });
       resolve({
         ...t,

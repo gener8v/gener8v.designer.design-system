@@ -1,0 +1,52 @@
+{
+  "case": "input-country-picker",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "skillFired": true,
+  "readPaths": [
+    "<project>y-picker-byLftl",
+    "**/*",
+    "<plugin>",
+    "Combobox",
+    "<plugin>/packages/ui/src/Combobox/Combobox.tsx",
+    "<project>y-picker-byLftl/src/App.tsx",
+    "<plugin>/evals/selection/cases/input-country-picker.json",
+    "<project>y-picker-byLftl/src/main.tsx",
+    "<plugin>/packages/ui/src",
+    "export (function|const) (TextField|Input|Field|Button|Card)\\b",
+    "<plugin>/packages/ui/src/Input/Input.tsx",
+    "<plugin>/packages/ui/src/Button/Button.tsx",
+    "<project>y-picker-byLftl/src/countries.ts",
+    "<project>y-picker-byLftl/src/App.tsx"
+  ],
+  "finalText": "I added a customer form with a Country field in `src/App.tsx`, plus a new `src/countries.ts` holding 195 country names. I haven't run it, type-checked it, or run `pnpm check`. I also didn't confirm that `field-error` exists as a class in the stylesheet or that `Combobox` and `Field` are exported from `@gener8v/ui`.\n\nThe Country field is a `Combobox`. Typing filters the list, and the arrow keys, Enter and Escape all work. It shows an invalid state with a \"Choose a country.\" message if you submit without picking one. The form also has Name and Email fields, which I added as placeholders. Submit validates but doesn't save anything yet.\n\n**Components used:** `Combobox`, `Field`, `Input` and `Button` (one primary button).\n\nI didn't start from a design-system template, because none of them covers a single-field form like this.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "content": "import { useState } from 'react';\nimport type { FormEvent } from 'react';\nimport { Button, Combobox, Field, Input } from '@gener8v/ui';\nimport { COUNTRY_OPTIONS } from './countries';\n\nexport function App() {\n  const [name, setName] = useState('');\n  const [email, setEmail] = useState('');\n  const [country, setCountry] = useState<string | null>(null);\n  const [submitted, setSubmitted] = useState(false);\n\n  const countryMissing = submitted && !country;\n\n  const onSubmit = (e: FormEvent) => {\n    e.preventDefault();\n    setSubmitted(true);\n    if (!name.trim() || !country) return;\n    // Hand off to the real save here.\n  };\n\n  return (\n    <main className=\"container\">\n      <h1>New customer</h1>\n      <form onSubmit={onSubmit} noValidate>\n        <Field>\n          <label className=\"field-label\" htmlFor=\"customer-name\">Name</label>\n          <Input id=\"customer-name\" value={name} onChange={(e) => setName(e.target.value)}\n            invalid={submitted && !name.trim()} autoComplete=\"name\" />\n        </Field>\n        <Field>\n          <label className=\"field-label\" htmlFor=\"customer-email\">Email</label>\n          <Input id=\"customer-email\" type=\"email\" value={email}\n            onChange={(e) => setEmail(e.target.value)} autoComplete=\"email\" />\n        </Field>\n        <Field>\n          <Combobox\n            id=\"customer-country\"\n            label=\"Country\"\n            placeholder=\"Start typing a country\"\n            options={COUNTRY_OPTIONS}\n            value={country}\n            onChange={setCountry}\n            invalid={countryMissing}\n            emptyMessage=\"No country matches\"\n          />\n          {countryMissing && <p className=\"field-error\" role=\"alert\">Choose a country.</p>}\n        </Field>\n        <Button type=\"submit\" variant=\"primary\">Save</Button>\n      </form>\n    </main>\n  );\n}\n"
+    },
+    {
+      "path": "src/countries.ts",
+      "content": "import type { ComboboxOption } from '@gener8v/ui';\n\nconst NAMES = [\n  'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina', 'Armenia',\n  'Australia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',\n  'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei', 'Bulgaria',\n  'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Canada', 'Central African Republic', 'Chad',\n  'Chile', 'China', 'Colombia', 'Comoros', 'Congo', 'Costa Rica', \"Côte d'Ivoire\", 'Croatia', 'Cuba', 'Cyprus',\n  'Czechia', 'Democratic Republic of the Congo', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',\n  'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia', 'Fiji',\n  'Finland', 'France', 'Gabon', 'Gambia', 'Georgia', 'Germany', 'Ghana', 'Greece', 'Grenada', 'Guatemala',\n  'Guinea', 'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'Iceland', 'India', 'Indonesia', 'Iran',\n  'Iraq', 'Ireland', 'Israel', 'Italy', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kenya', 'Kiribati',\n  'Kosovo', 'Kuwait', 'Kyrgyzstan', 'Laos', 'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein',\n  'Lithuania', 'Luxembourg', 'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands',\n  'Mauritania', 'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco',\n  'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'Netherlands', 'New Zealand', 'Nicaragua', 'Niger',\n  'Nigeria', 'North Korea', 'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama',\n  'Papua New Guinea', 'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia',\n  'Rwanda', 'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino',\n  'São Tomé and Príncipe', 'Saudi Arabia', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore',\n  'Slovakia', 'Slovenia', 'Solomon Islands', 'Somalia', 'South Africa', 'South Korea', 'South Sudan', 'Spain',\n  'Sri Lanka', 'Sudan', 'Suriname', 'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania',\n  'Thailand', 'Timor-Leste', 'Togo', 'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Türkiye', 'Turkmenistan',\n  'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United States', 'Uruguay',\n  'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe',\n];\n\n/** Module-level so the list keeps one identity across renders. */\nexport const COUNTRY_OPTIONS: ComboboxOption[] = NAMES.map((name) => ({ value: name, label: name }));\n"
+    }
+  ],
+  "rep": 0,
+  "costUsd": 0.1452972,
+  "durationMs": 29953,
+  "turns": 14,
+  "tools": {
+    "Skill": 1,
+    "Glob": 1,
+    "Grep": 2,
+    "Read": 6,
+    "Write": 2
+  },
+  "error": null,
+  "note": "Recorded from the baseline-main run (input-country-picker.0). Used by pnpm eval:selection:dry and the unit test.",
+  "expectedScore": {
+    "pass": true,
+    "missing": [],
+    "forbidHits": []
+  }
+}
