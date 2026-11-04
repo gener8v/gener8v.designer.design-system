@@ -16,6 +16,14 @@
    frame here so the card renders deterministically. */
 .stage .dialog-backdrop, .stage .toast-region { position: absolute; }
 .stack-4 { display: grid; gap: var(--space-4); }
+/* Two phones side by side: 375 wide, 600 tall, the dialog pinned inside each. */
+.phones { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.stage.phone { inline-size: min(calc(var(--space-32) * 2.93), 100%); block-size: calc(var(--space-32) * 4.69); }
+/* The system holds a dialog to the window (100dvh); a frame on a page is not the window, so here
+   the frame is a size container and the dialog is held to it instead. */
+.stage.phone { container-type: size; }
+.stage.phone .dialog { max-block-size: calc(100cqb - var(--space-4)); }
+.stage.phone .dialog-backdrop { padding: var(--space-2); }
 .note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
 </style>
 </head>
@@ -36,6 +44,20 @@
       </div>
     </div>
   </div>
+
+  <p class="demo-head label">A long form at phone width — without a tone, and with one</p>
+  <div class="phones">
+    <div class="stage phone">
+<div class="dialog-backdrop"><div role="dialog" aria-modal="true" aria-labelledby="_g7R_0_" tabindex="-1" class="dialog"><p class="dialog-title" id="_g7R_0_">Statement of work terms</p><div class="dialog-body"><div class="stack-4"><div class="field"><label for="plain-0" class="field-label">Client name</label><input id="plain-0" class="input"/></div><div class="field"><label for="plain-1" class="field-label">Engagement lead</label><input id="plain-1" class="input"/></div><div class="field"><label for="plain-2" class="field-label">Start date</label><input id="plain-2" class="input"/></div><div class="field"><label for="plain-3" class="field-label">Weeks</label><input id="plain-3" class="input"/></div><div class="field"><label for="plain-4" class="field-label">Fee basis</label><input id="plain-4" class="input"/></div><div class="field"><label for="plain-5" class="field-label">Payment terms</label><input id="plain-5" class="input"/></div><div class="field"><label for="plain-6" class="field-label">Rate card</label><input id="plain-6" class="input"/></div><div class="field"><label for="plain-7" class="field-label">Travel</label><input id="plain-7" class="input"/></div><div class="field"><label for="plain-notes" class="field-label">Assumptions</label><textarea id="plain-notes" rows="3" class="textarea"></textarea></div></div></div><div class="dialog-actions"><button type="button" class="btn btn-secondary">Cancel</button><button type="button" class="btn btn-primary">Draft Statement</button></div></div></div>
+    </div>
+    <div class="stage phone">
+<div class="dialog-backdrop"><div role="dialog" aria-modal="true" aria-labelledby="_g8R_0_" tabindex="-1" data-tone="accent" class="dialog"><p class="dialog-title" id="_g8R_0_">Statement of work terms</p><div class="dialog-body"><div class="stack-4"><div class="field"><label for="accent-0" class="field-label">Client name</label><input id="accent-0" class="input"/></div><div class="field"><label for="accent-1" class="field-label">Engagement lead</label><input id="accent-1" class="input"/></div><div class="field"><label for="accent-2" class="field-label">Start date</label><input id="accent-2" class="input"/></div><div class="field"><label for="accent-3" class="field-label">Weeks</label><input id="accent-3" class="input"/></div><div class="field"><label for="accent-4" class="field-label">Fee basis</label><input id="accent-4" class="input"/></div><div class="field"><label for="accent-5" class="field-label">Payment terms</label><input id="accent-5" class="input"/></div><div class="field"><label for="accent-6" class="field-label">Rate card</label><input id="accent-6" class="input"/></div><div class="field"><label for="accent-7" class="field-label">Travel</label><input id="accent-7" class="input"/></div><div class="field"><label for="accent-notes" class="field-label">Assumptions</label><textarea id="accent-notes" rows="3" class="textarea"></textarea></div></div></div><div class="dialog-actions"><button type="button" class="btn btn-secondary">Cancel</button><button type="button" class="btn btn-primary">Draft Statement</button></div></div></div>
+    </div>
+  </div>
+  <p class="note">The body scrolls and the buttons stay, whether or not the dialog carries a tone.
+  The dialog is a column: the band, the title and the actions keep their size, and only the body gives
+  way. It used to count the tone band as a grid row, so without one a long form pushed its own buttons
+  off the bottom.</p>
 
   <p class="demo-head label">Alerts</p>
   <div class="stack-4">

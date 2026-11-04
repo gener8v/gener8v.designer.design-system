@@ -71,6 +71,13 @@ T('--color-divider', `color-mix(in srgb, ${ink} 12%, transparent)`, 'color');
 T('--color-inverse', ramps.neutral[900], 'color');
 T('--color-on-inverse', ramps.neutral[200], 'color');
 
+/* --- the scrim, dark in BOTH modes --- */
+// What a dialog, a drawer and the command palette lay over the page they take. Each mixed
+// `--color-neutral-900` into transparent, which is the darkest ink on a light page and the
+// LIGHTEST once the ramp mirrors — so in dark mode the page behind a modal turned light grey
+// rather than receding. A scrim dims; it is the same near-black in both modes and never mirrors.
+T('--color-scrim', ramps.neutral[900], 'color');
+
 /* --- syntax, which lives on the inverse ground in both modes --- */
 // Not ramp steps: the ground under these does not change between modes, so neither should they.
 // Mirroring would have put a dark comment on a dark code block.
@@ -194,6 +201,7 @@ ${section('Chart series')}${emit(pick(/^--series-\d/))}
 ${section('Section band')}${emit(pick(/^--color-section/))}
 ${section('Status')}${emit(pick(/^--color-(success|warning|danger)/))}
 ${section('The panel that is dark in both modes')}${emit(pick(/^--color-(inverse|on-inverse)$/))}
+${section('The scrim behind a modal, dark in both modes')}${emit(pick(/^--color-scrim$/))}
 ${section('Syntax')}${emit(pick(/^--code-/))}
 ${section('Type')}${emit(pick(/^--font-/))}
 ${emit(pick(/^--(text|leading|tracking)-/))}

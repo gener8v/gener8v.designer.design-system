@@ -249,5 +249,24 @@ check('BarChart/horizontal',
   renderToStaticMarkup(h(ui.BarChart, { orientation: 'horizontal', title: 'Impact by kind', categories: ['Process friction'], series: [{ label: 'Findings', values: [14] }] })),
   'class="chart-hbars"', 'chart-hbar-row', 'chart-hbar-value');
 
+check('Dialog/no tone',
+  renderToStaticMarkup(h(ui.Dialog, { open: true, onClose: () => {}, title: 'Terms', actions: h(ui.Button, null, 'Cancel') }, 'Body')),
+  'class="dialog"', 'class="dialog-title"', 'class="dialog-body"', 'class="dialog-actions"');
+
+check('LayeredGraph',
+  renderToStaticMarkup(h(ui.LayeredGraph, { 'aria-label': 'Plan', onAssign: () => {}, edges: [{ from: 'r1', to: 'm1' }, { from: 'm1', to: 's', kind: 'sequence' }], layers: [
+    { id: 'r', label: 'Requirements', coverable: true, groups: [{ label: 'Close', nodes: [{ id: 'r1', code: 'REQ-1', label: 'Close checklist' }, { id: 'r2', code: 'REQ-2', label: 'Lock a period' }] }] },
+    { id: 'm', label: 'Milestones', ordered: true, nodes: [{ id: 'm1', code: 'M1', label: 'Discovery' }, { id: 's', label: 'Statement of work', variant: 'terminal' }] }] })),
+  'class="layered-graph"', 'class="layered-graph-edges"', 'aria-hidden="true"', '<ol class="layered-graph-list"',
+  'data-uncovered="true"', 'REQ-2: Lock a period. Not covered.', 'draggable="true"', 'data-variant="terminal"', '1 uncovered');
+
+check('ToolChip',
+  renderToStaticMarkup(h(ui.ToolChip, { label: ui.toolWords('list_requirements'), result: 'Listed 6 requirements', args: { capability: 'Close' } })),
+  'class="tool-chip"', 'data-state="done"', 'aria-expanded="false"', 'Listed 6 requirements');
+
+check('ConfirmCard',
+  renderToStaticMarkup(h(ui.ConfirmCard, { summary: 'Draft the statement of work', spend: 'starts a billed run', onConfirm: () => {} })),
+  'confirm-card', 'data-spend="true"', 'costs money', 'Approve Spend', 'role="status"');
+
 if (fails.length) { console.error(`✗ smoke\n${fails.map((f) => '  · ' + f).join('\n')}`); process.exit(1); }
-console.log(`✓ smoke — ${exported} exports import from dist; 47 render assertions pass`);
+console.log(`✓ smoke — ${exported} exports import from dist; 51 render assertions pass`);

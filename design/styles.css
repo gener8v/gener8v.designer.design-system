@@ -87,6 +87,9 @@
   --color-inverse: #182030;
   --color-on-inverse: #E2E6ED;
 
+  /* The scrim behind a modal, dark in both modes */
+  --color-scrim: #182030;
+
   /* Syntax */
   --code-comment: #ABB2C0;
   --code-string: #91E4BD;
@@ -683,6 +686,121 @@ a:hover { color: var(--color-accent-800); text-decoration-color: currentColor; }
   padding-block-end: var(--space-4);
   font-size: var(--text-sm);
   color: var(--color-neutral-700);
+}
+
+/* ------------------------------------------------------------------- agent */
+
+/* What an agent did and what it wants, inside a conversation.
+ *
+ * A TOOL CALL IS A CHIP, NOT A PARAGRAPH. The result is the line; the arguments are a press away.
+ * A CHANGE THAT NEEDS A PERSON ASKS ONE, on a card with the change written on it and two answers. */
+
+/* --- tool chip ------------------------------------------------------ */
+
+.tool-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.tool-chip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-h-xs);
+  max-inline-size: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  font: inherit;
+  text-align: start;
+}
+button.tool-chip-toggle { cursor: pointer; }
+button.tool-chip-toggle:hover { border-color: var(--color-neutral-400); }
+.tool-chip-caret {
+  flex: none;
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.tool-chip-toggle[aria-expanded="true"] .tool-chip-caret { transform: rotate(90deg); }
+.tool-chip-label { min-inline-size: 0; overflow-wrap: anywhere; }
+/* Running: the words are the tool's, not yet its answer, so they recede a step. */
+.tool-chip[data-state="running"] .tool-chip-toggle { color: var(--color-neutral-700); }
+.tool-chip[data-state="refused"] .tool-chip-toggle,
+.tool-chip[data-state="failed"] .tool-chip-toggle { border-color: var(--color-danger-300); }
+
+.tool-chip-detail {
+  flex-basis: 100%;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-inline-start: 2px solid var(--color-neutral-200);
+  color: var(--color-neutral-700);
+}
+.tool-chip-args { display: grid; gap: var(--space-1); margin: 0; }
+.tool-chip-args > div { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.tool-chip-args dt { font-family: var(--font-mono); color: var(--color-neutral-600); }
+.tool-chip-args dd { margin: 0; color: var(--color-neutral-900); overflow-wrap: anywhere; }
+.tool-chip-more { overflow-wrap: anywhere; }
+
+/* --- confirm card --------------------------------------------------- */
+
+.confirm-card {
+  border-color: var(--color-accent-300);
+}
+/* Margins rather than a gap: the outcome is a live region that must exist, empty, before it is
+   filled — and an empty grid item still takes a gap. */
+.confirm-card > * + * { margin-block-start: var(--space-3); }
+.confirm-card-outcome:empty { margin: 0; }
+.confirm-card[data-spend] { border-color: var(--color-danger-300); }
+/* Answered, it is a record of what was asked, not a question: it steps back to the hairline. */
+.confirm-card:not([data-state="open"]) { border-color: var(--color-neutral-200); }
+.confirm-card:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.confirm-card-flags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-spend { font-size: var(--text-xs); color: var(--color-neutral-700); }
+.confirm-card-summary {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-900);
+}
+.confirm-card-values {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.confirm-card-values > div { display: contents; }
+.confirm-card-values dt { color: var(--color-neutral-600); }
+.confirm-card-values dd { margin: 0; color: var(--color-neutral-900); font-variant-numeric: tabular-nums; }
+.confirm-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-outcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-problem { font-size: var(--text-xs); color: var(--color-neutral-700); }
+
+@media (max-width: 480px) {
+  /* A label above its value, on a phone: two columns of a long value wrap to a word a line. */
+  .confirm-card-values { grid-template-columns: 1fr; }
+  .confirm-card-values dd { margin-block-end: var(--space-1); }
 }
 
 /* ------------------------------------------------------------------ button */
@@ -1608,7 +1726,7 @@ mark {
   justify-items: center;
   align-content: start;
   padding: clamp(var(--space-8), 12vh, var(--space-32)) var(--space-6) var(--space-6);
-  background: color-mix(in srgb, var(--color-neutral-900) 28%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 28%, transparent);
   z-index: 90;
 }
 .command {
@@ -2846,23 +2964,33 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   padding: var(--space-6);
   /* A MODAL IS THE ONLY THING, OR IT IS A CARD. At 34% the page behind stayed fully legible and
      the dialog read as floating over live content rather than replacing it. */
-  background: color-mix(in srgb, var(--color-neutral-900) 56%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 56%, transparent);
   z-index: 50;
 }
 .dialog {
   inline-size: min(520px, 100%);
   max-block-size: calc(100vh - var(--space-16));
+  /* A phone's browser bar comes and goes; `dvh` is the height actually on show, where it exists. */
+  max-block-size: calc(100dvh - var(--space-16));
   /* THE BODY SCROLLS, NOT THE DIALOG.
      `overflow-y` on the box itself scrolled the title out of view and the actions off the bottom —
      so a long explanation could put the confirm button somewhere a reader had to go looking for
-     it, on the one surface where the controls are the entire point. */
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+     it, on the one surface where the controls are the entire point.
+
+     A COLUMN, NOT A GRID OF COUNTED ROWS. This was `grid-template-rows: auto auto minmax(0, 1fr)
+     auto`, which counted the tone band as the first row. Without a tone the title took the first
+     `auto`, the body the second — where it grew to its content and never scrolled — and the
+     actions the `1fr`, so a long form pushed its own buttons off the dialog on a phone. A flex
+     column has no row to miscount: the band, the title and the actions keep their size, and the
+     body alone gives way and scrolls, whichever of them are there. */
+  display: flex;
+  flex-direction: column;
   padding: var(--space-6);
   background: var(--color-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
+.dialog::before, .dialog-title, .dialog-actions { flex: none; }
 .dialog-title {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
@@ -2871,8 +2999,17 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   color: var(--color-neutral-900);
 }
 .dialog-body {
-  margin-block-start: var(--space-3);
+  /* Shrinks below its content (min-size 0), never grows past it: a short dialog stays short. */
+  flex: 0 1 auto;
+  min-block-size: 0;
+  margin-block-start: var(--space-2); /* space-3, less the step of ring room inside */
   overflow-y: auto;
+  overscroll-behavior: contain;
+  /* A field's focus ring is drawn outside it, and a scrolling box clips what is outside it. A step
+     of room on each side, taken back by the margin, keeps the ring whole at the body's edge. */
+  padding: var(--space-1);
+  margin-inline: calc(var(--space-1) * -1);
+  margin-block-end: calc(var(--space-1) * -1);
   font-size: var(--text-sm);
   color: var(--color-neutral-700);
 }
@@ -2903,11 +3040,16 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 
 .dialog-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-3);
   /* The decision is separated from the explanation by air rather than a rule — the layout
      foundation's own instruction: reach for a larger space step before reaching for a divider. */
   margin-block-start: var(--space-8);
+}
+/* On a phone the air above the decision is a step smaller, so the body keeps the height. */
+@media (max-width: 480px) {
+  .dialog-actions { margin-block-start: var(--space-5); }
 }
 
 /* --- alert ---------------------------------------------------------- */
@@ -4220,6 +4362,243 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   .shortcut { grid-template-columns: minmax(0, 1fr); gap: var(--space-1); }
 }
 
+/* ------------------------------------------------------------ layered graph */
+
+/* LAYERS READ LEFT TO RIGHT, AND THE LINES ARE A DRAWING OF WHAT THE LISTS ALREADY SAY.
+ *
+ * Each layer is a list of real buttons; the lines between them are one svg stretched across the
+ * same box, hidden from assistive technology. The layout is arithmetic in graph units — a
+ * sixteenth of a rem, so a pixel at the default size and more when the reader turns text up — and
+ * the nodes and the lines are placed with the same numbers.
+ *
+ * NARROW FIRST. The default is the phone: the layers stacked as plain lists, the drawing gone, and
+ * every node saying in words what covers it. From 30rem of its own width — a container query, so a
+ * graph in a side pane stacks on a desktop too — the layers stand side by side and the lines come
+ * back. */
+
+.layered-graph {
+  container: layered-graph / inline-size;
+  --layered-graph-unit: 0.0625rem;
+}
+
+.layered-graph-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.layered-graph-edges { display: none; }
+
+.layered-graph-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+/* A tag in an uppercase head keeps its own voice. */
+.layered-graph-head .tag, .layered-graph-group-head .tag { letter-spacing: normal; text-transform: none; }
+
+.layered-graph-list, .layered-graph-group-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.layered-graph-list { gap: var(--space-2); }
+.layered-graph-group-head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  margin-block: var(--space-2) var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- a node --------------------------------------------------------- */
+
+.layered-graph-node {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--space-6);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-neutral-900);
+  font: inherit;
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.layered-graph-node[draggable="true"] { cursor: grab; }
+.layered-graph-node[data-size="md"] {
+  align-items: flex-start;
+  padding-block: var(--space-2);
+  border-color: var(--color-neutral-300);
+  font-size: var(--text-sm);
+}
+/* Where a sequence ends. Dashed, because it is not one more step but the thing the steps make. */
+.layered-graph-node[data-variant="terminal"] {
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  border-style: dashed;
+  border-color: var(--color-neutral-400);
+}
+.layered-graph-code {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.layered-graph-label { flex: 1 1 0; min-inline-size: 0; }
+.layered-graph-meta { flex: none; display: inline-flex; gap: var(--space-1); }
+/* What the lines say, as words. Only where there are no lines. */
+.layered-graph-links {
+  flex-basis: 100%;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}
+
+.layered-graph-node:hover,
+.layered-graph-node:focus-visible { border-color: var(--color-accent-400); }
+.layered-graph-node[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-100);
+}
+/* UNCOVERED IS A SHAPE AS WELL AS A TINT. The dashed edge survives forced colours and a reader who
+   does not see the warning hue; the name says "Not covered" to everyone else. */
+.layered-graph-node[data-uncovered] {
+  border-style: dashed;
+  border-color: var(--color-warning-300);
+  background: var(--color-warning-100);
+}
+.layered-graph-node[data-uncovered] .layered-graph-links { color: var(--color-warning-800); }
+
+/* Brought forward by `highlight`: a ring, not a fade. Fading the rest would take their text under
+   contrast, and they are still the reader's to press. */
+.layered-graph[data-highlight] .layered-graph-node[data-highlighted] {
+  box-shadow: 0 0 0 2px var(--color-accent-600);
+}
+.layered-graph[data-highlight] .layered-graph-node[data-uncovered][data-highlighted] {
+  box-shadow: 0 0 0 2px var(--color-warning-700);
+}
+
+/* A drag, or a pick-up from the keyboard, in progress: where it can go is marked. */
+.layered-graph[data-dragging] .layered-graph-node[data-droppable],
+.layered-graph-node[data-target] {
+  border-style: dashed;
+  border-color: var(--color-accent-500);
+}
+.layered-graph-node[data-over] {
+  border-style: solid;
+  border-color: var(--color-accent);
+  background: var(--color-accent-100);
+}
+.layered-graph-node[data-carried] {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-300);
+}
+
+/* --- the drawing ---------------------------------------------------- */
+
+.layered-graph-edges path {
+  fill: none;
+  stroke: var(--color-neutral-300);
+  stroke-width: 1;
+}
+.layered-graph-edges path[data-lit] {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+.layered-graph-edges path[data-kind="sequence"] {
+  stroke: var(--color-neutral-400);
+  stroke-dasharray: 3 3;
+}
+
+/* --- side by side --------------------------------------------------- */
+
+@container layered-graph (min-width: 30rem) {
+  .layered-graph-canvas {
+    display: grid;
+    grid-template-columns: var(--layered-graph-columns, 1fr 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 10%;
+  }
+  .layered-graph-layer {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: 1 / span 2;
+    grid-column: var(--layered-graph-column, auto);
+    min-inline-size: 0;
+  }
+  .layered-graph-edges {
+    display: block;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: calc(var(--layered-graph-height, 0) * var(--layered-graph-unit));
+    overflow: visible;
+    pointer-events: none;
+  }
+  .layered-graph-list {
+    display: block;
+    position: relative;
+    grid-row: 2;
+    block-size: calc(var(--layered-graph-height, 0) * var(--layered-graph-unit));
+  }
+  /* The groups keep their list semantics and give up their boxes: a group's heading and nodes are
+     placed against the layer's list, so the groups line up with nothing between them. */
+  .layered-graph-group, .layered-graph-group-list { display: block; }
+  .layered-graph-item, .layered-graph-group-head {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(var(--layered-graph-y, 0) * var(--layered-graph-unit));
+    block-size: calc(var(--layered-graph-h, 0) * var(--layered-graph-unit));
+    margin: 0;
+  }
+  .layered-graph-group-head { padding-block-end: var(--space-1); }
+  .layered-graph-group-head .layered-graph-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .layered-graph-node {
+    flex-wrap: nowrap;
+    block-size: 100%;
+    min-block-size: 0;
+    padding-block: 0;
+  }
+  .layered-graph-node[data-size="sm"] .layered-graph-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .layered-graph-node[data-size="md"] { padding-block: var(--space-2); }
+  .layered-graph-node[data-size="md"] .layered-graph-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .layered-graph-links { display: none; }
+}
+
 /* ----------------------------------------------------------------- library */
 
 /* A document library. File type is carried by a mono badge and a glyph, not by
@@ -4956,7 +5335,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   position: absolute;
   inset: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-neutral-900) 32%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 .drawer-panel {
   position: absolute;
@@ -6645,6 +7024,20 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   .contents-item:has(.contents-link[aria-current]) { border-inline-start-color: Highlight; }
   .contents-link[aria-current] { color: Highlight; }
   [data-list-item]:focus-visible { outline: 2px solid Highlight; }
+
+  /* The layered graph. Its lines are drawn in the text colour and a lit one in the highlight; a
+     node's state was never the tint alone — pressed is the highlight edge, uncovered and a drop
+     target are dashed, and the names say both. */
+  .layered-graph-edges path { stroke: CanvasText; }
+  .layered-graph-edges path[data-lit] { stroke: Highlight; }
+  .layered-graph-node { border-color: CanvasText; }
+  .layered-graph-node[aria-pressed="true"], .layered-graph-node[data-over],
+  .layered-graph-node[data-carried] { border-color: Highlight; border-width: 2px; }
+  .layered-graph[data-highlight] .layered-graph-node[data-highlighted] { box-shadow: none; outline: 2px solid Highlight; }
+  /* A tool chip and a card waiting for an answer keep their edges; refused and the spend are
+     tags, which carry their own words. */
+  .tool-chip-toggle, .confirm-card { border-color: CanvasText; }
+  .confirm-card:focus-visible { outline-color: Highlight; }
 }
 
 /* --- print ------------------------------------------------------------ */
@@ -6688,6 +7081,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   .live-pulse, .pager-chip, .table-pager, .contents-check { display: none !important; }
   .live-section { background: none !important; opacity: 1 !important; border-inline-start-color: transparent !important; }
   .live-section > * { animation: none !important; }
+  /* A graph prints as drawn, in ink. A card's buttons and a chip's caret are the screen's. */
+  .layered-graph-edges path { stroke: #999 !important; }
+  .layered-graph-edges path[data-lit] { stroke: #000 !important; }
+  .layered-graph-node { background: none !important; }
+  .confirm-card-actions, .tool-chip-caret { display: none !important; }
   .citation { background: none; border: 1px solid #999; color: #000; }
   .matrix th, .matrix td { position: static !important; }
 
@@ -6735,5 +7133,9 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
     opacity: 0.25;
   }
   .live-pulse[data-still]::after { opacity: 0; }
+
+  /* A chip's caret turns and a graph node's edge eases; both are decoration, and both simply
+     arrive. Nothing here indicates activity — a running tool call says so with a pulse and words. */
+  .tool-chip-caret, .layered-graph-node { transition: none; }
 }
 @keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
