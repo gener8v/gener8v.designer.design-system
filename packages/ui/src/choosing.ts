@@ -96,3 +96,65 @@ export interface Screen {
   /** One line on when this template is the right start. */
   note: string;
 }
+
+/**
+ * One row of the "Which state?" table at the top of the status-and-feedback file. Empty, no
+ * results, error, partial and loading all read as "the region is not showing what you expected",
+ * and the wrong pick is usually a banner (`Alert`) or a passing notice (`Toast`) where the region
+ * itself should change. Every `use` is checked against the component names.
+ */
+export interface StateRow {
+  /** What is true, in task language: "the read failed". */
+  situation: string;
+  /** The entry name to build it with. Checked: it must exist. */
+  use: string;
+  /** How to build it: the kind, the placement, the action. */
+  how: string;
+  /** The tempting wrong pick, and why not. */
+  notThis: string;
+}
+
+export const STATES: StateRow[] = [
+  {
+    situation: 'nothing exists yet — a new account, an empty list',
+    use: 'State',
+    how: '`kind="empty"`, with `art`; name the cause and put the way out (Create…) in `StateActions`, in the list\'s own place.',
+    notThis: '`Skeleton` (that means still reading) and `Alert` (absence is a state of the region, not a banner).',
+  },
+  {
+    situation: 'a search or filter matched nothing, but the data exists',
+    use: 'State',
+    how: '`kind="empty"`, `tight`; say what was searched and offer to clear the filter. Keep the filter controls above it.',
+    notThis: 'The first-use empty state: do not tell someone with 4,000 records to create their first one.',
+  },
+  {
+    situation: 'the read failed and there is nothing to show instead',
+    use: 'State',
+    how: '`kind="error"` in place of the content, with a retry in `StateActions` and the code in `StateDetail`. The retry shows its wait on the button; the page does not go back to a skeleton.',
+    notThis: '`Toast` (it leaves, the failure stays), `Skeleton` (it never says it finished) and `Alert` (nothing is left under it).',
+  },
+  {
+    situation: 'only some sources answered; figures from the rest are shown',
+    use: 'State',
+    how: '`kind="partial"` directly above the figures it qualifies: "3 of 5 sources loaded", the missing ones named, Retry and Continue anyway. Never show a missing figure as zero.',
+    notThis: '`Alert` (it reads as a page notice, and the figure can still be quoted as the total) and `Toast`.',
+  },
+  {
+    situation: 'the region is still being read',
+    use: 'Skeleton',
+    how: 'Layout known: skeleton bars in its shape inside an `aria-busy` region. Shape unknown or a short wait: `State kind="loading"` or `Spinner`. Known amount done: `Progress`.',
+    notThis: 'A skeleton that stays after the read fails or finds nothing.',
+  },
+  {
+    situation: 'the content is fine and one thing about it needs saying — a stale source, a pending review',
+    use: 'Alert',
+    how: 'A banner above the content, with its action in `AlertActions`.',
+    notThis: '`State` (it would hide content that is there).',
+  },
+  {
+    situation: 'an action the person just took worked or failed, and the page is otherwise intact',
+    use: 'Toast',
+    how: 'Brief, with Undo at most. A failure that must be fixed goes in an `Alert` or on the field, not a toast.',
+    notThis: '`State` (it replaces a whole region).',
+  },
+];

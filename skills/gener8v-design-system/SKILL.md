@@ -148,6 +148,9 @@ Copying its structure beats composing a screen from the component list.
 | a document, prose, code, sources or type someone reads | `references/choosing/reading.md` (10) |
 | a conversation with an agent, or work that is running right now | `references/choosing/agents-and-live-work.md` (6) |
 
+Empty, no results, error, partial or loading: open "Which state?" at the top of `references/choosing/status-and-feedback.md`.
+A state is the region itself, not a banner or a toast.
+
 | Screen | Start from |
 | --- | --- |
 | an application page — a list, a dashboard, a record | `design/templates/app-shell/` |

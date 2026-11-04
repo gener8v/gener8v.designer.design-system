@@ -45,7 +45,7 @@ export function dirsWithoutWhen(ui = UI) {
 
 export async function load(root = ROOT) {
   const ui = join(root, 'packages/ui/src');
-  const { FAMILIES } = await import(/* @vite-ignore */ pathToFileURL(join(ui, 'choosing.ts')).href);
+  const { FAMILIES, STATES = [] } = await import(/* @vite-ignore */ pathToFileURL(join(ui, 'choosing.ts')).href);
   const entries = [];
   const screens = [];
   for (const f of whenFiles(ui)) {
@@ -53,7 +53,7 @@ export async function load(root = ROOT) {
     for (const e of mod.when ?? []) entries.push({ ...e, source: f.slice(root.length + 1) });
     screens.push(...(mod.screens ?? []));
   }
-  return { FAMILIES, entries, screens };
+  return { FAMILIES, entries, screens, states: STATES };
 }
 
 /** Value exports of the package entry, split into components (PascalCase) and the rest. */
@@ -99,7 +99,7 @@ export function ownerOf(cls, entries) {
  * Every problem with the metadata, as sentences. Pure: everything it needs is passed in, so the
  * test can hand it a broken registry and watch it fail.
  */
-export function validate({ families, entries, screens, exports, classes, rows, exists, missingWhen = [] }) {
+export function validate({ families, entries, screens, states = [], exports, classes, rows, exists, missingWhen = [] }) {
   const problems = [];
   const byName = new Map();
   const say = (e, msg) => problems.push(`${e.source ?? e.name}: ${e.name} — ${msg}`);
@@ -151,6 +151,9 @@ export function validate({ families, entries, screens, exports, classes, rows, e
     if (!row.length) continue;
     if (!ownerOf(row[0], entries)) problems.push(`components.md lists ${row[0]}, and no when.ts claims it — add its class root to an entry's css`);
   }
+  for (const r of states) {
+    if (!byName.has(r.use)) problems.push(`state "${r.situation}" uses ${r.use}, which is not a component here`);
+  }
   for (const s of screens) {
     if (!exists(`design/${s.template}`)) problems.push(`screen "${s.screen}": template design/${s.template} does not exist`);
     for (const i of s.implies) if (!entries.some((x) => x.name === i)) problems.push(`screen "${s.screen}" implies ${i}, which is not a component here`);
@@ -169,7 +172,7 @@ function where(name, entries, family) {
   return e && e.family !== family ? `${code(name)} (${e.family}.md)` : code(name);
 }
 
-export function renderFamily(family, FAMILIES, entries, screens) {
+export function renderFamily(family, FAMILIES, entries, screens, states = []) {
   const f = FAMILIES[family];
   const mine = entries.filter((e) => e.family === family);
   const lines = [
@@ -192,6 +195,15 @@ export function renderFamily(family, FAMILIES, entries, screens) {
     for (const s of screens) {
       lines.push(`| ${cell(s.screen)} | ${code(`design/${s.template}`)} | ${s.implies.map((i) => where(i, entries, family)).join(', ')} | ${cell(s.note)} |`);
     }
+    lines.push('');
+  }
+
+  if (family === 'status-and-feedback' && states.length) {
+    lines.push('## Which state?', '',
+      'Empty, no results, error, partial and loading are states of the region: they replace or head the',
+      'content, in its own place. A banner or a toast is for content that is still there.', '',
+      '| It is true that… | Use | How | Not this |', '| --- | --- | --- | --- |');
+    for (const r of states) lines.push(`| ${cell(r.situation)} | **${code(r.use)}** | ${cell(r.how)} | ${cell(r.notThis)} |`);
     lines.push('');
   }
 
@@ -235,6 +247,9 @@ export function renderRouter(FAMILIES, entries, screens) {
     '| --- | --- |',
     ...fams.map((f) => `| ${FAMILIES[f].question} | \`references/choosing/${f}.md\` (${entries.filter((e) => e.family === f).length}) |`),
     '',
+    'Empty, no results, error, partial or loading: open "Which state?" at the top of `references/choosing/status-and-feedback.md`.',
+    'A state is the region itself, not a banner or a toast.',
+    '',
     '| Screen | Start from |',
     '| --- | --- |',
     ...screens.map((s) => `| ${s.screen} | \`design/${s.template}\` |`),
@@ -244,9 +259,9 @@ export function renderRouter(FAMILIES, entries, screens) {
 }
 
 /** Every generated file, path → content. SKILL.md is the whole file with the block replaced. */
-export function renderAll({ FAMILIES, entries, screens }, skillSource) {
+export function renderAll({ FAMILIES, entries, screens, states = [] }, skillSource) {
   const out = {};
-  for (const f of Object.keys(FAMILIES)) out[`${CHOOSING_DIR}/${f}.md`] = renderFamily(f, FAMILIES, entries, screens);
+  for (const f of Object.keys(FAMILIES)) out[`${CHOOSING_DIR}/${f}.md`] = renderFamily(f, FAMILIES, entries, screens, states);
   const start = skillSource.indexOf(MARK_START.slice(0, 20));
   const end = skillSource.indexOf(MARK_END);
   if (start < 0 || end < 0) throw new Error(`${SKILL_DIR}/SKILL.md has no choosing markers`);
@@ -272,6 +287,7 @@ async function main() {
     families: Object.keys(reg.FAMILIES),
     entries: reg.entries,
     screens: reg.screens,
+    states: reg.states,
     exports: packageExports(rd('packages/ui/src/index.ts')),
     classes: stylesheetClasses(rd('design/styles.css')),
     rows: indexRows(rd('design/readme.md')),

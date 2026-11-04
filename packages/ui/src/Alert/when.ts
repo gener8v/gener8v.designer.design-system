@@ -12,6 +12,11 @@ export const when = [
     ],
     not: [
       {
+        when: 'a figure or list is built from only some of its sources',
+        use: 'State',
+        because: '`State kind="partial"` sits right above the figures and says how many arrived; a banner is read past and the figure still looks like the total.',
+      },
+      {
         when: 'confirming an action the person just took, which needs no further attention',
         use: 'Toast',
         because: 'a toast reports an event and leaves; an alert reports a condition and stays.',

@@ -9,11 +9,27 @@ it names the thing people reach for by mistake and what to use instead.
 `design/…` and `docs/…` paths here are in this plugin, not in your project: two directories up
 from the skill (`<skill base directory>/../../design/…`). Open them there.
 
+## Which state?
+
+Empty, no results, error, partial and loading are states of the region: they replace or head the
+content, in its own place. A banner or a toast is for content that is still there.
+
+| It is true that… | Use | How | Not this |
+| --- | --- | --- | --- |
+| nothing exists yet — a new account, an empty list | **`State`** | `kind="empty"`, with `art`; name the cause and put the way out (Create…) in `StateActions`, in the list's own place. | `Skeleton` (that means still reading) and `Alert` (absence is a state of the region, not a banner). |
+| a search or filter matched nothing, but the data exists | **`State`** | `kind="empty"`, `tight`; say what was searched and offer to clear the filter. Keep the filter controls above it. | The first-use empty state: do not tell someone with 4,000 records to create their first one. |
+| the read failed and there is nothing to show instead | **`State`** | `kind="error"` in place of the content, with a retry in `StateActions` and the code in `StateDetail`. The retry shows its wait on the button; the page does not go back to a skeleton. | `Toast` (it leaves, the failure stays), `Skeleton` (it never says it finished) and `Alert` (nothing is left under it). |
+| only some sources answered; figures from the rest are shown | **`State`** | `kind="partial"` directly above the figures it qualifies: "3 of 5 sources loaded", the missing ones named, Retry and Continue anyway. Never show a missing figure as zero. | `Alert` (it reads as a page notice, and the figure can still be quoted as the total) and `Toast`. |
+| the region is still being read | **`Skeleton`** | Layout known: skeleton bars in its shape inside an `aria-busy` region. Shape unknown or a short wait: `State kind="loading"` or `Spinner`. Known amount done: `Progress`. | A skeleton that stays after the read fails or finds nothing. |
+| the content is fine and one thing about it needs saying — a stale source, a pending review | **`Alert`** | A banner above the content, with its action in `AlertActions`. | `State` (it would hide content that is there). |
+| an action the person just took worked or failed, and the page is otherwise intact | **`Toast`** | Brief, with Undo at most. A failure that must be fixed goes in an `Alert` or on the field, not a toast. | `State` (it replaces a whole region). |
+
 ## At a glance
 
 | Job | Use | Not when | Instead | Because |
 | --- | --- | --- | --- | --- |
-| say something about the page that stays until it is no longer true | **`Alert`** | confirming an action the person just took, which needs no further attention | `Toast` | a toast reports an event and leaves; an alert reports a condition and stays. |
+| say something about the page that stays until it is no longer true | **`Alert`** | a figure or list is built from only some of its sources | `State` | `State kind="partial"` sits right above the figures and says how many arrived; a banner is read past and the figure still looks like the total. |
+|  |  | confirming an action the person just took, which needs no further attention | `Toast` | a toast reports an event and leaves; an alert reports a condition and stays. |
 |  |  | the region has nothing to show, failed to load, or is not allowed | `State` | a state replaces the content it stands for; an alert sits above content that is still there. |
 |  |  | a note inside prose that qualifies what is around it | `Callout` | a callout is a rule beside text at reading scale; a tinted banner would make it an alert it is not. |
 |  |  | the person must answer before anything else can happen | `Dialog` (overlays.md) | a dialog takes focus and must be dismissed; an alert can be read past. |
@@ -48,7 +64,8 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | many items, where only the counts matter | `SegmentedProgress` | naming a hundred items is a wall; a segmented bar says how many in each state. |
 |  |  | several agents running at once | `Lanes` (agents-and-live-work.md) | lanes show concurrency — who is waiting, working and done; a list is one sequence. |
 | hold the shape of content that is still being read | **`Skeleton`** | there is nothing to show | `State` | a skeleton means "still reading" and never "nothing here"; an empty state names the cause and the way out. |
-|  |  | the read failed | `State` | a skeleton never tells you it has finished; an error state says what went wrong. |
+|  |  | the read failed, or a failed read is being retried | `State` | a skeleton never tells you it has finished; an error state says what went wrong, and the retry button shows its own wait. |
+|  |  | a figure is shown from only some of its sources | `State` | the read finished; a skeleton would claim it is still loading. `State kind="partial"` says what is missing. |
 |  |  | the wait is short and the layout is not known | `Spinner` | a spinner marks a brief wait without promising a shape. |
 |  |  | a section is being written by a run right now | `Live` (agents-and-live-work.md) | `LiveSection` and `LiveMark` say the section is being written, in words. |
 | show that a short wait is under way, where its result will appear | **`Spinner`** | the shape of the content that is loading is known | `Skeleton` | a skeleton holds the layout so nothing jumps when the content lands. |
@@ -91,6 +108,7 @@ Say something about the page that stays until it is no longer true.
 
 **Not when**
 
+- A figure or list is built from only some of its sources → `State`. `State kind="partial"` sits right above the figures and says how many arrived; a banner is read past and the figure still looks like the total.
 - Confirming an action the person just took, which needs no further attention → `Toast`. A toast reports an event and leaves; an alert reports a condition and stays.
 - The region has nothing to show, failed to load, or is not allowed → `State`. A state replaces the content it stands for; an alert sits above content that is still there.
 - A note inside prose that qualifies what is around it → `Callout`. A callout is a rule beside text at reading scale; a tinted banner would make it an alert it is not.
@@ -273,7 +291,8 @@ Hold the shape of content that is still being read.
 **Not when**
 
 - There is nothing to show → `State`. A skeleton means "still reading" and never "nothing here"; an empty state names the cause and the way out.
-- The read failed → `State`. A skeleton never tells you it has finished; an error state says what went wrong.
+- The read failed, or a failed read is being retried → `State`. A skeleton never tells you it has finished; an error state says what went wrong, and the retry button shows its own wait.
+- A figure is shown from only some of its sources → `State`. The read finished; a skeleton would claim it is still loading. `State kind="partial"` says what is missing.
 - The wait is short and the layout is not known → `Spinner`. A spinner marks a brief wait without promising a shape.
 - A section is being written by a run right now → `Live` (agents-and-live-work.md). `LiveSection` and `LiveMark` say the section is being written, in words.
 
@@ -310,8 +329,8 @@ Stand in for content that is loading, empty, partial, failed, denied or done.
 **Use when**
 
 - A region has no content to show and needs to say why: `kind` is loading, empty, partial, error, denied or success.
-- A figure or list built from some sources but not all — `partial` says which are missing.
-- An empty list that names its cause and offers the way out in `StateActions`; `art` gives an empty place a line drawing.
+- A figure or list built from some sources but not all: `kind="partial"` directly above the figures that did arrive, saying which are missing and offering a retry. Use it instead of an `Alert` so the figure cannot be read as the full total.
+- An empty list or a failed read that names its cause and offers the way out in `StateActions` (Create…, Retry); `art` gives an empty place a line drawing. A retry shows its wait on the button, not by swapping in a `Skeleton`.
 
 **Not when**
 
