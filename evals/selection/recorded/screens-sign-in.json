@@ -1,0 +1,63 @@
+{
+  "case": "screens-sign-in",
+  "models": [
+    "claude-sonnet-5-5"
+  ],
+  "skillFired": true,
+  "readPaths": [
+    "<project>",
+    "**/*",
+    "<plugin>/skills/gener8v-design-system",
+    "design/**/*",
+    "<project>/src/App.tsx",
+    "<project>/src/main.tsx",
+    "<project>/node_modules/@gener8v/ui",
+    "**/*",
+    "<plugin>",
+    "**/*",
+    "<project>/package.json",
+    "<plugin>/skills",
+    "**/readme.md",
+    "<plugin>",
+    "*/*/node_modules/@gener8v/*/package.json",
+    "<plugin>",
+    "node_modules/@gener8v/*",
+    "<plugin>",
+    "**/*gener8v*",
+    "<plugin>/skills",
+    "*",
+    "<plugin>/skills/gener8v-design-system/references/components.md",
+    "<project>/src/App.tsx",
+    "<project>/src/sign-in.css"
+  ],
+  "finalText": "I built the sign-in page in `src/App.tsx`, with its styles in `src/sign-in.css`. I haven't built or run it. `@gener8v/ui` isn't installed in this project, and the design-system `design/` folder and templates weren't available. I couldn't check the React component exports or the form-field class names.\n\n- **Components used:** I used the system's class names directly on plain elements instead of importing React components. The classes are `container`, `card` (with `card-pad-lg`), `lede`, `muted`, `label`, `hr`, `stack`, `btn` (with `btn-primary`, `btn-secondary`, `btn-lg`, `btn-block`, `is-loading`) and `alert` (with `data-tone=\"danger\"`). The field classes `input` and `stack` are my guesses. If the system uses different names, those are the lines to change.\n- **Template:** I didn't start from a template.\n- **Layout:** SSO comes first, as the single primary button (\"Continue with SSO\"), with a short \"Recommended\" hint under it. Below a divider is the email and password form, with a secondary \"Sign in\" button.\n- **Errors:** A failed sign-in shows an alert and sets `aria-invalid` on any empty field.\n- **Styling:** The CSS uses only design tokens, with no raw hex or px values.\n- **Placeholder endpoints:** The SSO button goes to `/auth/sso` and the password form posts to `/auth/password`. Both are placeholders for your real endpoints.",
+  "files": [
+    {
+      "path": "src/App.tsx",
+      "content": "import { useState, type FormEvent } from 'react';\nimport './sign-in.css';\n\ntype Status = 'idle' | 'sso' | 'password' | 'error';\n\nexport function App() {\n  const [status, setStatus] = useState<Status>('idle');\n  const [email, setEmail] = useState('');\n  const [password, setPassword] = useState('');\n\n  const invalid = status === 'error';\n  const busy = status === 'sso' || status === 'password';\n\n  function startSso() {\n    setStatus('sso');\n    // Hand off to the company identity provider.\n    window.location.assign('/auth/sso');\n  }\n\n  async function submitPassword(e: FormEvent) {\n    e.preventDefault();\n    if (!email || !password) {\n      setStatus('error');\n      return;\n    }\n    setStatus('password');\n    try {\n      const res = await fetch('/auth/password', {\n        method: 'POST',\n        headers: { 'Content-Type': 'application/json' },\n        body: JSON.stringify({ email, password }),\n      });\n      if (!res.ok) throw new Error('rejected');\n      window.location.assign('/');\n    } catch {\n      setStatus('error');\n    }\n  }\n\n  return (\n    <main className=\"container sign-in\">\n      <div className=\"card card-pad-lg sign-in-card\">\n        <h1>Sign in</h1>\n        <p className=\"lede\">Use your company account to continue.</p>\n\n        <button\n          type=\"button\"\n          className={`btn btn-primary btn-lg btn-block${status === 'sso' ? ' is-loading' : ''}`}\n          onClick={startSso}\n          disabled={busy}\n        >\n          Continue with SSO\n        </button>\n        <p className=\"muted sign-in-hint\">Recommended. Your identity provider handles verification.</p>\n\n        <hr className=\"hr\" />\n\n        <form className=\"stack sign-in-form\" onSubmit={submitPassword} noValidate>\n          <h2 className=\"label\">Email and password</h2>\n\n          {invalid && (\n            <div className=\"alert\" data-tone=\"danger\" role=\"alert\">\n              <p className=\"alert-title\">Sign-in failed</p>\n              <p className=\"alert-body\">Check your email and password, then try again.</p>\n            </div>\n          )}\n\n          <div className=\"stack\">\n            <label htmlFor=\"email\">Email</label>\n            <input\n              id=\"email\"\n              className=\"input\"\n              type=\"email\"\n              autoComplete=\"username\"\n              value={email}\n              onChange={(e) => setEmail(e.target.value)}\n              aria-invalid={invalid && !email ? true : undefined}\n            />\n          </div>\n\n          <div className=\"stack\">\n            <label htmlFor=\"password\">Password</label>\n            <input\n              id=\"password\"\n              className=\"input\"\n              type=\"password\"\n              autoComplete=\"current-password\"\n              value={password}\n              onChange={(e) => setPassword(e.target.value)}\n              aria-invalid={invalid && !password ? true : undefined}\n            />\n          </div>\n\n          <button\n            type=\"submit\"\n            className={`btn btn-secondary btn-block${status === 'password' ? ' is-loading' : ''}`}\n            disabled={busy}\n          >\n            Sign in\n          </button>\n        </form>\n      </div>\n    </main>\n  );\n}\n"
+    },
+    {
+      "path": "src/sign-in.css",
+      "content": ".sign-in {\n  min-block-size: 100vh;\n  display: grid;\n  place-items: center;\n  padding-block: var(--space-12);\n}\n\n.sign-in-card {\n  inline-size: 100%;\n  max-inline-size: calc(var(--container-sm) / 1.5);\n}\n\n.sign-in-card h1 {\n  margin: 0 0 var(--space-2);\n}\n\n.sign-in-card .lede {\n  margin: 0 0 var(--space-6);\n}\n\n.sign-in-hint {\n  margin: var(--space-3) 0 0;\n}\n\n.sign-in-card .hr {\n  margin-block: var(--space-6);\n}\n\n.sign-in-form > .stack {\n  display: flex;\n  flex-direction: column;\n  gap: var(--space-2);\n}\n\n.sign-in-form {\n  display: flex;\n  flex-direction: column;\n  gap: var(--space-4);\n}\n\n.sign-in-form h2 {\n  margin: 0;\n}\n"
+    }
+  ],
+  "rep": 0,
+  "costUsd": 0.1831526,
+  "durationMs": 29988,
+  "turns": 18,
+  "tools": {
+    "Skill": 1,
+    "Glob": 9,
+    "Read": 4,
+    "Write": 2
+  },
+  "error": null,
+  "note": "Recorded from the baseline-main run (screens-sign-in.0). Used by pnpm eval:selection:dry and the unit test.",
+  "expectedScore": {
+    "pass": false,
+    "missing": [
+      "Entry"
+    ],
+    "forbidHits": []
+  }
+}

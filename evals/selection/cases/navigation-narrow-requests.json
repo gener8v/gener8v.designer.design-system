@@ -1,0 +1,22 @@
+{
+  "id": "navigation-narrow-requests",
+  "family": "navigation",
+  "groups": [
+    "tabs-segmented-filter"
+  ],
+  "prompt": "Above a list of support requests, let people show All, Open or Closed requests. It is one list either way, just narrowed, and only one of the three applies at a time.",
+  "expect": [],
+  "expect_any": [
+    [
+      "Segmented",
+      "Filter"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Tabs",
+      "reason": "Tabs swap panels; this narrows one list"
+    }
+  ],
+  "template": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "feedback-empty-projects",
+  "family": "status-and-feedback",
+  "groups": [
+    "empty-error"
+  ],
+  "prompt": "A brand-new account opens the projects list and has no projects yet. Design what they see there, and give them the way to create their first project from that spot.",
+  "expect": [
+    "State",
+    "Button"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Skeleton",
+      "reason": "Rule 18: a skeleton means still reading, never nothing to show"
+    },
+    {
+      "component": "Alert",
+      "reason": "Absence is a state of the region, not a banner"
+    }
+  ],
+  "template": null
+}

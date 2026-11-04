@@ -1,0 +1,23 @@
+{
+  "id": "feedback-delete-workspace",
+  "family": "status-and-feedback",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "Deleting a workspace is permanent: it removes its members, its documents and its API keys. Design the confirmation step that comes before the delete happens.",
+  "expect": [
+    "Dialog"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Popover",
+      "reason": "Non-modal; a destructive confirmation must hold focus"
+    },
+    {
+      "component": "Toast",
+      "reason": "An undo toast is not a confirmation for an irreversible action"
+    }
+  ],
+  "template": null
+}

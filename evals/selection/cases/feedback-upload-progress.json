@@ -1,0 +1,20 @@
+{
+  "id": "feedback-upload-progress",
+  "family": "status-and-feedback",
+  "groups": [
+    "progress-stepper",
+    "stat-meter-charts"
+  ],
+  "prompt": "While a 2 GB dataset uploads, show how far along the upload is.",
+  "expect": [
+    "Progress"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Meter",
+      "reason": "A meter is a level that is true; an upload is a task advancing"
+    }
+  ],
+  "template": null
+}

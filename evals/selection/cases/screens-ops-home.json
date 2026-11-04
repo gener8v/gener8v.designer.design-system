@@ -1,0 +1,32 @@
+{
+  "id": "screens-ops-home",
+  "family": "screens",
+  "groups": [
+    "stat-meter-charts"
+  ],
+  "prompt": "Build the home screen of an internal operations app: the app's navigation down the side, four headline figures across the top (open requests, average response time, requests closed this week, and escalations), and a list of recent activity below.",
+  "expect": [
+    "Sidebar"
+  ],
+  "expect_any": [
+    [
+      "Stat",
+      "StatRow"
+    ],
+    [
+      "Timeline",
+      "Feed"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Meter",
+      "reason": "Headline counts are figures (Stat), not a level against a capacity"
+    },
+    {
+      "component": "Progress",
+      "reason": "Progress is a task advancing, not a figure"
+    }
+  ],
+  "template": "app-shell"
+}

@@ -1,0 +1,25 @@
+{
+  "id": "screens-close-task",
+  "family": "screens",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "Build the screen for closing out a task. The person ticks off each acceptance criterion, chooses the outcome (done, won't do, or duplicate, each with a one-line explanation), attaches evidence files, and finally confirms the close. Closing is permanent and records the outcome, the evidence and the time.",
+  "expect": [
+    "Checklist",
+    "RadioCards",
+    "Dialog"
+  ],
+  "expect_any": [
+    [
+      "FileUpload"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Toast",
+      "reason": "An irreversible close is confirmed before it happens, not announced after it"
+    }
+  ],
+  "template": "work-item-close"
+}

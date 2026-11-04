@@ -1,0 +1,21 @@
+{
+  "id": "screens-checkout",
+  "family": "screens",
+  "groups": [
+    "select-combobox-menu"
+  ],
+  "prompt": "Build a checkout for buying seats of our software. The buyer chooses one of three plans (each has a short description and a monthly price), sets how many seats they want, sees the order totals, then pays.",
+  "expect": [
+    "RadioCards",
+    "Quantity",
+    "Summary"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Select",
+      "reason": "A choice that carries a description and a figure is RadioCards; a select hides both"
+    }
+  ],
+  "template": "purchase"
+}

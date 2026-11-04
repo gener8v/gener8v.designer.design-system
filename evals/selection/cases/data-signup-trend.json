@@ -1,0 +1,27 @@
+{
+  "id": "data-signup-trend",
+  "family": "data",
+  "groups": [
+    "stat-meter-charts"
+  ],
+  "prompt": "Plot weekly sign-ups over the past six months for our three acquisition channels, so the team can see how each is trending.",
+  "expect": [
+    "LineChart"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "pkg:recharts",
+      "reason": "Do not add a chart library"
+    },
+    {
+      "component": "pkg:chart.js",
+      "reason": "Do not add a chart library"
+    },
+    {
+      "component": "pkg:react-chartjs-2",
+      "reason": "Do not add a chart library"
+    }
+  ],
+  "template": null
+}

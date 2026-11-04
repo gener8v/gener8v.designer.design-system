@@ -1,0 +1,27 @@
+{
+  "id": "input-rename-inline",
+  "family": "input",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "Next to a dashboard's title, a Rename button opens a small floating panel with a name field and Save and Cancel. It must not block the rest of the page.",
+  "expect": [
+    "Popover"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Dialog",
+      "reason": "Modal; the task says it must not block the page"
+    },
+    {
+      "component": "HoverCard",
+      "reason": "Nothing can be acted on in a hover card"
+    },
+    {
+      "component": "Drawer",
+      "reason": "A modal side panel"
+    }
+  ],
+  "template": null
+}

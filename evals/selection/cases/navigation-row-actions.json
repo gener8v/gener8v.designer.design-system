@@ -1,0 +1,27 @@
+{
+  "id": "navigation-row-actions",
+  "family": "navigation",
+  "groups": [
+    "select-combobox-menu"
+  ],
+  "prompt": "Each row in a team members list needs a compact set of actions: change role, resend invite, and remove from team.",
+  "expect": [
+    "Menu"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Select",
+      "reason": "A select chooses a value; these are actions"
+    },
+    {
+      "component": "Combobox",
+      "reason": "A combobox chooses a value by typing"
+    },
+    {
+      "component": "<select>",
+      "reason": "Rule 19: native select"
+    }
+  ],
+  "template": null
+}

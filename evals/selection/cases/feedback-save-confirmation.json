@@ -1,0 +1,27 @@
+{
+  "id": "feedback-save-confirmation",
+  "family": "status-and-feedback",
+  "groups": [
+    "alert-toast-state-callout"
+  ],
+  "prompt": "After someone saves changes on their profile page, briefly let them know it worked without interrupting what they are doing.",
+  "expect": [],
+  "expect_any": [
+    [
+      "Toast",
+      "ToastProvider",
+      "useToast"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Alert",
+      "reason": "A persistent banner for a passing success"
+    },
+    {
+      "component": "Dialog",
+      "reason": "Interrupts the person for news that needs no answer"
+    }
+  ],
+  "template": null
+}

@@ -1,0 +1,18 @@
+{
+  "id": "agents-document-chat",
+  "family": "agents-and-live-work",
+  "groups": [],
+  "prompt": "Build a chat panel where people ask an assistant questions about their documents. The assistant answers in prose and shows each search it runs over the files while it works.",
+  "expect": [
+    "Conversation",
+    "ToolChip"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Toast",
+      "reason": "Tool activity belongs in the conversation, not in passing notices"
+    }
+  ],
+  "template": null
+}

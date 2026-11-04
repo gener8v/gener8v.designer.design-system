@@ -1,0 +1,21 @@
+{
+  "id": "navigation-folder-trail",
+  "family": "navigation",
+  "groups": [],
+  "prompt": "A document lives deep in a folder hierarchy: Workspace, then Legal, then Contracts, then 2026. Show people where they are and let them jump back up to any level.",
+  "expect": [
+    "Breadcrumbs"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Stepper",
+      "reason": "Folders are a hierarchy, not a sequence of steps"
+    },
+    {
+      "component": "Tabs",
+      "reason": "Ancestors are not sibling panels"
+    }
+  ],
+  "template": null
+}

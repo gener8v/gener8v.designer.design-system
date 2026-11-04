@@ -1,0 +1,27 @@
+{
+  "id": "reading-policy-document",
+  "family": "reading",
+  "groups": [],
+  "prompt": "Build a reader for a 40-page policy document: the text set on a page-like sheet, with the document's contents listed beside it and the section currently being read highlighted.",
+  "expect": [
+    "Contents"
+  ],
+  "expect_any": [
+    [
+      "Paper",
+      "Reader",
+      "Sheet"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Tabs",
+      "reason": "Sections of one document are read in order, not swapped"
+    },
+    {
+      "component": "Accordion",
+      "reason": "Hides the text the person came to read"
+    }
+  ],
+  "template": null
+}

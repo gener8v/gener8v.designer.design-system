@@ -1,0 +1,27 @@
+{
+  "id": "input-country-picker",
+  "family": "input",
+  "groups": [
+    "select-combobox-menu"
+  ],
+  "prompt": "In a customer form, add a field for the customer's country, chosen from about 200 countries. People usually know the answer and start typing it.",
+  "expect": [
+    "Combobox"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Select",
+      "reason": "Two hundred options people type to find is a combobox"
+    },
+    {
+      "component": "<select>",
+      "reason": "Rule 19: native select"
+    },
+    {
+      "component": "Menu",
+      "reason": "A menu runs actions; this chooses a value"
+    }
+  ],
+  "template": null
+}

@@ -1,0 +1,20 @@
+{
+  "id": "data-paged-invoices",
+  "family": "data",
+  "groups": [
+    "table-pager"
+  ],
+  "prompt": "Show a table of 2,300 invoices, 25 rows at a time, with which rows are on show and the page controls underneath the table.",
+  "expect": [
+    "Table",
+    "TablePager"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "PagerChip",
+      "reason": "Steps through one item at a time in place, not pages of a table"
+    }
+  ],
+  "template": null
+}

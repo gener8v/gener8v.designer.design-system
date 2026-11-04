@@ -1,0 +1,27 @@
+{
+  "id": "reading-person-preview",
+  "family": "reading",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "In an activity list, pointing at or focusing a person's name should preview their role, team and email address.",
+  "expect": [
+    "HoverCard"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Tooltip",
+      "reason": "A tooltip is supplementary text, not a preview card"
+    },
+    {
+      "component": "Dialog",
+      "reason": "Modal for a glance"
+    },
+    {
+      "component": "attr:title",
+      "reason": "Rule 19: a title attribute is painted by the OS"
+    }
+  ],
+  "template": null
+}

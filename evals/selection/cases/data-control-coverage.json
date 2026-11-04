@@ -1,0 +1,24 @@
+{
+  "id": "data-control-coverage",
+  "family": "data",
+  "groups": [
+    "stat-meter-charts",
+    "table-pager"
+  ],
+  "prompt": "Show which of 60 security controls are covered by which of 12 systems, so the gaps stand out at a glance and a reviewer can move cell by cell with the keyboard.",
+  "expect": [
+    "Matrix"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "BarChart",
+      "reason": "Counts hide which pair is the gap"
+    },
+    {
+      "component": "Tally",
+      "reason": "A tally sums disagreement on one row; this is a grid of pairs"
+    }
+  ],
+  "template": null
+}

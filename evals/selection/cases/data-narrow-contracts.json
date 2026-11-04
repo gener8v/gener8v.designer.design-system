@@ -1,0 +1,29 @@
+{
+  "id": "data-narrow-contracts",
+  "family": "data",
+  "groups": [
+    "tabs-segmented-filter",
+    "select-combobox-menu"
+  ],
+  "prompt": "A table of 400 contracts needs narrowing by status, owner and region. People often want several statuses at once, for example draft and in review.",
+  "expect": [
+    "Filter",
+    "Table"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Segmented",
+      "reason": "One value from one dimension; this is several dimensions with multi-select"
+    },
+    {
+      "component": "Tabs",
+      "reason": "Narrowing a list is not swapping panels"
+    },
+    {
+      "component": "<select>",
+      "reason": "Rule 19: native select"
+    }
+  ],
+  "template": null
+}

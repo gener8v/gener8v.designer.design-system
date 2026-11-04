@@ -1,0 +1,25 @@
+{
+  "id": "screens-intake-multistep",
+  "family": "screens",
+  "groups": [
+    "progress-stepper"
+  ],
+  "prompt": "Build an intake form for new client projects, spread over four steps: organisation details, scope, budget, and review. The list of steps sits beside the form, Back and Next sit at the bottom, and people must not be able to move on while a required field on the current step is empty.",
+  "expect": [
+    "Flow",
+    "Stepper"
+  ],
+  "expect_any": [
+    [
+      "ErrorSummary",
+      "useStepValidation"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Tabs",
+      "reason": "Steps are a sequence with a position, not panels a reader swaps between"
+    }
+  ],
+  "template": "intake"
+}
