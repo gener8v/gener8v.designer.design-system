@@ -6,6 +6,8 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+## 0.63.0
+
 **Visual change, button:** `.btn.is-loading` now draws the system spinner, the same
 track-and-arc ring as `.spinner` (stroke = size / 8, a quarter arc, one turn in 800ms), centred in the
 label's place and in the label's colour. Before this it was a bordered circle with a gap, a different
