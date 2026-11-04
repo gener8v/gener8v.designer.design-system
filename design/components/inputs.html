@@ -24,15 +24,15 @@
     <input class="input" id="client" type="text" role="combobox" aria-expanded="true"
       aria-controls="client-list" aria-autocomplete="list" aria-activedescendant="client-list-nh"
       value="No" style="margin-top:var(--space-2)" />
-    <button type="button" class="combobox-trigger" tabindex="-1" aria-label="Close suggestions" style="top:calc(50% + var(--space-3))">
+    <button type="button" class="combobox-trigger" tabindex="-1" aria-label="Close suggestions">
       <svg viewBox="0 0 256 256" fill="currentColor"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
     </button>
-    <ul class="listbox" id="client-list" role="listbox" aria-label="Client" style="margin-top:var(--space-2)">
-      <li class="listbox-option" id="client-list-nh" role="option" aria-selected="false" data-active>Northlake Health<span class="listbox-option-note">Healthcare</span></li>
+  </div>
+  <ul class="listbox" id="client-list" role="listbox" aria-label="Client" style="--anchor-w:100%;margin-top:var(--space-2)">
+    <li class="listbox-option" id="client-list-nh" role="option" aria-selected="false" data-active>Northlake Health<span class="listbox-option-note">Healthcare</span></li>
       <li class="listbox-option" role="option" aria-selected="true">Ridgeway Transit Authority<span class="listbox-option-note">Government</span></li>
       <li class="listbox-option" role="option" aria-selected="false" aria-disabled="true">Meridian Financial<span class="listbox-option-note">Archived</span></li>
     </ul>
-  </div>
 
   <p class="demo-head label">Select menu</p>
   <div class="select-menu">
