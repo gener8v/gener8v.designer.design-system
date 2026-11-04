@@ -9,6 +9,16 @@ A light, airy interface for a firm delivering AI into **regulated, governed and 
 environments. Near-white ground, Inter at weight 500 for headings, an authored 4px space
 scale, 6px radii, one blue used as an action colour rather than as decoration.
 
+## Where the files are
+
+This skill ships inside the design system's plugin, and the plugin holds the whole system.
+Every `design/…`, `docs/…` and `packages/…` path in this skill and its references is relative
+to the **plugin root — two directories up from this skill's base directory**
+(`<skill base directory>/../../design/templates/app-shell/`), **not** to the project you are
+working in. The consuming project only has `node_modules/@gener8v/*`; the templates, the class
+table (`design/readme.md`), the component pages and the specs are in the plugin. Open them
+there before you build.
+
 ## The one thing to get right
 
 **Take every value from a token. Never write a hex, a font name, or a px value the tokens
@@ -123,6 +133,9 @@ These are not preferences. Breaking one produces work that is off-brand or inacc
 
 Pick the row, open the file. Each one opens with a table — job, component, when not, what
 instead — then a section per component. Read the "not when" before you choose.
+
+Then open the template the screen table names — `<skill base directory>/../../design/templates/…`.
+Copying its structure beats composing a screen from the component list.
 
 | If you are building… | Read |
 | --- | --- |

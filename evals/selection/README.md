@@ -13,8 +13,9 @@ different result on each run.
 
 ## Run it
 
-You must be logged in to Claude Code (`claude` on your `PATH`), or you must set
-`ANTHROPIC_API_KEY`.
+It runs locally only, on your own Claude Code login (`claude` on your `PATH`). There is
+deliberately no CI workflow for it and no API key: it is a tool for whoever is changing the
+skill's guidance, run on their machine before and after the change.
 
 ```sh
 pnpm eval:selection                         # every case, once, on Sonnet
@@ -41,10 +42,6 @@ pnpm eval:selection:test                    # unit tests for the scorer and the 
 When you change the scorer, use `--record` together with `--from`. Then you can measure the
 change on the same model outputs, and you do not pay for the runs again. The runner replaces
 local paths with `<project>`, `<plugin>` and `~` in everything that it saves.
-
-To run the eval in GitHub, use **Actions → eval-selection → Run workflow**. The workflow starts
-only by hand and needs the `ANTHROPIC_API_KEY` repository secret. The report goes to the job
-summary and the result files become a build artifact.
 
 ## What one run does
 
