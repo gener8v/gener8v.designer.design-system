@@ -87,6 +87,9 @@
   --color-inverse: #182030;
   --color-on-inverse: #E2E6ED;
 
+  /* The scrim behind a modal, dark in both modes */
+  --color-scrim: #182030;
+
   /* Syntax */
   --code-comment: #ABB2C0;
   --code-string: #91E4BD;
@@ -1723,7 +1726,7 @@ mark {
   justify-items: center;
   align-content: start;
   padding: clamp(var(--space-8), 12vh, var(--space-32)) var(--space-6) var(--space-6);
-  background: color-mix(in srgb, var(--color-neutral-900) 28%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 28%, transparent);
   z-index: 90;
 }
 .command {
@@ -2961,7 +2964,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   padding: var(--space-6);
   /* A MODAL IS THE ONLY THING, OR IT IS A CARD. At 34% the page behind stayed fully legible and
      the dialog read as floating over live content rather than replacing it. */
-  background: color-mix(in srgb, var(--color-neutral-900) 56%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 56%, transparent);
   z-index: 50;
 }
 .dialog {
@@ -5332,7 +5335,7 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   position: absolute;
   inset: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-neutral-900) 32%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 .drawer-panel {
   position: absolute;

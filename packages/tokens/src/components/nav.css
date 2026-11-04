@@ -117,7 +117,7 @@
   position: absolute;
   inset: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-neutral-900) 32%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 32%, transparent);
 }
 .drawer-panel {
   position: absolute;

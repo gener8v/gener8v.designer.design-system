@@ -7,7 +7,8 @@ pull requests behind each `Release x.y.z` commit.
 ## 0.60.0
 
 One fix and three components the delivery record built for its Plan view, promoted and generalised.
-Additive apart from the dialog's layout, which renders the same where it already worked.
+Additive apart from the dialog's layout, which renders the same where it already worked, and the
+modal scrim, which changes only in dark mode.
 
 ### Fixed
 
@@ -20,6 +21,12 @@ Additive apart from the dialog's layout, which renders the same where it already
   with or without a tone. Also: `max-block-size` uses `100dvh` where supported, the actions wrap,
   the body keeps room for a field's focus ring at its edge, and below 480px the space above the
   actions is a step smaller. The record can drop the load-bearing `tone="accent"`.
+- **Modal backdrops stay dark in dark mode.** `.dialog-backdrop`, `.drawer-scrim` and
+  `.command-backdrop` mixed `--color-neutral-900` into transparent. That step mirrors to the
+  lightest ink in dark mode, so the page behind a dialog, a drawer or the command palette turned
+  light grey instead of receding. New token **`--color-scrim`**: the same near-black in both
+  modes, never mirrored. All three overlays use it, at their existing strengths (56%, 32%, 28%).
+  There are now 144 tokens.
 
 ### Added
 

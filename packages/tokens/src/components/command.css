@@ -10,7 +10,7 @@
   justify-items: center;
   align-content: start;
   padding: clamp(var(--space-8), 12vh, var(--space-32)) var(--space-6) var(--space-6);
-  background: color-mix(in srgb, var(--color-neutral-900) 28%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 28%, transparent);
   z-index: 90;
 }
 .command {

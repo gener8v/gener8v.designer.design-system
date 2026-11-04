@@ -72,6 +72,24 @@ describe('a dialog keeps its buttons', () => {
     expect(rule('.dialog-actions')).toMatch(/flex-wrap:\s*wrap/);
   });
 
+  it('lays every modal over a scrim that stays dark in dark mode', () => {
+    // `--color-neutral-900` mirrors to the lightest ink in dark mode, so a backdrop mixed from it
+    // turned the page behind a dialog light grey. The scrim is one near-black in both modes.
+    for (const sel of ['.dialog-backdrop', '.drawer-scrim', '.command-backdrop']) {
+      expect(rule(sel), sel).toMatch(/background:\s*color-mix\(in srgb, var\(--color-scrim\) \d+%, transparent\)/);
+    }
+    expect(CSS).not.toMatch(/color-mix\(in srgb, var\(--color-neutral-900\) \d+%, transparent\)/);
+    expect(CSS).toMatch(/:root \{[^}]*--color-scrim: #[0-9A-Fa-f]{6};/);
+    const dark = [
+      /@media \(prefers-color-scheme: dark\)\s*\{\s*:root:not\(\[data-theme="light"\]\)\s*\{([^}]*)\}/.exec(CSS)?.[1],
+      /:root\[data-theme="dark"\]\s*\{([^}]*)\}/.exec(CSS)?.[1],
+    ];
+    for (const block of dark) {
+      expect(block).toBeTruthy();
+      expect(block).not.toMatch(/--color-scrim:/);
+    }
+  });
+
   it('passes axe, with and without a tone', async () => {
     const { unmount } = render(<Terms />);
     await expectNoA11yViolations(document.body);

@@ -18,7 +18,7 @@ change that holds and one CI reverts.
 
 | Path | What it is | Authored or generated |
 | --- | --- | --- |
-| `packages/tokens/src/theme.mjs` | **The source of truth.** 143 tokens | **Authored** — start here |
+| `packages/tokens/src/theme.mjs` | **The source of truth.** 144 tokens | **Authored** — start here |
 | `packages/tokens/src/base.css` | Reset, base type, focus ring, layout utilities | **Authored** |
 | `packages/tokens/src/components/*.css` | The component layer, one file per family | **Authored** |
 | `design/components/*.html` | Every component rendered, as plain HTML | **Authored** |

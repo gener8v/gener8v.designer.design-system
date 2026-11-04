@@ -10,7 +10,7 @@
   padding: var(--space-6);
   /* A MODAL IS THE ONLY THING, OR IT IS A CARD. At 34% the page behind stayed fully legible and
      the dialog read as floating over live content rather than replacing it. */
-  background: color-mix(in srgb, var(--color-neutral-900) 56%, transparent);
+  background: color-mix(in srgb, var(--color-scrim) 56%, transparent);
   z-index: 50;
 }
 .dialog {
