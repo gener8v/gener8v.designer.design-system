@@ -6,6 +6,11 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+**Visual change, sidebar:** a collapsible group heading (`.sidebar-group-toggle`) now outranks its
+items — 14px at 600 in ink on the item's row and pill, with its items indented a step beneath it. It
+was the 12px muted label, smaller than the children it opens. Static `.sidebar-group` labels are
+unchanged.
+
 Four behaviours a product built for itself, promoted and made generic: a listbox keyboard
 contract, a keyboard-shortcut engine with an off-switch, an error boundary and an Undo action on a
 toast. All additive. Nothing existing changes its default, apart from one thing a toast now also

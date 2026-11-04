@@ -392,6 +392,25 @@
   cursor: pointer;
 }
 .sidebar-group-toggle:hover { color: var(--color-neutral-900); }
+
+/* A PARENT YOU OPEN OUTRANKS WHAT IT OPENS.
+ *
+ * A static `.sidebar-group` is a label over a list of places, and it stays quiet. A collapsible one
+ * is navigation: the reader scans the parents to find their way, then opens one. Drawn as the quiet
+ * label it was 12px and muted above 14px children, so the hierarchy read upside down. It takes the
+ * item's size, row height and shape, ink at 600; its children step in beneath it, so the level shows
+ * in the layout as well as the weight. */
+.sidebar-group.sidebar-group-toggle {
+  min-block-size: var(--control-h-md);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-neutral-900);
+  transition: background-color var(--dur-fast) var(--ease-out);
+}
+.sidebar-group.sidebar-group-toggle:hover { background: var(--nav-hover); }
+.sidebar-group-toggle + .sidebar-section-items .sidebar-item { padding-inline-start: var(--space-8); }
 .sidebar-group-toggle::after {
   content: "";
   margin-inline-start: auto;
