@@ -3138,6 +3138,10 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 .toast-title { font-weight: 500; color: var(--color-neutral-900); }
 .toast-body { margin-block-start: var(--space-1); color: var(--color-neutral-700); }
 .toast-close { margin-inline-start: auto; }
+/* The one action — Undo — sits at the end beside the dismiss, not under the text: it is the thing
+   to do about the line it follows, and a reader's eye ends the line there. */
+.toast-action { flex: none; margin-inline-start: auto; }
+.toast-action + .toast-close { margin-inline-start: 0; }
 .toast[data-tone="success"] svg { color: var(--color-success-700); }
 .toast[data-tone="warning"] svg { color: var(--color-warning-700); }
 .toast[data-tone="danger"]  svg { color: var(--color-danger-700); }

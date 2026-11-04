@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.2.4",
     "typescript": "^5.7.0"
   },
   "repository": {
@@ -40,5 +41,5 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "description": "React components for the GENER8V design system \u2014 the same class names as its static HTML, so markup ports either direction."
+  "description": "React components for the GENER8V design system — the same class names as its static HTML, so markup ports either direction."
 }

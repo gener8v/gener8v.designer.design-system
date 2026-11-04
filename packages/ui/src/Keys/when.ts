@@ -27,12 +27,17 @@ export const when = [
         because: '`MenuShortcut` sets the shortcut at the end of the item it triggers.',
       },
       {
+        when: 'the page binds its own single keys and needs them off while typing, an off-switch, and one list of them all',
+        use: 'Shortcuts',
+        because: '`useShortcuts` binds the keys, turns single keys off on request and registers them for `ShortcutHelp`; `Keys` only draws them.',
+      },
+      {
         when: 'the keys open a search over every command',
         use: 'CommandPalette',
         because: 'the command palette binds ⌘K itself and lists the commands.',
       },
     ],
-    neighbours: ['KeyList', 'CodeBlock', 'Menu', 'CommandPalette'],
+    neighbours: ['KeyList', 'CodeBlock', 'Menu', 'CommandPalette', 'Shortcuts'],
     react: ['Kbd', 'ShortcutList'],
     hooks: ['useListKeys', 'stepIndex', 'isTypingTarget'],
     css: ['.kbd', '.shortcut-list'],

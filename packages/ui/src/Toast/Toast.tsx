@@ -36,6 +36,19 @@ export const ToastBody = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLPar
     return <p {...rest} ref={ref} className={cx('toast-body', className)} />;
   });
 
+/**
+ * The one action a toast may carry — Undo, most often. A real button inside the live region, so it
+ * is announced with the toast and reached by Tab. Sits before `ToastClose`.
+ *
+ * One action, and only one that can be skipped: a toast is missed easily, so nothing that has to
+ * be decided goes in one.
+ */
+export const ToastAction = forwardRef<HTMLButtonElement, ButtonHTMLAttributes<HTMLButtonElement>>(
+  function ToastAction({ className, type = 'button', ...rest }, ref) {
+    return <button {...rest} ref={ref} type={type}
+      className={cx('btn', 'btn-secondary', 'btn-sm', 'toast-action', className)} />;
+  });
+
 export interface ToastCloseProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> {
   /** Defaults to "Dismiss" — the button is icon-only and needs a name. */
   'aria-label'?: string;

@@ -29,6 +29,7 @@ it names the thing people reach for by mistake and what to use instead.
 | show a keyboard key, or the keys a surface binds and what each does | **`Keys`** | the list is API keys | `KeyList` (data.md) | `.key-list` is the integrations list of API keys; this is keyboard keys. |
 |  |  | it is a command or a code sample | `CodeBlock` | a code block is for code to read or copy, not a key to press. |
 |  |  | the shortcut belongs on a menu item | `Menu` (input.md) | `MenuShortcut` sets the shortcut at the end of the item it triggers. |
+|  |  | the page binds its own single keys and needs them off while typing, an off-switch, and one list of them all | `Shortcuts` (input.md) | `useShortcuts` binds the keys, turns single keys off on request and registers them for `ShortcutHelp`; `Keys` only draws them. |
 |  |  | the keys open a search over every command | `CommandPalette` (navigation.md) | the command palette binds ⌘K itself and lists the commands. |
 | preview the file selected in a library, beside the list | **`DocPreview`** | the document is the page, read on its own rather than previewed from a list | `Paper` | paper is the sheet a document sits on and the ground behind it. |
 |  |  | two versions of the text are compared | `Diff` | a diff marks what was added and removed, not by colour alone. |
@@ -158,9 +159,10 @@ Show a keyboard key, or the keys a surface binds and what each does.
 - The list is API keys → `KeyList` (data.md). `.key-list` is the integrations list of API keys; this is keyboard keys.
 - It is a command or a code sample → `CodeBlock`. A code block is for code to read or copy, not a key to press.
 - The shortcut belongs on a menu item → `Menu` (input.md). `MenuShortcut` sets the shortcut at the end of the item it triggers.
+- The page binds its own single keys and needs them off while typing, an off-switch, and one list of them all → `Shortcuts` (input.md). `useShortcuts` binds the keys, turns single keys off on request and registers them for `ShortcutHelp`; `Keys` only draws them.
 - The keys open a search over every command → `CommandPalette` (navigation.md). The command palette binds ⌘K itself and lists the commands.
 
-**Confused with** `KeyList` (data.md), `CodeBlock`, `Menu` (input.md), `CommandPalette` (navigation.md)
+**Confused with** `KeyList` (data.md), `CodeBlock`, `Menu` (input.md), `CommandPalette` (navigation.md), `Shortcuts` (input.md)
 
 React `Kbd`, `ShortcutList` · hooks `useListKeys`, `stepIndex`, `isTypingTarget` · classes `.kbd`, `.shortcut-list` · shown in `design/components/reading.html`
 

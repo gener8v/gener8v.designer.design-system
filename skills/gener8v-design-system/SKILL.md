@@ -128,10 +128,10 @@ instead — then a section per component. Read the "not when" before you choose.
 | --- | --- |
 | a whole page, a shell, or the structure a page sits in | `references/choosing/screens.md` (10) |
 | something that floats above the page — a modal, a side panel, a hint, a preview | `references/choosing/overlays.md` (5) |
-| telling someone what happened, what state a thing is in, or that it is loading | `references/choosing/status-and-feedback.md` (11) |
+| telling someone what happened, what state a thing is in, or that it is loading | `references/choosing/status-and-feedback.md` (12) |
 | moving between places, switching views, or narrowing what a list shows | `references/choosing/navigation.md` (13) |
 | figures, tables, charts, lists of records, or history | `references/choosing/data.md` (24) |
-| an action someone presses or a value someone enters or picks | `references/choosing/input.md` (19) |
+| an action someone presses or a value someone enters or picks | `references/choosing/input.md` (20) |
 | a document, prose, code, sources or type someone reads | `references/choosing/reading.md` (10) |
 | a conversation with an agent, or work that is running right now | `references/choosing/agents-and-live-work.md` (6) |
 

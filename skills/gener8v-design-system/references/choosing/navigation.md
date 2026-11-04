@@ -15,6 +15,7 @@ it names the thing people reach for by mistake and what to use instead.
 |  |  | you are stepping through items of a set in place | `PagerChip` | the pager chip says "4 of 19" and moves to the next one without leaving. |
 | let someone type to find and run any command or go anywhere, from anywhere | **`CommandPalette`** | someone is choosing a value for a field by typing | `Combobox` (input.md) | a combobox fills a field in a form; a palette runs a command and closes. |
 |  |  | there are a few actions on one thing | `Menu` (input.md) | a menu button opens beside its trigger and does not take the page over. |
+|  |  | a frequent action wants one key of its own on one screen — J for next, E for done | `Shortcuts` (input.md) | a single-key shortcut acts at once and has to be possible to turn off; the palette is a search opened by a chord. |
 |  |  | the person is browsing places rather than searching | `Sidebar` | the rail shows every place at once; a palette shows only what matches. |
 | let a narrow column of long names be read by scrolling, one at a time | **`Dock`** | the list is the app's places | `Sidebar` | a rail of places has short names and marks the current page. |
 |  |  | there is room for each row to show its name and a line of provenance | `Item` (data.md) | an item list shows every row in full; a dock only grows the one in focus. |
@@ -85,9 +86,10 @@ Let someone type to find and run any command or go anywhere, from anywhere.
 
 - Someone is choosing a value for a field by typing → `Combobox` (input.md). A combobox fills a field in a form; a palette runs a command and closes.
 - There are a few actions on one thing → `Menu` (input.md). A menu button opens beside its trigger and does not take the page over.
+- A frequent action wants one key of its own on one screen — J for next, E for done → `Shortcuts` (input.md). A single-key shortcut acts at once and has to be possible to turn off; the palette is a search opened by a chord.
 - The person is browsing places rather than searching → `Sidebar`. The rail shows every place at once; a palette shows only what matches.
 
-**Confused with** `Combobox` (input.md), `Menu` (input.md), `Dialog` (overlays.md), `Keys` (reading.md)
+**Confused with** `Combobox` (input.md), `Menu` (input.md), `Dialog` (overlays.md), `Keys` (reading.md), `Shortcuts` (input.md)
 
 React `CommandPalette` · hooks `useCommandPalette` · classes `.command` · shown in `design/components/command.html`
 

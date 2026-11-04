@@ -76,6 +76,17 @@
   <div class="frame"><div class="state state-tight"><span aria-hidden="true" data-art="inbox" class="state-art"><svg viewBox="0 0 120 80" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 50 L32 28 H88 L100 50 V64 A4 4 0 0 1 96 68 H24 A4 4 0 0 1 20 64 Z"></path><path d="M20 50 H44 L48 57 H72 L76 50 H100"></path><path class="state-art-mark" d="M60 8 V36 M52 28 L60 36 L68 28"></path></g></svg></span><p class="state-title">Nothing waiting for you</p><p class="state-body">Findings assigned to you appear here.</p></div></div>
   <div class="frame"><div class="state state-tight"><span aria-hidden="true" data-art="search" class="state-art"><svg viewBox="0 0 120 80" focusable="false"><g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="12" width="48" height="58" rx="3"></rect><path d="M32 26 H62 M32 34 H58 M32 42 H50"></path><circle class="state-art-mark" cx="78" cy="50" r="14"></circle><path class="state-art-mark" d="M88 60 L100 72"></path></g></svg></span><p class="state-title">No matches</p><p class="state-body">Try fewer words, or search every engagement.</p></div></div>
 
+  <p class="demo-head label">Error boundary — a region that threw while rendering</p>
+  <div class="frame"><div class="state state-tight" data-tone="danger" role="alert">
+    <span class="state-icon"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg></span>
+    <p class="state-title">This part could not be shown</p>
+    <p class="state-body">Something in it went wrong. The rest of the page still works.</p>
+    <div class="state-actions"><button type="button" class="btn btn-secondary btn-sm">Try again</button></div>
+  </div></div>
+  <p class="note"><code>ErrorBoundary</code> draws this in place of what it wraps, inside the frame
+  around it. It never shows the error's own text — that goes to <code>onError</code> for the log. A new
+  <code>resetKey</code> (the page's path, a record's id) clears it; so does Try again.</p>
+
   <p class="note">Every state names what happened, whether anything changed, and what to do next.
   Error carries a <code>.state-detail</code> line a support engineer can quote and a user can ignore.
   <strong>Partial</strong> is the one most systems omit, and the one that matters most in audited

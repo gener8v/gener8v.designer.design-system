@@ -64,6 +64,9 @@ it names the thing people reach for by mistake and what to use instead.
 |  |  | two or three views of the same thing | `Segmented` (navigation.md) | a segmented control shows every option at once. |
 | move things between two places | **`Shelf`** | each item is simply on or off | `Choice` | a list of switches answers "is this on"; a shelf is for a movement the reader should see. |
 |  |  | items are ordered or grouped by state across more than two places | `Lanes` (agents-and-live-work.md) | lanes show work moving through states; a shelf has exactly two zones the person moves things between. |
+| bind page keys to actions, with an off-switch and one list of every key the page binds | **`Shortcuts`** | moving through a list of cards with J / K and arrows, with roving focus | `Keys` (reading.md) | `useListKeys` owns the focus and the tab stop in the list; bind the rest of the screen with this. |
+|  |  | searching every command and place from anywhere, by a chord | `CommandPalette` (navigation.md) | a palette is found by typing and binds ⌘K itself; a shortcut is a key someone has learned. |
+|  |  | showing the shortcut beside the menu item it triggers | `Menu` | `MenuShortcut` draws it at the end of the item; the key itself is still bound here. |
 | set a value on a continuous range where the position matters more than the exact figure | **`Slider`** | the value is a count of things — copies, seats | `Quantity` | a count is stepped or typed exactly; a slider is imprecise for whole numbers. |
 |  |  | the exact figure matters or the range is open-ended | `Input` | a number input takes an exact value; a slider needs a known minimum and maximum. |
 |  |  | the figure is shown, not set | `Meter` (data.md) | a meter reports a level; a slider asks for one. |
@@ -200,7 +203,7 @@ Pick a value from a long list by typing to narrow it.
 
 - An owner from forty people, a code from hundreds — too many to scan, easy to type.
 - The list has to look like the rest of the system and work the same on keyboard and touch; focus stays in the input.
-- `allowCustom` when the person may enter a value the list does not hold.
+- `allowCustom` when the person may enter a value the list does not hold. For a button that opens a list instead of a field you type in, `useListbox` gives the keyboard contract (type-ahead, no wrap, Tab closes) and you draw the markup.
 
 **Not when**
 
@@ -212,7 +215,7 @@ Pick a value from a long list by typing to narrow it.
 
 **Confused with** `Select`, `Menu`, `TokenInput`, `CommandPalette` (navigation.md)
 
-React `Combobox` · classes `.combobox`, `.listbox` · shown in `design/components/inputs.html`
+React `Combobox` · hooks `useListbox` · classes `.combobox`, `.listbox` · shown in `design/components/inputs.html`
 
 ## Field
 
@@ -391,6 +394,26 @@ Move things between two places.
 **Confused with** `Choice`, `Lanes` (agents-and-live-work.md), `Item` (data.md)
 
 React `Shelf` · classes `.shelf` · no demo page
+
+## Shortcuts
+
+Bind page keys to actions, with an off-switch and one list of every key the page binds.
+
+**Use when**
+
+- A screen people work through all day — next, done, assign — where one key per action saves time: `useShortcuts([{ key: 'j', does: 'Next item', run }])`. Keys stand down while typing in a field, with Ctrl, ⌘ or Alt held, and under a dialog.
+- Single-key shortcuts have to be possible to turn off (WCAG 2.1.4). Wrap the app in `ShortcutsProvider`, which stores the switch per person, and show `ShortcutHelp` — every registered key and the switch — behind a visible "?" button, not only behind the `?` key.
+- Escape that closes one thing at a time — a popover, then a draft, then the search — with `closeTopLayer`, still working inside a search field.
+
+**Not when**
+
+- Moving through a list of cards with J / K and arrows, with roving focus → `Keys` (reading.md). `useListKeys` owns the focus and the tab stop in the list; bind the rest of the screen with this.
+- Searching every command and place from anywhere, by a chord → `CommandPalette` (navigation.md). A palette is found by typing and binds ⌘K itself; a shortcut is a key someone has learned.
+- Showing the shortcut beside the menu item it triggers → `Menu`. `MenuShortcut` draws it at the end of the item; the key itself is still bound here.
+
+**Confused with** `Keys` (reading.md), `CommandPalette` (navigation.md), `Menu`
+
+React `ShortcutsProvider`, `ShortcutHelp` · hooks `useShortcuts`, `useSingleKeyShortcuts`, `useShortcutGroups`, `closeTopLayer` · shown in `design/components/reading.html`
 
 ## Slider
 

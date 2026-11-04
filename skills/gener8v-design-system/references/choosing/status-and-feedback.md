@@ -19,6 +19,8 @@ it names the thing people reach for by mistake and what to use instead.
 |  |  | the region has nothing to show | `State` | a state says why the content is absent and what to do; a callout assumes there is prose around it. |
 |  |  | a hint that belongs to one form field | `Field` (input.md) | a field hint is tied to its control by `aria-describedby`; a callout is not. |
 |  |  | a short status word | `Tag` | a status is one or two words in a tag, never a sentence. |
+| keep one broken region from blanking the app, and say plainly that it could not be shown | **`ErrorBoundary`** | a fetch failed or a source did not answer | `State` | a failed fetch is a state the screen expected and renders itself, with a retry; a boundary is for a render that threw. |
+|  |  | the content is there and something about it is wrong or stale | `Alert` | an alert sits above content that still shows; a boundary replaces content that could not be drawn. |
 | show an integration and the state it is in, with the way to fix it | **`Connection`** | the status is not about an integration | `Tag` | a tag is the general status word; `ConnectionStatus` has only the integration states. |
 |  |  | the problem needs the reader to act before carrying on with the page | `Alert` | an alert is an inline banner with a title, body and action for one problem. |
 |  |  | the thing on the row is an API key or a secret | `KeyList` (data.md) | keys have a fingerprint, scopes, last use and expiry; a connection has none of those. |
@@ -48,9 +50,12 @@ it names the thing people reach for by mistake and what to use instead.
 |  |  | the status needs a sentence to explain it | `Alert` | a tag is one or two words; prose belongs in an alert, a hint or a state body. |
 | confirm that something just happened, briefly, without taking focus | **`Toast`** | you want to raise a toast from anywhere in the app with timers handled | `ToastProvider` | the provider owns the queue, the timeout and the pause on hover; `Toast` is only the surface. |
 |  |  | the condition is still true after the moment passes — a failed source, a stale figure | `Alert` | a toast leaves; a condition that leaves with it is a condition nobody can find again. |
-|  |  | the person has to decide something before going on | `Dialog` (overlays.md) | a toast is polite and can be missed; a decision needs a modal that holds focus. |
+|  |  | the person has to decide something before going on | `Dialog` (overlays.md) | an action in a toast is right for undo, not for a decision: a toast is polite and can be missed, and a decision needs a modal that holds focus. |
+|  |  | an agent proposes a change and the person has to confirm or approve it | `ConfirmCard` (agents-and-live-work.md) | an action in a toast is right for undo, not for a decision; the confirm card holds the values and waits in the conversation until it is answered. |
 |  |  | the region the action was meant to fill is empty or failed | `State` | the result belongs where the content would be, not in a corner. |
 | raise toasts from anywhere in an app, with the queue and timers handled | **`ToastProvider`** | you render the toast markup yourself, or in static HTML | `Toast` | the provider renders `Toast` for you; use the parts directly only when you own the queue. |
+|  |  | the person has to decide something — confirm a delete, choose between two outcomes | `Dialog` (overlays.md) | an action in a toast is right for undo, not for a decision; a decision needs a modal that holds focus until it is answered. |
+|  |  | an agent asks the person to confirm or approve a change | `ConfirmCard` (agents-and-live-work.md) | an action in a toast is right for undo, not for a decision; the confirm card shows what will change and waits for an answer. |
 |  |  | the message describes a condition rather than an event | `Alert` | a queued toast times out; a condition has to stay on the page. |
 
 ## Alert
@@ -94,6 +99,25 @@ Set a quiet aside inside prose.
 **Confused with** `Alert`, `Tooltip` (overlays.md), `Field` (input.md), `Paper` (reading.md)
 
 React `Callout`, `CalloutTitle` · classes `.callout` · shown in `design/components/feedback.html`
+
+## ErrorBoundary
+
+Keep one broken region from blanking the app, and say plainly that it could not be shown.
+
+**Use when**
+
+- Around a routed page, inside the frame, so the header and navigation stay when the page throws: `<ErrorBoundary resetKey={path}>`, and leaving the page recovers it.
+- Around a panel that renders data it does not control — a detail pane, a chart, an embedded preview — with the record id as `resetKey`.
+- Hand the error to `onError` for the log. The person sees `State kind="error"`, never the error text.
+
+**Not when**
+
+- A fetch failed or a source did not answer → `State`. A failed fetch is a state the screen expected and renders itself, with a retry; a boundary is for a render that threw.
+- The content is there and something about it is wrong or stale → `Alert`. An alert sits above content that still shows; a boundary replaces content that could not be drawn.
+
+**Confused with** `State`, `Alert`
+
+React `ErrorBoundary` · shown in `design/components/states.html`
 
 ## Connection
 
@@ -244,7 +268,7 @@ Confirm that something just happened, briefly, without taking focus.
 
 **Use when**
 
-- The result of an action the person took — "Saved", "Invite sent", "Export ready".
+- The result of an action the person took — "Saved", "Invite sent", "Export ready" — with at most one way to take it back: `ToastAction` for Undo, before `ToastClose`.
 - An event that happened elsewhere while they work, worth a glance and no more.
 - Rendering the surface yourself; mount `ToastRegion` once, near the root, before any toast is added.
 
@@ -252,12 +276,13 @@ Confirm that something just happened, briefly, without taking focus.
 
 - You want to raise a toast from anywhere in the app with timers handled → `ToastProvider`. The provider owns the queue, the timeout and the pause on hover; `Toast` is only the surface.
 - The condition is still true after the moment passes — a failed source, a stale figure → `Alert`. A toast leaves; a condition that leaves with it is a condition nobody can find again.
-- The person has to decide something before going on → `Dialog` (overlays.md). A toast is polite and can be missed; a decision needs a modal that holds focus.
+- The person has to decide something before going on → `Dialog` (overlays.md). An action in a toast is right for undo, not for a decision: a toast is polite and can be missed, and a decision needs a modal that holds focus.
+- An agent proposes a change and the person has to confirm or approve it → `ConfirmCard` (agents-and-live-work.md). An action in a toast is right for undo, not for a decision; the confirm card holds the values and waits in the conversation until it is answered.
 - The region the action was meant to fill is empty or failed → `State`. The result belongs where the content would be, not in a corner.
 
-**Confused with** `ToastProvider`, `Alert`, `State`
+**Confused with** `ToastProvider`, `Alert`, `State`, `ConfirmCard` (agents-and-live-work.md)
 
-React `ToastRegion`, `Toast`, `ToastTitle`, `ToastBody`, `ToastClose` · classes `.toast` · shown in `design/components/feedback.html`
+React `ToastRegion`, `Toast`, `ToastTitle`, `ToastBody`, `ToastAction`, `ToastClose` · classes `.toast` · shown in `design/components/feedback.html`
 
 ## ToastProvider
 
@@ -267,13 +292,15 @@ Raise toasts from anywhere in an app, with the queue and timers handled.
 
 - Wrap the app once and call `useToast().toast({ title, tone })` from any component.
 - Toasts should time out, pause while the pointer is over them, and cap at a few on screen.
-- A toast with an action: pass `duration: 0` so it stays until dismissed.
+- Undo after the fact: `toast({ title, action: { label: 'Undo', onAction } })`. A toast with an action stays until dismissed (it defaults to `duration: 0`), and its button is announced with it and reached by Tab.
 
 **Not when**
 
 - You render the toast markup yourself, or in static HTML → `Toast`. The provider renders `Toast` for you; use the parts directly only when you own the queue.
+- The person has to decide something — confirm a delete, choose between two outcomes → `Dialog` (overlays.md). An action in a toast is right for undo, not for a decision; a decision needs a modal that holds focus until it is answered.
+- An agent asks the person to confirm or approve a change → `ConfirmCard` (agents-and-live-work.md). An action in a toast is right for undo, not for a decision; the confirm card shows what will change and waits for an answer.
 - The message describes a condition rather than an event → `Alert`. A queued toast times out; a condition has to stay on the page.
 
-**Confused with** `Toast`, `Alert`
+**Confused with** `Toast`, `Alert`, `Dialog` (overlays.md), `ConfirmCard` (agents-and-live-work.md)
 
 React `ToastProvider` · hooks `useToast` · no demo page
