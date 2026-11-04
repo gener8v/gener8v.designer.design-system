@@ -30,7 +30,12 @@ in React), or a collapsed header has no navigation.
 ## Sidebar groups
 `.sidebar-group` is a quiet label: body family, `--text-xs`, weight 500,
 `--color-neutral-600`, sentence case as authored. No rule underneath; groups are separated by
-`--space-6` of air. A collapsible group (`.sidebar-group-toggle`) keeps the chevron.
+`--space-6` of air.
+
+A collapsible group (`.sidebar-group-toggle`) is navigation, not a label, so it outranks what it
+opens: `--text-sm` at weight 600 in `--color-neutral-900`, on the item's row height and pill shape,
+with the hover tint, and the chevron. Its items step in by `--space-8`, so the level shows in the
+layout as well as the weight. A quiet label above larger children read as the hierarchy upside down.
 
 ## Drawer
 Links in a drawer are the same size as in the header or rail. There is no drawer-specific
