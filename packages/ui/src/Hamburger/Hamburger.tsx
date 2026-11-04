@@ -9,6 +9,11 @@ export interface HamburgerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElem
   'aria-label': string;
   /** The id of the menu this controls, for `aria-controls`. */
   controls?: string;
+  /**
+   * The header's own burger: adds `.nav-burger`, so it shows only once the `Nav` it sits in has
+   * collapsed its link row (the header measures its own width, not the window's).
+   */
+  inNav?: boolean;
 }
 
 /**
@@ -17,12 +22,12 @@ export interface HamburgerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElem
  * element for assistive tech to announce.
  */
 export const Hamburger = forwardRef<HTMLButtonElement, HamburgerProps>(function Hamburger(
-  { expanded, controls, className, type = 'button', ...rest }, ref,
+  { expanded, controls, inNav = false, className, type = 'button', ...rest }, ref,
 ) {
   return (
     <button {...rest} ref={ref} type={type}
       aria-expanded={expanded} aria-controls={controls}
-      className={cx('hamburger', className)}>
+      className={cx('hamburger', inNav && 'nav-burger', className)}>
       <span className="hamburger-box">
         <span className="hamburger-bar" />
         <span className="hamburger-bar" />

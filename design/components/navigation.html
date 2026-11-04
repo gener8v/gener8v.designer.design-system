@@ -8,14 +8,15 @@
 <link rel="stylesheet" href="../styles.css" />
 <style>
 /* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo { max-width: var(--container-lg); margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
 .demo-head { margin: var(--space-10) 0 var(--space-4); }
 .demo-head:first-child { margin-top: 0; }
 .frame { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; }
-.frame-scroll { overflow-x: auto; }
+.narrow { max-inline-size: calc(var(--space-24) * 4); }
+.prose { max-inline-size: 72ch; }
 .stage-tall { height: var(--space-32); }
 .stage { position: relative; height: calc(var(--space-32) * 1.75); background: var(--color-surface); overflow: hidden; }
-.pair { display: flex; gap: var(--space-6); align-items: center; }
+.pair { display: flex; gap: var(--space-6); align-items: center; flex-wrap: wrap; }
 .note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
 </style>
 </head>
@@ -23,8 +24,8 @@
 <main class="demo">
 
   <p class="demo-head label">Header — wide</p>
-  <div class="frame frame-scroll">
-    <nav class="nav" style="min-width:var(--container-md)">
+  <div class="frame">
+    <nav class="nav">
       <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
       <div class="nav-links">
         <a class="nav-item" href="#" aria-current="page">What we do</a>
@@ -32,14 +33,25 @@
         <a class="nav-item" href="#">Writing</a>
       </div>
       <a class="btn btn-primary btn-sm" href="#">Start a conversation</a>
+      <button type="button" class="hamburger nav-burger" aria-expanded="false" aria-label="Open menu">
+        <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
+      </button>
     </nav>
   </div>
 
   <p class="demo-head label">Header — narrow, collapsed to the hamburger</p>
-  <div class="frame">
+  <p class="note prose" style="margin-block:0 var(--space-4)">The same markup as above in a narrower box. The
+    header measures its own width, not the window's, so it folds its links into the hamburger
+    instead of scrolling sideways.</p>
+  <div class="frame narrow">
     <nav class="nav">
       <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
-      <button type="button" class="hamburger" aria-expanded="false" aria-label="Open menu">
+      <div class="nav-links">
+        <a class="nav-item" href="#" aria-current="page">What we do</a>
+        <a class="nav-item" href="#">Who we are</a>
+        <a class="nav-item" href="#">Writing</a>
+      </div>
+      <button type="button" class="hamburger nav-burger" aria-expanded="false" aria-label="Open menu">
         <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
       </button>
     </nav>
@@ -69,7 +81,7 @@
 
   <p class="demo-head label">Account — the avatar, and what it opens</p>
   <div class="pair" style="align-items:flex-start">
-    <div class="frame" style="flex:1">
+    <div class="frame" style="flex:1 1 100%">
       <nav class="nav">
         <a class="nav-brand" href="#"><img src="../assets/logo.png" alt="" />GENER8V</a>
         <div class="nav-links">
@@ -77,6 +89,9 @@
         </div>
         <button type="button" class="btn btn-ghost btn-sm btn-icon" aria-haspopup="menu" aria-expanded="false" aria-label="Account">
           <span class="avatar avatar-sm">TE</span>
+        </button>
+        <button type="button" class="hamburger nav-burger" aria-expanded="false" aria-label="Open menu">
+          <span class="hamburger-box"><span class="hamburger-bar"></span><span class="hamburger-bar"></span><span class="hamburger-bar"></span></span>
         </button>
       </nav>
     </div>
@@ -116,7 +131,7 @@
   </div>
 
   <p class="demo-head label">Drawer</p>
-  <div class="frame stage">
+  <div class="frame stage" style="max-inline-size:var(--container-sm)">
     <div class="drawer-scrim"></div>
     <div class="drawer-panel">
       <button type="button" class="hamburger" aria-expanded="true" aria-label="Close menu" style="align-self:flex-end">
@@ -157,7 +172,7 @@
         </div>
       </div>
     </nav>
-    <div style="flex:1;padding:var(--space-6)">
+    <div style="flex:1;min-inline-size:0;padding:var(--space-6)">
       <p class="breadcrumbs">
         <a href="#">Delivery</a><span class="breadcrumb-sep">/</span>
         <a href="#">Engagements</a><span class="breadcrumb-sep">/</span>
@@ -171,9 +186,10 @@
     </div>
   </div>
 
-  <p class="note">Active state is driven by <code>aria-current</code> (and <code>aria-selected</code>
+  <p class="note prose">Active state is driven by <code>aria-current</code> (and <code>aria-selected</code>
   on tabs), never by an <code>.is-active</code> class — the styling and the accessibility tree cannot
-  drift apart. The hamburger is a single button whose bars morph on
+  drift apart. The current place is one cue — a soft tinted pill with the label in ink — in the
+  header, the rail and the drawer alike; hover is a lighter neutral tint, and focus is the ring. The hamburger is a single button whose bars morph on
   <code>aria-expanded</code>; nothing is swapped for an X glyph.</p>
 
   <p class="demo-head label">Rail as a phone drawer</p>

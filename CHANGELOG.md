@@ -11,6 +11,28 @@ contract, a keyboard-shortcut engine with an off-switch, an error boundary and a
 toast. All additive. Nothing existing changes its default, apart from one thing a toast now also
 does: it pauses its timer while keyboard focus is inside it, as it already did on hover.
 
+### Changed — visual (navigation)
+
+**A visual change on existing classes, shipped as the new default.** Consumers on `^0.61` will
+see it when they bump. No class, prop or markup is renamed or removed.
+
+- **One cue for the current place.** `.nav-item[aria-current]` and `.sidebar-item[aria-current]`
+  (and both inside `.drawer-panel`) were a saturated accent fill, a 3px inset bar and accent text.
+  They are now one soft tinted pill (`--color-accent-500` at 14%) with the label in
+  `--color-neutral-900` at weight 600. Hover is a neutral tint. Items are full pills. In dark mode
+  the old blue-on-navy label was low contrast; the new pair is 11–14:1 and is gated by
+  `lint:contrast` in both themes.
+- **Quiet sidebar group labels.** `.sidebar-group` is no longer uppercase, tracked, near-ink and
+  ruled off underneath. It is a small muted label, separated from the group above by space.
+- **Drawer items** lose their larger padding and font size, and match the rail and the header.
+- **Tabs.** The selected label is ink, not accent; the underline stays the indicator.
+- **The header collapses by its own width.** `.nav` is a size container; `.nav-links` folds into
+  `.nav-burger` below 720px of the header's width, not the window's, so a header in a narrow pane
+  no longer scrolls sideways and clips its last link. `.nav-burger` now also outranks
+  `.hamburger`'s own `display`, so it no longer shows beside a full link row.
+- **Added** `Hamburger`'s `inNav` prop, which adds `.nav-burger`.
+- Spec: `docs/specs/navigation.md`.
+
 ### Added
 
 - **`useListbox`** (with `Combobox`), the WAI-ARIA collapsible-listbox keyboard contract as a
