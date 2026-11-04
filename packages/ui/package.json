@@ -37,7 +37,7 @@
   "license": "MIT",
   "author": "GENER8V",
   "publishConfig": {
-    "access": "restricted",
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "description": "React components for the GENER8V design system \u2014 the same class names as its static HTML, so markup ports either direction."

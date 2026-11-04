@@ -6,10 +6,10 @@
 // `matches gener8v.com's cool ink`, `blue-600, the site's action colour`. That is this firm's
 // brand, and every product built on the system shares it.
 //
-// A client engagement is not that. Mutual Assurance's product carried their navy, their gold and
-// their paper as raw values in its own stylesheet, under a comment reading *a client's brand is
-// the one thing the design system cannot supply* — which was true, and is the thing this file
-// changes. The consuming app had to hand-roll nine neutral steps, pick the two selectors that
+// A client engagement is not that. Before this file, a client's product carried its navy, its
+// gold and its paper as raw values in its own stylesheet, under a comment reading *a client's
+// brand is the one thing the design system cannot supply* — which was true, and is the thing this
+// file changes. The consuming app had to hand-roll nine neutral steps, pick the two selectors that
 // scope them to light mode, and keep a guard that permits raw hexes in one block so it could.
 // Every later engagement would have done the same work again, differently.
 //
@@ -34,21 +34,18 @@
 
 export const brands = [
   {
-    slug: 'mutual-assurance',
-    name: 'Mutual Assurance',
+    // An example brand, not a real client: warm paper, a deep navy and a gold. It is the shape a
+    // client palette takes — copy it, rename it and replace the values with the client's own.
+    slug: 'ledger',
+    name: 'Ledger (example)',
 
-    // Measured from their own reporting rather than eyedropped. The figures below come from the
-    // Guidewire-to-NetSuite reconciliation their assistant treasurer writes and reads every
-    // month: the neutrals of that document sit at hue 85 and chroma 0.010–0.018 — warm where the
-    // house greys are cool, at about half their chroma.
-    //
-    // Their navy, ink and gold were already the same colours the house product had been given:
-    // #002639, #003550 and #e29e26 in his report against the product's own #01263C, #023550 and
-    // #E19D1A. The palette that was missing was the paper underneath the figures.
+    // A finance-report palette. The neutrals sit at hue 85 and chroma 0.010–0.018 — warm where
+    // the house greys are cool, at about half their chroma — because the paper underneath the
+    // figures is what a palette like this most needs, and the house ramp does not supply it.
     palette: {
       hue: 85,
       neutralChroma: 0.018,
-      // Ground, surface and ink, pinned. Read off the reconciliation itself.
+      // Ground, surface and ink, pinned.
       pin: { bg: '#FAF9F6', surface: '#F7F5F0', text: '#1A1614' },
       // The navy of the mark. A filled action wears it; text takes the darker ink, which reads
       // as near-black once it is a word rather than a field.

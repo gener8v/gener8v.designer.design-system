@@ -33,7 +33,7 @@ palette and nothing else:
 
 ```css
 @import "@gener8v/ui/styles.css";
-@import "@gener8v/tokens/brands/mutual-assurance.css";
+@import "@gener8v/tokens/brands/ledger.css";
 ```
 
 Declare one in `packages/tokens/src/brands.mjs` — a hue, a chroma, the three pinned grounds, and

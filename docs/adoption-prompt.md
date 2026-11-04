@@ -19,8 +19,8 @@ Only worth saying anything if output drifts:
 
 > This project uses the GENER8V design system.
 >
-> Install it: `npm i @gener8v/ui @gener8v/tokens @gener8v/icons` — private to the
-> @gener8v npm org, so the machine needs registry auth. Then `import
+> Install it: `npm i @gener8v/ui @gener8v/tokens @gener8v/icons` — public on npm,
+> no auth needed. Then `import
 > '@gener8v/ui/styles.css'` once, at the app root.
 >
 > Build with the components and class names it ships. The React components render the

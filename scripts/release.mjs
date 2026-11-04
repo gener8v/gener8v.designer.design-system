@@ -81,7 +81,7 @@ for (const name of PACKAGES) {
 console.log(`\n▸ publishing${dry ? ' (dry run)' : ''}`);
 try {
   for (const name of PACKAGES) {
-    run('npm', ['publish', ...(dry ? ['--dry-run'] : []), '--access', 'restricted'],
+    run('npm', ['publish', ...(dry ? ['--dry-run'] : []), '--access', 'public'],
         { cwd: `packages/${name}` });
   }
 } catch (err) {

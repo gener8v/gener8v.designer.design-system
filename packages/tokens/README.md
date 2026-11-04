@@ -4,7 +4,7 @@ The source of truth for the GENER8V design system. Everything else in the reposi
 generated from one file here.
 
 ```bash
-npm i @gener8v/tokens      # private to the @gener8v npm org
+npm i @gener8v/tokens      # public on npm, MIT
 ```
 ```ts
 import tokens from '@gener8v/tokens';
