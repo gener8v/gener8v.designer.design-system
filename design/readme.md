@@ -186,6 +186,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.confirm-card` (`data-tier`, `data-spend`, `data-state`) with `.confirm-card-flags`, `.confirm-card-spend`, `.confirm-card-summary`, `.confirm-card-values`, `.confirm-card-actions`, `.confirm-card-outcome`, `.confirm-card-problem` | A proposed change asking a person to confirm or approve it, inline in a conversation; stays as a record once answered | components/agent.html |
 | `.split` with `.split-aside`, `.split-handle`, `.split-main` | Reader-sized pane: drag the handle, click it to collapse. `role="separator"` | — |
 | `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input; `allowCustom` accepts a value the list does not hold | components/inputs.html |
+| `.select-menu` with `.select-menu-trigger`, `.select-menu-list`, `.select-menu-option`, `.select-menu-group` | A button that opens a styled list to pick one value — a `.select` closed, a `.listbox` open; type-ahead jumps, it does not filter | components/inputs.html |
 | `.slider` (+ `.slider-head`, `.slider-value`) | Native range; fill driven by `--slider-pct` | components/inputs.html |
 | `.dropzone` with `.file-list`, `.file-item`, `.file-name`, `.file-size` | File drop over a real `input[type=file]` | components/inputs.html |
 | `.calendar` with `.calendar-grid`, `.calendar-day` | `role="grid"` month view; dates are `YYYY-MM-DD` strings | components/inputs.html |
@@ -294,7 +295,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - `components/feedback.html` — dialog, alerts, toast, tooltip and callout.
 - `components/disclosure.html` — menu, accordion and the segmented control.
 - `components/data.html` — stats, meters, description lists and avatars.
-- `components/inputs.html` — combobox, slider, file drop and the calendar.
+- `components/inputs.html` — combobox, select menu, slider, file drop and the calendar.
 - `components/graph.html` — the knowledge graph, at readable and at corpus scale.
 - `components/coverage.html` — the coverage graph: a plan's layers, uncovered brought forward, a narrow pane.
 - `components/agent.html` — tool chips and confirm cards, in a conversation and on their own.

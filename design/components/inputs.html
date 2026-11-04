@@ -1,4 +1,4 @@
-<!-- @dsCard group="Components" name="Advanced inputs" subtitle="Combobox, slider, file drop and calendar — native controls wherever one exists" viewport="640x1000" -->
+<!-- @dsCard group="Components" name="Advanced inputs" subtitle="Combobox, select menu, slider, file drop and calendar — native controls wherever one exists" viewport="640x1000" -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -33,6 +33,62 @@
       <li class="listbox-option" role="option" aria-selected="false" aria-disabled="true">Meridian Financial<span class="listbox-option-note">Archived</span></li>
     </ul>
   </div>
+
+  <p class="demo-head label">Select menu</p>
+  <div class="select-menu">
+    <span class="field-label" id="account-label">Account</span>
+    <span class="select-wrap">
+      <button type="button" class="select select-menu-trigger" id="account-button" aria-haspopup="listbox"
+        aria-expanded="true" aria-controls="account-list" aria-labelledby="account-label account-button">
+        <span class="select-menu-value">Meridian Financial</span>
+      </button>
+    </span>
+    <div class="listbox select-menu-list" id="account-list" role="listbox" tabindex="-1" style="--anchor-w:100%;max-block-size:none"
+      aria-labelledby="account-label" aria-activedescendant="account-opt-2">
+      <div class="select-menu-group" role="group" aria-labelledby="account-group-0">
+        <div class="select-menu-group-label" id="account-group-0" role="presentation">Healthcare</div>
+        <div class="listbox-option select-menu-option" id="account-opt-0" role="option" aria-selected="false">
+          <span class="select-menu-option-text"><span class="select-menu-option-label">Northlake Health</span><span class="listbox-option-note">Two open renewals</span></span>
+          <svg class="select-menu-check" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+        </div>
+      </div>
+      <div class="select-menu-group" role="group" aria-labelledby="account-group-1">
+        <div class="select-menu-group-label" id="account-group-1" role="presentation">Finance and logistics</div>
+        <div class="listbox-option select-menu-option" id="account-opt-1" role="option" aria-selected="true">
+          <span class="select-menu-option-text"><span class="select-menu-option-label">Meridian Financial</span></span>
+          <svg class="select-menu-check" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+        </div>
+        <div class="listbox-option select-menu-option" id="account-opt-2" role="option" aria-selected="false" data-active>
+          <span class="select-menu-option-text"><span class="select-menu-option-label">Atlas Logistics</span><span class="listbox-option-note">Contract under review</span></span>
+          <svg class="select-menu-check" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+        </div>
+      </div>
+      <div class="select-menu-group" role="group" aria-labelledby="account-group-2">
+        <div class="select-menu-group-label" id="account-group-2" role="presentation">Public sector</div>
+        <div class="listbox-option select-menu-option" id="account-opt-3" role="option" aria-selected="false" aria-disabled="true">
+          <span class="select-menu-option-text"><span class="select-menu-option-label">Ridgeway Transit Authority</span><span class="listbox-option-note">Archived — cannot take new work</span></span>
+          <svg class="select-menu-check" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"/></svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="select-menu" style="margin-top:var(--space-6)">
+    <span class="field-label" id="region-label">Region</span>
+    <span class="select-wrap">
+      <button type="button" class="select select-menu-trigger select-sm" id="region-button" aria-haspopup="listbox"
+        aria-expanded="false" aria-labelledby="region-label region-button">
+        <span class="select-menu-value" data-placeholder>Choose…</span>
+      </button>
+    </span>
+  </div>
+
+  <p class="note">Three ways to pick one value. <code>Select</code> is the native control: no
+  script, the platform's own picker, and an open list no token reaches. <code>SelectMenu</code> is
+  the same choice with a list that is ours, so an option can carry a note, sit in a group or be
+  disabled visibly; a letter jumps to the option that starts with it. <code>Combobox</code> is a
+  field you type into, and the list narrows to what you typed: use it when the list is too long to
+  scan.</p>
 
   <p class="demo-head label">Slider</p>
   <div class="slider-head">

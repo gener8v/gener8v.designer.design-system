@@ -8,7 +8,7 @@ export const when = [
     use: [
       'An owner from forty people, a code from hundreds — too many to scan, easy to type.',
       'The list has to look like the rest of the system and work the same on keyboard and touch; focus stays in the input.',
-      '`allowCustom` when the person may enter a value the list does not hold. For a button that opens a list instead of a field you type in, `useListbox` gives the keyboard contract (type-ahead, no wrap, Tab closes) and you draw the markup.',
+      '`allowCustom` when the person may enter a value the list does not hold.',
     ],
     not: [
       {
@@ -32,14 +32,18 @@ export const when = [
         because: 'the palette is a dialog opened by ⌘K; a combobox is one field on a form.',
       },
       {
+        when: 'a list short enough to scan, opened from a button rather than typed into',
+        use: 'SelectMenu',
+        because: 'a select menu shows the value on a button and jumps on a letter; a combobox is a field that filters, which a short list does not need.',
+      },
+      {
         when: 'a short native list in a plain form',
         use: 'Select',
         because: 'a native select needs no script, at the cost of an open list the platform draws.',
       },
     ],
-    neighbours: ['Select', 'Menu', 'TokenInput', 'CommandPalette'],
+    neighbours: ['SelectMenu', 'Select', 'Menu', 'TokenInput', 'CommandPalette'],
     react: ['Combobox'],
-    hooks: ['useListbox'],
     css: ['.combobox', '.listbox'],
     page: 'components/inputs.html',
   },

@@ -124,9 +124,33 @@ see it when they bump. No class, prop or markup is renamed or removed.
 
 ### Added
 
+- **`SelectMenu`**, a button that shows the chosen value and opens a list drawn by the system, to
+  pick one value. Built on `useListbox`; new classes only (`.select-menu-*`), so nothing existing
+  changes its look.
+  - `SelectMenu({ options, value, onChange, label, labelHidden?, placeholder? = 'Choose…', display?,
+    size? = 'md', invalid?, disabled?, id?, name?, align? = 'start', className? })`. `options` holds
+    `{ value, label, note?, disabled? }` or groups `{ group, options }`.
+  - Closed, it is a `.select` in a `.select-wrap`: the native select's height, border, focus ring,
+    chevron and sizes. Open, it is a `.listbox` at least as wide as the button, with a check on the
+    chosen row, group headings and a focus-coloured bar on the row the keys are on. The chosen row
+    keeps the body ink (the action blue is under 4.5:1 for text on the dark ground) and the check
+    carries the colour.
+  - The keys are `useListbox`'s. Focus goes back to the button on a choice, on Escape and on Tab.
+  - `name` submits the value with a native form through a hidden input.
+  - Single choice only. For several values use `TokenInput` or `Filter`.
+  - Choosing: `Select` stays the native control, `Combobox` stays the field you type to narrow, and
+    each of the three points at the other two. `useListbox` moves to the `SelectMenu` entry.
+- **Fixed in `useListbox`:**
+  - Opening did not move focus into the list in a real browser when the list was placed by
+    `useAnchoredPosition`, which keeps it `visibility: hidden` until measured; a hidden element
+    refuses focus. The arrows then reached the button and not the list. The hook now tries again on
+    each commit while open until the list has focus.
+  - A list placed with `position: fixed` did not scroll to an option below its fold. Its options
+    measure their offset from the list, and the hook subtracted the list's offset from the page as
+    well.
 - **`useListbox`** (with `Combobox`), the WAI-ARIA collapsible-listbox keyboard contract as a
   hook. No markup and no class: the caller draws the button and the list, and positions it with
-  `useAnchoredPosition`. `SelectMenu` will be built on it.
+  `useAnchoredPosition`. `SelectMenu` is built on it.
   - `useListbox({ count, open, onOpenChange, selectedIndex, textOf, onChoose, isDisabled?, idBase?,
     typeaheadWindow? = 500 })` returns `{ active, setActive, optionId, openAt, close, choose,
     buttonRef, listRef, rootProps(), buttonProps(), listProps(), optionProps(i) }`.

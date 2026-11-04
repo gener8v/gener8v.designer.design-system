@@ -139,11 +139,23 @@ export function useListbox({
   }, [onOpenChange]);
 
   // Opening moves focus to the list. preventScroll: the page never jumps to reveal it.
+  //
+  // UNTIL IT TAKES, NOT ONCE. `useAnchoredPosition` keeps the list `visibility: hidden` until it
+  // has measured it, and a hidden element refuses focus. Trying only on the commit that opened
+  // the list left focus on the button in every real browser (jsdom does not check visibility), so
+  // the arrows reached the button and the list never heard them. So it tries on every commit
+  // while open, until the list has focus — which is the commit after the list is placed.
+  const focusPending = useRef(false);
   const wasOpen = useRef(false);
   useLayoutEffect(() => {
-    if (open && !wasOpen.current) listRef.current?.focus({ preventScroll: true });
+    if (open && !wasOpen.current) focusPending.current = true;
+    if (!open) focusPending.current = false;
     wasOpen.current = open;
-  }, [open]);
+    const list = listRef.current;
+    if (!focusPending.current || !list) return;
+    list.focus({ preventScroll: true });
+    if (typeof document !== 'undefined' && document.activeElement === list) focusPending.current = false;
+  });
 
   // Keep the active option in view by scrolling the list, never the page.
   useEffect(() => {
@@ -151,7 +163,11 @@ export function useListbox({
     const list = listRef.current;
     const el = document.getElementById(optionId(active));
     if (!list || !el || list.scrollHeight <= list.clientHeight) return;
-    const top = el.offsetTop - list.offsetTop;
+    // A list that is positioned — `position: fixed` from `useAnchoredPosition` — is its options'
+    // offsetParent, so their offsetTop is already measured from it. Subtracting the list's own
+    // offsetTop then (its distance from the top of the page) put every option above the list,
+    // and the list never scrolled down.
+    const top = el.offsetParent === list ? el.offsetTop : el.offsetTop - list.offsetTop;
     if (top < list.scrollTop) list.scrollTop = top;
     else if (top + el.offsetHeight > list.scrollTop + list.clientHeight) {
       list.scrollTop = top + el.offsetHeight - list.clientHeight;

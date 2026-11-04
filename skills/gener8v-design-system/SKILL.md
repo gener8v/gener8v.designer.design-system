@@ -144,7 +144,7 @@ Copying its structure beats composing a screen from the component list.
 | telling someone what happened, what state a thing is in, or that it is loading | `references/choosing/status-and-feedback.md` (16) |
 | moving between places, switching views, or narrowing what a list shows | `references/choosing/navigation.md` (13) |
 | figures, tables, charts, lists of records, or history | `references/choosing/data.md` (24) |
-| an action someone presses or a value someone enters or picks | `references/choosing/input.md` (20) |
+| an action someone presses or a value someone enters or picks | `references/choosing/input.md` (21) |
 | a document, prose, code, sources or type someone reads | `references/choosing/reading.md` (10) |
 | a conversation with an agent, or work that is running right now | `references/choosing/agents-and-live-work.md` (6) |
 

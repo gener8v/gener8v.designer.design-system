@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { expectNoA11yViolations } from './a11y.js';
 import {
-  Combobox, Slider, FileUpload, FileList, FileItem, Calendar, Popover, PopoverTitle,
+  Combobox, SelectMenu, Slider, FileUpload, FileList, FileItem, Calendar, Popover, PopoverTitle,
   PopoverActions, Tooltip, Button, Field, FieldLabel,
 } from '../packages/ui/src/index.js';
 import type { ComboboxOption } from '../packages/ui/src/index.js';
@@ -17,6 +17,18 @@ const OPTIONS: ComboboxOption[] = [
 function ComboHarness() {
   const [v, setV] = useState<string | null>(null);
   return <Combobox label="Client" options={OPTIONS} value={v} onChange={setV} />;
+}
+function SelectMenuHarness() {
+  const [v, setV] = useState<string | null>('nh');
+  return (
+    <SelectMenu label="Client" value={v} onChange={setV} options={[
+      { group: 'Healthcare', options: [{ value: 'nh', label: 'Northlake Health', note: 'Two open renewals' }] },
+      { group: 'Logistics', options: [
+        { value: 'al', label: 'Atlas Logistics' },
+        { value: 'rt', label: 'Ridgeway Transit Authority', disabled: true },
+      ] },
+    ]} />
+  );
 }
 function SliderHarness() {
   const [v, setV] = useState(62);
@@ -34,6 +46,15 @@ describe('axe — advanced inputs', () => {
     const { container } = render(<main><h1>Intake</h1><ComboHarness /></main>);
     await expectNoA11yViolations(container);
     await u.click(screen.getByRole('combobox'));
+    await u.keyboard('{ArrowDown}');
+    await expectNoA11yViolations(container);
+  });
+
+  it('select menu, closed and open', async () => {
+    const u = userEvent.setup();
+    const { container } = render(<main><h1>Intake</h1><SelectMenuHarness /></main>);
+    await expectNoA11yViolations(container);
+    await u.click(screen.getByRole('button', { name: /Client/ }));
     await u.keyboard('{ArrowDown}');
     await expectNoA11yViolations(container);
   });

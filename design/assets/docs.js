@@ -62,7 +62,7 @@ window.__DOCS_NAV__ = {
    "items": [
     {
      "title": "Advanced inputs",
-     "subtitle": "Combobox, slider, file drop and calendar — native controls wherever one exists",
+     "subtitle": "Combobox, select menu, slider, file drop and calendar — native controls wherever one exists",
      "path": "components/inputs.html"
     },
     {

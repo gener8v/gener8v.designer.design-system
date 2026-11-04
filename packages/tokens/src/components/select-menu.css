@@ -1,0 +1,122 @@
+/* ------------------------------------------------------------- select menu */
+
+/* A BUTTON THAT LOOKS LIKE THE FIELD IT REPLACES, AND A LIST THAT IS THE COMBOBOX'S.
+ *
+ * The button is a `.select` inside a `.select-wrap`, so closed it is the native select: the same
+ * height scale, border, focus ring, chevron and sizes. A form that mixes the two does not show a
+ * seam. The list is a `.listbox` with `.listbox-option` rows, so open it is the combobox's list.
+ * Everything here is what the two do not already have: a button's text alignment, a placeholder,
+ * a check on the chosen row, group headings, and a mark for the row the keys are on.
+ *
+ * All of it is under `.select-menu-*`. Nothing about `.select` or `.listbox` changes. */
+
+/* The same grid as `.field` and `.combobox`, so a label sits the same distance above the button
+   whichever of the three draws it. */
+.select-menu {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+}
+
+/* A button centres its text and a select does not. The value is one line that ellipses: the full
+   text is in the list, one press away. */
+.select-menu-trigger {
+  display: flex;
+  align-items: center;
+  text-align: start;
+  font-weight: 400;
+}
+.select-menu-value {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.select-menu-value[data-placeholder] { color: var(--color-neutral-500); }
+/* Open, the button keeps the accent edge it had while focused: focus has moved into the list, and
+   the edge says which field the list belongs to. */
+.select-menu-trigger[aria-expanded="true"] { border-color: var(--color-accent); }
+.select-menu-trigger:disabled {
+  cursor: not-allowed;
+  background: var(--color-surface);
+  color: var(--color-neutral-500);
+}
+
+/* At least as wide as the button, wider when an option needs it, never wider than the screen.
+   `.listbox` is exactly the field's width, which is right for a field you type into and too
+   narrow for a short button holding a long option.
+   Taller than `.listbox` (320px against 230px): a select menu's rows carry group headings and
+   notes, and a list someone scans should show a good part of itself before it scrolls. */
+.select-menu-list {
+  inline-size: max-content;
+  min-inline-size: var(--anchor-w, auto);
+  max-block-size: min(calc(var(--space-32) * 2.5), var(--select-menu-room, 100vh));
+  white-space: normal;
+  text-align: start;
+}
+/* Focus is on the list, and the row the keys are on is the mark. A ring around the whole list as
+   well would point at two things at once. */
+.select-menu-list:focus { outline: none; }
+
+/* A ROW: THE TEXT, THEN THE CHECK. The text is the combobox's stack, a label with a note under
+   it; the check sits on the first line, so it marks the label rather than floating in the middle
+   of a two-line row. */
+.select-menu-option {
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+.select-menu-option-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+.select-menu-option-label { line-height: var(--leading-sm); }
+
+/* The chosen row is marked by a shape as well as by colour and weight, so it survives a colour
+   that cannot be told apart. */
+.select-menu-check {
+  flex: none;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  margin-block-start: calc((var(--text-sm) * var(--leading-sm) - var(--space-4)) / 2);
+  visibility: hidden;
+}
+/* The chosen row keeps the body ink and takes its colour on the check alone. The action blue is
+   3.6:1 on the dark ground: enough for a mark (3:1), not for 14px text (4.5:1). `.listbox` itself
+   is unchanged. */
+.select-menu-option[aria-selected="true"] { color: var(--color-neutral-900); }
+.select-menu-option[aria-selected="true"] .select-menu-check { visibility: visible; color: var(--color-action); }
+
+/* The row the keys are on. Hover and keys share the tint already; with the keyboard in use the
+   row also takes a bar in the focus colour on its leading edge, because the list holds focus and
+   this row is where it is. */
+.select-menu-list:focus-visible .select-menu-option[data-active] {
+  box-shadow: inset var(--ring-width) 0 0 var(--ring-color);
+}
+
+/* A group is its heading and its rows. A rule separates it from whatever comes before it. */
+.select-menu-group + .select-menu-group,
+.select-menu-option + .select-menu-group,
+.select-menu-group + .select-menu-option {
+  margin-block-start: var(--space-1);
+  padding-block-start: var(--space-1);
+  border-block-start: 1px solid var(--color-neutral-200);
+}
+.select-menu-group-label {
+  padding: var(--space-2) var(--space-3) var(--space-1);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: var(--leading-xs);
+  color: var(--color-neutral-600);
+}
+
+@media (forced-colors: active) {
+  /* The tint is gone; the active row needs an edge of its own. */
+  .select-menu-option[data-active] {
+    outline: 2px solid Highlight;
+    outline-offset: -2px;
+  }
+}
