@@ -13,9 +13,15 @@
   .shell { display: grid; grid-template-rows: auto minmax(0, 1fr); block-size: 100%; }
   .shell-body { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); min-block-size: 0; }
   .shell-rail { overflow-y: auto; }
-  .shell-main { overflow-y: auto; padding: var(--space-8); }
+  .shell-main { overflow-y: auto; padding: var(--space-8); container-type: inline-size; }
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); margin-block: var(--space-6); }
   .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-6); align-items: start; }
+  /* The table needs ~40rem before its columns stop wrapping. Below that the side
+     column moves under it, and its cards sit side by side rather than stacked. */
+  @container (max-width: 68rem) {
+    .split { grid-template-columns: minmax(0, 1fr); }
+    .split > .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); align-items: start; }
+  }
   @media (max-width: 900px) {
     .shell-body { grid-template-columns: minmax(0, 1fr); }
     .shell-rail { display: none; }
