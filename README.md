@@ -30,6 +30,8 @@ change that holds and one CI reverts.
 | `packages/tailwind-preset/theme.css` | Tailwind `@theme` | Generated |
 | `figma/plugin/tokens.json` | DTCG for Figma | Generated |
 | `skills/…/references/components.md` | The class index the skill reads | Generated |
+| `packages/ui/src/*/when.ts`, `packages/ui/src/*.when.ts` | Which component for which job, and which not — one beside each component | **Authored** |
+| `skills/…/references/choosing/*.md`, the router in `SKILL.md` | The choosing guide, per family, cut from the `when.ts` files by `pnpm build:choosing` | Generated |
 | `packages/ui/src/` | React components | **Authored** |
 | `packages/icons/src/` | 18 Phosphor glyphs | **Authored** (extracted) |
 | `examples/consumer-check/` | Packaging fixture — **not** a design reference | **Authored** |
@@ -51,8 +53,8 @@ overwrites it, and CI fails the reproducibility check. Change `packages/tokens/s
 **2 · The static HTML and the React components share class names.** `design/components/buttons.html`
 and `packages/ui/src/Button` both produce `class="btn btn-primary"`. This is enforced:
 `pnpm lint:parity` fails if the HTML uses a class no component can emit. Adding a component
-means touching three places — the CSS, a preview page, and the React component — or the gate
-stops you.
+means touching four places — the CSS, a preview page, the React component, and a `when.ts`
+beside it saying what it is for and when not to use it — or a gate stops you.
 
 **3 · `design/` is the lab *and* a shipped artifact.** Those pages are served locally for
 review, pushed to Claude's design system, and are what the React port is derived from. They
@@ -74,6 +76,7 @@ lint-gated against the stylesheet, so it cannot claim a class that does not exis
 | `lint:contrast` | Any text or chrome pair falling under WCAG 2.2 AA, computed in OKLCH from the real ramps |
 | `lint:palette` | The chart series palette drifting out of colour-blind separation — including a check that the documented three-series cap for scatter/map forms is still correct |
 | `lint:parity` | The static HTML using a class no React component can emit |
+| `lint:choosing` | An exported component or an indexed class family with no `when.ts` entry, a "not when" or a neighbour naming a component that does not exist, or a stale `references/choosing/*.md` or `SKILL.md` router |
 | `smoke` | The **built** package failing to render, or an ARIA reference not resolving |
 | `verify:consumer` | A broken `exports` map, a missing `files` entry, or an undefined export reaching an engagement — it resolves the packages by name from outside the workspace and **executes**, which the in-repo tests cannot |
 | `test` | 400 tests: keyboard contracts, focus management, axe across every component family, the product language rules, and a harness test proving axe can actually fail |

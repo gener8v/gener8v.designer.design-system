@@ -1,4 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": { "noEmit": false, "outDir": "dist" }
+  "compilerOptions": { "noEmit": false, "outDir": "dist" },
+  // The choosing guide's source — read by scripts/choosing.mjs, not part of the package.
+  "exclude": ["src/**/when.ts", "src/*.when.ts", "src/choosing.ts"]
 }
