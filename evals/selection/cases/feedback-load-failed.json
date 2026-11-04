@@ -1,0 +1,24 @@
+{
+  "id": "feedback-load-failed",
+  "family": "status-and-feedback",
+  "groups": [
+    "empty-error",
+    "alert-toast-state-callout"
+  ],
+  "prompt": "The reports page could not load its data because the reporting service returned an error. Design what the page shows in place of the reports, and let the person try again.",
+  "expect": [
+    "State"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Skeleton",
+      "reason": "Rule 18: a skeleton never means the read failed"
+    },
+    {
+      "component": "Toast",
+      "reason": "A failure that replaces the content must stay where the content was"
+    }
+  ],
+  "template": null
+}

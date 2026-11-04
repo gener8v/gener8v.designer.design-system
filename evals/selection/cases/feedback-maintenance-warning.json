@@ -1,0 +1,23 @@
+{
+  "id": "feedback-maintenance-warning",
+  "family": "status-and-feedback",
+  "groups": [
+    "alert-toast-state-callout"
+  ],
+  "prompt": "On the billing page, warn people that scheduled maintenance tomorrow will pause invoice exports for two hours. The warning stays on the page until the maintenance is over.",
+  "expect": [
+    "Alert"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Toast",
+      "reason": "A toast is transient; this must stay"
+    },
+    {
+      "component": "Callout",
+      "reason": "A callout is a quiet aside inside prose, not a page-level warning"
+    }
+  ],
+  "template": null
+}

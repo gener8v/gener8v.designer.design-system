@@ -1,0 +1,19 @@
+{
+  "id": "screens-sign-in",
+  "family": "screens",
+  "groups": [
+    "empty-error"
+  ],
+  "prompt": "Build the sign-in page for our product. Single sign-on through the company identity provider is the recommended way in; email and password is offered as an alternative below it.",
+  "expect": [
+    "Entry"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "State",
+      "reason": "A sign-in gate is not an empty state: State reads as a dead end"
+    }
+  ],
+  "template": null
+}

@@ -1,0 +1,24 @@
+{
+  "id": "reading-cited-summary",
+  "family": "reading",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "An AI-written summary paragraph cites three source documents inline. Pointing at or focusing a citation should preview the passage it came from, and a citation whose source has gone missing has to say so.",
+  "expect": [
+    "Citation"
+  ],
+  "expect_any": [
+    [
+      "SourceCard",
+      "HoverCard"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Tooltip",
+      "reason": "A tooltip is a one-line description, not a source preview"
+    }
+  ],
+  "template": null
+}

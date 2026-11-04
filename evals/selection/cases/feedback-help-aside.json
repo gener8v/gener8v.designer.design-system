@@ -1,0 +1,23 @@
+{
+  "id": "feedback-help-aside",
+  "family": "status-and-feedback",
+  "groups": [
+    "alert-toast-state-callout"
+  ],
+  "prompt": "In a help article about exporting data, add a short aside, set within the article text, noting that exports over 1 GB are split into several files.",
+  "expect": [
+    "Callout"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Alert",
+      "reason": "A banner competes with the page; this is a quiet aside in prose"
+    },
+    {
+      "component": "Toast",
+      "reason": "Not an event"
+    }
+  ],
+  "template": null
+}

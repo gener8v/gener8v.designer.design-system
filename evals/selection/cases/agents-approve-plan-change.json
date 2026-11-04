@@ -1,0 +1,19 @@
+{
+  "id": "agents-approve-plan-change",
+  "family": "agents-and-live-work",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "In a chat, the assistant proposes moving a customer to a more expensive billing plan. Nothing may change until a person approves it, and the record of what was proposed and answered stays in the chat.",
+  "expect": [
+    "ConfirmCard"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Dialog",
+      "reason": "A confirm card stays inline as the record; a dialog vanishes once answered"
+    }
+  ],
+  "template": null
+}

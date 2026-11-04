@@ -1,0 +1,28 @@
+{
+  "id": "data-finance-kpis",
+  "family": "data",
+  "groups": [
+    "stat-meter-charts"
+  ],
+  "prompt": "At the top of a finance dashboard, show this month's revenue, active customers, churn rate and average deal size, each with how it changed against last month.",
+  "expect": [
+    "StatDelta"
+  ],
+  "expect_any": [
+    [
+      "Stat",
+      "StatRow"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "Meter",
+      "reason": "These are figures, not levels against a capacity"
+    },
+    {
+      "component": "Progress",
+      "reason": "Not a task advancing"
+    }
+  ],
+  "template": null
+}

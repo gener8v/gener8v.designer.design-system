@@ -1,0 +1,5 @@
+# Run output. Only a deliberately saved baseline is committed.
+*
+!.gitignore
+!baseline-*.json
+!baseline-*.md

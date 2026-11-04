@@ -1,0 +1,23 @@
+{
+  "id": "agents-batch-run-lanes",
+  "family": "agents-and-live-work",
+  "groups": [
+    "progress-stepper"
+  ],
+  "prompt": "Show a live view of an automated batch run of 30 document reviewers: which reviewers are waiting, which are working, which are done, and which stopped. It updates while the run goes on.",
+  "expect": [
+    "Lanes"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Stepper",
+      "reason": "A stepper is one sequence; this is many items by state"
+    },
+    {
+      "component": "Tabs",
+      "reason": "States are not panels to switch between"
+    }
+  ],
+  "template": null
+}

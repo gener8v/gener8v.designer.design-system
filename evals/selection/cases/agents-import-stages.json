@@ -1,0 +1,23 @@
+{
+  "id": "agents-import-stages",
+  "family": "agents-and-live-work",
+  "groups": [
+    "progress-stepper"
+  ],
+  "prompt": "Show the five fixed stages a data import passes through (upload, validate, map, import, verify): which stage it is in now, which are behind it, and which stage failed if one did.",
+  "expect": [
+    "Stepper"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Lanes",
+      "reason": "Lanes sort many items by state; this is one item's position in a sequence"
+    },
+    {
+      "component": "Tabs",
+      "reason": "Stages are not panels"
+    }
+  ],
+  "template": null
+}

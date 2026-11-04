@@ -1,0 +1,26 @@
+{
+  "id": "data-search-result-pages",
+  "family": "data",
+  "groups": [
+    "table-pager"
+  ],
+  "prompt": "A search results page lists matching help articles, ten per page, with numbered page links at the bottom of the results.",
+  "expect": [],
+  "expect_any": [
+    [
+      "Pagination",
+      "TablePager"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "PagerChip",
+      "reason": "Steps through one item at a time in place"
+    },
+    {
+      "component": "Stepper",
+      "reason": "Pages are not steps"
+    }
+  ],
+  "template": null
+}

@@ -19,7 +19,10 @@
     "bench:graph": "node scripts/bench-graph.mjs",
     "lint:palette": "node scripts/lint-palette.mjs",
     "verify:consumer": "pnpm --filter @gener8v/consumer-check typecheck && pnpm --filter @gener8v/consumer-check check && pnpm --filter @gener8v/consumer-check build",
-    "release": "node scripts/release.mjs"
+    "release": "node scripts/release.mjs",
+    "eval:selection": "node evals/selection/run.mjs",
+    "eval:selection:dry": "node evals/selection/run.mjs --dry-run",
+    "eval:selection:test": "node --test evals/selection/test/score.test.mjs"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",

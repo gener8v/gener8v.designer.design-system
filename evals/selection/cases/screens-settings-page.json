@@ -1,0 +1,23 @@
+{
+  "id": "screens-settings-page",
+  "family": "screens",
+  "groups": [],
+  "prompt": "Build the settings screen for our workspace product. People reach it from the navigation down the left side of the app. It has a page heading and a form with the workspace name, a default timezone, and on/off email notifications for weekly digests and for mentions, with a single save action.",
+  "expect": [
+    "Sidebar",
+    "Field"
+  ],
+  "expect_any": [
+    [
+      "Switch",
+      "Checkbox"
+    ]
+  ],
+  "forbid": [
+    {
+      "component": "<select>",
+      "reason": "Rule 19: the OS paints a native select popup; use the system Select/Combobox/Menu"
+    }
+  ],
+  "template": "app-shell"
+}

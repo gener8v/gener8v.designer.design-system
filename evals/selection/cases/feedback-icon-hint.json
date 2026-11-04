@@ -1,0 +1,27 @@
+{
+  "id": "feedback-icon-hint",
+  "family": "status-and-feedback",
+  "groups": [
+    "dialog-drawer-popover"
+  ],
+  "prompt": "An icon-only \"copy link\" button in a toolbar needs a short hint saying what it does, shown on hover and on keyboard focus.",
+  "expect": [
+    "Tooltip"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "HoverCard",
+      "reason": "A hover card previews a thing; a one-line hint is a tooltip"
+    },
+    {
+      "component": "Popover",
+      "reason": "Opened by click, for content you act in"
+    },
+    {
+      "component": "attr:title",
+      "reason": "Rule 19: a title attribute tooltip is painted by the OS"
+    }
+  ],
+  "template": null
+}

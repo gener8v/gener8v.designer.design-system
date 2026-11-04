@@ -1,0 +1,27 @@
+{
+  "id": "reading-step-through-findings",
+  "family": "reading",
+  "groups": [
+    "table-pager"
+  ],
+  "prompt": "In a side panel that shows one review finding at a time, let the reviewer go to the previous or next of the 19 open findings without leaving the panel, and always see which one they are on.",
+  "expect": [
+    "PagerChip"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Pagination",
+      "reason": "Pages of a list, not stepping through a set in place"
+    },
+    {
+      "component": "TablePager",
+      "reason": "Belongs under a paged table"
+    },
+    {
+      "component": "Stepper",
+      "reason": "Findings are a set, not a sequence of steps"
+    }
+  ],
+  "template": null
+}

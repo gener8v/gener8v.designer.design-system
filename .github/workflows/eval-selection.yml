@@ -1,0 +1,54 @@
+name: eval-selection
+
+# Component-selection eval (evals/selection). It calls the model, costs money and
+# is nondeterministic, so it never runs on push or pull request: start it by hand.
+# Needs the ANTHROPIC_API_KEY repository secret.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: Model alias or id
+        default: sonnet
+      repeat:
+        description: Repeats per case (mean and spread are reported)
+        default: '2'
+      cases:
+        description: Case glob, e.g. 'data-*' or '*'
+        default: '*'
+      label:
+        description: Label for the result files
+        default: ci
+
+permissions:
+  contents: read
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: npm install -g @anthropic-ai/claude-code
+      - run: pnpm eval:selection:test
+      - name: Run the eval
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          MODEL: ${{ inputs.model }}
+          REPEAT: ${{ inputs.repeat }}
+          CASES: ${{ inputs.cases }}
+          LABEL: ${{ inputs.label }}
+        run: pnpm eval:selection --model "$MODEL" --repeat "$REPEAT" --cases "$CASES" --label "$LABEL"
+      - name: Report
+        if: always()
+        run: cat "$(ls -t evals/selection/results/*.md | head -1)" >> "$GITHUB_STEP_SUMMARY" || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-selection-results
+          path: evals/selection/results/

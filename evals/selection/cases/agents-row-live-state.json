@@ -1,0 +1,24 @@
+{
+  "id": "agents-row-live-state",
+  "family": "agents-and-live-work",
+  "groups": [
+    "progress-stepper"
+  ],
+  "prompt": "In a table of documents being processed, each row shows whether it is queued, being worked on (which section, and how many of its parts are done), finished, or failed.",
+  "expect": [
+    "LiveProgress",
+    "Table"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Spinner",
+      "reason": "A spinner says nothing about where the work is or how far it got"
+    },
+    {
+      "component": "Stepper",
+      "reason": "A stepper is a page-level sequence, not a row state"
+    }
+  ],
+  "template": null
+}

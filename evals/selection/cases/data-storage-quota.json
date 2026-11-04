@@ -1,0 +1,20 @@
+{
+  "id": "data-storage-quota",
+  "family": "data",
+  "groups": [
+    "stat-meter-charts",
+    "progress-stepper"
+  ],
+  "prompt": "Show how much of its 50 GB storage allowance a team has used, and mark the 90% point where they will be warned.",
+  "expect": [
+    "Meter"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Progress",
+      "reason": "Progress is a task advancing; usage is a level that is true"
+    }
+  ],
+  "template": null
+}

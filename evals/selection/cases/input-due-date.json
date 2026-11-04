@@ -1,0 +1,21 @@
+{
+  "id": "input-due-date",
+  "family": "input",
+  "groups": [],
+  "prompt": "Let people pick a due date for a task from a month view.",
+  "expect": [
+    "Calendar"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "pkg:react-datepicker",
+      "reason": "Do not add a date-picker library"
+    },
+    {
+      "component": "pkg:react-day-picker",
+      "reason": "Do not add a date-picker library"
+    }
+  ],
+  "template": null
+}

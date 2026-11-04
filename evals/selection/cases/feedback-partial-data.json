@@ -1,0 +1,23 @@
+{
+  "id": "feedback-partial-data",
+  "family": "status-and-feedback",
+  "groups": [
+    "empty-error"
+  ],
+  "prompt": "A revenue summary combines figures from five regional systems. Today two of them did not respond. Show the figures that did arrive, and make it impossible to mistake them for the full total.",
+  "expect": [
+    "State"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Skeleton",
+      "reason": "The read finished; a skeleton would claim it is still loading"
+    },
+    {
+      "component": "Toast",
+      "reason": "Incompleteness belongs on the figure, not in a passing notice"
+    }
+  ],
+  "template": null
+}

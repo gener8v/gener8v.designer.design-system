@@ -1,0 +1,23 @@
+{
+  "id": "navigation-detail-sections",
+  "family": "navigation",
+  "groups": [
+    "tabs-segmented-filter"
+  ],
+  "prompt": "A customer detail page has Overview, Invoices, Contacts and Activity sections. Only one section shows at a time, and people switch between them from a row of labels at the top of the page.",
+  "expect": [
+    "Tabs"
+  ],
+  "expect_any": [],
+  "forbid": [
+    {
+      "component": "Segmented",
+      "reason": "A radiogroup that narrows content; it does not swap panels"
+    },
+    {
+      "component": "Filter",
+      "reason": "Narrows a list; it does not swap panels"
+    }
+  ],
+  "template": null
+}
