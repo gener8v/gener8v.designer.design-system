@@ -2255,6 +2255,13 @@ svg.contents-written { inline-size: 0.9em; block-size: 0.9em; }
 }
 /* The first column carries no rule, because there is nothing to its left to be divided from. */
 .stat-row > .stat:first-child { padding-inline-start: 0; border-inline-start: 0; }
+/* ON A PHONE, TWO BY TWO. Four figures in 358px are four captions wrapped onto three lines each.
+   Viewport rather than container: the row is often a flex item whose width it sizes itself (see
+   above), and a size container cannot take its width from its content. */
+@media (max-width: 560px) {
+  .stat-row { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat-row > .stat:nth-child(odd) { padding-inline-start: 0; border-inline-start: 0; }
+}
 
 /* --- meter — the capability bar, generalised ------------------------ */
 
@@ -5272,6 +5279,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 @container nav (max-width: 720px) {
   .nav-links { display: none; }
   .nav .nav-burger { display: inline-grid; }
+}
+/* Narrower still, the call to action folds into the burger too: a brand, a button and a burger
+   do not fit a phone, and a header never scrolls sideways. Only when there is a burger to hold it. */
+@container nav (max-width: 480px) {
+  .nav:has(.nav-burger) > .btn { display: none; }
 }
 @media (max-width: 720px) {
   .nav { gap: var(--space-3); padding-inline: var(--space-4); }

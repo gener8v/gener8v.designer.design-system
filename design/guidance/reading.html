@@ -25,8 +25,9 @@
 .doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
 @media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
 
-.gd-table td, .gd-table th { white-space: normal; vertical-align: top; }
-.gd-table td:first-child { min-inline-size: 14ch; }
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; font-size: var(--text-sm); }
+.gd-table td:first-child { min-inline-size: 12ch; }
+.gd-table code { overflow-wrap: anywhere; }
 .gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
 .gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }

@@ -36,6 +36,10 @@ see it when they bump. No class, prop or markup is renamed or removed.
 ### Changed — visual (integrations)
 
 - **`.key-row` wraps** when it does not fit, instead of clipping inside `.key-list` on a phone.
+- **`.stat-row` goes two by two** below 560px of viewport, instead of squeezing four figures into
+  a phone's width.
+- **A header's call to action folds into the burger** below 480px of the header's own width (only
+  when the header has a `.nav-burger` to hold it), so brand, button and burger never overflow.
 
 ### Added
 

@@ -51,6 +51,11 @@
   .nav-links { display: none; }
   .nav .nav-burger { display: inline-grid; }
 }
+/* Narrower still, the call to action folds into the burger too: a brand, a button and a burger
+   do not fit a phone, and a header never scrolls sideways. Only when there is a burger to hold it. */
+@container nav (max-width: 480px) {
+  .nav:has(.nav-burger) > .btn { display: none; }
+}
 @media (max-width: 720px) {
   .nav { gap: var(--space-3); padding-inline: var(--space-4); }
 }

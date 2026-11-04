@@ -23,7 +23,8 @@ Active state is driven by `aria-current` (and `aria-selected` on tabs), never a 
 ## Header (`.nav`)
 The header collapses by its **own** width: `.nav` is a size container named `nav`, and below
 720px of its own inline size `.nav-links` hides and `.nav-burger` shows. It never scrolls
-sideways. Put a `.hamburger.nav-burger` in every header that has links (`<Hamburger inNav>`
+sideways. Below 480px a direct `.btn` child (the call to action) folds away too,
+when a `.nav-burger` is present. Put a `.hamburger.nav-burger` in every header that has links (`<Hamburger inNav>`
 in React), or a collapsed header has no navigation.
 
 ## Sidebar groups

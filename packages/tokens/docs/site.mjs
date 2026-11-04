@@ -135,7 +135,8 @@ const cards = (items, cols, featured = false) => `<div class="ov-grid" style="--
 
 const OVERVIEW_CSS = `
 html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
-.ov-wrap { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding-inline: var(--space-6); }
+.ov-wrap { max-inline-size: calc(var(--space-4) * 72); margin-inline: 0 auto; padding-inline: var(--space-6); }
+@media (min-width: 1280px) { .ov-wrap { margin-inline-start: var(--space-6); } }
 /* THE ATMOSPHERE gener8v.com wears: a light ground washed with soft blue and a little teal. */
 .ov-hero {
   position: relative;
@@ -186,8 +187,7 @@ html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
   .ov-hero { padding-block: var(--space-12); }
   .ov-grid { grid-template-columns: minmax(0, 1fr); }
   .ov-featured { grid-column: auto; }
-  .ov-specimen .stat-row { grid-auto-flow: row; }
-  .ov-specimen .stat-row > .stat { padding-inline: 0; border-inline-start: 0; }
+  .ov-install { white-space: normal; border-radius: var(--radius-lg); font-size: var(--text-xs); overflow-x: visible; }
 }
 `;
 
@@ -377,8 +377,9 @@ import { Button, Flow, BarChart } from '@gener8v/ui';</code></pre>
 /* --------------------------------------------------------------- guidance */
 
 const GUIDANCE_CSS = `
-.gd-table td, .gd-table th { white-space: normal; vertical-align: top; }
-.gd-table td:first-child { min-inline-size: 14ch; }
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; font-size: var(--text-sm); }
+.gd-table td:first-child { min-inline-size: 12ch; }
+.gd-table code { overflow-wrap: anywhere; }
 .gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
 .gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
