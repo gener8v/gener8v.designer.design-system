@@ -3,7 +3,7 @@
 The Phosphor subset the GENER8V design system actually uses. 44 icons, not 1,500.
 
 ```bash
-npm i @gener8v/icons       # private to the @gener8v npm org
+npm i @gener8v/icons       # public on npm, MIT
 ```
 ```tsx
 import { ArrowRight, Warning } from '@gener8v/icons';

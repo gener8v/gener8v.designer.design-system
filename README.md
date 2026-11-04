@@ -96,11 +96,13 @@ pnpm release 0.2.0           # gates, bump, publish, commit, tag
 
 Or run the **release** workflow in Actions (manual dispatch, dry-run by default).
 
-All four carry `publishConfig.access: "restricted"`. That is deliberate rather than
-relying on npm's default for scoped packages: a stray `--access public` overrides a
-default, and publishing brand IP to the public registry is not undoable.
+All four are **public** on npm under the MIT license, and carry `publishConfig.access: "public"`
+explicitly. A scoped package defaults to restricted, so without it the first publish of a new
+package would fail for anyone not in the `@gener8v` org; stating it makes the intent unmissable.
 
-### Where the token goes
+### Where the publish token goes
+
+Only publishing needs a token. Installing needs nothing.
 
 **Never in this repository.** `.npmrc` is gitignored so a local one cannot be committed.
 
@@ -151,8 +153,7 @@ exception list; a list that grows is evidence the rule needs revising, not that 
 
 ### 1. Install
 
-The packages are **private** to the `@gener8v` npm org, so the consuming machine needs
-auth — the same `~/.npmrc` token used to publish. Nothing goes in the project repo.
+The packages are **public** on npm (MIT). No token, no `.npmrc`, no org membership.
 
 ```bash
 npm i @gener8v/ui @gener8v/tokens @gener8v/icons
@@ -162,19 +163,7 @@ import '@gener8v/ui/styles.css';          // one stylesheet, first
 import { Button, Flow, BarChart } from '@gener8v/ui';
 ```
 
-For that project's **CI**, add its own `NPM_TOKEN` secret and let `actions/setup-node`
-write the `.npmrc`:
-
-```yaml
-- uses: actions/setup-node@v4
-  with:
-    node-version: 24
-    registry-url: https://registry.npmjs.org
-    scope: '@gener8v'
-- run: npm ci
-  env:
-    NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-```
+CI needs no secret either — a plain `npm ci` resolves them.
 
 ### 2. Teach Claude Code the rules
 
@@ -182,8 +171,8 @@ write the `.npmrc`:
 /plugin marketplace add gener8v/gener8v.designer.design-system
 ```
 
-The repo is private, so the machine needs GitHub access to it. A local path works with no
-auth at all: `/plugin marketplace add /path/to/gener8v.designer.design-system`.
+The repo is public, so this needs no GitHub access. A local checkout works too:
+`/plugin marketplace add /path/to/gener8v.designer.design-system`.
 
 Claude then knows the ten hard rules, the class names, and where the templates are —
 without the design system repo being open.
@@ -262,3 +251,7 @@ gradients. Never cycle the chart series palette or reuse a status colour as a se
 dual-axis charts. All six flow states or none. A masked secret is not in the DOM.
 
 `design/readme.md` is the full guide.
+
+## License
+
+[MIT](LICENSE) — the repository and all four `@gener8v/*` packages. Use it, fork it, ship it.

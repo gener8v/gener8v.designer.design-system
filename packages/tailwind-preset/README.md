@@ -4,7 +4,7 @@ Tailwind v4 `@theme` generated from the same tokens as the stylesheet, so utilit
 component layer can never disagree.
 
 ```bash
-npm i @gener8v/tailwind-preset     # private to the @gener8v npm org
+npm i @gener8v/tailwind-preset     # public on npm, MIT
 ```
 ```css
 @import "tailwindcss";

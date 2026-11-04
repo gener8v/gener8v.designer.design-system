@@ -3,7 +3,7 @@
 The React layer of the GENER8V design system.
 
 ```bash
-npm i @gener8v/ui          # private to the @gener8v npm org
+npm i @gener8v/ui          # public on npm, MIT
 ```
 ```tsx
 import '@gener8v/ui/styles.css';   // once, at the app root

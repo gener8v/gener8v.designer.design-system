@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/gener8v/gener8v.designer.design-system#readme",
   "publishConfig": {
-    "access": "restricted",
+    "access": "public",
     "registry": "https://registry.npmjs.org/"
   }
 }
