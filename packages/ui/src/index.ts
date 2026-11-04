@@ -50,8 +50,15 @@ export { GridTable, GridHead, GridCell, GridProgress } from './GridTable/index.j
 export type { GridTableProps, GridHeadProps, GridCellProps, GridProgressProps } from './GridTable/index.js';
 export { Stepper, Step } from './Stepper/index.js';
 export type { StepperProps, StepProps, StepState } from './Stepper/index.js';
-export { Progress, ProgressRing } from './Progress/index.js';
-export type { ProgressProps, ProgressRingProps } from './Progress/index.js';
+export {
+  Progress, ProgressRing, ProgressGlyph, ProgressMark, PROGRESS_STATE_WORDS, PROGRESS_STATE_GLYPH,
+  SegmentedProgress, ProgressList,
+} from './Progress/index.js';
+export type {
+  ProgressProps, ProgressRingProps, ProgressTone, ProgressSize, ProgressRingSize, ProgressName,
+  ProgressState, ProgressGlyphName, ProgressGlyphProps, ProgressMarkProps,
+  SegmentedProgressProps, ProgressSegmentCount, ProgressListProps, ProgressTask,
+} from './Progress/index.js';
 export { Split } from './Split/index.js';
 export type { SplitProps } from './Split/index.js';
 export { Spinner } from './Spinner/index.js';
@@ -142,8 +149,10 @@ export { Avatar, AvatarGroup } from './Avatar/index.js';
 export type { AvatarProps, AvatarSize } from './Avatar/index.js';
 export { Slider } from './Slider/index.js';
 export type { SliderProps } from './Slider/index.js';
-export { FileUpload, FileList, FileItem } from './FileUpload/index.js';
-export type { FileUploadProps, FileItemProps } from './FileUpload/index.js';
+export { FileUpload, FileList, FileItem, FileProgress } from './FileUpload/index.js';
+export type {
+  FileUploadProps, FileItemProps, FileProgressProps, FileProgressState, FileProgressLabels,
+} from './FileUpload/index.js';
 export { CodeEditor } from './CodeEditor/index.js';
 export type { CodeEditorProps } from './CodeEditor/index.js';
 export { Combobox } from './Combobox/index.js';

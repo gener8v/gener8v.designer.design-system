@@ -141,7 +141,7 @@ Copying its structure beats composing a screen from the component list.
 | --- | --- |
 | a whole page, a shell, or the structure a page sits in | `references/choosing/screens.md` (10) |
 | something that floats above the page — a modal, a side panel, a hint, a preview | `references/choosing/overlays.md` (5) |
-| telling someone what happened, what state a thing is in, or that it is loading | `references/choosing/status-and-feedback.md` (12) |
+| telling someone what happened, what state a thing is in, or that it is loading | `references/choosing/status-and-feedback.md` (16) |
 | moving between places, switching views, or narrowing what a list shows | `references/choosing/navigation.md` (13) |
 | figures, tables, charts, lists of records, or history | `references/choosing/data.md` (24) |
 | an action someone presses or a value someone enters or picks | `references/choosing/input.md` (20) |

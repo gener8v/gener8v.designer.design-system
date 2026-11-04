@@ -76,7 +76,7 @@ export interface FileItemProps extends HTMLAttributes<HTMLLIElement> {
   icon?: ReactNode;
 }
 
-const formatSize = (bytes: number) => {
+export const formatSize = (bytes: number) => {
   const units = ['B', 'KB', 'MB', 'GB'];
   let n = bytes;
   let u = 0;

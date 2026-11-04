@@ -24,6 +24,7 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | the dates are events to read in order, not a value to pick | `Timeline` (data.md) | a timeline shows what happened when; a calendar asks for one date. |
 | tick off criteria and keep the record of what was checked | **`Checklist`** | the ticks are independent settings or form answers | `Choice` | checkboxes answer questions; a checklist is a record of work done. |
 |  |  | the items are steps in a sequence with one current step | `Stepper` (status-and-feedback.md) | a stepper shows position in an order; a checklist can be ticked in any order. |
+|  |  | the system is doing the tasks and the reader is watching | `ProgressList` (status-and-feedback.md) | a progress list reports work in progress with a spinner and failures; a checklist is ticked by hand. |
 |  |  | the reader is ticking off sections of a document as reviewed | `Contents` (reading.md) | the contents carries its own reviewed boxes beside each section link. |
 | tick a box, pick a radio, or turn a setting on or off | **`Choice`** | each option needs a description or a figure — a plan, a delivery speed | `RadioCards` | the whole card is the label and carries a title, a note and a figure. |
 |  |  | the choice is between two or three views of the same thing | `Segmented` (navigation.md) | views are switched in a strip; radios are answers in a form. |
@@ -42,6 +43,7 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | the problem is not about one control but about the whole form or page | `Alert` (status-and-feedback.md) | an alert is an inline banner for the region; a field error belongs under the control it is about. |
 |  |  | the question is one clause of a sentence — "must stay true, because …" | `Input` | `InputGroup` with `InputAddon` attaches the connecting words to the control, so the row reads as the sentence. |
 | let someone attach files, by dropping them or by choosing them | **`FileUpload`** | the files are already stored and the reader is browsing them | `DocList` (data.md) | a document library lists stored files with their type; an upload list is what is being added now. |
+|  |  | a file is still uploading, or failed to | `FileProgress` (status-and-feedback.md) | a transfer row carries the bar, the percent, cancel and retry; `FileItem` is what has arrived. |
 |  |  | the person is pasting or writing text rather than attaching a file | `Input` | a textarea takes text; do not make someone save text to a file to submit it. |
 | take free text or a number typed by the person | **`Input`** | the value comes from a known list the person searches | `Combobox` | a combobox filters a list as you type and keeps focus in the input. |
 |  |  | the value is several separate labels | `TokenInput` | tokens are removable one by one and Backspace removes the last; a comma-separated string is not. |
@@ -151,9 +153,10 @@ Tick off criteria and keep the record of what was checked.
 
 - The ticks are independent settings or form answers → `Choice`. Checkboxes answer questions; a checklist is a record of work done.
 - The items are steps in a sequence with one current step → `Stepper` (status-and-feedback.md). A stepper shows position in an order; a checklist can be ticked in any order.
+- The system is doing the tasks and the reader is watching → `ProgressList` (status-and-feedback.md). A progress list reports work in progress with a spinner and failures; a checklist is ticked by hand.
 - The reader is ticking off sections of a document as reviewed → `Contents` (reading.md). The contents carries its own reviewed boxes beside each section link.
 
-**Confused with** `Choice`, `Stepper` (status-and-feedback.md), `Contents` (reading.md)
+**Confused with** `Choice`, `Stepper` (status-and-feedback.md), `Contents` (reading.md), `ProgressList` (status-and-feedback.md)
 
 React `Checklist`, `ChecklistItem` · classes `.checklist` · shown in `design/templates/work-item-close/`
 
@@ -252,9 +255,10 @@ Let someone attach files, by dropping them or by choosing them.
 **Not when**
 
 - The files are already stored and the reader is browsing them → `DocList` (data.md). A document library lists stored files with their type; an upload list is what is being added now.
+- A file is still uploading, or failed to → `FileProgress` (status-and-feedback.md). A transfer row carries the bar, the percent, cancel and retry; `FileItem` is what has arrived.
 - The person is pasting or writing text rather than attaching a file → `Input`. A textarea takes text; do not make someone save text to a file to submit it.
 
-**Confused with** `DocList` (data.md), `Field`
+**Confused with** `DocList` (data.md), `Field`, `FileProgress` (status-and-feedback.md)
 
 React `FileUpload`, `FileList`, `FileItem` · classes `.dropzone`, `.file-list`, `.file-item` · shown in `design/components/inputs.html`
 

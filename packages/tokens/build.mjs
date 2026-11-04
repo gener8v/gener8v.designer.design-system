@@ -173,6 +173,33 @@ T('--ring-width', '2px', 'size');
 T('--ring-offset', '2px', 'size');
 T('--ring-color', 'var(--color-accent)', 'color');
 
+/* --- progress: ONE anatomy for every bar, ring, spinner, rail and mark ---
+ *
+ * Every indicator in the progress family reads these, so a bar, the rail form of a stepper, a
+ * row's live bar, a segmented bar, a ring and a spinner cannot drift apart again. They had: five
+ * indicators carried five track colours, three thicknesses and three stroke rules.
+ *
+ * TRACK THICKNESS is three steps — 4 for anything inline or in a row, 6 the default, 8 for a bar
+ * that is the subject of its region. CIRCLE SIZES are multiples of 8, because a ring's stroke is
+ * its diameter over 8 and that keeps every stroke a whole pixel: 2, 3, 4, 6, 8.
+ *
+ * FILL says where the work is (the action colour while it moves). A TONE replaces it only when
+ * the whole thing has ended: success, warning (stopped short) or danger (failed). The fills are
+ * the 700 steps because those mirror for dark mode and keep their contrast on both grounds. */
+T('--progress-track', 'var(--color-neutral-200)', 'color');
+T('--progress-fill', 'var(--color-action)', 'color');
+T('--progress-fill-success', 'var(--color-success-700)', 'color');
+T('--progress-fill-warning', 'var(--color-warning-700)', 'color');
+T('--progress-fill-danger', 'var(--color-danger-700)', 'color');
+T('--progress-h-sm', '4px', 'size');
+T('--progress-h-md', '6px', 'size');
+T('--progress-h-lg', '8px', 'size');
+T('--progress-gap', '2px', 'size');
+T('--progress-radius', 'var(--radius-full)', 'size');
+for (const [k, v] of Object.entries({ xs: 16, sm: 24, md: 32, lg: 48, xl: 64 })) {
+  T(`--progress-circle-${k}`, `${v}px`, 'size');
+}
+
 /* --------------------------------------------------------------- styles.css */
 
 /** Google's own name for a family, which is the family name with spaces as `+`. Written from the
@@ -212,6 +239,7 @@ ${section('Motion')}${emit(byKind('motion'))}
 ${section('Controls')}${emit(pick(/^--control-h-/))}
 ${section('Layout')}${emit(pick(/^--(container|rail)-/))}
 ${section('Focus')}${emit(pick(/^--ring-/))}
+${section('Progress')}${emit(pick(/^--progress-/))}
 }
 `;
 

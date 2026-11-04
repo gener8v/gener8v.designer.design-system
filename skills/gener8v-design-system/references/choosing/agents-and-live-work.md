@@ -28,9 +28,11 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | a state that has settled — done, failed | `Tag` (status-and-feedback.md) | a pulse means moving; a finished thing is a status word. |
 | show one row's live work — where it is, how far, and how it ended | **`LiveProgress`** | a single task with a percentage and no list around it | `Progress` (status-and-feedback.md) | a progress bar is the bare measure; live progress is a row's whole live state. |
 |  |  | the whole run at a glance, by state | `Lanes` | lanes show every item in its state; live progress sits on one row. |
+|  |  | a standalone task list the system is working through, not a row in a table | `ProgressList` (status-and-feedback.md) | a progress list names every task with its mark and counts them; live progress is one row's summary. |
 |  |  | a level that is simply true | `Meter` (data.md) | a meter is not work advancing. |
 | show many items of a run moving between waiting, working and done | **`Lanes`** | one sequence of named steps | `Stepper` (status-and-feedback.md) | a stepper is one path; lanes are many items sorted by state. |
 |  |  | one item's progress in a row | `LiveProgress` | a row carries its own live state; lanes are the overview. |
+|  |  | only the totals matter — how many done, failed and still to go | `SegmentedProgress` (status-and-feedback.md) | a segmented bar is the count at a glance; lanes name every item. |
 |  |  | what happened, in order, after the run | `Timeline` (data.md) | lanes are now; a timeline is then. |
 
 ## ToolChip
@@ -126,9 +128,10 @@ Show one row's live work — where it is, how far, and how it ended.
 
 - A single task with a percentage and no list around it → `Progress` (status-and-feedback.md). A progress bar is the bare measure; live progress is a row's whole live state.
 - The whole run at a glance, by state → `Lanes`. Lanes show every item in its state; live progress sits on one row.
+- A standalone task list the system is working through, not a row in a table → `ProgressList` (status-and-feedback.md). A progress list names every task with its mark and counts them; live progress is one row's summary.
 - A level that is simply true → `Meter` (data.md). A meter is not work advancing.
 
-**Confused with** `Progress` (status-and-feedback.md), `Lanes`, `Live`, `ToolChip`
+**Confused with** `Progress` (status-and-feedback.md), `Lanes`, `Live`, `ToolChip`, `ProgressList` (status-and-feedback.md)
 
 React `LiveProgress` · classes `.live-progress` · shown in `design/components/live.html`
 
@@ -145,8 +148,9 @@ Show many items of a run moving between waiting, working and done.
 
 - One sequence of named steps → `Stepper` (status-and-feedback.md). A stepper is one path; lanes are many items sorted by state.
 - One item's progress in a row → `LiveProgress`. A row carries its own live state; lanes are the overview.
+- Only the totals matter — how many done, failed and still to go → `SegmentedProgress` (status-and-feedback.md). A segmented bar is the count at a glance; lanes name every item.
 - What happened, in order, after the run → `Timeline` (data.md). Lanes are now; a timeline is then.
 
-**Confused with** `Stepper` (status-and-feedback.md), `LiveProgress`, `Live`, `Shelf` (input.md)
+**Confused with** `Stepper` (status-and-feedback.md), `LiveProgress`, `Live`, `Shelf` (input.md), `SegmentedProgress` (status-and-feedback.md), `ProgressList` (status-and-feedback.md)
 
 React `Lanes` · hooks `AGENT_LANES` · classes `.lanes`, `.lane` · shown in `design/components/live.html`

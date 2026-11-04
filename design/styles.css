@@ -186,6 +186,23 @@
   --ring-width: 2px;
   --ring-offset: 2px;
   --ring-color: var(--color-accent);
+
+  /* Progress */
+  --progress-track: var(--color-neutral-200);
+  --progress-fill: var(--color-action);
+  --progress-fill-success: var(--color-success-700);
+  --progress-fill-warning: var(--color-warning-700);
+  --progress-fill-danger: var(--color-danger-700);
+  --progress-h-sm: 4px;
+  --progress-h-md: 6px;
+  --progress-h-lg: 8px;
+  --progress-gap: 2px;
+  --progress-radius: var(--radius-full);
+  --progress-circle-xs: 16px;
+  --progress-circle-sm: 24px;
+  --progress-circle-md: 32px;
+  --progress-circle-lg: 48px;
+  --progress-circle-xl: 64px;
 }
 
 
@@ -3546,271 +3563,367 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
 /* --- stepper -------------------------------------------------------- */
 
 /* Position is carried by aria-current="step" and data-state, so the marker,
-   the connector and the screen-reader announcement read one source. */
+   the connector and the screen-reader announcement read one source.
+
+   The marker's states are the progress family's states, drawn by the same rules
+   as `.progress-mark` in progress.css: a tonal disc with one glyph from the
+   family's glyph set. A step and a checklist task that are both complete look
+   the same because they ARE the same rule. */
 
 /* THE AIR EITHER SIDE OF A CONNECTOR IS THE SAME AIR.
  *
  * A connector sits after the label of the step it leaves and before the marker of
  * the step it points at, so the space on its two sides comes from two different
- * rules: `.step`'s own gap on the left, the `.stepper`'s gap on the right. At 12px
- * and 8px those are visibly different, and the step a connector points at wears a
- * `box-shadow: 0 0 0 3px` ring when it is current — which eats half of what is
- * left. Measured on a four-step rail at 8px: 12 / 16 / 1, 12 / 16 / 7, 12 / 23 / 8.
- * The 1px case put the line 2px under the ring, so the rail read as one node
- * overlapping the next rather than as a sequence.
- *
- * One gap for both sides, and `align-items: center` so a rail of labels at one
- * size draws a line through the middle of its markers rather than near their tops. */
-.stepper { display: flex; align-items: center; gap: var(--space-3); }
+ * rules: `.step`'s own column gap on the left, the `.stepper`'s gap on the right.
+ * They are one value, so a line never sits closer to one marker than the other. */
+.stepper {
+  --step-marker: var(--progress-circle-md);
+  /* The stepper measures itself, so it can lay out by the room IT has — a stepper in a 360px
+     dialog on a wide screen needs the narrow form as much as one on a phone. */
+  container: stepper / inline-size;
+  display: flex;
+  /* Wrap, never clip. A label is the step's name; an ellipsis on it is a step with no name. */
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+/* Compact: a 24px marker for a dense header or a dialog. */
+.stepper-sm { --step-marker: var(--progress-circle-sm); }
 
-/* A CONNECTOR IS A LENGTH, NOT WHATEVER THE LABELS LEFT OVER.
+/* A STEP IS A SMALL GRID, NOT A ROW OF WHATEVER IT HOLDS.
  *
- * `flex: 1` with a 16px floor hands each connector the free space its own step did
- * not use, so a rail whose labels differ in width — Ingested, Identify, Define,
- * Reference — draws its lines at three different lengths and reads as a rhythm
- * somebody got wrong. A basis of its own makes every connector the same length
- * until the rail runs out of room, and then they all shorten together. */
-.step { display: flex; align-items: center; gap: var(--space-3); flex: 1 1 auto; min-inline-size: 0; }
-.step:last-child { flex: none; }
+ * Marker, label and connector share the first row, which is exactly the marker's
+ * height, so the label and the line both sit on the marker's centre whatever the
+ * label's font. An optional description takes the second row under the label and
+ * moves nothing above it.
+ *
+ * A CONNECTOR IS A LENGTH, NOT WHATEVER THE LABELS LEFT OVER: the connector column
+ * is `1fr` with its own floor, so every line is the same length until the rail
+ * runs out of room, and then they all shorten together. */
+.step {
+  display: grid;
+  grid-template-columns: auto auto minmax(var(--space-4), 1fr);
+  grid-template-rows: var(--step-marker) auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+.step:last-child { flex: none; grid-template-columns: auto auto; }
 
 .step-marker {
+  position: relative;
   display: grid;
   place-items: center;
-  inline-size: var(--space-8);
-  block-size: var(--space-8);
+  grid-row: 1;
+  grid-column: 1;
+  box-sizing: border-box;
+  inline-size: var(--step-marker);
+  block-size: var(--step-marker);
   flex: none;
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-full);
   background: var(--color-bg);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
   font-weight: 500;
+  line-height: 1;
   color: var(--color-neutral-600);
   transition: background-color var(--dur-base) var(--ease-out),
               border-color var(--dur-base) var(--ease-out),
               color var(--dur-base) var(--ease-out);
 }
-.step-label { font-size: var(--text-sm); color: var(--color-neutral-600); white-space: nowrap; }
-.step-connector { flex: 1 1 var(--space-8); block-size: 1px; background: var(--color-neutral-200); min-inline-size: var(--space-8); }
+.step-label {
+  grid-row: 1;
+  grid-column: 2;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-700);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.step-description {
+  grid-row: 2;
+  grid-column: 2;
+  margin-block-start: calc(-1 * var(--space-1));
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}
+.step-connector {
+  grid-row: 1;
+  grid-column: 3;
+  block-size: 1px;
+  background: var(--color-neutral-200);
+}
+
+/* THE GLYPH IS NOT A GRID ITEM.
+ *
+ * The tick used to be `::after` inside a grid whose number had been hidden with
+ * `font-size: 0`. The number's text node was still a grid item, so the grid had
+ * two rows and the tick was placed in the second: 9.7px low, while the failed
+ * cross, pinned to the first row, sat 8px high. A hand-tuned translate was
+ * blamed and adjusted; the grid was the cause.
+ *
+ * Now the glyph is absolutely positioned over the whole marker and centred by
+ * `inset: 0; margin: auto` with an explicit size, so the number's box cannot
+ * touch it. The number stays in the DOM, transparent, so the marker keeps its
+ * size and a screen reader still reaches it. The glyph's ink is centred in its
+ * own box by construction (see the glyph set in progress.css), so nothing here
+ * is tuned. */
+.step-marker::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: calc(var(--step-marker) / 2);
+  block-size: calc(var(--step-marker) / 2);
+  background: currentColor;
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
+}
+
+.step[data-state="complete"] .step-marker,
+.step[data-state="failed"] .step-marker,
+.step[data-state="stopped"] .step-marker,
+.step[data-state="skipped"] .step-marker { font-size: 0; color: transparent; }
+.step[data-state="complete"] .step-marker::after,
+.step[data-state="failed"] .step-marker::after,
+.step[data-state="stopped"] .step-marker::after,
+.step[data-state="skipped"] .step-marker::after { content: ""; }
 
 .step[data-state="complete"] .step-marker {
-  background: var(--color-action);
-  border-color: var(--color-action);
-  color: var(--color-bg);
-  font-size: 0;
+  background: var(--color-success-100);
+  border-color: var(--color-success-300);
 }
-/* Tick drawn from borders — no icon dependency inside a marker this small.
- *
- * `place-items: center` centres the pseudo-element's BOX, and the ink is not the
- * box: it is an L hugging two of its four edges. Rotate that box 45° and the ink
- * no longer sits where the box does, so the mark needs a translate to bring it
- * back — which is what this is, and it was hand-tuned rather than derived.
- *
- * The value is the offset of the ink's bounding box from the marker's centre
- * after rotation, measured by rasterising the exact geometry at 20× and scanning
- * the painted pixels. Redo that if the proportions change; do not eyeball it.
- * Horizontally the ink centres itself, because the box's width and height enter
- * the rotation symmetrically. */
-.step[data-state="complete"] .step-marker::after {
-  content: "";
-  inline-size: 0.28em;
-  block-size: 0.55em;
-  border-inline-end: 2px solid currentColor;
-  border-block-end: 2px solid currentColor;
-  font-size: var(--text-base);
-  transform: translateY(-0.053em) rotate(45deg);
-}
+.step[data-state="complete"] .step-marker::after { background: var(--color-success-700); }
 .step[data-state="complete"] .step-label { color: var(--color-neutral-800); }
 /* A connector belongs to the step it LEAVES, so it fills only when that step
    is complete. Colouring the connector of the step that follows a complete one
    would claim the current step is finished. */
-.step[data-state="complete"] .step-connector { background: var(--color-action); }
+.step[data-state="complete"] .step-connector { background: var(--color-success-300); }
 
 /* A STEP THAT WAS ATTEMPTED AND REFUSED IS NEITHER CURRENT NOR COMPLETE.
  *
  * The vocabulary was complete / current / upcoming, which has no word for the one outcome a reader
- * most needs to see. A consumer running a sequence that reaches out to somebody else's API — create
- * the repository, wire the webhook, make the Project — had the choice of leaving the failed step
- * looking "current" forever, or marking it complete, which is a lie. This system has a rule about
- * exactly that: all six states or none.
- *
- * Danger rather than warning: the step did not happen, and the sequence stopped. */
+ * most needs to see. Without it a refused step sits at `current` forever or is marked complete,
+ * which is a lie. Danger rather than warning: the step did not happen, and the sequence stopped.
+ * The connector stays neutral: the step did not complete, so nothing left it. */
 .step[data-state="failed"] .step-marker {
-  background: var(--color-danger-700);
-  border-color: var(--color-danger-700);
-  color: var(--color-bg);
-  font-size: 0;
+  background: var(--color-danger-100);
+  border-color: var(--color-danger-300);
 }
-/* A cross from the same two borders the tick is drawn from, rotated the other way and crossed.
-   No icon dependency inside a marker this small, for the reason the tick has none. */
-.step[data-state="failed"] .step-marker::before,
 .step[data-state="failed"] .step-marker::after {
-  content: "";
-  grid-area: 1 / 1;
-  inline-size: 0.62em;
-  block-size: 2px;
-  background: currentColor;
-  font-size: var(--text-base);
+  background: var(--color-danger-700);
+  -webkit-mask-image: var(--progress-glyph-cross);
+  mask-image: var(--progress-glyph-cross);
 }
-.step[data-state="failed"] .step-marker::before { transform: rotate(45deg); }
-.step[data-state="failed"] .step-marker::after { transform: rotate(-45deg); }
 .step[data-state="failed"] .step-label { color: var(--color-danger-700); }
-/* The connector stays neutral: the step did not complete, so nothing left it. */
+
+/* Stopped short — interrupted or cancelled, not refused. Warning, and the `!` glyph. */
+.step[data-state="stopped"] .step-marker {
+  background: var(--color-warning-100);
+  border-color: var(--color-warning-300);
+}
+.step[data-state="stopped"] .step-marker::after {
+  background: var(--color-warning-700);
+  -webkit-mask-image: var(--progress-glyph-alert);
+  mask-image: var(--progress-glyph-alert);
+}
+.step[data-state="stopped"] .step-label { color: var(--color-warning-800); }
+
+/* Skipped — passed over on purpose. Dashed and quiet, with a dash. The connector
+   leaving it fills, because the sequence moved past it. */
+.step[data-state="skipped"] .step-marker {
+  border-style: dashed;
+  background: transparent;
+}
+.step[data-state="skipped"] .step-marker::after {
+  background: var(--color-neutral-600);
+  -webkit-mask-image: var(--progress-glyph-minus);
+  mask-image: var(--progress-glyph-minus);
+}
+.step[data-state="skipped"] .step-label { color: var(--color-neutral-600); }
+.step[data-state="skipped"] .step-connector { background: var(--color-success-300); }
 
 .step[aria-current="step"] .step-marker {
-  border-color: var(--color-action);
-  color: var(--color-action);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-action) 14%, transparent);
+  border-color: var(--progress-fill);
+  color: var(--progress-fill);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--progress-fill) 14%, transparent);
 }
 .step[aria-current="step"] .step-label { color: var(--color-neutral-900); font-weight: 500; }
 
-/* Vertical rail — the shape the .flow shell uses. The connecting line is drawn
-   between marker bottom and the next marker top, so it never runs past the
-   last step. */
+/* Vertical rail — the shape the .flow shell uses. The line runs from just under
+   one marker to just above the next, through whatever height the step's
+   description gives it, so it never runs past the last step. */
 .stepper-vertical { flex-direction: column; align-items: stretch; gap: 0; }
-.stepper-vertical .step { position: relative; flex: none; align-items: center; padding-block: var(--space-2); }
+.stepper-vertical .step,
+.stepper-vertical .step:last-child {
+  position: relative;
+  flex: none;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding-block: var(--space-3);
+}
 .stepper-vertical .step-connector { display: none; }
 .stepper-vertical .step:not(:last-child)::before {
   content: "";
   position: absolute;
-  inset-block-start: calc(var(--space-2) + var(--space-8));
-  block-size: var(--space-4);
-  inset-inline-start: calc(var(--space-8) / 2 - 0.5px);
+  inset-block-start: calc(var(--space-3) + var(--step-marker) + var(--space-1));
+  inset-block-end: calc(var(--space-1) - var(--space-3));
+  inset-inline-start: calc(var(--step-marker) / 2 - 0.5px);
   inline-size: 1px;
   background: var(--color-neutral-200);
 }
-.stepper-vertical .step[data-state="complete"]:not(:last-child)::before { background: var(--color-action); }
+.stepper-vertical .step[data-state="complete"]:not(:last-child)::before,
+.stepper-vertical .step[data-state="skipped"]:not(:last-child)::before { background: var(--color-success-300); }
+.stepper-vertical .step-label { white-space: normal; }
 
 /* THE RAIL FORM — A SEQUENCE READ AT A GLANCE RATHER THAN COUNTED.
  *
  * The marker form pairs a numbered circle with a label beside it, and that
- * pairing is what breaks when a sequence spans a page. Six stages across a wide
- * screen put two hundred and fifty pixels between one circle and the next, so a
- * reader crosses the width to join a marker to the thing it names — and still
- * cannot see how far along the sequence is, because every circle but one is the
- * same grey and the difference is a single ring.
- *
- * The rail answers the other question. Same four states, same `data-state`
- * vocabulary, drawn as a filled span: how much is behind you reads without
- * counting anything, and each label sits under its own segment so there is no
- * pairing left to make.
+ * pairing is what breaks when a sequence spans a page. The rail answers the
+ * other question: same states, same `data-state` vocabulary, drawn as segments
+ * of the family's bar — the same 4px track, the same 2px gap and the same state
+ * colours as a segmented progress bar. How much is behind you reads without
+ * counting, and each label sits under its own segment.
  *
  * Use the marker form when a reader steps through and each step is an act they
  * perform. Use the rail when the sequence is a position they are somewhere in.
  *
  * `--stepper-complete` is declared nowhere and referenced with a fallback,
- * which is this system's signal for a property the caller sets. A brand owning
- * a second colour can fill what is behind with it — the colour that is not the
- * action colour is often exactly what a product reserves for progress — without
- * the sequence's own vocabulary changing.
+ * which is this system's signal for a property the caller sets.
  */
-.stepper-rail { display: flex; align-items: stretch; gap: 2px; }
-.stepper-rail .step { display: block; flex: 1 1 0; min-inline-size: 0; gap: 0; }
-/* Every segment the same width, the last included: the rail measures the whole
-   sequence, and a final step that shrank to its label would misreport how much
-   of it is behind you. */
-.stepper-rail .step:last-child { flex: 1 1 0; }
+.stepper-rail { display: flex; align-items: stretch; gap: var(--progress-gap); }
+.stepper-rail .step,
+.stepper-rail .step:last-child { display: block; flex: 1 1 0; min-inline-size: 0; }
 .stepper-rail .step-marker {
   display: block;
   inline-size: auto;
-  block-size: var(--space-1);
+  block-size: var(--progress-h-sm);
   border: 0;
-  border-radius: var(--radius-full);
-  background: var(--color-neutral-200);
+  border-radius: var(--progress-radius);
+  background: var(--progress-track);
   /* The segment is the marker here, so the index has nothing to sit in. Hidden
-     by size rather than removed, so a screen reader still reaches the label —
-     the same reason the tick hides the index in the marker form. */
+     by size rather than removed, so a screen reader still reaches it. */
   font-size: 0;
+  color: transparent;
 }
-.stepper-rail .step-marker::after,
-.stepper-rail .step-marker::before { content: none; }
+.stepper-rail .step .step-marker::after,
+.stepper-rail .step[data-state] .step-marker::after,
+.stepper-rail .step .step-marker::before { content: none; }
 .stepper-rail .step-label {
   display: block;
   margin-block-start: var(--space-2);
   font-size: var(--text-xs);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
+.stepper-rail .step-description { display: block; margin-block-start: 0; }
 .stepper-rail .step-connector { display: none; }
 
-.stepper-rail .step[data-state="complete"] .step-marker {
-  background: var(--stepper-complete, var(--color-action));
-}
-.stepper-rail .step[data-state="failed"] .step-marker { background: var(--color-danger-700); }
-.stepper-rail .step[aria-current="step"] .step-marker {
-  background: var(--color-action);
-  box-shadow: none;
-}
+/* The segment's colour is the state's; the label carries the state's glyph, so
+   the rail is never colour alone. */
+.stepper-rail .step[data-state="complete"] .step-marker { background: var(--stepper-complete, var(--progress-fill-success)); box-shadow: none; }
+.stepper-rail .step[data-state="failed"] .step-marker { background: var(--progress-fill-danger); }
+.stepper-rail .step[data-state="stopped"] .step-marker { background: var(--progress-fill-warning); }
+.stepper-rail .step[data-state="skipped"] .step-marker { background: var(--color-neutral-300); }
+.stepper-rail .step[aria-current="step"] .step-marker { background: var(--progress-fill); box-shadow: none; }
 
-/* --- progress ------------------------------------------------------- */
-
-.progress {
-  inline-size: 100%;
-  block-size: var(--space-2);
-  background: var(--color-neutral-200);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-.progress-bar {
-  block-size: 100%;
-  inline-size: 0;
-  background: var(--color-action);
-  border-radius: var(--radius-full);
-  transition: inline-size var(--dur-slow) var(--ease-out);
-}
-.progress-indeterminate .progress-bar {
-  inline-size: 35%;
-  animation: progress-slide 1.4s var(--ease-in-out) infinite;
-}
-@keyframes progress-slide {
-  0%   { transform: translateX(-100%); }
-  100% { transform: translateX(340%); }
-}
-
-/* Ring drawn with a conic gradient — one element, no SVG, and the value is a
-   single custom property the caller sets. */
-.progress-ring {
-  position: relative;
-  display: grid;
-  place-items: center;
-  inline-size: var(--space-16);
-  block-size: var(--space-16);
-  border-radius: var(--radius-full);
-  background: conic-gradient(
-    var(--color-action) calc(var(--progress, 0) * 1%),
-    var(--color-neutral-200) 0
-  );
-}
-.progress-ring::before {
+.stepper-rail .step[data-state] .step-label::before {
   content: "";
-  position: absolute;
-  inset: var(--space-2);
-  border-radius: var(--radius-full);
-  background: var(--color-bg);
-}
-.progress-ring-value {
-  position: relative;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  font-variant-numeric: tabular-nums;
-  color: var(--color-neutral-900);
-}
-
-/* --- spinner and skeleton ------------------------------------------- */
-
-.spinner {
   display: inline-block;
-  inline-size: var(--space-5);
-  block-size: var(--space-5);
-  border: 2px solid var(--color-neutral-300);
-  border-top-color: var(--color-action);
-  border-radius: var(--radius-full);
-  animation: spinner-spin 620ms linear infinite;
+  inline-size: 1em;
+  block-size: 1em;
+  margin-inline-end: var(--space-1);
+  vertical-align: -0.15em;
+  background: var(--color-success-700);
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
 }
-.spinner-sm { inline-size: var(--space-4); block-size: var(--space-4); }
-.spinner-lg { inline-size: var(--space-8); block-size: var(--space-8); border-width: 3px; }
-@keyframes spinner-spin { to { transform: rotate(360deg); } }
+.stepper-rail .step[aria-current="step"] .step-label::before { content: none; }
+.stepper-rail .step[data-state="failed"] .step-label::before {
+  background: var(--color-danger-700);
+  -webkit-mask-image: var(--progress-glyph-cross);
+  mask-image: var(--progress-glyph-cross);
+}
+.stepper-rail .step[data-state="stopped"] .step-label::before {
+  background: var(--color-warning-700);
+  -webkit-mask-image: var(--progress-glyph-alert);
+  mask-image: var(--progress-glyph-alert);
+}
+.stepper-rail .step[data-state="skipped"] .step-label::before {
+  background: var(--color-neutral-600);
+  -webkit-mask-image: var(--progress-glyph-minus);
+  mask-image: var(--progress-glyph-minus);
+}
+
+/* --- the stepper in a narrow container ------------------------------ */
+
+/* BELOW 30REM THE MARKER STEPPER GOES VERTICAL; THE RAIL SHOWS ONE LABEL.
+ *
+ * Four steps across a phone leave each label about 55px, and the labels were clipped to an
+ * ellipsis — a step with half a name. The two ways out were to keep the row and show only the
+ * current label with an `n of N`, or to stack the steps. The marker stepper stacks:
+ *
+ *   - Its job is to name every step, and the stacked form keeps every name, whole, with its
+ *     description, at a size a thumb can read. A count and one label would hide the very thing
+ *     the markers exist to pair with.
+ *   - It is already a first-class form here (the `.flow` shell's rail), with the same marks and
+ *     connectors, so a reader who rotates the phone sees the same object turn, not a new one.
+ *   - It needs no count, no knowledge of N, and nothing from React: the same markup does it, so
+ *     a static page and `<Stepper>` behave alike.
+ *
+ * Phones have height to spare and no width; the stacked form spends the one they have.
+ *
+ * The rail keeps its row — its whole point is how much is behind you at a glance — and shows only
+ * the current step's label, whole, with the others kept for assistive tech. */
+@container stepper (max-width: 30rem) {
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step,
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step:last-child {
+    position: relative;
+    flex: 1 0 100%;
+    grid-template-columns: auto minmax(0, 1fr);
+    padding-block: var(--space-2);
+  }
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step .step-connector { display: none; }
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step .step-label { white-space: normal; }
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-block-start: calc(var(--space-2) + var(--step-marker) + var(--space-1));
+    inset-block-end: calc(var(--space-1) - var(--space-2) - var(--space-3));
+    inset-inline-start: calc(var(--step-marker) / 2 - 0.5px);
+    inline-size: 1px;
+    background: var(--color-neutral-200);
+  }
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step[data-state="complete"]:not(:last-child)::before,
+  .stepper:not(.stepper-rail):not(.stepper-vertical) > .step[data-state="skipped"]:not(:last-child)::before {
+    background: var(--color-success-300);
+  }
+
+  /* The rail: one label, whole. The others leave the layout but not the accessibility tree.
+     The current label may run past its own segment; near the end of the rail it runs back
+     from the segment's end instead, so it never leaves the rail. */
+  .stepper-rail > .step { position: relative; display: flex; flex-direction: column; align-items: flex-start; }
+  .stepper-rail > .step:nth-last-child(-n + 2) { align-items: flex-end; }
+  .stepper-rail > .step > .step-marker { align-self: stretch; }
+  .stepper-rail > .step:not([aria-current="step"]) > .step-label,
+  .stepper-rail > .step:not([aria-current="step"]) > .step-description {
+    /* Sized to nothing rather than clipped: a clipped label still overflows its segment, and
+       the text at font-size 0 is still what a screen reader reads — the same reason the
+       marker's index is kept. */
+    position: absolute;
+    font-size: 0;
+  }
+  .stepper-rail > .step[aria-current="step"] > .step-label {
+    inline-size: max-content;
+    overflow: visible;
+    white-space: nowrap;
+  }
+}
+
+/* --- skeleton ------------------------------------------------------- */
+
+/* Progress, rings and the spinner moved to progress.css, where the whole progress family shares
+   one anatomy. */
 
 .skeleton {
   display: block;
@@ -3954,7 +4067,10 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
     padding: var(--space-4) var(--space-6);
   }
   .flow-rail .stepper-vertical { flex-direction: row; align-items: center; gap: var(--space-2); }
-  .flow-rail .stepper-vertical .step-label { display: none; }
+  .flow-rail .stepper-vertical .step-label,
+  .flow-rail .stepper-vertical .step-description,
+  .flow-rail .stepper-vertical .step::before { display: none; }
+  .flow-rail .stepper-vertical .step { padding-block: 0; }
   .flow-header, .flow-content, .flow-footer { padding-inline: var(--space-6); }
 
   /* Several controls will not fit one narrow row. Wrap, and give the status
@@ -4778,7 +4894,8 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   inline-size: var(--space-2);
   block-size: var(--space-2);
   border-radius: var(--radius-full);
-  background: var(--color-accent);
+  /* The progress family's "current" colour, so a pulse and a running bar are one blue. */
+  background: var(--progress-fill);
   vertical-align: middle;
 }
 .live-pulse::after {
@@ -4869,9 +4986,25 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   font-size: var(--text-xs);
   color: var(--color-neutral-700);
 }
+/* An ACTIVE row is four fixed columns — pulse, where, bar, count — so the bars in a table's rows
+   start and end at the same x whether the place reads `§2.5 +1` or `Rewriting`. The other
+   states are a tag and a word, and keep the inline flow. */
+.live-progress[data-state="active"] {
+  display: inline-grid;
+  grid-template-columns: var(--space-2) var(--space-20) var(--space-24) auto;
+  justify-items: start;
+  column-gap: var(--space-2);
+}
+.live-progress[data-state="active"] .live-progress-where {
+  max-inline-size: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .live-progress-where { font-weight: 500; color: var(--color-accent-700); }
-.live-progress-bar { inline-size: var(--space-24); }
-.live-progress-count { color: var(--color-neutral-600); }
+/* The family's inline bar: the 4px track, label before it, value after it. */
+.progress.live-progress-bar { --progress-h: var(--progress-h-sm); inline-size: var(--space-24); }
+.live-progress-count { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-neutral-700); }
 
 /* The row being worked on is found from across the table. */
 .table tbody tr:has(.live-progress[data-state="active"]) > * {
@@ -4937,10 +5070,11 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   color: var(--color-neutral-800);
   animation: live-enter var(--dur-slow) var(--ease-out) both;
 }
-.lane-item svg { inline-size: 1em; block-size: 1em; flex: none; }
+.lane-item svg, .lane-item .progress-glyph { inline-size: 1em; block-size: 1em; flex: none; }
 .lane-item[data-tone="accent"] { border-color: var(--color-accent-300); color: var(--color-accent-800); font-weight: 500; }
 .lane-item[data-tone="success"] { color: var(--color-neutral-700); }
-.lane-item[data-tone="success"] svg { color: var(--color-success-700); }
+.lane-item[data-tone="success"] svg,
+.lane-item[data-tone="success"] .progress-glyph { color: var(--color-success-700); }
 .lane-item[data-tone="danger"] { border-color: var(--color-danger-300); color: var(--color-danger-800); }
 .lane-item[data-tone="warning"] { border-color: var(--color-warning-300); color: var(--color-warning-800); }
 /* Not started, or nothing to do: dashed, on the lane's own ground. */
@@ -6049,6 +6183,451 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   overscroll-behavior: contain;
 }
 
+/* ---------------------------------------------------------------- progress */
+
+/* ONE FAMILY, ONE ANATOMY.
+ *
+ * Bar, ring, spinner, the stepper's rail, a row's live bar, a segmented bar, a
+ * checklist's marks and a file's transfer row are one family. They read the
+ * same tokens (`--progress-*` in the theme), the same six states and the same
+ * four glyphs, and they place a label and a value by one rule:
+ *
+ *   LABEL AT THE START, VALUE AT THE END, HELPER UNDERNEATH.
+ *   - Stacked (a bar that is the subject of its region): label and value on one
+ *     line above the track, helper text below it.
+ *   - Inline (a row, a table cell): label · track · value, on one line.
+ *   - Ring: the value inside when the ring is 48px or larger; otherwise beside
+ *     it, where a label would go. A label and helper sit beside a ring, never
+ *     under it.
+ *   Values are tabular figures in the mono voice, so a moving number does not
+ *   make its row shimmer.
+ *
+ * THE SIX STATES, ONE MAPPING.
+ *
+ *   state     word          glyph   tone
+ *   queued    Queued/To do  —       neutral, hollow
+ *   current   In progress   —       action (a ring; a spinner when work runs)
+ *   complete  Done          check   success
+ *   failed    Failed        cross   danger
+ *   stopped   Stopped       alert   warning — interrupted or cancelled, not refused
+ *   skipped   Skipped       minus   neutral, dashed
+ *
+ * A mark is a tonal disc: the 100 step behind, the 300 step as its edge, the
+ * glyph in 700. A segment of a bar is a fill in the 700 step. Colour never
+ * carries a state alone — the glyph, the word or both are always there. */
+
+/* --- the glyph set ----------------------------------------------------- */
+
+/* FOUR GLYPHS, ONE SOURCE, ONE STROKE.
+ *
+ * Phosphor's Bold geometry (the system's icon set is Phosphor) — a 24-unit stroke
+ * on a 256 grid with round caps and joins — drawn as strokes and embedded as
+ * CSS mask images. A mask rather than inline SVG or a text glyph because:
+ *
+ *   - It needs no markup. The stepper's existing `<span class="step-marker">1</span>`
+ *     draws its tick from CSS alone, so markup written against an earlier version
+ *     gets the fix on its next bump, and a static page needs no React and no icon
+ *     package.
+ *   - It is painted in `background-color`, so a state colours it with one token,
+ *     and forced-colours mode can repaint it in a system colour.
+ *   - A text glyph (✓ ×) is drawn by whatever font the reader has, at that font's
+ *     weight and baseline — which is how three different ticks got into the system.
+ *
+ * Each viewBox is centred on the INK, not on Phosphor's 256 box: the check's ink
+ * spans x 28–236 and y 60–212, centre (132, 136), so its viewBox starts at (4, 8).
+ * A glyph's painted centre is therefore its box's centre, by construction, and a
+ * container centres the box. Nothing is nudged. */
+:root {
+  --progress-glyph-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='4 8 256 256'%3E%3Cpath d='M40 144l56 56L224 72' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M56 56l144 144M200 56L56 200' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-minus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M40 128h176' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-alert: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128 56v92' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='128' cy='196' r='16'/%3E%3C/svg%3E");
+}
+
+/* A glyph inline with text: 1em, in the text's colour. */
+.progress-glyph {
+  display: inline-block;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  vertical-align: -0.15em;
+  background: currentColor;
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
+}
+.progress-glyph[data-glyph="cross"] { -webkit-mask-image: var(--progress-glyph-cross); mask-image: var(--progress-glyph-cross); }
+.progress-glyph[data-glyph="minus"] { -webkit-mask-image: var(--progress-glyph-minus); mask-image: var(--progress-glyph-minus); }
+.progress-glyph[data-glyph="alert"] { -webkit-mask-image: var(--progress-glyph-alert); mask-image: var(--progress-glyph-alert); }
+
+/* --- the mark: a state in a disc --------------------------------------- */
+
+/* The same disc and glyph a stepper marker draws, for a checklist task, a
+   legend and anywhere else one item's state needs a mark. `data-state` picks
+   the glyph and tone; the disc is 24px, or 16px as `.progress-mark-sm`. */
+.progress-mark {
+  --mark-size: var(--progress-circle-sm);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--mark-size);
+  block-size: var(--mark-size);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  vertical-align: middle;
+}
+.progress-mark-sm { --mark-size: var(--progress-circle-xs); }
+/* Absolutely placed and centred by margin, so nothing in the disc can move it. */
+.progress-mark::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: calc(var(--mark-size) / 2);
+  block-size: calc(var(--mark-size) / 2);
+  background: currentColor;
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
+}
+.progress-mark[data-state="complete"]::after,
+.progress-mark[data-state="failed"]::after,
+.progress-mark[data-state="stopped"]::after,
+.progress-mark[data-state="skipped"]::after { content: ""; }
+
+.progress-mark[data-state="complete"] { background: var(--color-success-100); border-color: var(--color-success-300); color: var(--color-success-700); }
+.progress-mark[data-state="failed"] { background: var(--color-danger-100); border-color: var(--color-danger-300); color: var(--color-danger-700); }
+.progress-mark[data-state="failed"]::after { -webkit-mask-image: var(--progress-glyph-cross); mask-image: var(--progress-glyph-cross); }
+.progress-mark[data-state="stopped"] { background: var(--color-warning-100); border-color: var(--color-warning-300); color: var(--color-warning-700); }
+.progress-mark[data-state="stopped"]::after { -webkit-mask-image: var(--progress-glyph-alert); mask-image: var(--progress-glyph-alert); }
+.progress-mark[data-state="skipped"] { border-style: dashed; background: transparent; color: var(--color-neutral-600); }
+.progress-mark[data-state="skipped"]::after { -webkit-mask-image: var(--progress-glyph-minus); mask-image: var(--progress-glyph-minus); }
+/* Current: the work is running, so the mark IS the spinner — the same ring,
+   track and arc, at the disc's size. See `.spinner` below. */
+
+/* --- linear ------------------------------------------------------------ */
+
+.progress {
+  --progress-h: var(--progress-h-md);
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--progress-h);
+  background: var(--progress-track);
+  border-radius: var(--progress-radius);
+  overflow: hidden;
+}
+.progress-sm { --progress-h: var(--progress-h-sm); }
+.progress-lg { --progress-h: var(--progress-h-lg); }
+.progress-bar {
+  block-size: 100%;
+  inline-size: 0;
+  background: var(--progress-fill);
+  border-radius: inherit;
+  transition: inline-size var(--dur-slow) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+}
+
+/* A tone replaces the fill only when the whole task has ended. */
+.progress[data-tone="success"], .progress-field[data-tone="success"], .progress-ring[data-tone="success"], .progress-ring-field[data-tone="success"] { --progress-tone: var(--progress-fill-success); }
+.progress[data-tone="warning"], .progress-field[data-tone="warning"], .progress-ring[data-tone="warning"], .progress-ring-field[data-tone="warning"] { --progress-tone: var(--progress-fill-warning); }
+.progress[data-tone="danger"], .progress-field[data-tone="danger"], .progress-ring[data-tone="danger"], .progress-ring-field[data-tone="danger"] { --progress-tone: var(--progress-fill-danger); }
+.progress[data-tone] .progress-bar,
+.progress-field[data-tone] .progress-bar { background: var(--progress-tone, var(--progress-fill)); }
+
+/* Indeterminate: a third of the track crosses it, and leaves before it
+   returns, so it never reads as a bar parked at a value. */
+.progress-indeterminate .progress-bar {
+  inline-size: 40%;
+  animation: progress-slide 1.6s var(--ease-in-out) infinite;
+}
+@keyframes progress-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+/* The labelled layout: label and value above the track, helper below. */
+.progress-field { display: grid; gap: var(--space-2); min-inline-size: 0; }
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+.progress-label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+.progress-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-700);
+}
+.progress-helper { margin: 0; font-size: var(--text-xs); color: var(--color-neutral-600); }
+/* A value that is a WORD — Uploaded, Failed, Waiting — is set in the body face, not the figures'
+   mono, so every status in a list reads in one voice. Figures stay mono and tabular. */
+.progress-status { font-family: var(--font-body); font-weight: 500; }
+.progress-field[data-tone="success"] .progress-value { color: var(--color-success-700); }
+.progress-field[data-tone="warning"] .progress-value { color: var(--color-warning-800); }
+.progress-field[data-tone="danger"] .progress-value,
+.progress-field[data-tone="danger"] .progress-helper { color: var(--color-danger-700); }
+
+/* Inline: label · track · value on one line, for a row or a cell.
+ *
+ * THREE FIXED COLUMNS, NOT WHATEVER EACH LABEL LEFT OVER. Inline bars stack — Controls over
+ * Evidence over Owners — and a bar that starts wherever its own label happens to end puts every
+ * track at a different x, which reads as a list nobody lined up. The label and value tracks are
+ * fixed (`--progress-label-w`, `--progress-value-w`, set by the caller when the words are longer),
+ * so every bar in a stack starts and ends at the same x and the values right-align. */
+.progress-inline {
+  display: grid;
+  grid-template-columns:
+    minmax(0, var(--progress-label-w, var(--space-32)))
+    minmax(var(--space-12), 1fr)
+    var(--progress-value-w, var(--space-12));
+  align-items: center;
+  column-gap: var(--space-3);
+}
+.progress-inline .progress-label { font-weight: 400; color: var(--color-neutral-700); font-size: var(--text-xs); }
+.progress-inline .progress-value { justify-self: end; }
+
+/* --- circular ---------------------------------------------------------- */
+
+/* RING, SPINNER AND A RUNNING MARK ARE ONE SHAPE.
+ *
+ * A track and an arc, stroke = diameter / 8, drawn with a conic gradient and a
+ * radial mask that cuts the hole — so the hole is genuinely empty and the ring
+ * sits on a card, a tinted lane or a dark page alike. (It used to cover its
+ * middle with a disc of `--color-bg`, which showed as a white coin on anything
+ * that was not the page.) The spinner is this ring with no value, a quarter arc
+ * and a turn. Sizes are the circle scale: xs 16, sm 24, md 32, lg 48, xl 64. */
+.progress-ring,
+.spinner,
+.progress-mark[data-state="current"] {
+  --ring-size: var(--progress-circle-xl);
+  --ring-stroke: calc(var(--ring-size) / 8);
+  --ring-hole: radial-gradient(farthest-side,
+    transparent calc(100% - var(--ring-stroke) - 1px),
+    black calc(100% - var(--ring-stroke)));
+}
+.progress-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--ring-size);
+  block-size: var(--ring-size);
+  border-radius: var(--radius-full);
+}
+.progress-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    var(--progress-tone, var(--progress-fill)) calc(var(--progress, 0) * 1%),
+    var(--progress-track) 0
+  );
+  -webkit-mask: var(--ring-hole);
+  mask: var(--ring-hole);
+}
+.progress-ring-xs { --ring-size: var(--progress-circle-xs); }
+.progress-ring-sm { --ring-size: var(--progress-circle-sm); }
+.progress-ring-md { --ring-size: var(--progress-circle-md); }
+.progress-ring-lg { --ring-size: var(--progress-circle-lg); }
+.progress-ring-value {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-neutral-900);
+}
+.progress-ring-lg .progress-ring-value { font-size: var(--text-xs); }
+/* An icon in the middle: three-eighths of the ring, the colour of its fill. */
+.progress-ring > .progress-glyph,
+.progress-ring > svg {
+  position: relative;
+  inline-size: calc(var(--ring-size) * 0.375);
+  block-size: calc(var(--ring-size) * 0.375);
+  vertical-align: 0;
+  color: var(--progress-tone, var(--progress-fill));
+}
+.progress-ring-indeterminate::before {
+  background: conic-gradient(var(--progress-fill) 0 25%, var(--progress-track) 0);
+  animation: spinner-spin 800ms linear infinite;
+}
+
+/* A RING WITH ITS WORDS BESIDE IT — ONE RULE.
+ *
+ * The ring is centred on its text, and the text is always two lines: the title line (label, and
+ * the value when the ring is too small to hold it) and one supporting line (the helper). Two
+ * rings side by side therefore put their titles on one line whatever their sizes, and no ring
+ * sits against a three-line block in one place and a two-line block in another. */
+.progress-ring-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+.progress-ring-text { display: grid; gap: var(--space-1); min-inline-size: 0; }
+.progress-ring-text .progress-head { justify-content: flex-start; gap: var(--space-2); }
+
+/* --- spinner ----------------------------------------------------------- */
+
+/* The indeterminate ring at its three small sizes: 16, 24 and 32. */
+.spinner,
+.progress-mark[data-state="current"] {
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--ring-size);
+  block-size: var(--ring-size);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: conic-gradient(var(--progress-fill) 0 25%, var(--progress-track) 0);
+  -webkit-mask: var(--ring-hole);
+  mask: var(--ring-hole);
+  vertical-align: middle;
+  animation: spinner-spin 800ms linear infinite;
+}
+.spinner { --ring-size: var(--progress-circle-sm); }
+.spinner-sm { --ring-size: var(--progress-circle-xs); }
+.spinner-lg { --ring-size: var(--progress-circle-md); }
+.progress-mark[data-state="current"] { --ring-size: var(--mark-size); }
+@keyframes spinner-spin { to { transform: rotate(360deg); } }
+
+/* --- segmented --------------------------------------------------------- */
+
+/* ONE TRACK, SPLIT BY STATUS. Each segment's length is its count; the gap is
+   the rail's 2px, so a segmented bar and a stepper's rail are the same object.
+   A segment never shrinks below a dot, so one failure in a hundred is seen. */
+.progress-segments {
+  display: flex;
+  gap: var(--progress-gap);
+  block-size: var(--progress-h-md);
+}
+.progress-segments.progress-sm { block-size: var(--progress-h-sm); }
+.progress-segments.progress-lg { block-size: var(--progress-h-lg); }
+.progress-segment {
+  flex: var(--value, 1) 1 0;
+  min-inline-size: var(--progress-h-lg);
+  border-radius: var(--progress-radius);
+  background: var(--progress-track);
+}
+.progress-segment[data-state="complete"], .progress-legend-swatch[data-state="complete"] { background: var(--progress-fill-success); }
+.progress-segment[data-state="failed"], .progress-legend-swatch[data-state="failed"] { background: var(--progress-fill-danger); }
+.progress-segment[data-state="stopped"], .progress-legend-swatch[data-state="stopped"] { background: var(--progress-fill-warning); }
+.progress-segment[data-state="current"], .progress-legend-swatch[data-state="current"] { background: var(--progress-fill); }
+.progress-segment[data-state="skipped"], .progress-legend-swatch[data-state="skipped"] { background: var(--color-neutral-400); }
+
+/* The legend says every count in words. The swatch is the segment's shape. */
+.progress-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.progress-legend-item { display: inline-flex; align-items: center; gap: var(--space-2); }
+.progress-legend-swatch {
+  flex: none;
+  inline-size: var(--space-3);
+  block-size: var(--progress-h-md);
+  border-radius: var(--progress-radius);
+  background: var(--progress-track);
+}
+.progress-legend-count { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-neutral-900); }
+
+/* --- checklist progress ------------------------------------------------ */
+
+/* Tasks, each with its mark, and the count of how many are done. For a setup
+   list, onboarding, or the steps of an agent's run. Not ticked by the reader —
+   that is `.checklist`. */
+.progress-list { display: grid; gap: var(--space-3); min-inline-size: 0; }
+.progress-list-items { display: grid; margin: 0; padding: 0; list-style: none; }
+.progress-list-item {
+  display: grid;
+  grid-template-columns: var(--progress-circle-sm) minmax(0, 1fr);
+  grid-template-rows: var(--progress-circle-sm) auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  padding-block: var(--space-2);
+}
+.progress-list-item > .progress-mark { grid-row: 1; grid-column: 1; }
+.progress-list-label {
+  grid-row: 1;
+  grid-column: 2;
+  min-inline-size: 0;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+}
+.progress-list-description {
+  grid-row: 2;
+  grid-column: 2;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}
+.progress-list-item[data-state="current"] .progress-list-label { color: var(--color-neutral-900); font-weight: 500; }
+.progress-list-item[data-state="queued"] .progress-list-label,
+.progress-list-item[data-state="skipped"] .progress-list-label { color: var(--color-neutral-600); }
+.progress-list-item[data-state="failed"] .progress-list-label { color: var(--color-danger-700); }
+.progress-list-item[data-state="failed"] .progress-list-description { color: var(--color-danger-700); }
+.progress-list-item[data-state="stopped"] .progress-list-label { color: var(--color-warning-800); }
+
+/* --- file transfer ----------------------------------------------------- */
+
+/* A file on its way: the stacked layout (name and status above, a 4px track,
+ * size or the error below), and two action slots at the end of the row.
+ *
+ * THE ACTION COLUMNS ARE THE LIST'S, NOT THE ROW'S. A row with a Retry button used to get a
+ * shorter bar and a status 66px left of its neighbours'. A list holding transfer rows becomes a
+ * three-column grid — body, retry slot, dismiss slot — and each row takes those columns as a
+ * subgrid, so every bar ends and every status right-aligns at the same x, and a row with no
+ * Retry keeps the slot empty rather than giving it to its bar. */
+.file-list:has(> .file-progress) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+.file-list:has(> .file-progress) > * { grid-column: 1 / -1; }
+.file-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.file-list > .file-progress { grid-template-columns: subgrid; }
+.file-progress > .progress-field { gap: var(--space-2); margin-inline-end: var(--space-1); }
+/* A file's name wraps rather than clipping: two files that differ only at the end of a long
+   name are told apart by exactly the part an ellipsis would hide. */
+.file-progress .progress-label { font-weight: 400; white-space: normal; overflow-wrap: anywhere; }
+/* An empty slot still holds its column; the dismiss slot is always one square control wide. */
+.file-progress-slot { display: flex; }
+.file-progress-slot + .file-progress-slot { inline-size: var(--control-h-sm); }
+.file-progress[data-state="failed"] { border-color: var(--color-danger-300); }
+
+/* --- progress inside a button ----------------------------------------- */
+
+/* Not added. `.btn.is-loading` already keeps a button's label and width while
+   it waits, and a determinate fill inside a solid button would put a second
+   bar on the one control a view has exactly one of. A long action reports its
+   progress where its result will land. */
+
 /* ------------------------------------------------------------------- shelf */
 
 /* MOVING A THING BETWEEN TWO PLACES.
@@ -7024,12 +7603,38 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
   /* Progress and steps are pure colour; Highlight is the only signal left. */
   .progress { border: 1px solid CanvasText; }
   .progress-bar, .switch:checked, .checkbox:checked, .radio:checked,
-  .step[data-state="complete"] .step-marker, .timeline-item[data-state="current"] .timeline-marker {
+  .timeline-item[data-state="current"] .timeline-marker {
     background: Highlight;
     forced-color-adjust: none;
   }
-  .progress-ring { forced-color-adjust: none; }
-  .step-marker { border: 1px solid CanvasText; }
+  .step-marker, .progress-mark { border: 1px solid CanvasText; }
+  /* The progress family's glyphs are masks painted in a background colour, which forced colours
+     would repaint as the page's own ground. They are drawn in the text colour instead, so a tick,
+     a cross, a dash and a `!` survive on every disc and beside every label. */
+  .step-marker::after, .progress-mark::after, .progress-glyph,
+  .stepper-rail .step[data-state] .step-label::before {
+    background: CanvasText !important;
+    forced-color-adjust: none;
+  }
+  /* Rings, spinners and running marks: the arc in the highlight, the track in grey text. */
+  .progress-ring, .progress-ring-field, .spinner, .progress-mark[data-state="current"] {
+    --progress-fill: Highlight !important;
+    --progress-tone: Highlight !important;
+    --progress-track: GrayText !important;
+    forced-color-adjust: none;
+  }
+  /* A rail and a segmented bar: every segment keeps an edge; done, current and ended ones fill. The
+     words under the rail and the legend's counts were always there. */
+  .stepper-rail .step-marker, .progress-segment, .progress-legend-swatch {
+    border: 1px solid CanvasText;
+    background: Canvas !important;
+    forced-color-adjust: none;
+  }
+  .stepper-rail .step[data-state] .step-marker, .stepper-rail .step[aria-current="step"] .step-marker,
+  .progress-segment[data-state]:not([data-state="queued"]),
+  .progress-legend-swatch[data-state]:not([data-state="queued"]),
+  .progress[data-tone] .progress-bar, .progress-field[data-tone] .progress-bar { background: Highlight !important; }
+  .file-progress { border-color: CanvasText; }
 
   /* Decoration carries no meaning and only adds noise here. */
   .bg-dot-grid, .bg-noise { background-image: none; }
@@ -7145,16 +7750,21 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
  * without the sweep across a wide surface that the skeleton and the progress bar rely on. */
 @media (prefers-reduced-motion: reduce) {
   .spinner,
+  .progress-ring-indeterminate::before,
+  .progress-mark[data-state="current"],
   .btn.is-loading::after {
     animation-duration: 1.8s !important;
     animation-iteration-count: infinite !important;
   }
 
-  /* The bar slides across its whole track, which IS a wide-area sweep — so it pulses in place
-     instead. Still moving, still indeterminate, and going nowhere on purpose. */
+  /* The bar slides across its whole track, which IS a wide-area sweep. It used to breathe in place
+     at full width instead, which read as a pulse, not as progress. Now a third of the track
+     appears at the start, then the middle, then the end — it fades out, MOVES WHILE INVISIBLE, and
+     fades in one place further on. Nothing travels across the screen, and it still reads as
+     getting somewhere. */
   .progress-indeterminate .progress-bar {
-    animation: progress-breathe 2.4s var(--ease-in-out) infinite !important;
-    inline-size: 100%;
+    animation: progress-hop 2.4s linear infinite !important;
+    inline-size: calc(100% / 3);
   }
 
   /* A PULSE IS NOT ONE OF THE THREE. It always sits beside words that say the same thing, so it
@@ -7171,4 +7781,17 @@ button.facet[aria-pressed='true']:hover { background: var(--color-accent-200); }
      arrive. Nothing here indicates activity — a running tool call says so with a pulse and words. */
   .tool-chip-caret, .layered-graph-node { transition: none; }
 }
-@keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes progress-hop {
+  0%      { transform: translateX(0);    opacity: 0; }
+  8%      { opacity: 1; }
+  25%     { opacity: 1; }
+  33.32%  { transform: translateX(0);    opacity: 0; }
+  33.33%  { transform: translateX(100%); opacity: 0; }
+  41%     { opacity: 1; }
+  58%     { opacity: 1; }
+  66.65%  { transform: translateX(100%); opacity: 0; }
+  66.66%  { transform: translateX(200%); opacity: 0; }
+  75%     { opacity: 1; }
+  92%     { opacity: 1; }
+  100%    { transform: translateX(200%); opacity: 0; }
+}

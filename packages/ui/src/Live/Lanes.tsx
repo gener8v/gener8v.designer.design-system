@@ -1,7 +1,7 @@
 import { forwardRef, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
-import { Pulse, Tick, Cross } from './Live.js';
+import { Pulse, Tick, Cross, Dash } from './Live.js';
 
 export type LaneTone = 'neutral' | 'muted' | 'accent' | 'success' | 'warning' | 'danger';
 
@@ -11,7 +11,7 @@ export interface Lane {
   label: string;
   tone?: LaneTone;
   /** The mark inside each pill in this lane. */
-  marker?: 'pulse' | 'tick' | 'cross' | 'none';
+  marker?: 'pulse' | 'tick' | 'cross' | 'dash' | 'none';
   /**
    * When the lane is drawn.
    *
@@ -49,7 +49,7 @@ export const AGENT_LANES: Lane[] = [
   { id: 'running', label: 'Working', tone: 'accent', marker: 'pulse', show: 'while-active' },
   { id: 'done', label: 'Done', tone: 'success', marker: 'tick', show: 'always', keep: 'last', announce: true },
   { id: 'failed', label: 'Stopped', tone: 'danger', marker: 'cross', show: 'when-occupied', announce: true },
-  { id: 'skipped', label: 'Skipped', tone: 'muted', show: 'when-occupied' },
+  { id: 'skipped', label: 'Skipped', tone: 'muted', marker: 'dash', show: 'when-occupied' },
 ];
 
 export interface LanesProps extends Omit<HTMLAttributes<HTMLDivElement>, 'children'> {
@@ -174,6 +174,7 @@ export const Lanes = forwardRef<HTMLDivElement, LanesProps>(function Lanes(
                       {lane.marker === 'pulse' && <Pulse />}
                       {lane.marker === 'tick' && <Tick />}
                       {lane.marker === 'cross' && <Cross />}
+                      {lane.marker === 'dash' && <Dash />}
                       <span className="lane-item-label">{item.label}</span>
                       {!hideDetail && item.detail && <span className="lane-item-detail">{item.detail}</span>}
                     </li>

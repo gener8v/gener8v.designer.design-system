@@ -21,12 +21,17 @@ export const when = [
         because: 'a stepper shows position in an order; a checklist can be ticked in any order.',
       },
       {
+        when: 'the system is doing the tasks and the reader is watching',
+        use: 'ProgressList',
+        because: 'a progress list reports work in progress with a spinner and failures; a checklist is ticked by hand.',
+      },
+      {
         when: 'the reader is ticking off sections of a document as reviewed',
         use: 'Contents',
         because: 'the contents carries its own reviewed boxes beside each section link.',
       },
     ],
-    neighbours: ['Choice', 'Stepper', 'Contents'],
+    neighbours: ['Choice', 'Stepper', 'Contents', 'ProgressList'],
     react: ['Checklist', 'ChecklistItem'],
     css: ['.checklist'],
     page: 'templates/work-item-close/',

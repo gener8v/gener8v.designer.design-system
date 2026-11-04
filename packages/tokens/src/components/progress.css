@@ -1,0 +1,444 @@
+/* ---------------------------------------------------------------- progress */
+
+/* ONE FAMILY, ONE ANATOMY.
+ *
+ * Bar, ring, spinner, the stepper's rail, a row's live bar, a segmented bar, a
+ * checklist's marks and a file's transfer row are one family. They read the
+ * same tokens (`--progress-*` in the theme), the same six states and the same
+ * four glyphs, and they place a label and a value by one rule:
+ *
+ *   LABEL AT THE START, VALUE AT THE END, HELPER UNDERNEATH.
+ *   - Stacked (a bar that is the subject of its region): label and value on one
+ *     line above the track, helper text below it.
+ *   - Inline (a row, a table cell): label · track · value, on one line.
+ *   - Ring: the value inside when the ring is 48px or larger; otherwise beside
+ *     it, where a label would go. A label and helper sit beside a ring, never
+ *     under it.
+ *   Values are tabular figures in the mono voice, so a moving number does not
+ *   make its row shimmer.
+ *
+ * THE SIX STATES, ONE MAPPING.
+ *
+ *   state     word          glyph   tone
+ *   queued    Queued/To do  —       neutral, hollow
+ *   current   In progress   —       action (a ring; a spinner when work runs)
+ *   complete  Done          check   success
+ *   failed    Failed        cross   danger
+ *   stopped   Stopped       alert   warning — interrupted or cancelled, not refused
+ *   skipped   Skipped       minus   neutral, dashed
+ *
+ * A mark is a tonal disc: the 100 step behind, the 300 step as its edge, the
+ * glyph in 700. A segment of a bar is a fill in the 700 step. Colour never
+ * carries a state alone — the glyph, the word or both are always there. */
+
+/* --- the glyph set ----------------------------------------------------- */
+
+/* FOUR GLYPHS, ONE SOURCE, ONE STROKE.
+ *
+ * Phosphor's Bold geometry (the system's icon set is Phosphor) — a 24-unit stroke
+ * on a 256 grid with round caps and joins — drawn as strokes and embedded as
+ * CSS mask images. A mask rather than inline SVG or a text glyph because:
+ *
+ *   - It needs no markup. The stepper's existing `<span class="step-marker">1</span>`
+ *     draws its tick from CSS alone, so markup written against an earlier version
+ *     gets the fix on its next bump, and a static page needs no React and no icon
+ *     package.
+ *   - It is painted in `background-color`, so a state colours it with one token,
+ *     and forced-colours mode can repaint it in a system colour.
+ *   - A text glyph (✓ ×) is drawn by whatever font the reader has, at that font's
+ *     weight and baseline — which is how three different ticks got into the system.
+ *
+ * Each viewBox is centred on the INK, not on Phosphor's 256 box: the check's ink
+ * spans x 28–236 and y 60–212, centre (132, 136), so its viewBox starts at (4, 8).
+ * A glyph's painted centre is therefore its box's centre, by construction, and a
+ * container centres the box. Nothing is nudged. */
+:root {
+  --progress-glyph-check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='4 8 256 256'%3E%3Cpath d='M40 144l56 56L224 72' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M56 56l144 144M200 56L56 200' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-minus: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M40 128h176' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --progress-glyph-alert: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cpath d='M128 56v92' fill='none' stroke='black' stroke-width='24' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='128' cy='196' r='16'/%3E%3C/svg%3E");
+}
+
+/* A glyph inline with text: 1em, in the text's colour. */
+.progress-glyph {
+  display: inline-block;
+  flex: none;
+  inline-size: 1em;
+  block-size: 1em;
+  vertical-align: -0.15em;
+  background: currentColor;
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
+}
+.progress-glyph[data-glyph="cross"] { -webkit-mask-image: var(--progress-glyph-cross); mask-image: var(--progress-glyph-cross); }
+.progress-glyph[data-glyph="minus"] { -webkit-mask-image: var(--progress-glyph-minus); mask-image: var(--progress-glyph-minus); }
+.progress-glyph[data-glyph="alert"] { -webkit-mask-image: var(--progress-glyph-alert); mask-image: var(--progress-glyph-alert); }
+
+/* --- the mark: a state in a disc --------------------------------------- */
+
+/* The same disc and glyph a stepper marker draws, for a checklist task, a
+   legend and anywhere else one item's state needs a mark. `data-state` picks
+   the glyph and tone; the disc is 24px, or 16px as `.progress-mark-sm`. */
+.progress-mark {
+  --mark-size: var(--progress-circle-sm);
+  position: relative;
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--mark-size);
+  block-size: var(--mark-size);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  vertical-align: middle;
+}
+.progress-mark-sm { --mark-size: var(--progress-circle-xs); }
+/* Absolutely placed and centred by margin, so nothing in the disc can move it. */
+.progress-mark::after {
+  content: none;
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  inline-size: calc(var(--mark-size) / 2);
+  block-size: calc(var(--mark-size) / 2);
+  background: currentColor;
+  -webkit-mask: var(--progress-glyph-check) center / contain no-repeat;
+  mask: var(--progress-glyph-check) center / contain no-repeat;
+}
+.progress-mark[data-state="complete"]::after,
+.progress-mark[data-state="failed"]::after,
+.progress-mark[data-state="stopped"]::after,
+.progress-mark[data-state="skipped"]::after { content: ""; }
+
+.progress-mark[data-state="complete"] { background: var(--color-success-100); border-color: var(--color-success-300); color: var(--color-success-700); }
+.progress-mark[data-state="failed"] { background: var(--color-danger-100); border-color: var(--color-danger-300); color: var(--color-danger-700); }
+.progress-mark[data-state="failed"]::after { -webkit-mask-image: var(--progress-glyph-cross); mask-image: var(--progress-glyph-cross); }
+.progress-mark[data-state="stopped"] { background: var(--color-warning-100); border-color: var(--color-warning-300); color: var(--color-warning-700); }
+.progress-mark[data-state="stopped"]::after { -webkit-mask-image: var(--progress-glyph-alert); mask-image: var(--progress-glyph-alert); }
+.progress-mark[data-state="skipped"] { border-style: dashed; background: transparent; color: var(--color-neutral-600); }
+.progress-mark[data-state="skipped"]::after { -webkit-mask-image: var(--progress-glyph-minus); mask-image: var(--progress-glyph-minus); }
+/* Current: the work is running, so the mark IS the spinner — the same ring,
+   track and arc, at the disc's size. See `.spinner` below. */
+
+/* --- linear ------------------------------------------------------------ */
+
+.progress {
+  --progress-h: var(--progress-h-md);
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--progress-h);
+  background: var(--progress-track);
+  border-radius: var(--progress-radius);
+  overflow: hidden;
+}
+.progress-sm { --progress-h: var(--progress-h-sm); }
+.progress-lg { --progress-h: var(--progress-h-lg); }
+.progress-bar {
+  block-size: 100%;
+  inline-size: 0;
+  background: var(--progress-fill);
+  border-radius: inherit;
+  transition: inline-size var(--dur-slow) var(--ease-out), background-color var(--dur-base) var(--ease-out);
+}
+
+/* A tone replaces the fill only when the whole task has ended. */
+.progress[data-tone="success"], .progress-field[data-tone="success"], .progress-ring[data-tone="success"], .progress-ring-field[data-tone="success"] { --progress-tone: var(--progress-fill-success); }
+.progress[data-tone="warning"], .progress-field[data-tone="warning"], .progress-ring[data-tone="warning"], .progress-ring-field[data-tone="warning"] { --progress-tone: var(--progress-fill-warning); }
+.progress[data-tone="danger"], .progress-field[data-tone="danger"], .progress-ring[data-tone="danger"], .progress-ring-field[data-tone="danger"] { --progress-tone: var(--progress-fill-danger); }
+.progress[data-tone] .progress-bar,
+.progress-field[data-tone] .progress-bar { background: var(--progress-tone, var(--progress-fill)); }
+
+/* Indeterminate: a third of the track crosses it, and leaves before it
+   returns, so it never reads as a bar parked at a value. */
+.progress-indeterminate .progress-bar {
+  inline-size: 40%;
+  animation: progress-slide 1.6s var(--ease-in-out) infinite;
+}
+@keyframes progress-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+/* The labelled layout: label and value above the track, helper below. */
+.progress-field { display: grid; gap: var(--space-2); min-inline-size: 0; }
+.progress-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+.progress-label {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-neutral-900);
+}
+.progress-value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-neutral-700);
+}
+.progress-helper { margin: 0; font-size: var(--text-xs); color: var(--color-neutral-600); }
+/* A value that is a WORD — Uploaded, Failed, Waiting — is set in the body face, not the figures'
+   mono, so every status in a list reads in one voice. Figures stay mono and tabular. */
+.progress-status { font-family: var(--font-body); font-weight: 500; }
+.progress-field[data-tone="success"] .progress-value { color: var(--color-success-700); }
+.progress-field[data-tone="warning"] .progress-value { color: var(--color-warning-800); }
+.progress-field[data-tone="danger"] .progress-value,
+.progress-field[data-tone="danger"] .progress-helper { color: var(--color-danger-700); }
+
+/* Inline: label · track · value on one line, for a row or a cell.
+ *
+ * THREE FIXED COLUMNS, NOT WHATEVER EACH LABEL LEFT OVER. Inline bars stack — Controls over
+ * Evidence over Owners — and a bar that starts wherever its own label happens to end puts every
+ * track at a different x, which reads as a list nobody lined up. The label and value tracks are
+ * fixed (`--progress-label-w`, `--progress-value-w`, set by the caller when the words are longer),
+ * so every bar in a stack starts and ends at the same x and the values right-align. */
+.progress-inline {
+  display: grid;
+  grid-template-columns:
+    minmax(0, var(--progress-label-w, var(--space-32)))
+    minmax(var(--space-12), 1fr)
+    var(--progress-value-w, var(--space-12));
+  align-items: center;
+  column-gap: var(--space-3);
+}
+.progress-inline .progress-label { font-weight: 400; color: var(--color-neutral-700); font-size: var(--text-xs); }
+.progress-inline .progress-value { justify-self: end; }
+
+/* --- circular ---------------------------------------------------------- */
+
+/* RING, SPINNER AND A RUNNING MARK ARE ONE SHAPE.
+ *
+ * A track and an arc, stroke = diameter / 8, drawn with a conic gradient and a
+ * radial mask that cuts the hole — so the hole is genuinely empty and the ring
+ * sits on a card, a tinted lane or a dark page alike. (It used to cover its
+ * middle with a disc of `--color-bg`, which showed as a white coin on anything
+ * that was not the page.) The spinner is this ring with no value, a quarter arc
+ * and a turn. Sizes are the circle scale: xs 16, sm 24, md 32, lg 48, xl 64. */
+.progress-ring,
+.spinner,
+.progress-mark[data-state="current"] {
+  --ring-size: var(--progress-circle-xl);
+  --ring-stroke: calc(var(--ring-size) / 8);
+  --ring-hole: radial-gradient(farthest-side,
+    transparent calc(100% - var(--ring-stroke) - 1px),
+    black calc(100% - var(--ring-stroke)));
+}
+.progress-ring {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--ring-size);
+  block-size: var(--ring-size);
+  border-radius: var(--radius-full);
+}
+.progress-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: conic-gradient(
+    var(--progress-tone, var(--progress-fill)) calc(var(--progress, 0) * 1%),
+    var(--progress-track) 0
+  );
+  -webkit-mask: var(--ring-hole);
+  mask: var(--ring-hole);
+}
+.progress-ring-xs { --ring-size: var(--progress-circle-xs); }
+.progress-ring-sm { --ring-size: var(--progress-circle-sm); }
+.progress-ring-md { --ring-size: var(--progress-circle-md); }
+.progress-ring-lg { --ring-size: var(--progress-circle-lg); }
+.progress-ring-value {
+  position: relative;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-neutral-900);
+}
+.progress-ring-lg .progress-ring-value { font-size: var(--text-xs); }
+/* An icon in the middle: three-eighths of the ring, the colour of its fill. */
+.progress-ring > .progress-glyph,
+.progress-ring > svg {
+  position: relative;
+  inline-size: calc(var(--ring-size) * 0.375);
+  block-size: calc(var(--ring-size) * 0.375);
+  vertical-align: 0;
+  color: var(--progress-tone, var(--progress-fill));
+}
+.progress-ring-indeterminate::before {
+  background: conic-gradient(var(--progress-fill) 0 25%, var(--progress-track) 0);
+  animation: spinner-spin 800ms linear infinite;
+}
+
+/* A RING WITH ITS WORDS BESIDE IT — ONE RULE.
+ *
+ * The ring is centred on its text, and the text is always two lines: the title line (label, and
+ * the value when the ring is too small to hold it) and one supporting line (the helper). Two
+ * rings side by side therefore put their titles on one line whatever their sizes, and no ring
+ * sits against a three-line block in one place and a two-line block in another. */
+.progress-ring-field {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+.progress-ring-text { display: grid; gap: var(--space-1); min-inline-size: 0; }
+.progress-ring-text .progress-head { justify-content: flex-start; gap: var(--space-2); }
+
+/* --- spinner ----------------------------------------------------------- */
+
+/* The indeterminate ring at its three small sizes: 16, 24 and 32. */
+.spinner,
+.progress-mark[data-state="current"] {
+  display: inline-block;
+  flex: none;
+  box-sizing: border-box;
+  inline-size: var(--ring-size);
+  block-size: var(--ring-size);
+  border: 0;
+  border-radius: var(--radius-full);
+  background: conic-gradient(var(--progress-fill) 0 25%, var(--progress-track) 0);
+  -webkit-mask: var(--ring-hole);
+  mask: var(--ring-hole);
+  vertical-align: middle;
+  animation: spinner-spin 800ms linear infinite;
+}
+.spinner { --ring-size: var(--progress-circle-sm); }
+.spinner-sm { --ring-size: var(--progress-circle-xs); }
+.spinner-lg { --ring-size: var(--progress-circle-md); }
+.progress-mark[data-state="current"] { --ring-size: var(--mark-size); }
+@keyframes spinner-spin { to { transform: rotate(360deg); } }
+
+/* --- segmented --------------------------------------------------------- */
+
+/* ONE TRACK, SPLIT BY STATUS. Each segment's length is its count; the gap is
+   the rail's 2px, so a segmented bar and a stepper's rail are the same object.
+   A segment never shrinks below a dot, so one failure in a hundred is seen. */
+.progress-segments {
+  display: flex;
+  gap: var(--progress-gap);
+  block-size: var(--progress-h-md);
+}
+.progress-segments.progress-sm { block-size: var(--progress-h-sm); }
+.progress-segments.progress-lg { block-size: var(--progress-h-lg); }
+.progress-segment {
+  flex: var(--value, 1) 1 0;
+  min-inline-size: var(--progress-h-lg);
+  border-radius: var(--progress-radius);
+  background: var(--progress-track);
+}
+.progress-segment[data-state="complete"], .progress-legend-swatch[data-state="complete"] { background: var(--progress-fill-success); }
+.progress-segment[data-state="failed"], .progress-legend-swatch[data-state="failed"] { background: var(--progress-fill-danger); }
+.progress-segment[data-state="stopped"], .progress-legend-swatch[data-state="stopped"] { background: var(--progress-fill-warning); }
+.progress-segment[data-state="current"], .progress-legend-swatch[data-state="current"] { background: var(--progress-fill); }
+.progress-segment[data-state="skipped"], .progress-legend-swatch[data-state="skipped"] { background: var(--color-neutral-400); }
+
+/* The legend says every count in words. The swatch is the segment's shape. */
+.progress-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.progress-legend-item { display: inline-flex; align-items: center; gap: var(--space-2); }
+.progress-legend-swatch {
+  flex: none;
+  inline-size: var(--space-3);
+  block-size: var(--progress-h-md);
+  border-radius: var(--progress-radius);
+  background: var(--progress-track);
+}
+.progress-legend-count { font-family: var(--font-mono); font-variant-numeric: tabular-nums; color: var(--color-neutral-900); }
+
+/* --- checklist progress ------------------------------------------------ */
+
+/* Tasks, each with its mark, and the count of how many are done. For a setup
+   list, onboarding, or the steps of an agent's run. Not ticked by the reader —
+   that is `.checklist`. */
+.progress-list { display: grid; gap: var(--space-3); min-inline-size: 0; }
+.progress-list-items { display: grid; margin: 0; padding: 0; list-style: none; }
+.progress-list-item {
+  display: grid;
+  grid-template-columns: var(--progress-circle-sm) minmax(0, 1fr);
+  grid-template-rows: var(--progress-circle-sm) auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  padding-block: var(--space-2);
+}
+.progress-list-item > .progress-mark { grid-row: 1; grid-column: 1; }
+.progress-list-label {
+  grid-row: 1;
+  grid-column: 2;
+  min-inline-size: 0;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-800);
+}
+.progress-list-description {
+  grid-row: 2;
+  grid-column: 2;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}
+.progress-list-item[data-state="current"] .progress-list-label { color: var(--color-neutral-900); font-weight: 500; }
+.progress-list-item[data-state="queued"] .progress-list-label,
+.progress-list-item[data-state="skipped"] .progress-list-label { color: var(--color-neutral-600); }
+.progress-list-item[data-state="failed"] .progress-list-label { color: var(--color-danger-700); }
+.progress-list-item[data-state="failed"] .progress-list-description { color: var(--color-danger-700); }
+.progress-list-item[data-state="stopped"] .progress-list-label { color: var(--color-warning-800); }
+
+/* --- file transfer ----------------------------------------------------- */
+
+/* A file on its way: the stacked layout (name and status above, a 4px track,
+ * size or the error below), and two action slots at the end of the row.
+ *
+ * THE ACTION COLUMNS ARE THE LIST'S, NOT THE ROW'S. A row with a Retry button used to get a
+ * shorter bar and a status 66px left of its neighbours'. A list holding transfer rows becomes a
+ * three-column grid — body, retry slot, dismiss slot — and each row takes those columns as a
+ * subgrid, so every bar ends and every status right-aligns at the same x, and a row with no
+ * Retry keeps the slot empty rather than giving it to its bar. */
+.file-list:has(> .file-progress) {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+.file-list:has(> .file-progress) > * { grid-column: 1 / -1; }
+.file-progress {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  column-gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+}
+.file-list > .file-progress { grid-template-columns: subgrid; }
+.file-progress > .progress-field { gap: var(--space-2); margin-inline-end: var(--space-1); }
+/* A file's name wraps rather than clipping: two files that differ only at the end of a long
+   name are told apart by exactly the part an ellipsis would hide. */
+.file-progress .progress-label { font-weight: 400; white-space: normal; overflow-wrap: anywhere; }
+/* An empty slot still holds its column; the dismiss slot is always one square control wide. */
+.file-progress-slot { display: flex; }
+.file-progress-slot + .file-progress-slot { inline-size: var(--control-h-sm); }
+.file-progress[data-state="failed"] { border-color: var(--color-danger-300); }
+
+/* --- progress inside a button ----------------------------------------- */
+
+/* Not added. `.btn.is-loading` already keeps a button's label and width while
+   it waits, and a determinate fill inside a solid button would put a second
+   bar on the one control a view has exactly one of. A long action reports its
+   progress where its result will land. */
