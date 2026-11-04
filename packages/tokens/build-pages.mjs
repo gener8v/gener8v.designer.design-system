@@ -9,6 +9,7 @@ import { contrast, STEPS } from './src/color.mjs';
 import { THEME_BOOT, THEME_CONTROL, THEME_CSS } from '../../scripts/lab-theme.mjs';
 import { theme, TYPE_SCALE, SPACE_BASE, SPACE_EXTRA, CONTROL_H } from './src/theme.mjs';
 import tokens from './dist/tokens.mjs';
+import { load as loadChoosing, indexRows, ownerOf } from '../../scripts/choosing.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const write = (rel, body) => {
@@ -485,6 +486,19 @@ const readme = read(join(ROOT, 'design', 'readme.md'), 'utf8');
 const tableRows = [...readme.matchAll(/^\| (`[^|]+`) \| ([^|]+) \| ([^|]+) \|$/gm)]
   .filter((m) => !m[1].includes('Class'));
 
+// The React column comes from the `when.ts` beside each component: the entry that owns each class
+// on the row (longest class root wins), and its exports. `pnpm lint:choosing` fails on a row with
+// no owner, so a blank cell here means a CSS-only part, not a gap.
+const { entries: choosing } = await loadChoosing();
+const reactFor = (row) => {
+  const names = [];
+  for (const cls of indexRows(row[0])[0] ?? []) {
+    const e = ownerOf(cls, choosing);
+    for (const r of e?.react ?? []) if (!names.includes(r)) names.push(r);
+  }
+  return names.length ? names.map((n) => `\`${n}\``).join(', ') : '—';
+};
+
 write('skills/gener8v-design-system/references/components.md',
 `# Component index
 
@@ -494,9 +508,11 @@ producible by \`@gener8v/ui\` — both facts are gated by \`pnpm check\`.
 Prefer these over inventing a parallel class. If you need something that is not here,
 add it to the system, not to the consuming app.
 
-| Class | What it is | Shown in |
-| --- | --- | --- |
-${tableRows.map((m) => `| ${m[1]} | ${m[2].trim()} | ${m[3].trim()} |`).join('\n')}
+Which one to use for a job, and which not to: \`choosing/<family>.md\`, routed from SKILL.md.
+
+| Class | React | What it is | Shown in |
+| --- | --- | --- | --- |
+${tableRows.map((m) => `| ${m[1]} | ${reactFor(m)} | ${m[2].trim()} | ${m[3].trim()} |`).join('\n')}
 
 ## Tokens
 
