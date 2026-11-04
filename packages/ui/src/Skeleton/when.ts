@@ -16,9 +16,14 @@ export const when = [
         because: 'a skeleton means "still reading" and never "nothing here"; an empty state names the cause and the way out.',
       },
       {
-        when: 'the read failed',
+        when: 'the read failed, or a failed read is being retried',
         use: 'State',
-        because: 'a skeleton never tells you it has finished; an error state says what went wrong.',
+        because: 'a skeleton never tells you it has finished; an error state says what went wrong, and the retry button shows its own wait.',
+      },
+      {
+        when: 'a figure is shown from only some of its sources',
+        use: 'State',
+        because: 'the read finished; a skeleton would claim it is still loading. `State kind="partial"` says what is missing.',
       },
       {
         when: 'the wait is short and the layout is not known',

@@ -7,8 +7,8 @@ export const when = [
     job: 'stand in for content that is loading, empty, partial, failed, denied or done',
     use: [
       'A region has no content to show and needs to say why: `kind` is loading, empty, partial, error, denied or success.',
-      'A figure or list built from some sources but not all — `partial` says which are missing.',
-      'An empty list that names its cause and offers the way out in `StateActions`; `art` gives an empty place a line drawing.',
+      'A figure or list built from some sources but not all: `kind="partial"` directly above the figures that did arrive, saying which are missing and offering a retry. Use it instead of an `Alert` so the figure cannot be read as the full total.',
+      'An empty list or a failed read that names its cause and offers the way out in `StateActions` (Create…, Retry); `art` gives an empty place a line drawing. A retry shows its wait on the button, not by swapping in a `Skeleton`.',
     ],
     not: [
       {
