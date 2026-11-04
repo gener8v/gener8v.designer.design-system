@@ -80,6 +80,17 @@ html[data-docs="page"] body { padding-block-start: var(--docs-top); padding-inli
 html[data-docs="page"] body > main { margin-inline: 0 auto; }
 @media (min-width: 1280px) { html[data-docs="page"] body > main { margin-inline-start: var(--space-6); } }
 
+/* ONE SPECIMEN COLUMN, DEFINED ONCE.
+ *
+ * Every component page used to cap its own `.demo` — 600px on most, and 620, 660, 720, 920 or 1200
+ * on the rest — so a header that needs 768px scrolled sideways inside a 550px column on a 2300px
+ * screen. The column is fluid now and fills the space beside the rail, up to a reading-room
+ * maximum. Specimens take the width; prose keeps its measure. */
+.demo { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-8) var(--space-6) var(--space-16); }
+.demo-head { margin: var(--space-10) 0 var(--space-4); }
+.demo-head:first-child { margin-top: 0; }
+.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+.demo > p:not([class]), .demo > ul:not([class]) { max-inline-size: 72ch; }
 html[data-docs="page"] :target { scroll-margin-block-start: calc(var(--docs-top) + var(--space-6)); }
 
 .docs-head { margin-block-end: var(--space-10); }

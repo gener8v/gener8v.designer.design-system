@@ -33,6 +33,10 @@ see it when they bump. No class, prop or markup is renamed or removed.
 - **Added** `Hamburger`'s `inNav` prop, which adds `.nav-burger`.
 - Spec: `docs/specs/navigation.md`.
 
+### Changed — visual (integrations)
+
+- **`.key-row` wraps** when it does not fit, instead of clipping inside `.key-list` on a phone.
+
 ### Added
 
 - **`useListbox`** (with `Combobox`), the WAI-ARIA collapsible-listbox keyboard contract as a

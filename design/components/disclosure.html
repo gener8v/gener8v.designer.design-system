@@ -8,12 +8,10 @@
 <link rel="stylesheet" href="../styles.css" />
 <script src="../assets/docs.js"></script>
 <style>
-/* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: 600px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
-.demo-head { margin: var(--space-10) 0 var(--space-4); }
-.demo-head:first-child { margin-top: 0; }
-.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+/* Demo scaffolding only — everything visual comes from ../styles.css; the specimen column
+   (.demo, .demo-head, .note) is shared by every docs page and comes from ../assets/docs.js. */
 .anchor { display: flex; gap: var(--space-6); align-items: flex-start; flex-wrap: wrap; }
+.menu-flyout { margin-block-start: calc(var(--space-4) * 10); margin-inline-start: calc(-1 * var(--space-5)); }
 </style>
 </head>
 <body>
@@ -45,17 +43,20 @@
           Move to
           <svg class="menu-sub-mark" viewBox="0 0 256 256" fill="currentColor"><path d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/></svg>
         </button>
-        <div class="menu" role="menu" aria-label="Move to" style="position:absolute;inset-inline-start:100%;inset-block-start:0;margin-inline-start:var(--space-1)">
-          <button type="button" class="menu-item" role="menuitemradio" aria-checked="true">Current quarter</button>
-          <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Next quarter</button>
-          <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Archive</button>
-        </div>
       </div>
       <hr class="menu-sep" />
       <button type="button" class="menu-item menu-item-danger" role="menuitem">
         <svg viewBox="0 0 256 256" fill="currentColor"><path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192Z"/></svg>
         Archive
       </button>
+    </div>
+    <!-- The flyout, drawn beside its parent at the height of "Move to". In the React Menu it is
+         positioned against the trigger; a static page has no anchor to measure, so it sits in the
+         row rather than at an absolute offset that lands off the page. -->
+    <div class="menu menu-flyout" role="menu" aria-label="Move to">
+      <button type="button" class="menu-item" role="menuitemradio" aria-checked="true">Current quarter</button>
+      <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Next quarter</button>
+      <button type="button" class="menu-item" role="menuitemradio" aria-checked="false">Archive</button>
     </div>
   </div>
 

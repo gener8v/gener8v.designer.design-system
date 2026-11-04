@@ -8,17 +8,17 @@
 <link rel="stylesheet" href="../styles.css" />
 <script src="../assets/docs.js"></script>
 <style>
-/* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: var(--container-lg); margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
-.demo-head { margin: var(--space-10) 0 var(--space-4); }
-.demo-head:first-child { margin-top: 0; }
-.frame { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow: hidden; }
+/* Demo scaffolding only — everything visual comes from ../styles.css; the specimen column
+   (.demo, .demo-head, .note) is shared by every docs page and comes from ../assets/docs.js. */
+/* Frames never hide what they hold: a specimen too wide for its column scrolls in its own frame. */
+.frame { border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); overflow-x: auto; }
+.frame-rails { display: flex; flex-wrap: wrap; }
+.frame-rails > .frame-pane { flex: 1 1 calc(var(--space-20) * 3); min-inline-size: 0; padding: var(--space-6); }
 .narrow { max-inline-size: calc(var(--space-24) * 4); }
 .prose { max-inline-size: 72ch; }
 .stage-tall { height: var(--space-32); }
 .stage { position: relative; height: calc(var(--space-32) * 1.75); background: var(--color-surface); overflow: hidden; }
 .pair { display: flex; gap: var(--space-6); align-items: center; flex-wrap: wrap; }
-.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
 </style>
 </head>
 <body>
@@ -145,7 +145,7 @@
   </div>
 
   <p class="demo-head label">Sidebar</p>
-  <div class="frame" style="display:flex">
+  <div class="frame frame-rails">
     <nav class="sidebar">
       <p class="sidebar-group">Delivery</p>
       <a class="sidebar-item" href="#" aria-current="page">Engagements<span class="sidebar-count">14</span></a>
@@ -173,7 +173,7 @@
         </div>
       </div>
     </nav>
-    <div style="flex:1;min-inline-size:0;padding:var(--space-6)">
+    <div class="frame-pane">
       <p class="breadcrumbs">
         <a href="#">Delivery</a><span class="breadcrumb-sep">/</span>
         <a href="#">Engagements</a><span class="breadcrumb-sep">/</span>
