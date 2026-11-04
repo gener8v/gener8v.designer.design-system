@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Reading — Guidance — GENER8V Design System</title>
+<link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
+<style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
+
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; }
+.gd-table td:first-child { min-inline-size: 14ch; }
+.gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
+.gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
+.gd-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-block-start: var(--space-5); }
+.gd-cols h3 { font-size: var(--text-sm); font-weight: 600; color: var(--color-neutral-900); }
+.gd-cols ul { margin: var(--space-2) 0 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-neutral-700); }
+.gd-meta { margin-block-start: var(--space-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.gd-meta code { font-size: var(--text-xs); }
+.gd-other { margin-block-start: var(--space-16); }
+@media (max-width: 720px) { .gd-cols { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<main class="doc">
+  <div class="docs-head">
+    <h1>Reading</h1>
+    <p class="lede">Which component to use for a document, prose, code, sources or type someone reads. Find the job, take the component, and read the “not when” before you commit: it names the thing people reach for by mistake, and what to use instead.</p>
+  </div>
+
+  <section class="doc-section" aria-labelledby="at-a-glance">
+    <span class="doc-rule" aria-hidden="true"></span>
+    <h2 id="at-a-glance">At a glance</h2>
+    <div class="table-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table">
+      <thead><tr><th scope="col">Job</th><th scope="col">Use</th><th scope="col">Not when</th><th scope="col">Instead</th><th scope="col">Because</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">Fold sections of content away so a reader opens only the ones they need</td><td rowspan="3"><a href="#accordion"><code>Accordion</code></a></td><td>Exactly one panel shows at a time and they are equal views</td><td><a href="navigation.html#tabs"><code>Tabs</code></a></td><td>Tabs swap panels in place; an accordion keeps every section in reading order.</td></tr>
+        <tr><td>The sections nest to any depth and the reader selects nodes</td><td><a href="navigation.html#tree"><code>Tree</code></a></td><td>A tree is a hierarchy with its own keyboard contract.</td></tr>
+        <tr><td>The content is a list of actions behind a button</td><td><a href="input.html#menu"><code>Menu</code></a></td><td>A menu floats and closes on a choice; an accordion discloses content inline.</td></tr>
+        <tr><td rowspan="3">Mark a claim in prose with the source it came from, and show that source in place</td><td rowspan="3"><a href="#citation"><code>Citation</code></a></td><td>The link goes to a page and nothing is being cited</td><td><a href="overlays.html#hovercard"><code>HoverCard</code></a></td><td>A hover card previews what any link or name leads to; a citation is a source behind a claim.</td></tr>
+        <tr><td>The sources are a list to step through one by one</td><td><a href="navigation.html#pagerchip"><code>PagerChip</code></a></td><td>A pager chip walks a set in place — <code>S4 of 19</code> — with source cards as the content.</td></tr>
+        <tr><td>The aside is a note of your own, not a source</td><td><a href="status-and-feedback.html#callout"><code>Callout</code></a></td><td>A callout is a quiet aside inside prose.</td></tr>
+        <tr><td rowspan="4">Show a snippet of code or output to read or copy</td><td rowspan="4"><a href="#codeblock"><code>CodeBlock</code></a></td><td>The person types or edits the code</td><td><a href="input.html#codeeditor"><code>CodeEditor</code></a></td><td>A code editor keeps a real textarea under the highlighting; a code block is read-only.</td></tr>
+        <tr><td>Two versions are compared</td><td><a href="#diff"><code>Diff</code></a></td><td>A diff marks additions and removals in words and lines, not colour alone.</td></tr>
+        <tr><td>It is a keyboard key or a shortcut</td><td><a href="#keys"><code>Keys</code></a></td><td><code>Kbd</code> draws a key as a key; a code block is for code.</td></tr>
+        <tr><td>The value is a secret</td><td><a href="input.html#credential"><code>Credential</code></a></td><td>A credential keeps the secret out of the DOM until revealed and copies without reveal.</td></tr>
+        <tr><td rowspan="3">Show where you are in a long document and jump elsewhere in it</td><td rowspan="3"><a href="#contents"><code>Contents</code></a></td><td>The links go to other pages of the app</td><td><a href="navigation.html#sidebar"><code>Sidebar</code></a></td><td>Places in the app are navigation; contents are places in one document.</td></tr>
+        <tr><td>The sections should be shown one at a time</td><td><a href="navigation.html#tabs"><code>Tabs</code></a></td><td>Tabs swap panels; contents keeps the whole document in one scroll.</td></tr>
+        <tr><td>The document has two headings or fewer</td><td><a href="screens.html#sectionhead"><code>SectionHead</code></a></td><td>Contents draws nothing under three entries — the headings are enough.</td></tr>
+        <tr><td rowspan="3">Show two versions of a text and what changed between them</td><td rowspan="3"><a href="#diff"><code>Diff</code></a></td><td>There is one version of some code to show</td><td><a href="#codeblock"><code>CodeBlock</code></a></td><td>A code block shows a snippet, with a copy control and optional highlighting.</td></tr>
+        <tr><td>The change is one an agent proposes and a person must approve</td><td><a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a></td><td>A confirm card lists the values it will write and waits for the yes.</td></tr>
+        <tr><td>The person is editing the text</td><td><a href="input.html#codeeditor"><code>CodeEditor</code></a></td><td>A code editor is a textarea that shows the shape of what is typed.</td></tr>
+        <tr><td rowspan="5">Show a keyboard key, or the keys a surface binds and what each does</td><td rowspan="5"><a href="#keys"><code>Keys</code></a></td><td>The list is API keys</td><td><a href="data.html#keylist"><code>KeyList</code></a></td><td><code>.key-list</code> is the integrations list of API keys; this is keyboard keys.</td></tr>
+        <tr><td>It is a command or a code sample</td><td><a href="#codeblock"><code>CodeBlock</code></a></td><td>A code block is for code to read or copy, not a key to press.</td></tr>
+        <tr><td>The shortcut belongs on a menu item</td><td><a href="input.html#menu"><code>Menu</code></a></td><td><code>MenuShortcut</code> sets the shortcut at the end of the item it triggers.</td></tr>
+        <tr><td>The page binds its own single keys and needs them off while typing, an off-switch, and one list of them all</td><td><a href="input.html#shortcuts"><code>Shortcuts</code></a></td><td><code>useShortcuts</code> binds the keys, turns single keys off on request and registers them for <code>ShortcutHelp</code>; <code>Keys</code> only draws them.</td></tr>
+        <tr><td>The keys open a search over every command</td><td><a href="navigation.html#commandpalette"><code>CommandPalette</code></a></td><td>The command palette binds ⌘K itself and lists the commands.</td></tr>
+        <tr><td rowspan="3">Preview the file selected in a library, beside the list</td><td rowspan="3"><a href="#docpreview"><code>DocPreview</code></a></td><td>The document is the page, read on its own rather than previewed from a list</td><td><a href="#paper"><code>Paper</code></a></td><td>Paper is the sheet a document sits on and the ground behind it.</td></tr>
+        <tr><td>Two versions of the text are compared</td><td><a href="#diff"><code>Diff</code></a></td><td>A diff marks what was added and removed, not by colour alone.</td></tr>
+        <tr><td>The pane is a modal side panel over the page</td><td><a href="overlays.html#drawer"><code>Drawer</code></a></td><td>A drawer takes the page over and must be dismissed; a preview pane sits beside the list.</td></tr>
+        <tr><td rowspan="3">Set a document on a sheet, on a ground, so it reads as a document</td><td rowspan="3"><a href="#paper"><code>Paper</code></a></td><td>The content is scanned as data — a table, a tree, a split pane</td><td><a href="data.html#table"><code>Table</code></a></td><td>Data takes the full width; the reader looks across it, not down it.</td></tr>
+        <tr><td>You want a surface for one self-contained item in a grid</td><td><a href="screens.html#card"><code>Card</code></a></td><td>A card is a hairline surface for scanning; paper is a sheet for reading.</td></tr>
+        <tr><td>You are previewing a file inside a library pane</td><td><a href="#docpreview"><code>DocPreview</code></a></td><td>The preview pane has its own head and actions and holds prose in <code>Reader</code>.</td></tr>
+        <tr><td rowspan="2">Show a recorded exchange somebody works through and marks as evidence</td><td rowspan="2"><a href="#transcript"><code>Transcript</code></a></td><td>The exchange is live, between the person and a system answering them</td><td><a href="agents-and-live-work.html#conversation"><code>Conversation</code></a></td><td>A conversation is two-sided, appended to and announced as it arrives.</td></tr>
+        <tr><td>Each entry is a note left about a record</td><td><a href="data.html#comment"><code>Comment</code></a></td><td>A comment is one authored note about something; a transcript turn is part of a continuous exchange.</td></tr>
+        <tr><td rowspan="3">Set the voice of text — mono labels, an intro paragraph, secondary copy, figures</td><td rowspan="3"><a href="#type"><code>Type</code></a></td><td>You are naming a section</td><td><a href="screens.html#sectionhead"><code>SectionHead</code></a></td><td>A section name is the loud part; <code>.label</code> is 11px mono and inverts the hierarchy.</td></tr>
+        <tr><td>You are naming the page</td><td><a href="screens.html#pagehead"><code>PageHead</code></a></td><td>The page title belongs in the page head band.</td></tr>
+        <tr><td>The small words report a status</td><td><a href="status-and-feedback.html#tag"><code>Tag</code></a></td><td>A status is a tag with a tone that means something; a label is only a voice.</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="gd-entry" id="accordion" aria-labelledby="accordion-h">
+    <h2 id="accordion-h"><code>Accordion</code></h2>
+    <p>Fold sections of content away so a reader opens only the ones they need.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A list of questions, details or optional sections where most readers want few of them.</li><li>Several may be open at once by default; <code>type=&quot;single&quot;</code> closes one when another opens.</li><li>Opening a panel should cause the work it holds — <code>unmountClosed</code> keeps fetches off until then.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Exactly one panel shows at a time and they are equal views → <a href="navigation.html#tabs"><code>Tabs</code></a>. Tabs swap panels in place; an accordion keeps every section in reading order.</li><li>The sections nest to any depth and the reader selects nodes → <a href="navigation.html#tree"><code>Tree</code></a>. A tree is a hierarchy with its own keyboard contract.</li><li>The content is a list of actions behind a button → <a href="input.html#menu"><code>Menu</code></a>. A menu floats and closes on a choice; an accordion discloses content inline.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="navigation.html#tabs"><code>Tabs</code></a>, <a href="navigation.html#tree"><code>Tree</code></a>, <a href="#contents"><code>Contents</code></a></span><span>React <code>Accordion</code> <code>AccordionItem</code></span><span>Classes <code>.accordion</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/disclosure.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="citation" aria-labelledby="citation-h">
+    <h2 id="citation-h"><code>Citation</code></h2>
+    <p>Mark a claim in prose with the source it came from, and show that source in place.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A marker like <code>S4</code> inside a sentence, followed in place to what it names; <code>SourceCard</code> is the file, the locator, the cited words and a way to open it there.</li><li>Generated or sanitised HTML: the same class styles <code>&lt;a class=&quot;citation&quot;&gt;</code>, and <code>useDelegatedHoverCard</code> previews it.</li><li>A source that cannot be found: <code>missing</code> draws a dashed, unlinked marker that says so in words.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The link goes to a page and nothing is being cited → <a href="overlays.html#hovercard"><code>HoverCard</code></a>. A hover card previews what any link or name leads to; a citation is a source behind a claim.</li><li>The sources are a list to step through one by one → <a href="navigation.html#pagerchip"><code>PagerChip</code></a>. A pager chip walks a set in place — <code>S4 of 19</code> — with source cards as the content.</li><li>The aside is a note of your own, not a source → <a href="status-and-feedback.html#callout"><code>Callout</code></a>. A callout is a quiet aside inside prose.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="overlays.html#hovercard"><code>HoverCard</code></a>, <a href="navigation.html#pagerchip"><code>PagerChip</code></a>, <a href="status-and-feedback.html#callout"><code>Callout</code></a></span><span>React <code>Citation</code> <code>SourceCard</code></span><span>Classes <code>.citation</code> <code>.source-card</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/reading.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="codeblock" aria-labelledby="codeblock-h">
+    <h2 id="codeblock-h"><code>CodeBlock</code></h2>
+    <p>Show a snippet of code or output to read or copy.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A command, a config file or a sample, with a title (a filename or a language) in the head.</li><li>Something meant to be run: <code>copyable</code> adds a copy control — off by default.</li><li>Legibility, not correctness: <code>language</code> highlights sh, ts, tsx, js, css and json; leave it off for logs and stack traces.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The person types or edits the code → <a href="input.html#codeeditor"><code>CodeEditor</code></a>. A code editor keeps a real textarea under the highlighting; a code block is read-only.</li><li>Two versions are compared → <a href="#diff"><code>Diff</code></a>. A diff marks additions and removals in words and lines, not colour alone.</li><li>It is a keyboard key or a shortcut → <a href="#keys"><code>Keys</code></a>. <code>Kbd</code> draws a key as a key; a code block is for code.</li><li>The value is a secret → <a href="input.html#credential"><code>Credential</code></a>. A credential keeps the secret out of the DOM until revealed and copies without reveal.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="input.html#codeeditor"><code>CodeEditor</code></a>, <a href="#diff"><code>Diff</code></a>, <a href="#keys"><code>Keys</code></a>, <a href="input.html#credential"><code>Credential</code></a></span><span>React <code>CodeBlock</code></span><span>Classes <code>.code</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/command.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="contents" aria-labelledby="contents-h">
+    <h2 id="contents-h"><code>Contents</code></h2>
+    <p>Show where you are in a long document and jump elsewhere in it.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A long document with headings: the entry in view is marked <code>aria-current=&quot;location&quot;</code> as the reader scrolls.</li><li>Review section by section — pass <code>reviewed</code> with <code>onReviewedChange</code> for a box per entry and a count.</li><li>A run is writing the document — each entry carries the same live mark as its section.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The links go to other pages of the app → <a href="navigation.html#sidebar"><code>Sidebar</code></a>. Places in the app are navigation; contents are places in one document.</li><li>The sections should be shown one at a time → <a href="navigation.html#tabs"><code>Tabs</code></a>. Tabs swap panels; contents keeps the whole document in one scroll.</li><li>The document has two headings or fewer → <a href="screens.html#sectionhead"><code>SectionHead</code></a>. Contents draws nothing under three entries — the headings are enough.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="navigation.html#sidebar"><code>Sidebar</code></a>, <a href="#paper"><code>Paper</code></a>, <a href="navigation.html#tabs"><code>Tabs</code></a>, <a href="agents-and-live-work.html#liveprogress"><code>LiveProgress</code></a></span><span>React <code>Contents</code></span><span>Classes <code>.contents</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/reading.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="diff" aria-labelledby="diff-h">
+    <h2 id="diff-h"><code>Diff</code></h2>
+    <p>Show two versions of a text and what changed between them.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Before and after of a document, a field or a setting — inline or split into two panes, by word or by line.</li><li>Removals are struck through and additions underlined, as real <code>&lt;del&gt;</code> and <code>&lt;ins&gt;</code>, so a change never rests on colour alone.</li><li>The operations rather than the rendering: <code>diff()</code> and <code>tokenize()</code> are exported.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>There is one version of some code to show → <a href="#codeblock"><code>CodeBlock</code></a>. A code block shows a snippet, with a copy control and optional highlighting.</li><li>The change is one an agent proposes and a person must approve → <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>. A confirm card lists the values it will write and waits for the yes.</li><li>The person is editing the text → <a href="input.html#codeeditor"><code>CodeEditor</code></a>. A code editor is a textarea that shows the shape of what is typed.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#codeblock"><code>CodeBlock</code></a>, <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>, <a href="#docpreview"><code>DocPreview</code></a></span><span>React <code>Diff</code></span><span>Hooks <code>diff</code> <code>tokenize</code></span><span>Classes <code>.diff</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/library.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="keys" aria-labelledby="keys-h">
+    <h2 id="keys-h"><code>Keys</code></h2>
+    <p>Show a keyboard key, or the keys a surface binds and what each does.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A key drawn as a key inside text — <code>J</code>, <code>Enter</code>, <code>⇧</code> — as a real <code>&lt;kbd&gt;</code> (<code>Kbd</code>).</li><li>A &quot;?&quot; sheet or the foot of a panel that binds keys: <code>ShortcutList</code>, a description list of keys and what they do, with glyphs given spoken names.</li><li>Moving through a list of cards by <code>J</code> / <code>K</code> and arrows with real roving focus: <code>useListKeys</code>, which ignores keys while typing or under a dialog.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The list is API keys → <a href="data.html#keylist"><code>KeyList</code></a>. <code>.key-list</code> is the integrations list of API keys; this is keyboard keys.</li><li>It is a command or a code sample → <a href="#codeblock"><code>CodeBlock</code></a>. A code block is for code to read or copy, not a key to press.</li><li>The shortcut belongs on a menu item → <a href="input.html#menu"><code>Menu</code></a>. <code>MenuShortcut</code> sets the shortcut at the end of the item it triggers.</li><li>The page binds its own single keys and needs them off while typing, an off-switch, and one list of them all → <a href="input.html#shortcuts"><code>Shortcuts</code></a>. <code>useShortcuts</code> binds the keys, turns single keys off on request and registers them for <code>ShortcutHelp</code>; <code>Keys</code> only draws them.</li><li>The keys open a search over every command → <a href="navigation.html#commandpalette"><code>CommandPalette</code></a>. The command palette binds ⌘K itself and lists the commands.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="data.html#keylist"><code>KeyList</code></a>, <a href="#codeblock"><code>CodeBlock</code></a>, <a href="input.html#menu"><code>Menu</code></a>, <a href="navigation.html#commandpalette"><code>CommandPalette</code></a>, <a href="input.html#shortcuts"><code>Shortcuts</code></a></span><span>React <code>Kbd</code> <code>ShortcutList</code></span><span>Hooks <code>useListKeys</code> <code>stepIndex</code> <code>isTypingTarget</code></span><span>Classes <code>.kbd</code> <code>.shortcut-list</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/reading.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="docpreview" aria-labelledby="docpreview-h">
+    <h2 id="docpreview-h"><code>DocPreview</code></h2>
+    <p>Preview the file selected in a library, beside the list.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A pane with the file's title and actions in a head and its rendered body below.</li><li>Prose in <code>Reader</code>, its measure capped at 72ch; a spreadsheet in <code>Sheet</code>, a grid shown as a grid.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The document is the page, read on its own rather than previewed from a list → <a href="#paper"><code>Paper</code></a>. Paper is the sheet a document sits on and the ground behind it.</li><li>Two versions of the text are compared → <a href="#diff"><code>Diff</code></a>. A diff marks what was added and removed, not by colour alone.</li><li>The pane is a modal side panel over the page → <a href="overlays.html#drawer"><code>Drawer</code></a>. A drawer takes the page over and must be dismissed; a preview pane sits beside the list.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#paper"><code>Paper</code></a>, <a href="data.html#doclist"><code>DocList</code></a>, <a href="screens.html#split"><code>Split</code></a>, <a href="overlays.html#drawer"><code>Drawer</code></a></span><span>React <code>DocPreview</code> <code>DocPreviewHead</code> <code>DocPreviewTitle</code> <code>DocPreviewActions</code> <code>DocPreviewBody</code> <code>Reader</code> <code>Sheet</code></span><span>Classes <code>.doc-preview</code> <code>.reader</code> <code>.sheet</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/library.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="paper" aria-labelledby="paper-h">
+    <h2 id="paper-h"><code>Paper</code></h2>
+    <p>Set a document on a sheet, on a ground, so it reads as a document.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Anything read as a document — a report, a specification, a generated write-up.</li><li>Navigation for the document — its contents, a provenance rail — goes beside the sheet in <code>PaperAside</code>, not on it.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The content is scanned as data — a table, a tree, a split pane → <a href="data.html#table"><code>Table</code></a>. Data takes the full width; the reader looks across it, not down it.</li><li>You want a surface for one self-contained item in a grid → <a href="screens.html#card"><code>Card</code></a>. A card is a hairline surface for scanning; paper is a sheet for reading.</li><li>You are previewing a file inside a library pane → <a href="#docpreview"><code>DocPreview</code></a>. The preview pane has its own head and actions and holds prose in <code>Reader</code>.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="screens.html#card"><code>Card</code></a>, <a href="#docpreview"><code>DocPreview</code></a>, <a href="#contents"><code>Contents</code></a>, <a href="screens.html#panel"><code>Panel</code></a></span><span>React <code>Paper</code> <code>PaperAside</code> <code>PaperGround</code></span><span>Classes <code>.paper</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/reading.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="transcript" aria-labelledby="transcript-h">
+    <h2 id="transcript-h"><code>Transcript</code></h2>
+    <p>Show a recorded exchange somebody works through and marks as evidence.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An interview or session transcript with any number of speakers, read in order and marked for what each stretch is evidence of.</li><li>Actions on a turn appear on interaction, not on every row — an hour is hundreds of turns.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The exchange is live, between the person and a system answering them → <a href="agents-and-live-work.html#conversation"><code>Conversation</code></a>. A conversation is two-sided, appended to and announced as it arrives.</li><li>Each entry is a note left about a record → <a href="data.html#comment"><code>Comment</code></a>. A comment is one authored note about something; a transcript turn is part of a continuous exchange.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="agents-and-live-work.html#conversation"><code>Conversation</code></a>, <a href="data.html#comment"><code>Comment</code></a>, <a href="#citation"><code>Citation</code></a></span><span>React <code>Transcript</code> <code>TranscriptTurn</code></span><span>Classes <code>.transcript</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="type" aria-labelledby="type-h">
+    <h2 id="type-h"><code>Type</code></h2>
+    <p>Set the voice of text — mono labels, an intro paragraph, secondary copy, figures.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li><code>.label</code> — the mono voice for section markers, figures and data labels. Never above a heading as an eyebrow.</li><li><code>.lede</code> for an intro paragraph, <code>.muted</code> for secondary copy (neutral-600, never neutral-500).</li><li><code>.num</code> for tabular figures that line up; <code>.mono</code> for technical identifiers.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>You are naming a section → <a href="screens.html#sectionhead"><code>SectionHead</code></a>. A section name is the loud part; <code>.label</code> is 11px mono and inverts the hierarchy.</li><li>You are naming the page → <a href="screens.html#pagehead"><code>PageHead</code></a>. The page title belongs in the page head band.</li><li>The small words report a status → <a href="status-and-feedback.html#tag"><code>Tag</code></a>. A status is a tag with a tone that means something; a label is only a voice.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="screens.html#sectionhead"><code>SectionHead</code></a>, <a href="screens.html#pagehead"><code>PageHead</code></a>, <a href="status-and-feedback.html#tag"><code>Tag</code></a></span><span>Classes <code>.label</code> <code>.lede</code> <code>.muted</code> <code>.num</code> <code>.mono</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../foundations/type.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <p class="gd-other muted">Other guides: <a href="screens.html">Screens</a> · <a href="overlays.html">Overlays</a> · <a href="status-and-feedback.html">Status and feedback</a> · <a href="navigation.html">Navigation</a> · <a href="data.html">Data</a> · <a href="input.html">Input</a> · <a href="agents-and-live-work.html">Agents and live work</a></p>
+  <p class="muted" style="font-size:var(--text-sm);margin-block-start:var(--space-3)">Generated from the <code>when.ts</code> beside each component — the same data the Claude Code plugin reads.</p>
+</main>
+</body>
+</html>

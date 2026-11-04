@@ -7,7 +7,7 @@ visual rewrite.
 
 ```
 pnpm install
-pnpm dev      # the design lab at localhost:4321
+pnpm dev      # the documentation site at localhost:4321
 pnpm check    # every gate below
 ```
 

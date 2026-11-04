@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Get started — GENER8V Design System</title>
+<link rel="stylesheet" href="styles.css" />
+<script src="assets/docs.js"></script>
+<style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<main class="doc">
+  <div class="docs-head">
+    <h1>Get started</h1>
+    <p class="lede">Install the packages, import one stylesheet, and teach Claude Code the rules. Then start a screen from a template rather than from a blank file.</p>
+  </div>
+  <ol class="doc-steps">
+    <li><div><h3>Install</h3>
+      <p>The packages are public on npm under MIT. No token, no <code>.npmrc</code>, no account — and CI needs no secret either.</p>
+      <pre class="code"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre></div></li>
+    <li><div><h3>Import the stylesheet, then the components</h3>
+      <p>One stylesheet carries the tokens and every component class. Import it first.</p>
+      <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';          // one stylesheet, first
+import { Button, Flow, BarChart } from '@gener8v/ui';</code></pre>
+      <p>Not on React? The same classes work in plain HTML: link <code>styles.css</code> and copy the markup from any component page.</p></div></li>
+    <li><div><h3>Using Tailwind</h3>
+      <p>The preset maps the same tokens into a Tailwind v4 theme, so utilities and components agree.</p>
+      <pre class="code"><code data-language="sh">npm i @gener8v/tailwind-preset</code></pre></div></li>
+    <li><div><h3>Teach Claude Code the rules</h3>
+      <p>The plugin gives Claude the hard rules, the class names, where the templates are, and the guidance on which component fits which job — without this repository being open.</p>
+      <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
+    <li><div><h3>Enforce it</h3>
+      <p>Copy <code>design/_adherence.oxlintrc.json</code> into the project and point its lint at it. It fails on raw hex, raw px and fonts the system does not provide.</p></div></li>
+    <li><div><h3>Start from a template</h3>
+      <p><a href="templates/app-shell/index.html">Application shell</a> for an app, <a href="templates/landing/index.html">Landing page</a> for marketing, <a href="templates/deck/index.html">Presentation deck</a> for slides, and four worked flows. Copy one and replace the content.</p></div></li>
+  </ol>
+
+  <section class="doc-section" aria-labelledby="pkgs">
+    <span class="doc-rule" aria-hidden="true"></span>
+    <h2 id="pkgs">Packages</h2>
+    <p class="doc-prose muted" style="margin-block-start:var(--space-3)">All four release on one version.</p>
+    <ul class="doc-pkgs">
+      <li><a href="https://www.npmjs.com/package/@gener8v/ui">@gener8v/ui</a><p>React components that render the same class names as the HTML.</p></li>
+      <li><a href="https://www.npmjs.com/package/@gener8v/tokens">@gener8v/tokens</a><p>One token source: CSS variables, TypeScript and DTCG.</p></li>
+      <li><a href="https://www.npmjs.com/package/@gener8v/tailwind-preset">@gener8v/tailwind-preset</a><p>A Tailwind v4 theme over the same tokens.</p></li>
+      <li><a href="https://www.npmjs.com/package/@gener8v/icons">@gener8v/icons</a><p>The icon subset the system uses, tree-shakeable.</p></li>
+    </ul>
+    <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">Source on <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a> · <a href="https://github.com/gener8v/gener8v.designer.design-system/blob/main/LICENSE">MIT licence</a></p>
+  </section>
+</main>
+</body>
+</html>

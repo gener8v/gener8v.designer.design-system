@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Data — Guidance — GENER8V Design System</title>
+<link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
+<style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
+
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; }
+.gd-table td:first-child { min-inline-size: 14ch; }
+.gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
+.gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
+.gd-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-block-start: var(--space-5); }
+.gd-cols h3 { font-size: var(--text-sm); font-weight: 600; color: var(--color-neutral-900); }
+.gd-cols ul { margin: var(--space-2) 0 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-neutral-700); }
+.gd-meta { margin-block-start: var(--space-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.gd-meta code { font-size: var(--text-xs); }
+.gd-other { margin-block-start: var(--space-16); }
+@media (max-width: 720px) { .gd-cols { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<main class="doc">
+  <div class="docs-head">
+    <h1>Data</h1>
+    <p class="lede">Which component to use for figures, tables, charts, lists of records, or history. Find the job, take the component, and read the “not when” before you commit: it names the thing people reach for by mistake, and what to use instead.</p>
+  </div>
+
+  <section class="doc-section" aria-labelledby="at-a-glance">
+    <span class="doc-rule" aria-hidden="true"></span>
+    <h2 id="at-a-glance">At a glance</h2>
+    <div class="table-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table">
+      <thead><tr><th scope="col">Job</th><th scope="col">Use</th><th scope="col">Not when</th><th scope="col">Instead</th><th scope="col">Because</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="3">Put a face or initials beside a person's name</td><td rowspan="3"><a href="#avatar"><code>Avatar</code></a></td><td>The avatar would be the only place the person is named</td><td><a href="#item"><code>Item</code></a></td><td>A name is text; put the avatar in an item's <code>lead</code> beside the name rather than instead of it.</td></tr>
+        <tr><td>The mark stands for a system or an integration, not a person</td><td><a href="status-and-feedback.html#connection"><code>Connection</code></a></td><td>A connection has its own mark and says its state in words.</td></tr>
+        <tr><td>It shows who did a run of actions in order</td><td><a href="#feed"><code>Feed</code></a></td><td>A feed groups each person's run of actions and takes the avatar as the group's mark.</td></tr>
+        <tr><td rowspan="5">Compare amounts across categories on a zero baseline</td><td rowspan="5"><a href="#barchart"><code>BarChart</code></a></td><td>Change over time is the point</td><td><a href="#linechart"><code>LineChart</code></a></td><td>A line shows trend and may float off zero; bars must sit on zero.</td></tr>
+        <tr><td>A direction beside a figure, with no axis</td><td><a href="#sparkline"><code>Sparkline</code></a></td><td>A sparkline is a shape, not a measurement.</td></tr>
+        <tr><td>Two measures on different scales</td><td><a href="#chartframe"><code>ChartFrame</code></a></td><td>Never a second axis: draw two charts, or index both to a common base.</td></tr>
+        <tr><td>Presence or absence at each crossing of two lists</td><td><a href="#matrix"><code>Matrix</code></a></td><td>Coverage is a grid of marks, not a quantity.</td></tr>
+        <tr><td>One or a few headline figures</td><td><a href="#stat"><code>Stat</code></a></td><td>A chart of three bars is a row of figures with extra ink.</td></tr>
+        <tr><td rowspan="3">Show how one or more measures change over time</td><td rowspan="3"><a href="#linechart"><code>LineChart</code></a></td><td>Comparing amounts between categories</td><td><a href="#barchart"><code>BarChart</code></a></td><td>Categories are not a continuum; a line between them implies one.</td></tr>
+        <tr><td>The trend only needs a glance beside a figure</td><td><a href="#sparkline"><code>Sparkline</code></a></td><td>A sparkline is the shape without axes, legend or tooltip.</td></tr>
+        <tr><td>Two measures of different scale</td><td><a href="#chartframe"><code>ChartFrame</code></a></td><td>One y-axis always: two charts in two frames, or index both to a common base.</td></tr>
+        <tr><td rowspan="2">Show which way a figure has been moving, beside the figure</td><td rowspan="2"><a href="#sparkline"><code>Sparkline</code></a></td><td>The reader needs to read values off it</td><td><a href="#linechart"><code>LineChart</code></a></td><td>A sparkline has no axes, no legend and no tooltip.</td></tr>
+        <tr><td>There is no figure beside it</td><td><a href="#stat"><code>Stat</code></a></td><td>A shape alone says nothing about how much; give it the number it qualifies.</td></tr>
+        <tr><td rowspan="2">Frame a chart with its title, legend, plot and a table view</td><td rowspan="2"><a href="#chartframe"><code>ChartFrame</code></a></td><td>Bars or lines</td><td><a href="#barchart"><code>BarChart</code></a></td><td><code>BarChart</code> and <code>LineChart</code> already render inside the frame.</td></tr>
+        <tr><td>The data is better read as a table than seen as a shape</td><td><a href="#table"><code>Table</code></a></td><td>A chart earns its place by showing a shape; exact lookups belong in a table.</td></tr>
+        <tr><td rowspan="3">Set out a proposition somebody has to adjudicate — the assertion, the argument, where it stands</td><td rowspan="3"><a href="#claim"><code>Claim</code></a></td><td>The rows are records with a name, not sentences to judge</td><td><a href="#item"><code>Item</code></a></td><td>An item is a one-line title and provenance; a claim is prose with a case attached.</td></tr>
+        <tr><td>An agent proposes a change that will be written on a yes</td><td><a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a></td><td>A confirm card shows the values it will write and stays as the record of the answer.</td></tr>
+        <tr><td>It is an authored note about something, in a thread</td><td><a href="#comment"><code>Comment</code></a></td><td>A comment is a note with an author and a time; nothing is adjudicated.</td></tr>
+        <tr><td rowspan="3">Show authored notes about a thing, and a place to write the next one</td><td rowspan="3"><a href="#comment"><code>Comment</code></a></td><td>The record is what people did, not what they wrote</td><td><a href="#feed"><code>Feed</code></a></td><td>A feed groups each person's actions in order.</td></tr>
+        <tr><td>A person is talking with an agent that answers</td><td><a href="agents-and-live-work.html#conversation"><code>Conversation</code></a></td><td>A conversation is two-sided and live, and announces turns as they arrive.</td></tr>
+        <tr><td>It is a record of what people said, to work through</td><td><a href="reading.html#transcript"><code>Transcript</code></a></td><td>A transcript turn is part of a continuous exchange, timed against a recording.</td></tr>
+        <tr><td rowspan="3">List the properties of one thing as names and values</td><td rowspan="3"><a href="#descriptionlist"><code>DescriptionList</code></a></td><td>The values add up to a total</td><td><a href="#summary"><code>Summary</code></a></td><td>A summary is term/value pairs with one emphasised total row.</td></tr>
+        <tr><td>Several records are compared on the same properties</td><td><a href="#table"><code>Table</code></a></td><td>A table puts one record per row so values compare down a column.</td></tr>
+        <tr><td>A few headline figures summarise a page</td><td><a href="#stat"><code>Stat</code></a></td><td>A stat is a figure set large with its label and delta; a description list is quiet reference.</td></tr>
+        <tr><td rowspan="3">Show who did what, in order, with each person's run of actions kept together</td><td rowspan="3"><a href="#feed"><code>Feed</code></a></td><td>The events have nobody in them</td><td><a href="#timeline"><code>Timeline</code></a></td><td>A timeline is a chronology of events; a feed is a sequence of people.</td></tr>
+        <tr><td>People discuss the thing in their own words</td><td><a href="#comment"><code>Comment</code></a></td><td>A comment is an authored note with a composer; a feed records actions.</td></tr>
+        <tr><td>It is an exchange of what people said in an interview or meeting</td><td><a href="reading.html#transcript"><code>Transcript</code></a></td><td>A transcript is a record of speech somebody works from, with times into a recording.</td></tr>
+        <tr><td rowspan="3">Let people key values into many rows at a sitting</td><td rowspan="3"><a href="#gridtable"><code>GridTable</code></a></td><td>The rows are read, compared or sorted, not typed into</td><td><a href="#table"><code>Table</code></a></td><td>A table presents what a system holds; a grid is a keying surface.</td></tr>
+        <tr><td>One record with a handful of fields</td><td><a href="input.html#field"><code>Field</code></a></td><td>A form of labelled fields reads better than a one-row grid.</td></tr>
+        <tr><td>Marking which rows cover which columns</td><td><a href="#matrix"><code>Matrix</code></a></td><td>A matrix records presence on a grid; a grid table records typed values.</td></tr>
+        <tr><td rowspan="3">List API keys by name and fingerprint, with their scopes, last use and expiry</td><td rowspan="3"><a href="#keylist"><code>KeyList</code></a></td><td>The person needs the secret value itself, to copy</td><td><a href="input.html#credential"><code>Credential</code></a></td><td>A key row never holds the secret; a credential does, masked, with copy.</td></tr>
+        <tr><td>The rows are general records that are not keys</td><td><a href="#item"><code>Item</code></a></td><td>An item is the general record row — a title, a line of provenance, marks at the end.</td></tr>
+        <tr><td>The values are compared down columns or sorted</td><td><a href="#table"><code>Table</code></a></td><td>A table is for values you compare down a column, with sort.</td></tr>
+        <tr><td rowspan="3">Show an event rule as a sentence — when this happens there, do that here</td><td rowspan="3"><a href="#rule"><code>Rule</code></a></td><td>The steps are a sequence a person goes through</td><td><a href="status-and-feedback.html#stepper"><code>Stepper</code></a></td><td>A stepper is a position in a sequence; a rule is one trigger and one action.</td></tr>
+        <tr><td>The relationships are many-to-many and need a picture</td><td><a href="#layeredgraph"><code>LayeredGraph</code></a></td><td>A layered graph draws what covers what across layers; a rule is a single sentence.</td></tr>
+        <tr><td>The endpoint is a code sample to copy</td><td><a href="reading.html#codeblock"><code>CodeBlock</code></a></td><td>A code block carries a copy control and a language; <code>Endpoint</code> is a method and a URL.</td></tr>
+        <tr><td rowspan="4">List records, each read on its own — a name, where it came from, a mark or two</td><td rowspan="4"><a href="#item"><code>Item</code></a></td><td>Values are compared down a column or sorted</td><td><a href="#table"><code>Table</code></a></td><td>A table is for values you compare down a column.</td></tr>
+        <tr><td>The rows are files</td><td><a href="#doclist"><code>DocList</code></a></td><td>A document list carries the file type badge, size and the list/grid views a library needs.</td></tr>
+        <tr><td>Each row is an assertion in prose that somebody has to adjudicate</td><td><a href="#claim"><code>Claim</code></a></td><td>An item's title is one line that never wraps; a claim holds a measured sentence, its argument and its standing.</td></tr>
+        <tr><td>The list is a long column the reader scrolls past beside the main view</td><td><a href="navigation.html#dock"><code>Dock</code></a></td><td>A dock gives momentary width to whatever is at the focus point of a narrow column.</td></tr>
+        <tr><td rowspan="3">Explore how a large set of things nobody arranged relate to each other</td><td rowspan="3"><a href="#knowledgegraph"><code>KnowledgeGraph</code></a></td><td>The nodes have an order the reader already knows — layers, then a sequence</td><td><a href="#layeredgraph"><code>LayeredGraph</code></a></td><td>A layered graph is laid out, not simulated, and its nodes are real buttons in lists.</td></tr>
+        <tr><td>The question is which of these covers which of those</td><td><a href="#matrix"><code>Matrix</code></a></td><td>A matrix shows presence and absence on a grid, read across a row and down a column.</td></tr>
+        <tr><td>The structure is a hierarchy</td><td><a href="navigation.html#tree"><code>Tree</code></a></td><td>A tree has one parent per node and a keyboard contract for expanding and collapsing.</td></tr>
+        <tr><td rowspan="3">Show what covers what across ordered layers, and what nothing covers</td><td rowspan="3"><a href="#layeredgraph"><code>LayeredGraph</code></a></td><td>The set is large and has no order — a corpus of linked things</td><td><a href="#knowledgegraph"><code>KnowledgeGraph</code></a></td><td>The knowledge graph is force-directed on a canvas and built to hold a thousand nodes.</td></tr>
+        <tr><td>The reader needs every pairing, present or absent, at once</td><td><a href="#matrix"><code>Matrix</code></a></td><td>A matrix shows each cell of rows against columns; a layered graph shows only the lines that exist.</td></tr>
+        <tr><td>It is one trigger leading to one action</td><td><a href="#rule"><code>Rule</code></a></td><td>A rule is one sentence, not a graph.</td></tr>
+        <tr><td rowspan="4">List files and folders in a document library</td><td rowspan="4"><a href="#doclist"><code>DocList</code></a></td><td>The rows are records that are not files</td><td><a href="#item"><code>Item</code></a></td><td>An item is the general record row; a doc row carries a type badge and file size.</td></tr>
+        <tr><td>Files are compared on several columns, or sorted</td><td><a href="#table"><code>Table</code></a></td><td>A table sorts and compares down columns.</td></tr>
+        <tr><td>The files are attachments the person is uploading</td><td><a href="input.html#fileupload"><code>FileUpload</code></a></td><td>A file upload has the drop zone over a real file input and the list of what was added.</td></tr>
+        <tr><td>The files nest several levels deep</td><td><a href="navigation.html#tree"><code>Tree</code></a></td><td>A tree expands and collapses a hierarchy with one Tab stop.</td></tr>
+        <tr><td rowspan="4">Show which things cover which, read across a row and down a column</td><td rowspan="4"><a href="#matrix"><code>Matrix</code></a></td><td>The cells hold values to compare, not presence and absence</td><td><a href="#table"><code>Table</code></a></td><td>A table is records down a column; a matrix is a yes-or-no at every crossing.</td></tr>
+        <tr><td>The coverage runs through ordered layers — requirements, then milestones, then outcomes</td><td><a href="#layeredgraph"><code>LayeredGraph</code></a></td><td>The layered graph keeps the order and draws what covers what as lines and words.</td></tr>
+        <tr><td>A single level against a target</td><td><a href="#meter"><code>Meter</code></a></td><td>A meter is one figure on a track; a matrix is many crossings.</td></tr>
+        <tr><td>A set of verdicts on one row that do not agree</td><td><a href="#tally"><code>Tally</code></a></td><td>A tally sums the disagreement in one bar with the counts as words.</td></tr>
+        <tr><td rowspan="4">Show a level that is simply true, against its scale and target</td><td rowspan="4"><a href="#meter"><code>Meter</code></a></td><td>A task advancing toward done</td><td><a href="status-and-feedback.html#progress"><code>Progress</code></a></td><td><code>role=&quot;progressbar&quot;</code> means work under way; a meter means a level, and swapping them misreports what is happening.</td></tr>
+        <tr><td>Several verdicts on one thing that do not agree</td><td><a href="#tally"><code>Tally</code></a></td><td>A tally shows the split with the counts as words; one tone would hide the disagreement.</td></tr>
+        <tr><td>The number alone carries it, with no scale</td><td><a href="#stat"><code>Stat</code></a></td><td>A stat is a figure and a label; a track with no meaningful maximum is decoration.</td></tr>
+        <tr><td>Comparing the level across many categories</td><td><a href="#barchart"><code>BarChart</code></a></td><td>Bars on a shared zero compare; a stack of meters does not.</td></tr>
+        <tr><td rowspan="5">Show a headline figure with its label and what changed</td><td rowspan="5"><a href="#stat"><code>Stat</code></a></td><td>The figure is a level against a scale or a target</td><td><a href="#meter"><code>Meter</code></a></td><td>A meter draws the level on a track and says the target in words; a stat is just the number.</td></tr>
+        <tr><td>The shape over time matters more than the latest value</td><td><a href="#linechart"><code>LineChart</code></a></td><td>A trend needs a line with axes; put a <code>Sparkline</code> beside a stat when direction is enough.</td></tr>
+        <tr><td>Many categories compared by size</td><td><a href="#barchart"><code>BarChart</code></a></td><td>A row of more than four or five stats is a chart that lost its axis.</td></tr>
+        <tr><td>Label and value pairs that describe one thing, not measure it</td><td><a href="#descriptionlist"><code>DescriptionList</code></a></td><td>Attributes are terms and values in body type; a stat is a figure set large.</td></tr>
+        <tr><td>Totals that add up to a price</td><td><a href="#summary"><code>Summary</code></a></td><td>A summary is term and value rows with one emphasised total.</td></tr>
+        <tr><td rowspan="3">Add lines up to a total the eye lands on</td><td rowspan="3"><a href="#summary"><code>Summary</code></a></td><td>The pairs are properties of a record and nothing adds up</td><td><a href="#descriptionlist"><code>DescriptionList</code></a></td><td>A description list is plain names and values with no total.</td></tr>
+        <tr><td>The figures are headline measures, not a sum</td><td><a href="#stat"><code>Stat</code></a></td><td>A stat row is figures that read as one sentence; a summary is a sum.</td></tr>
+        <tr><td>Many line items are compared or sorted</td><td><a href="#table"><code>Table</code></a></td><td>A table compares rows down columns; a summary is a short stack ending in a total.</td></tr>
+        <tr><td rowspan="5">Show records whose values are compared down a column</td><td rowspan="5"><a href="#table"><code>Table</code></a></td><td>People type values into the cells</td><td><a href="#gridtable"><code>GridTable</code></a></td><td>A grid has a spreadsheet's keyboard, owned columns and type-ahead per column; a table is read.</td></tr>
+        <tr><td>The question is which row covers which column — presence and absence on a grid</td><td><a href="#matrix"><code>Matrix</code></a></td><td>A matrix is one Tab stop with arrow keys, pinned headings, and a mark in every tinted cell.</td></tr>
+        <tr><td>Each row is read on its own and most columns would be empty</td><td><a href="#item"><code>Item</code></a></td><td>A list of records is a name, a line of provenance and a mark or two; empty columns are noise.</td></tr>
+        <tr><td>A list of files</td><td><a href="#doclist"><code>DocList</code></a></td><td>The library rows carry type badges, size and a preview pane.</td></tr>
+        <tr><td>A handful of label and value pairs about one thing</td><td><a href="#descriptionlist"><code>DescriptionList</code></a></td><td>One record's attributes are terms and values, not rows.</td></tr>
+        <tr><td rowspan="3">Page through a long table and say which rows are on show</td><td rowspan="3"><a href="#tablepager"><code>TablePager</code></a></td><td>The table fits on one page</td><td><a href="#table"><code>Table</code></a></td><td>The pager renders nothing then — a &quot;page 1 of 1&quot; control does nothing.</td></tr>
+        <tr><td>Paging something that is not a table — search results, a gallery</td><td><a href="navigation.html#pagination"><code>Pagination</code></a></td><td>Pagination is the bare page list; the table pager adds the range and is wired to <code>usePagedTable</code>.</td></tr>
+        <tr><td>Stepping one item at a time through a set, inside a pane</td><td><a href="navigation.html#pagerchip"><code>PagerChip</code></a></td><td>The chip says &quot;4 of 19&quot; with previous and next; it is not a page list.</td></tr>
+        <tr><td rowspan="4">Show what a set of statements adds up to when they do not agree</td><td rowspan="4"><a href="#tally"><code>Tally</code></a></td><td>One value with one tone</td><td><a href="#meter"><code>Meter</code></a></td><td>A meter is a single level; a tally is a split.</td></tr>
+        <tr><td>Nobody has said anything yet</td><td><a href="status-and-feedback.html#state"><code>State</code></a></td><td>A tally with every part at zero renders nothing; say the absence in your own words.</td></tr>
+        <tr><td>Parts of a whole across categories, compared between rows</td><td><a href="#barchart"><code>BarChart</code></a></td><td>A stacked bar chart has a shared axis and a legend for many rows.</td></tr>
+        <tr><td>One settled status</td><td><a href="status-and-feedback.html#tag"><code>Tag</code></a></td><td>A single verdict is a status word.</td></tr>
+        <tr><td rowspan="3">Show events in the order they happened</td><td rowspan="3"><a href="#timeline"><code>Timeline</code></a></td><td>The history is people doing things, several in a row each</td><td><a href="#feed"><code>Feed</code></a></td><td>A feed groups each person's run of actions so the boundaries between people are seen, not read.</td></tr>
+        <tr><td>People write notes about the thing and reply</td><td><a href="#comment"><code>Comment</code></a></td><td>A comment is an authored note with a composer; a timeline entry is an event.</td></tr>
+        <tr><td>The steps are a process the person is part-way through</td><td><a href="status-and-feedback.html#stepper"><code>Stepper</code></a></td><td>A stepper shows position in a sequence still to finish; a timeline records what already happened.</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="gd-entry" id="avatar" aria-labelledby="avatar-h">
+    <h2 id="avatar-h"><code>Avatar</code></h2>
+    <p>Put a face or initials beside a person's name.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Beside the name it depicts — in a comment, a feed group, a header menu. It is decorative there and hidden from assistive tech.</li><li>A stack of people on one thing: <code>AvatarGroup</code>.</li><li>Standing alone with no name beside it: pass <code>aria-label</code> so it has one.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The avatar would be the only place the person is named → <a href="#item"><code>Item</code></a>. A name is text; put the avatar in an item's <code>lead</code> beside the name rather than instead of it.</li><li>The mark stands for a system or an integration, not a person → <a href="status-and-feedback.html#connection"><code>Connection</code></a>. A connection has its own mark and says its state in words.</li><li>It shows who did a run of actions in order → <a href="#feed"><code>Feed</code></a>. A feed groups each person's run of actions and takes the avatar as the group's mark.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#item"><code>Item</code></a>, <a href="#feed"><code>Feed</code></a>, <a href="#comment"><code>Comment</code></a></span><span>React <code>Avatar</code> <code>AvatarGroup</code></span><span>Classes <code>.avatar</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/data.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="barchart" aria-labelledby="barchart-h">
+    <h2 id="barchart-h"><code>BarChart</code></h2>
+    <p>Compare amounts across categories on a zero baseline.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Sizes side by side — per team, per month, per category; <code>stacked</code> for parts of each whole.</li><li><code>orientation=&quot;horizontal&quot;</code> for long category names, a ranking, or a phone: the name above each bar, the figure at its end.</li><li>Up to eight series in the fixed palette order; a ninth folds into &quot;Other&quot;.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Change over time is the point → <a href="#linechart"><code>LineChart</code></a>. A line shows trend and may float off zero; bars must sit on zero.</li><li>A direction beside a figure, with no axis → <a href="#sparkline"><code>Sparkline</code></a>. A sparkline is a shape, not a measurement.</li><li>Two measures on different scales → <a href="#chartframe"><code>ChartFrame</code></a>. Never a second axis: draw two charts, or index both to a common base.</li><li>Presence or absence at each crossing of two lists → <a href="#matrix"><code>Matrix</code></a>. Coverage is a grid of marks, not a quantity.</li><li>One or a few headline figures → <a href="#stat"><code>Stat</code></a>. A chart of three bars is a row of figures with extra ink.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#linechart"><code>LineChart</code></a>, <a href="#stat"><code>Stat</code></a>, <a href="#meter"><code>Meter</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="#chartframe"><code>ChartFrame</code></a></span><span>React <code>BarChart</code></span><span>Classes <code>.chart-bar</code> <code>.chart-hbar</code> <code>.chart-hbars</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/charts.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="linechart" aria-labelledby="linechart-h">
+    <h2 id="linechart-h"><code>LineChart</code></h2>
+    <p>Show how one or more measures change over time.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A trend across dates, with a crosshair and a shared tooltip.</li><li>Several series of the same unit on one y-axis, in the fixed palette order.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Comparing amounts between categories → <a href="#barchart"><code>BarChart</code></a>. Categories are not a continuum; a line between them implies one.</li><li>The trend only needs a glance beside a figure → <a href="#sparkline"><code>Sparkline</code></a>. A sparkline is the shape without axes, legend or tooltip.</li><li>Two measures of different scale → <a href="#chartframe"><code>ChartFrame</code></a>. One y-axis always: two charts in two frames, or index both to a common base.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#barchart"><code>BarChart</code></a>, <a href="#sparkline"><code>Sparkline</code></a>, <a href="#stat"><code>Stat</code></a></span><span>React <code>LineChart</code></span><span>Classes <code>.chart-line</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/charts.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="sparkline" aria-labelledby="sparkline-h">
+    <h2 id="sparkline-h"><code>Sparkline</code></h2>
+    <p>Show which way a figure has been moving, beside the figure.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Next to a <code>Stat</code> or in a table cell, where direction matters and the exact values do not.</li><li>Always with a text <code>label</code> — it shows direction, not magnitude.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The reader needs to read values off it → <a href="#linechart"><code>LineChart</code></a>. A sparkline has no axes, no legend and no tooltip.</li><li>There is no figure beside it → <a href="#stat"><code>Stat</code></a>. A shape alone says nothing about how much; give it the number it qualifies.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#linechart"><code>LineChart</code></a>, <a href="#stat"><code>Stat</code></a></span><span>React <code>Sparkline</code></span><span>Classes <code>.sparkline</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/charts.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="chartframe" aria-labelledby="chartframe-h">
+    <h2 id="chartframe-h"><code>ChartFrame</code></h2>
+    <p>Frame a chart with its title, legend, plot and a table view.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Wrapping a chart form the system does not ship, so it still has a title, a legend and the data as a table.</li><li>Anywhere a chart appears: the table view is the relief for series colours under 3:1, and makes the numbers copyable.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Bars or lines → <a href="#barchart"><code>BarChart</code></a>. <code>BarChart</code> and <code>LineChart</code> already render inside the frame.</li><li>The data is better read as a table than seen as a shape → <a href="#table"><code>Table</code></a>. A chart earns its place by showing a shape; exact lookups belong in a table.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#barchart"><code>BarChart</code></a>, <a href="#linechart"><code>LineChart</code></a>, <a href="#table"><code>Table</code></a></span><span>React <code>ChartFrame</code></span><span>Hooks <code>linear</code> <code>ticks</code> <code>extent</code> <code>seriesColor</code> <code>fmt</code> <code>MAX_SERIES</code></span><span>Classes <code>.chart</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/charts.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="claim" aria-labelledby="claim-h">
+    <h2 id="claim-h"><code>Claim</code></h2>
+    <p>Set out a proposition somebody has to adjudicate — the assertion, the argument, where it stands.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A finding, a held-open decision, or a reading a machine proposed and a person has not confirmed.</li><li>The argument has an author (<code>ClaimReason by</code>), because whether a machine or a person wrote it is the first thing a reader needs.</li><li>Where it stands is said once (<code>ClaimStanding</code>), with the controls level with the first line; <code>settled</code> once it is decided.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The rows are records with a name, not sentences to judge → <a href="#item"><code>Item</code></a>. An item is a one-line title and provenance; a claim is prose with a case attached.</li><li>An agent proposes a change that will be written on a yes → <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>. A confirm card shows the values it will write and stays as the record of the answer.</li><li>It is an authored note about something, in a thread → <a href="#comment"><code>Comment</code></a>. A comment is a note with an author and a time; nothing is adjudicated.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#item"><code>Item</code></a>, <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>, <a href="#comment"><code>Comment</code></a>, <a href="status-and-feedback.html#callout"><code>Callout</code></a></span><span>React <code>Claim</code> <code>ClaimActions</code> <code>ClaimBody</code> <code>ClaimReason</code> <code>ClaimStanding</code> <code>ClaimText</code></span><span>Classes <code>.claim</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="comment" aria-labelledby="comment-h">
+    <h2 id="comment-h"><code>Comment</code></h2>
+    <p>Show authored notes about a thing, and a place to write the next one.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An activity thread on a work item: each note with its author, a time and the text.</li><li>The composer under the thread (<code>CommentCompose</code>) with its actions (<code>CommentActions</code>).</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The record is what people did, not what they wrote → <a href="#feed"><code>Feed</code></a>. A feed groups each person's actions in order.</li><li>A person is talking with an agent that answers → <a href="agents-and-live-work.html#conversation"><code>Conversation</code></a>. A conversation is two-sided and live, and announces turns as they arrive.</li><li>It is a record of what people said, to work through → <a href="reading.html#transcript"><code>Transcript</code></a>. A transcript turn is part of a continuous exchange, timed against a recording.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#feed"><code>Feed</code></a>, <a href="agents-and-live-work.html#conversation"><code>Conversation</code></a>, <a href="reading.html#transcript"><code>Transcript</code></a>, <a href="#timeline"><code>Timeline</code></a></span><span>React <code>Comment</code> <code>CommentCompose</code> <code>CommentActions</code></span><span>Classes <code>.comment</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../templates/work-item-close/index.html">See it on the template<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="descriptionlist" aria-labelledby="descriptionlist-h">
+    <h2 id="descriptionlist-h"><code>DescriptionList</code></h2>
+    <p>List the properties of one thing as names and values.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The details of a record — Owner, Created, Status, Due — each a term and its value, as a real <code>&lt;dl&gt;</code>.</li><li>A narrow column or a side pane: <code>stacked</code> puts the term above the value.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The values add up to a total → <a href="#summary"><code>Summary</code></a>. A summary is term/value pairs with one emphasised total row.</li><li>Several records are compared on the same properties → <a href="#table"><code>Table</code></a>. A table puts one record per row so values compare down a column.</li><li>A few headline figures summarise a page → <a href="#stat"><code>Stat</code></a>. A stat is a figure set large with its label and delta; a description list is quiet reference.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#summary"><code>Summary</code></a>, <a href="#table"><code>Table</code></a>, <a href="#stat"><code>Stat</code></a></span><span>React <code>DescriptionList</code></span><span>Classes <code>.dl</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/data.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="feed" aria-labelledby="feed-h">
+    <h2 id="feed-h"><code>Feed</code></h2>
+    <p>Show who did what, in order, with each person's run of actions kept together.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An activity record: one person opened three findings, then another answered two of them — a <code>FeedGroup</code> per actor, a <code>FeedItem</code> per action.</li><li>An ordered list of groups, so a screen reader announces &quot;3 of 5&quot; without anything written for it.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The events have nobody in them → <a href="#timeline"><code>Timeline</code></a>. A timeline is a chronology of events; a feed is a sequence of people.</li><li>People discuss the thing in their own words → <a href="#comment"><code>Comment</code></a>. A comment is an authored note with a composer; a feed records actions.</li><li>It is an exchange of what people said in an interview or meeting → <a href="reading.html#transcript"><code>Transcript</code></a>. A transcript is a record of speech somebody works from, with times into a recording.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#timeline"><code>Timeline</code></a>, <a href="#comment"><code>Comment</code></a>, <a href="reading.html#transcript"><code>Transcript</code></a>, <a href="#item"><code>Item</code></a></span><span>React <code>Feed</code> <code>FeedGroup</code> <code>FeedItem</code></span><span>Classes <code>.feed</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/flow.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="gridtable" aria-labelledby="gridtable-h">
+    <h2 id="gridtable-h"><code>GridTable</code></h2>
+    <p>Let people key values into many rows at a sitting.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The rows and keys exist and people must fill in facts only they hold — two hundred rows of owners, codes or names.</li><li>Some columns are filled by people and some come from a source: mark the owned ones with <code>GridHead</code>.</li><li>Show how far the filling has got with <code>GridProgress</code>.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The rows are read, compared or sorted, not typed into → <a href="#table"><code>Table</code></a>. A table presents what a system holds; a grid is a keying surface.</li><li>One record with a handful of fields → <a href="input.html#field"><code>Field</code></a>. A form of labelled fields reads better than a one-row grid.</li><li>Marking which rows cover which columns → <a href="#matrix"><code>Matrix</code></a>. A matrix records presence on a grid; a grid table records typed values.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#table"><code>Table</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="input.html#input"><code>Input</code></a></span><span>React <code>GridTable</code> <code>GridHead</code> <code>GridCell</code> <code>GridProgress</code></span><span>Classes <code>.grid-table</code> <code>.grid-cell</code> <code>.grid-head-owned</code> <code>.grid-progress</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/table.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="keylist" aria-labelledby="keylist-h">
+    <h2 id="keylist-h"><code>KeyList</code></h2>
+    <p>List API keys by name and fingerprint, with their scopes, last use and expiry.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Managing API keys: each <code>KeyRow</code> shows a name, a fingerprint that identifies without exposing, scopes and when it was last used.</li><li>Scopes as <code>Scopes</code> / <code>Scope</code>; mark <code>write</code> on the one that can change something so it is the one that stands out.</li><li>Expiry: <code>expiring</code> is a warning because it still works today; only <code>expired</code> is an error.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The person needs the secret value itself, to copy → <a href="input.html#credential"><code>Credential</code></a>. A key row never holds the secret; a credential does, masked, with copy.</li><li>The rows are general records that are not keys → <a href="#item"><code>Item</code></a>. An item is the general record row — a title, a line of provenance, marks at the end.</li><li>The values are compared down columns or sorted → <a href="#table"><code>Table</code></a>. A table is for values you compare down a column, with sort.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="input.html#credential"><code>Credential</code></a>, <a href="#item"><code>Item</code></a>, <a href="#table"><code>Table</code></a></span><span>React <code>KeyList</code> <code>KeyRow</code> <code>Scopes</code> <code>Scope</code></span><span>Classes <code>.key-list</code> <code>.key-row</code> <code>.scopes</code> <code>.scope</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/integrations.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="rule" aria-labelledby="rule-h">
+    <h2 id="rule-h"><code>Rule</code></h2>
+    <p>Show an event rule as a sentence — when this happens there, do that here.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An automation or event rule: a trigger and its event, an arrow, then the target and its action; <code>enabled={false}</code> shows it off.</li><li>An inbound webhook address with its method — <code>Endpoint</code>, in mono.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The steps are a sequence a person goes through → <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>. A stepper is a position in a sequence; a rule is one trigger and one action.</li><li>The relationships are many-to-many and need a picture → <a href="#layeredgraph"><code>LayeredGraph</code></a>. A layered graph draws what covers what across layers; a rule is a single sentence.</li><li>The endpoint is a code sample to copy → <a href="reading.html#codeblock"><code>CodeBlock</code></a>. A code block carries a copy control and a language; <code>Endpoint</code> is a method and a URL.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="status-and-feedback.html#connection"><code>Connection</code></a>, <a href="reading.html#codeblock"><code>CodeBlock</code></a>, <a href="#item"><code>Item</code></a></span><span>React <code>Rule</code> <code>Endpoint</code></span><span>Classes <code>.rule</code> <code>.endpoint</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/integrations.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="item" aria-labelledby="item-h">
+    <h2 id="item-h"><code>Item</code></h2>
+    <p>List records, each read on its own — a name, where it came from, a mark or two.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A list of notes, actions or entries: a one-line title, a quieter line of provenance (<code>meta</code>), and tags or a button on the title's line (<code>trailing</code>).</li><li>Rows where table columns would be empty most of the time.</li><li>An icon or avatar before the text (<code>lead</code>) and more detail under the meta.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Values are compared down a column or sorted → <a href="#table"><code>Table</code></a>. A table is for values you compare down a column.</li><li>The rows are files → <a href="#doclist"><code>DocList</code></a>. A document list carries the file type badge, size and the list/grid views a library needs.</li><li>Each row is an assertion in prose that somebody has to adjudicate → <a href="#claim"><code>Claim</code></a>. An item's title is one line that never wraps; a claim holds a measured sentence, its argument and its standing.</li><li>The list is a long column the reader scrolls past beside the main view → <a href="navigation.html#dock"><code>Dock</code></a>. A dock gives momentary width to whatever is at the focus point of a narrow column.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#table"><code>Table</code></a>, <a href="#doclist"><code>DocList</code></a>, <a href="#claim"><code>Claim</code></a>, <a href="navigation.html#dock"><code>Dock</code></a>, <a href="#feed"><code>Feed</code></a></span><span>React <code>Item</code> <code>ItemList</code></span><span>Classes <code>.item</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="knowledgegraph" aria-labelledby="knowledgegraph-h">
+    <h2 id="knowledgegraph-h"><code>KnowledgeGraph</code></h2>
+    <p>Explore how a large set of things nobody arranged relate to each other.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A corpus of entities and links — hundreds to a thousand nodes — laid out by force on a canvas.</li><li>The kinds are the caller's own words, coloured from the series palette in declared order; eight at most.</li><li>Always paired with a real list of the entities and their relationships, because a canvas cannot be traversed.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The nodes have an order the reader already knows — layers, then a sequence → <a href="#layeredgraph"><code>LayeredGraph</code></a>. A layered graph is laid out, not simulated, and its nodes are real buttons in lists.</li><li>The question is which of these covers which of those → <a href="#matrix"><code>Matrix</code></a>. A matrix shows presence and absence on a grid, read across a row and down a column.</li><li>The structure is a hierarchy → <a href="navigation.html#tree"><code>Tree</code></a>. A tree has one parent per node and a keyboard contract for expanding and collapsing.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#layeredgraph"><code>LayeredGraph</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="navigation.html#tree"><code>Tree</code></a></span><span>React <code>KnowledgeGraph</code></span><span>Hooks <code>createLayout</code> <code>tick</code> <code>settle</code> <code>bounds</code> <code>radiusFor</code></span><span>Classes <code>.graph</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/graph.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="layeredgraph" aria-labelledby="layeredgraph-h">
+    <h2 id="layeredgraph-h"><code>LayeredGraph</code></h2>
+    <p>Show what covers what across ordered layers, and what nothing covers.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Layers read left to right — requirements, then milestones in sequence, then where the sequence ends — with a line for each cover.</li><li>Uncovered nodes need to be brought forward, and a person may move one under another (drag, or <code>A</code> then Enter by keyboard).</li><li>A narrow pane: below 30rem of its own width the layers stack and the lines become words.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The set is large and has no order — a corpus of linked things → <a href="#knowledgegraph"><code>KnowledgeGraph</code></a>. The knowledge graph is force-directed on a canvas and built to hold a thousand nodes.</li><li>The reader needs every pairing, present or absent, at once → <a href="#matrix"><code>Matrix</code></a>. A matrix shows each cell of rows against columns; a layered graph shows only the lines that exist.</li><li>It is one trigger leading to one action → <a href="#rule"><code>Rule</code></a>. A rule is one sentence, not a graph.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#knowledgegraph"><code>KnowledgeGraph</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="navigation.html#tree"><code>Tree</code></a></span><span>React <code>LayeredGraph</code></span><span>Hooks <code>layoutGraph</code> <code>edgePath</code> <code>uncoveredIds</code> <code>layerNodes</code></span><span>Classes <code>.layered-graph</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/coverage.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="doclist" aria-labelledby="doclist-h">
+    <h2 id="doclist-h"><code>DocList</code></h2>
+    <p>List files and folders in a document library.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A library of files as rows (<code>DocList</code> / <code>DocRow</code>) or as cards (<code>DocGrid</code> / <code>DocCard</code>).</li><li>File type is a mono badge (<code>DocType</code>) from the extension, never a coloured chip; folders are the one exception.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The rows are records that are not files → <a href="#item"><code>Item</code></a>. An item is the general record row; a doc row carries a type badge and file size.</li><li>Files are compared on several columns, or sorted → <a href="#table"><code>Table</code></a>. A table sorts and compares down columns.</li><li>The files are attachments the person is uploading → <a href="input.html#fileupload"><code>FileUpload</code></a>. A file upload has the drop zone over a real file input and the list of what was added.</li><li>The files nest several levels deep → <a href="navigation.html#tree"><code>Tree</code></a>. A tree expands and collapses a hierarchy with one Tab stop.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#item"><code>Item</code></a>, <a href="#table"><code>Table</code></a>, <a href="input.html#fileupload"><code>FileUpload</code></a>, <a href="reading.html#docpreview"><code>DocPreview</code></a>, <a href="navigation.html#tree"><code>Tree</code></a></span><span>React <code>DocType</code> <code>DocList</code> <code>DocRow</code> <code>DocGrid</code> <code>DocCard</code></span><span>Hooks <code>kindOf</code> <code>formatBytes</code></span><span>Classes <code>.doc-list</code> <code>.doc-row</code> <code>.doc-type</code> <code>.doc-grid</code> <code>.doc-card</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/library.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="matrix" aria-labelledby="matrix-h">
+    <h2 id="matrix-h"><code>Matrix</code></h2>
+    <p>Show which things cover which, read across a row and down a column.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Coverage on a grid — requirements against tests, controls against systems, people against projects.</li><li>Grids wider than the screen: it scrolls in its own frame with headings and row labels pinned, and the cells are one Tab stop.</li><li>Totals per row or column; a tone on a cell always comes with a mark.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The cells hold values to compare, not presence and absence → <a href="#table"><code>Table</code></a>. A table is records down a column; a matrix is a yes-or-no at every crossing.</li><li>The coverage runs through ordered layers — requirements, then milestones, then outcomes → <a href="#layeredgraph"><code>LayeredGraph</code></a>. The layered graph keeps the order and draws what covers what as lines and words.</li><li>A single level against a target → <a href="#meter"><code>Meter</code></a>. A meter is one figure on a track; a matrix is many crossings.</li><li>A set of verdicts on one row that do not agree → <a href="#tally"><code>Tally</code></a>. A tally sums the disagreement in one bar with the counts as words.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#table"><code>Table</code></a>, <a href="#layeredgraph"><code>LayeredGraph</code></a>, <a href="#tally"><code>Tally</code></a>, <a href="#barchart"><code>BarChart</code></a></span><span>React <code>Matrix</code></span><span>Classes <code>.matrix</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/table.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="meter" aria-labelledby="meter-h">
+    <h2 id="meter-h"><code>Meter</code></h2>
+    <p>Show a level that is simply true, against its scale and target.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Usage against a quota, capacity used, coverage as a percentage, a score out of a maximum.</li><li>A level that should reach a target: <code>threshold</code> draws the tick and says the target in words; <code>tone=&quot;auto&quot;</code> reads success or warning off it.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>A task advancing toward done → <a href="status-and-feedback.html#progress"><code>Progress</code></a>. <code>role=&quot;progressbar&quot;</code> means work under way; a meter means a level, and swapping them misreports what is happening.</li><li>Several verdicts on one thing that do not agree → <a href="#tally"><code>Tally</code></a>. A tally shows the split with the counts as words; one tone would hide the disagreement.</li><li>The number alone carries it, with no scale → <a href="#stat"><code>Stat</code></a>. A stat is a figure and a label; a track with no meaningful maximum is decoration.</li><li>Comparing the level across many categories → <a href="#barchart"><code>BarChart</code></a>. Bars on a shared zero compare; a stack of meters does not.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="status-and-feedback.html#progress"><code>Progress</code></a>, <a href="#tally"><code>Tally</code></a>, <a href="#stat"><code>Stat</code></a>, <a href="#barchart"><code>BarChart</code></a></span><span>React <code>Meter</code></span><span>Classes <code>.meter</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/data.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="stat" aria-labelledby="stat-h">
+    <h2 id="stat-h"><code>Stat</code></h2>
+    <p>Show a headline figure with its label and what changed.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A few KPIs above the content they summarise — put them in a <code>StatRow</code> so the rules between them say they belong together.</li><li>A change since last period with <code>StatDelta</code>: <code>direction</code> says which way, <code>good</code> says whether that is good news, and the text says it too.</li><li>A figure built from some sources but not all says so in <code>StatNote</code> — and where the count failed, show no figure.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The figure is a level against a scale or a target → <a href="#meter"><code>Meter</code></a>. A meter draws the level on a track and says the target in words; a stat is just the number.</li><li>The shape over time matters more than the latest value → <a href="#linechart"><code>LineChart</code></a>. A trend needs a line with axes; put a <code>Sparkline</code> beside a stat when direction is enough.</li><li>Many categories compared by size → <a href="#barchart"><code>BarChart</code></a>. A row of more than four or five stats is a chart that lost its axis.</li><li>Label and value pairs that describe one thing, not measure it → <a href="#descriptionlist"><code>DescriptionList</code></a>. Attributes are terms and values in body type; a stat is a figure set large.</li><li>Totals that add up to a price → <a href="#summary"><code>Summary</code></a>. A summary is term and value rows with one emphasised total.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#meter"><code>Meter</code></a>, <a href="#sparkline"><code>Sparkline</code></a>, <a href="#descriptionlist"><code>DescriptionList</code></a>, <a href="#summary"><code>Summary</code></a>, <a href="screens.html#pagehead"><code>PageHead</code></a></span><span>React <code>Stat</code> <code>StatRow</code> <code>StatLabel</code> <code>StatValue</code> <code>StatNote</code> <code>StatDelta</code></span><span>Classes <code>.stat</code> <code>.stat-row</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/data.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="summary" aria-labelledby="summary-h">
+    <h2 id="summary-h"><code>Summary</code></h2>
+    <p>Add lines up to a total the eye lands on.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An order or a quote: subtotal, delivery, tax, then one <code>total</code> row — one emphasised total per summary.</li><li>A note under the figures (<code>SummaryNote</code>) for what the total does or does not include.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The pairs are properties of a record and nothing adds up → <a href="#descriptionlist"><code>DescriptionList</code></a>. A description list is plain names and values with no total.</li><li>The figures are headline measures, not a sum → <a href="#stat"><code>Stat</code></a>. A stat row is figures that read as one sentence; a summary is a sum.</li><li>Many line items are compared or sorted → <a href="#table"><code>Table</code></a>. A table compares rows down columns; a summary is a short stack ending in a total.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#descriptionlist"><code>DescriptionList</code></a>, <a href="#stat"><code>Stat</code></a>, <a href="#table"><code>Table</code></a></span><span>React <code>Summary</code> <code>SummaryRow</code> <code>SummaryNote</code></span><span>Classes <code>.summary</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../templates/purchase/index.html">See it on the template<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="table" aria-labelledby="table-h">
+    <h2 id="table-h"><code>Table</code></h2>
+    <p>Show records whose values are compared down a column.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Rows of the same kind with values worth comparing or sorting — status, owner, date, figure.</li><li>Sort through <code>Th</code> and <code>useTableSort</code>, so the caret and <code>aria-sort</code> read one value; put filters and a &quot;3 of 240&quot; count in <code>TableToolbar</code>.</li><li>Always inside <code>TableWrap</code>, so a wide table scrolls in its own box and never widens the page.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>People type values into the cells → <a href="#gridtable"><code>GridTable</code></a>. A grid has a spreadsheet's keyboard, owned columns and type-ahead per column; a table is read.</li><li>The question is which row covers which column — presence and absence on a grid → <a href="#matrix"><code>Matrix</code></a>. A matrix is one Tab stop with arrow keys, pinned headings, and a mark in every tinted cell.</li><li>Each row is read on its own and most columns would be empty → <a href="#item"><code>Item</code></a>. A list of records is a name, a line of provenance and a mark or two; empty columns are noise.</li><li>A list of files → <a href="#doclist"><code>DocList</code></a>. The library rows carry type badges, size and a preview pane.</li><li>A handful of label and value pairs about one thing → <a href="#descriptionlist"><code>DescriptionList</code></a>. One record's attributes are terms and values, not rows.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#gridtable"><code>GridTable</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="#item"><code>Item</code></a>, <a href="#tablepager"><code>TablePager</code></a>, <a href="#doclist"><code>DocList</code></a></span><span>React <code>TableWrap</code> <code>Table</code> <code>TableToolbar</code> <code>Th</code> <code>Td</code> <code>TableEmpty</code> <code>TableEmptyTitle</code></span><span>Hooks <code>useTableSort</code></span><span>Classes <code>.table</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/table.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="tablepager" aria-labelledby="tablepager-h">
+    <h2 id="tablepager-h"><code>TablePager</code></h2>
+    <p>Page through a long table and say which rows are on show.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Under a table too long for one screen: &quot;Showing 26–50 of 61&quot; and the page numbers.</li><li>Rows already in memory: <code>usePagedTable</code> sorts the whole set, then pages it, and feeds the pager.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The table fits on one page → <a href="#table"><code>Table</code></a>. The pager renders nothing then — a &quot;page 1 of 1&quot; control does nothing.</li><li>Paging something that is not a table — search results, a gallery → <a href="navigation.html#pagination"><code>Pagination</code></a>. Pagination is the bare page list; the table pager adds the range and is wired to <code>usePagedTable</code>.</li><li>Stepping one item at a time through a set, inside a pane → <a href="navigation.html#pagerchip"><code>PagerChip</code></a>. The chip says &quot;4 of 19&quot; with previous and next; it is not a page list.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="navigation.html#pagination"><code>Pagination</code></a>, <a href="navigation.html#pagerchip"><code>PagerChip</code></a>, <a href="#table"><code>Table</code></a></span><span>React <code>TablePager</code></span><span>Hooks <code>usePagedTable</code> <code>pageRange</code></span><span>Classes <code>.table-pager</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/table.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="tally" aria-labelledby="tally-h">
+    <h2 id="tally-h"><code>Tally</code></h2>
+    <p>Show what a set of statements adds up to when they do not agree.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Five sources say gap and two say covered: one bar split by part, with the counts underneath as words.</li><li>On a row where the disagreement is the thing worth opening.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>One value with one tone → <a href="#meter"><code>Meter</code></a>. A meter is a single level; a tally is a split.</li><li>Nobody has said anything yet → <a href="status-and-feedback.html#state"><code>State</code></a>. A tally with every part at zero renders nothing; say the absence in your own words.</li><li>Parts of a whole across categories, compared between rows → <a href="#barchart"><code>BarChart</code></a>. A stacked bar chart has a shared axis and a legend for many rows.</li><li>One settled status → <a href="status-and-feedback.html#tag"><code>Tag</code></a>. A single verdict is a status word.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#meter"><code>Meter</code></a>, <a href="#barchart"><code>BarChart</code></a>, <a href="#matrix"><code>Matrix</code></a>, <a href="status-and-feedback.html#tag"><code>Tag</code></a></span><span>React <code>Tally</code></span><span>Classes <code>.tally</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="timeline" aria-labelledby="timeline-h">
+    <h2 id="timeline-h"><code>Timeline</code></h2>
+    <p>Show events in the order they happened.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A chronology of events with nobody in them — submitted, reviewed, released — each with a time, a title and an optional body.</li><li>Marking the live entry: <code>current</code> highlights its marker.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The history is people doing things, several in a row each → <a href="#feed"><code>Feed</code></a>. A feed groups each person's run of actions so the boundaries between people are seen, not read.</li><li>People write notes about the thing and reply → <a href="#comment"><code>Comment</code></a>. A comment is an authored note with a composer; a timeline entry is an event.</li><li>The steps are a process the person is part-way through → <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>. A stepper shows position in a sequence still to finish; a timeline records what already happened.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#feed"><code>Feed</code></a>, <a href="#comment"><code>Comment</code></a>, <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>, <a href="reading.html#transcript"><code>Transcript</code></a></span><span>React <code>Timeline</code> <code>TimelineItem</code></span><span>Classes <code>.timeline</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/flow.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <p class="gd-other muted">Other guides: <a href="screens.html">Screens</a> · <a href="overlays.html">Overlays</a> · <a href="status-and-feedback.html">Status and feedback</a> · <a href="navigation.html">Navigation</a> · <a href="input.html">Input</a> · <a href="reading.html">Reading</a> · <a href="agents-and-live-work.html">Agents and live work</a></p>
+  <p class="muted" style="font-size:var(--text-sm);margin-block-start:var(--space-3)">Generated from the <code>when.ts</code> beside each component — the same data the Claude Code plugin reads.</p>
+</main>
+</body>
+</html>

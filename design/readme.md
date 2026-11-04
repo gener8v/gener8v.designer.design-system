@@ -273,6 +273,12 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - `readme.md` — this guide.
 - `theme.json` — the parameters the system was derived from.
 - `thumbnail.html` — the project cover.
+- `index.html`, `get-started.html` — the documentation site's Overview and Get started (generated).
+- `guidance/<family>.html` — which component for which job, one page per family, generated from the
+  `when.ts` beside each component.
+- `assets/docs.js` — the documentation chrome (header, left nav, phone drawer, Light/Dark control,
+  shared specimen column), generated. Each docs page loads it with one `<script>` line; templates
+  load it with `data-docs="template"` and get only a slim return link. Light is the default.
 - `foundations/color.html` — the roles, the six ramps, and measured contrast on the page ground.
 - `foundations/type.html` — the scale at real sizes, the pairing, and the mono voice.
 - `foundations/layout.html` — space, control heights, radius, elevation and the section rhythm.

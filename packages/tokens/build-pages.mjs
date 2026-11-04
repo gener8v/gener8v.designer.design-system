@@ -6,7 +6,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { contrast, STEPS } from './src/color.mjs';
-import { THEME_BOOT, THEME_CONTROL, THEME_CSS } from '../../scripts/lab-theme.mjs';
+import { docsScript, navData, docsAsset, overviewPage, getStartedPage, guidancePages } from './docs/site.mjs';
 import { theme, TYPE_SCALE, SPACE_BASE, SPACE_EXTRA, CONTROL_H } from './src/theme.mjs';
 import tokens from './dist/tokens.mjs';
 import { load as loadChoosing, indexRows, ownerOf } from '../../scripts/choosing.mjs';
@@ -44,11 +44,10 @@ const page = (name, card, body, extraCss = '') => `<!-- @dsCard group="${card.gr
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${theme.name} — ${card.name}</title>
 <link rel="stylesheet" href="../styles.css" />
-<style>${SCAFFOLD}${THEME_CSS}${extraCss}</style>
-${THEME_BOOT}
+${docsScript('../')}
+<style>${SCAFFOLD}${extraCss}</style>
 </head>
 <body>
-${THEME_CONTROL}
 <main class="demo">
 ${body}
 </main>
@@ -318,149 +317,17 @@ const TEMPLATES = [
     subtitle: 'Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected' },
 ];
 
-const cardGrid = (items) => `<div class="index-grid">${items.map((c) => `
-  <a class="card card-interactive card-pad-sm" href="${c.path}">
-    <p class="card-kicker mono">${c.path}</p>
-    <p class="card-title" style="font-size:var(--text-lg)">${c.name}</p>
-    <p class="card-body">${c.subtitle}</p>
-  </a>`).join('')}</div>`;
-
-const swatches = (prefix, steps) => steps.map((s) =>
-  `<span class="index-chip" style="background:${t(`--color-${prefix}-${s}`)}" title="--color-${prefix}-${s}"></span>`).join('');
-
 const foundations = collect('foundations');
 const components = collect('components');
 
-write('design/index.html', `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${theme.name} — Design system</title>
-<link rel="stylesheet" href="styles.css" />
-${THEME_BOOT}
-<style>
-${THEME_CSS}
-/* Page scaffolding only — every component below comes from styles.css. */
-.index-hero { border-block-end: 1px solid var(--color-neutral-200); }
-.index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
-.index-chip { forced-color-adjust: none; display: inline-block; inline-size: var(--space-6); block-size: var(--space-6); border-radius: var(--radius-xs); }
-.index-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
-.index-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-4); }
-.index-fact { padding: var(--space-4); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); }
-.index-fact-n { font-family: var(--font-mono); font-size: var(--text-2xl); color: var(--color-neutral-900); font-variant-numeric: tabular-nums; }
-.index-sec { margin-block-start: var(--space-16); }
-</style>
-</head>
-<body>
-
-${THEME_CONTROL}
-<header class="index-hero bg-dot-grid">
-  <div class="container section-tight">
-    <h1>${theme.name}</h1>
-    <p class="lede" style="margin-block-start:var(--space-4);max-inline-size:60ch">
-      A light, airy interface for delivering AI in regulated, governed and auditable
-      environments. One stylesheet, one token source, and the same class names in the
-      static HTML and in <code>@gener8v/ui</code>.
-    </p>
-    <div class="index-row" style="margin-block-start:var(--space-6)">
-      <a class="btn btn-primary" href="foundations/color.html">Foundations<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
-      <a class="btn btn-secondary" href="#get-started">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>
-    </div>
-  </div>
-</header>
-
-<main class="container" style="padding-block:var(--space-12) var(--space-24)">
-
-  <div class="index-facts">
-    <div class="index-fact"><p class="index-fact-n">${tokens ? Object.keys(tokens).length : 0}</p><p class="label" style="margin-block-start:var(--space-1)">Tokens</p></div>
-    <div class="index-fact"><p class="index-fact-n">${components.length}</p><p class="label" style="margin-block-start:var(--space-1)">Component pages</p></div>
-    <div class="index-fact"><p class="index-fact-n">${foundations.length}</p><p class="label" style="margin-block-start:var(--space-1)">Foundations</p></div>
-    <div class="index-fact"><p class="index-fact-n">${theme.radius}px</p><p class="label" style="margin-block-start:var(--space-1)">Radius</p></div>
-  </div>
-
-  <section class="index-sec" id="get-started" aria-labelledby="get-started-title">
-    <p class="label" id="get-started-title">Get started</p>
-    <p class="muted" style="margin-block-start:var(--space-4);max-inline-size:60ch">
-      Open source under MIT. Four public packages on npm — no token, no account. Install them
-      and import one stylesheet.
-    </p>
-    <pre class="code" style="margin-block-start:var(--space-4)"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre>
-    <pre class="code" style="margin-block-start:var(--space-3)"><code data-language="tsx">import '@gener8v/ui/styles.css';
-import { Button, Table, Dialog } from '@gener8v/ui';</code></pre>
-    <div class="index-grid" style="margin-block-start:var(--space-6)">
-      <a class="card card-interactive card-pad-sm" href="https://github.com/gener8v/gener8v.designer.design-system">
-        <p class="card-kicker">Source</p><p class="card-title">GitHub repository</p>
-        <p class="card-body">Tokens, components, templates and the rules that gate them.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/ui">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/ui</p>
-        <p class="card-body">React components that render these exact class names.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tokens">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tokens</p>
-        <p class="card-body">One token source, as CSS, TypeScript and DTCG.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/icons">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/icons</p>
-        <p class="card-body">The icon subset the system uses, tree-shakeable.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tailwind-preset">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tailwind-preset</p>
-        <p class="card-body">Tailwind v4 theme over the same tokens.</p>
-      </a>
-    </div>
-    <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">
-      Building with Claude Code? <code>/plugin marketplace add gener8v/gener8v.designer.design-system</code>
-      teaches it the rules, the class names, the templates — and which component fits which job.
-    </p>
-  </section>
-
-  <section class="index-sec">
-    <p class="label">At a glance</p>
-    <div class="stack" style="margin-block-start:var(--space-4);gap:var(--space-5)">
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Neutral</span>
-        ${swatches('neutral', [100, 200, 300, 400, 500, 600, 700, 800, 900])}
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Accent</span>
-        ${swatches('accent', [100, 200, 300, 400, 500, 600, 700, 800, 900])}
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Action</span>
-        <span class="index-chip" style="background:${t('--color-action')}"></span>
-        <code style="font-size:var(--text-xs)">${t('--color-action')}</code>
-        <span class="muted" style="font-size:var(--text-xs)">fills a primary button — the accent stays for focus rings and links</span>
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Type</span>
-        <span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:var(--text-2xl)">Inter 500</span>
-        <span class="mono" style="color:var(--color-neutral-600)">IBM Plex Mono</span>
-      </div>
-    </div>
-  </section>
-
-  <section class="index-sec">
-    <p class="label">Foundations</p>
-    <div style="margin-block-start:var(--space-4)">${cardGrid(foundations)}</div>
-  </section>
-
-  <section class="index-sec">
-    <p class="label">Components</p>
-    <div style="margin-block-start:var(--space-4)">${cardGrid(components)}</div>
-  </section>
-
-  <section class="index-sec">
-    <p class="label">Templates</p>
-    <div style="margin-block-start:var(--space-4)">${cardGrid(TEMPLATES)}</div>
-  </section>
-
-</main>
-</body>
-</html>
-`);
+// The documentation site: nav data + the shared chrome script, Overview, Get started, Guidance.
+const { FAMILIES: DOC_FAMILIES, entries: docEntries, screens: docScreens } = await loadChoosing();
+const nav = navData({ foundations, components, templates: TEMPLATES, FAMILIES: DOC_FAMILIES });
+write('design/assets/docs.js', docsAsset(nav));
+write('design/index.html', overviewPage({ nav, themeName: theme.name }));
+write('design/get-started.html', getStartedPage({ themeName: theme.name }));
+const guidance = guidancePages({ FAMILIES: DOC_FAMILIES, entries: docEntries, screens: docScreens, themeName: theme.name });
+for (const [rel, body] of Object.entries(guidance)) write(rel, body);
 
 
 /* -------------------------------------------------- responsive check harness */
@@ -469,6 +336,8 @@ import { Button, Table, Dialog } from '@gener8v/ui';</code></pre>
 
 const allPages = [
   'index.html',
+  'get-started.html',
+  ...Object.keys(guidance).map((p) => p.replace(/^design\//, '')),
   ...components.map((c) => c.path),
   ...foundations.map((c) => c.path),
   ...TEMPLATES.map((c) => c.path),
