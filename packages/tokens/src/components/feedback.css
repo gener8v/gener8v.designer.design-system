@@ -16,17 +16,27 @@
 .dialog {
   inline-size: min(520px, 100%);
   max-block-size: calc(100vh - var(--space-16));
+  /* A phone's browser bar comes and goes; `dvh` is the height actually on show, where it exists. */
+  max-block-size: calc(100dvh - var(--space-16));
   /* THE BODY SCROLLS, NOT THE DIALOG.
      `overflow-y` on the box itself scrolled the title out of view and the actions off the bottom —
      so a long explanation could put the confirm button somewhere a reader had to go looking for
-     it, on the one surface where the controls are the entire point. */
-  display: grid;
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+     it, on the one surface where the controls are the entire point.
+
+     A COLUMN, NOT A GRID OF COUNTED ROWS. This was `grid-template-rows: auto auto minmax(0, 1fr)
+     auto`, which counted the tone band as the first row. Without a tone the title took the first
+     `auto`, the body the second — where it grew to its content and never scrolled — and the
+     actions the `1fr`, so a long form pushed its own buttons off the dialog on a phone. A flex
+     column has no row to miscount: the band, the title and the actions keep their size, and the
+     body alone gives way and scrolls, whichever of them are there. */
+  display: flex;
+  flex-direction: column;
   padding: var(--space-6);
   background: var(--color-bg);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
 }
+.dialog::before, .dialog-title, .dialog-actions { flex: none; }
 .dialog-title {
   font-family: var(--font-heading);
   font-weight: var(--font-heading-weight);
@@ -35,8 +45,17 @@
   color: var(--color-neutral-900);
 }
 .dialog-body {
-  margin-block-start: var(--space-3);
+  /* Shrinks below its content (min-size 0), never grows past it: a short dialog stays short. */
+  flex: 0 1 auto;
+  min-block-size: 0;
+  margin-block-start: var(--space-2); /* space-3, less the step of ring room inside */
   overflow-y: auto;
+  overscroll-behavior: contain;
+  /* A field's focus ring is drawn outside it, and a scrolling box clips what is outside it. A step
+     of room on each side, taken back by the margin, keeps the ring whole at the body's edge. */
+  padding: var(--space-1);
+  margin-inline: calc(var(--space-1) * -1);
+  margin-block-end: calc(var(--space-1) * -1);
   font-size: var(--text-sm);
   color: var(--color-neutral-700);
 }
@@ -67,11 +86,16 @@
 
 .dialog-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-3);
   /* The decision is separated from the explanation by air rather than a rule — the layout
      foundation's own instruction: reach for a larger space step before reaching for a divider. */
   margin-block-start: var(--space-8);
+}
+/* On a phone the air above the decision is a step smaller, so the body keeps the height. */
+@media (max-width: 480px) {
+  .dialog-actions { margin-block-start: var(--space-5); }
 }
 
 /* --- alert ---------------------------------------------------------- */

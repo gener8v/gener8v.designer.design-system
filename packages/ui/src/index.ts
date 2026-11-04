@@ -150,6 +150,11 @@ export { Checklist, ChecklistItem } from './Checklist/index.js';
 export type { ChecklistItemProps } from './Checklist/index.js';
 export { Conversation, Turn, TurnPending } from './Conversation/index.js';
 export type { ConversationProps, TurnProps, TurnSide } from './Conversation/index.js';
+export { ToolChip, toolWords, ConfirmCard } from './Agent/index.js';
+export type {
+  ToolChipProps, ToolChipState, ToolChipLabels, ConfirmCardProps, ConfirmCardLabels, ConfirmCardElsewhere,
+  ConfirmTier, ConfirmState, ConfirmValue,
+} from './Agent/index.js';
 export { Comment, CommentCompose, CommentActions } from './Comment/index.js';
 export type { CommentProps } from './Comment/index.js';
 export { Summary, SummaryRow, SummaryNote } from './Summary/index.js';
@@ -158,6 +163,11 @@ export { KnowledgeGraph } from './KnowledgeGraph/index.js';
 export type { KnowledgeGraphProps, GraphNode, GraphLink } from './KnowledgeGraph/index.js';
 export { createLayout, tick, settle, bounds, radiusFor } from './KnowledgeGraph/index.js';
 export type { Layout, SimLink, SimOptions, GraphNodeInput } from './KnowledgeGraph/index.js';
+export { LayeredGraph, layoutGraph, edgePath, uncoveredIds, layerNodes, LAYERED_METRICS } from './LayeredGraph/index.js';
+export type {
+  LayeredGraphProps, LayeredGraphLabels, NodeLinks, LayeredLayer, LayeredGroup, LayeredNode, LayeredEdge,
+  LayeredEdgeKind, LayeredLayout, PlacedLayer, PlacedNode, PlacedHead,
+} from './LayeredGraph/index.js';
 export { ToastProvider, useToast } from './ToastProvider/index.js';
 export type { ToastProviderProps, ToastSpec } from './ToastProvider/index.js';
 export { CommandPalette, useCommandPalette } from './CommandPalette/index.js';

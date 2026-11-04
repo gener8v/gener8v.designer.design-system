@@ -1,0 +1,114 @@
+/* ------------------------------------------------------------------- agent */
+
+/* What an agent did and what it wants, inside a conversation.
+ *
+ * A TOOL CALL IS A CHIP, NOT A PARAGRAPH. The result is the line; the arguments are a press away.
+ * A CHANGE THAT NEEDS A PERSON ASKS ONE, on a card with the change written on it and two answers. */
+
+/* --- tool chip ------------------------------------------------------ */
+
+.tool-chip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.tool-chip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-h-xs);
+  max-inline-size: 100%;
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-full);
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-800);
+  font: inherit;
+  text-align: start;
+}
+button.tool-chip-toggle { cursor: pointer; }
+button.tool-chip-toggle:hover { border-color: var(--color-neutral-400); }
+.tool-chip-caret {
+  flex: none;
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.tool-chip-toggle[aria-expanded="true"] .tool-chip-caret { transform: rotate(90deg); }
+.tool-chip-label { min-inline-size: 0; overflow-wrap: anywhere; }
+/* Running: the words are the tool's, not yet its answer, so they recede a step. */
+.tool-chip[data-state="running"] .tool-chip-toggle { color: var(--color-neutral-700); }
+.tool-chip[data-state="refused"] .tool-chip-toggle,
+.tool-chip[data-state="failed"] .tool-chip-toggle { border-color: var(--color-danger-300); }
+
+.tool-chip-detail {
+  flex-basis: 100%;
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-inline-start: 2px solid var(--color-neutral-200);
+  color: var(--color-neutral-700);
+}
+.tool-chip-args { display: grid; gap: var(--space-1); margin: 0; }
+.tool-chip-args > div { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.tool-chip-args dt { font-family: var(--font-mono); color: var(--color-neutral-600); }
+.tool-chip-args dd { margin: 0; color: var(--color-neutral-900); overflow-wrap: anywhere; }
+.tool-chip-more { overflow-wrap: anywhere; }
+
+/* --- confirm card --------------------------------------------------- */
+
+.confirm-card {
+  border-color: var(--color-accent-300);
+}
+/* Margins rather than a gap: the outcome is a live region that must exist, empty, before it is
+   filled — and an empty grid item still takes a gap. */
+.confirm-card > * + * { margin-block-start: var(--space-3); }
+.confirm-card-outcome:empty { margin: 0; }
+.confirm-card[data-spend] { border-color: var(--color-danger-300); }
+/* Answered, it is a record of what was asked, not a question: it steps back to the hairline. */
+.confirm-card:not([data-state="open"]) { border-color: var(--color-neutral-200); }
+.confirm-card:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.confirm-card-flags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-spend { font-size: var(--text-xs); color: var(--color-neutral-700); }
+.confirm-card-summary {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-neutral-900);
+}
+.confirm-card-values {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-1) var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+}
+.confirm-card-values > div { display: contents; }
+.confirm-card-values dt { color: var(--color-neutral-600); }
+.confirm-card-values dd { margin: 0; color: var(--color-neutral-900); font-variant-numeric: tabular-nums; }
+.confirm-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-outcome {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.confirm-card-problem { font-size: var(--text-xs); color: var(--color-neutral-700); }
+
+@media (max-width: 480px) {
+  /* A label above its value, on a phone: two columns of a long value wrap to a word a line. */
+  .confirm-card-values { grid-template-columns: 1fr; }
+  .confirm-card-values dd { margin-block-end: var(--space-1); }
+}

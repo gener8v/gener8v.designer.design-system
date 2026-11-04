@@ -51,7 +51,7 @@ packages/tokens/src/theme.mjs      the source of truth — 135 tokens
 
 ## What is in here
 
-258 exports across 50 families. The ones worth knowing:
+267 exports across 52 families. The ones worth knowing:
 
 | Area | Exports |
 | --- | --- |
@@ -60,8 +60,8 @@ packages/tokens/src/theme.mjs      the source of truth — 135 tokens
 | Forms | `Field` `Input` `Textarea` `Select` `Combobox` `Checkbox` `Radio` `Switch` `Slider` `FileUpload` `TokenInput` `Quantity` `RadioCard` |
 | Navigation | `Nav` `Sidebar` `Breadcrumbs` `Tabs` `Tree` `Hamburger` `Drawer` `PagerChip` `Contents` `Menu` `CommandPalette` `Kbd` `ShortcutList` `useListKeys` |
 | Flow | `Flow` `Stepper` `Progress` `Meter` `Timeline` `Feed` `Lanes` `LiveProgress` `LiveIndicator` `Pulse` `LiveMark` `LiveSection` `State` `StateArt` `useStepValidation` `ErrorSummary` |
-| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `HoverCard` `useDelegatedHoverCard` `Callout` |
-| Data | `Table` `usePagedTable` `TablePager` `Matrix` `Diff` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` |
+| Feedback | `Dialog` `Alert` `Toast` `ToastProvider`/`useToast` `Tooltip` `Popover` `HoverCard` `useDelegatedHoverCard` `Callout` `ToolChip` `ConfirmCard` |
+| Data | `Table` `usePagedTable` `TablePager` `Matrix` `Diff` `Stat` `DescriptionList` `Avatar` `BarChart` `LineChart` `Sparkline` `KnowledgeGraph` `LayeredGraph` |
 | Library & integrations | `DocList` `DocPreview` `Reader` `Citation` `SourceCard` `Connection` `Credential` `KeyRow` `Rule` |
 
 `design/components/*.html` shows every one of them rendered. View source and copy the markup.

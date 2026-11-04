@@ -77,6 +77,20 @@
   .contents-item:has(.contents-link[aria-current]) { border-inline-start-color: Highlight; }
   .contents-link[aria-current] { color: Highlight; }
   [data-list-item]:focus-visible { outline: 2px solid Highlight; }
+
+  /* The layered graph. Its lines are drawn in the text colour and a lit one in the highlight; a
+     node's state was never the tint alone — pressed is the highlight edge, uncovered and a drop
+     target are dashed, and the names say both. */
+  .layered-graph-edges path { stroke: CanvasText; }
+  .layered-graph-edges path[data-lit] { stroke: Highlight; }
+  .layered-graph-node { border-color: CanvasText; }
+  .layered-graph-node[aria-pressed="true"], .layered-graph-node[data-over],
+  .layered-graph-node[data-carried] { border-color: Highlight; border-width: 2px; }
+  .layered-graph[data-highlight] .layered-graph-node[data-highlighted] { box-shadow: none; outline: 2px solid Highlight; }
+  /* A tool chip and a card waiting for an answer keep their edges; refused and the spend are
+     tags, which carry their own words. */
+  .tool-chip-toggle, .confirm-card { border-color: CanvasText; }
+  .confirm-card:focus-visible { outline-color: Highlight; }
 }
 
 /* --- print ------------------------------------------------------------ */
@@ -120,6 +134,11 @@
   .live-pulse, .pager-chip, .table-pager, .contents-check { display: none !important; }
   .live-section { background: none !important; opacity: 1 !important; border-inline-start-color: transparent !important; }
   .live-section > * { animation: none !important; }
+  /* A graph prints as drawn, in ink. A card's buttons and a chip's caret are the screen's. */
+  .layered-graph-edges path { stroke: #999 !important; }
+  .layered-graph-edges path[data-lit] { stroke: #000 !important; }
+  .layered-graph-node { background: none !important; }
+  .confirm-card-actions, .tool-chip-caret { display: none !important; }
   .citation { background: none; border: 1px solid #999; color: #000; }
   .matrix th, .matrix td { position: static !important; }
 
@@ -167,5 +186,9 @@
     opacity: 0.25;
   }
   .live-pulse[data-still]::after { opacity: 0; }
+
+  /* A chip's caret turns and a graph node's edge eases; both are decoration, and both simply
+     arrive. Nothing here indicates activity — a running tool call says so with a pulse and words. */
+  .tool-chip-caret, .layered-graph-node { transition: none; }
 }
 @keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }

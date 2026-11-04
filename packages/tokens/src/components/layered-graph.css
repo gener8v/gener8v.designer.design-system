@@ -1,0 +1,236 @@
+/* ------------------------------------------------------------ layered graph */
+
+/* LAYERS READ LEFT TO RIGHT, AND THE LINES ARE A DRAWING OF WHAT THE LISTS ALREADY SAY.
+ *
+ * Each layer is a list of real buttons; the lines between them are one svg stretched across the
+ * same box, hidden from assistive technology. The layout is arithmetic in graph units — a
+ * sixteenth of a rem, so a pixel at the default size and more when the reader turns text up — and
+ * the nodes and the lines are placed with the same numbers.
+ *
+ * NARROW FIRST. The default is the phone: the layers stacked as plain lists, the drawing gone, and
+ * every node saying in words what covers it. From 30rem of its own width — a container query, so a
+ * graph in a side pane stacks on a desktop too — the layers stand side by side and the lines come
+ * back. */
+
+.layered-graph {
+  container: layered-graph / inline-size;
+  --layered-graph-unit: 0.0625rem;
+}
+
+.layered-graph-canvas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+.layered-graph-edges { display: none; }
+
+.layered-graph-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-block-end: var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-neutral-600);
+}
+/* A tag in an uppercase head keeps its own voice. */
+.layered-graph-head .tag, .layered-graph-group-head .tag { letter-spacing: normal; text-transform: none; }
+
+.layered-graph-list, .layered-graph-group-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.layered-graph-list { gap: var(--space-2); }
+.layered-graph-group-head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-2);
+  margin-block: var(--space-2) var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- a node --------------------------------------------------------- */
+
+.layered-graph-node {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--space-6);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--color-neutral-200);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-neutral-900);
+  font: inherit;
+  font-size: var(--text-xs);
+  line-height: 1.3;
+  text-align: start;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+}
+.layered-graph-node[draggable="true"] { cursor: grab; }
+.layered-graph-node[data-size="md"] {
+  align-items: flex-start;
+  padding-block: var(--space-2);
+  border-color: var(--color-neutral-300);
+  font-size: var(--text-sm);
+}
+/* Where a sequence ends. Dashed, because it is not one more step but the thing the steps make. */
+.layered-graph-node[data-variant="terminal"] {
+  justify-content: space-between;
+  font-size: var(--text-sm);
+  border-style: dashed;
+  border-color: var(--color-neutral-400);
+}
+.layered-graph-code {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-neutral-700);
+}
+.layered-graph-label { flex: 1 1 0; min-inline-size: 0; }
+.layered-graph-meta { flex: none; display: inline-flex; gap: var(--space-1); }
+/* What the lines say, as words. Only where there are no lines. */
+.layered-graph-links {
+  flex-basis: 100%;
+  font-size: var(--text-xs);
+  color: var(--color-neutral-600);
+}
+
+.layered-graph-node:hover,
+.layered-graph-node:focus-visible { border-color: var(--color-accent-400); }
+.layered-graph-node[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: var(--color-accent-100);
+}
+/* UNCOVERED IS A SHAPE AS WELL AS A TINT. The dashed edge survives forced colours and a reader who
+   does not see the warning hue; the name says "Not covered" to everyone else. */
+.layered-graph-node[data-uncovered] {
+  border-style: dashed;
+  border-color: var(--color-warning-300);
+  background: var(--color-warning-100);
+}
+.layered-graph-node[data-uncovered] .layered-graph-links { color: var(--color-warning-800); }
+
+/* Brought forward by `highlight`: a ring, not a fade. Fading the rest would take their text under
+   contrast, and they are still the reader's to press. */
+.layered-graph[data-highlight] .layered-graph-node[data-highlighted] {
+  box-shadow: 0 0 0 2px var(--color-accent-600);
+}
+.layered-graph[data-highlight] .layered-graph-node[data-uncovered][data-highlighted] {
+  box-shadow: 0 0 0 2px var(--color-warning-700);
+}
+
+/* A drag, or a pick-up from the keyboard, in progress: where it can go is marked. */
+.layered-graph[data-dragging] .layered-graph-node[data-droppable],
+.layered-graph-node[data-target] {
+  border-style: dashed;
+  border-color: var(--color-accent-500);
+}
+.layered-graph-node[data-over] {
+  border-style: solid;
+  border-color: var(--color-accent);
+  background: var(--color-accent-100);
+}
+.layered-graph-node[data-carried] {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px var(--color-accent-300);
+}
+
+/* --- the drawing ---------------------------------------------------- */
+
+.layered-graph-edges path {
+  fill: none;
+  stroke: var(--color-neutral-300);
+  stroke-width: 1;
+}
+.layered-graph-edges path[data-lit] {
+  stroke: var(--color-accent);
+  stroke-width: 2;
+}
+.layered-graph-edges path[data-kind="sequence"] {
+  stroke: var(--color-neutral-400);
+  stroke-dasharray: 3 3;
+}
+
+/* --- side by side --------------------------------------------------- */
+
+@container layered-graph (min-width: 30rem) {
+  .layered-graph-canvas {
+    display: grid;
+    grid-template-columns: var(--layered-graph-columns, 1fr 1fr);
+    grid-template-rows: auto auto;
+    column-gap: 10%;
+  }
+  .layered-graph-layer {
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: 1 / span 2;
+    grid-column: var(--layered-graph-column, auto);
+    min-inline-size: 0;
+  }
+  .layered-graph-edges {
+    display: block;
+    grid-row: 2;
+    grid-column: 1 / -1;
+    inline-size: 100%;
+    max-inline-size: none;
+    block-size: calc(var(--layered-graph-height, 0) * var(--layered-graph-unit));
+    overflow: visible;
+    pointer-events: none;
+  }
+  .layered-graph-list {
+    display: block;
+    position: relative;
+    grid-row: 2;
+    block-size: calc(var(--layered-graph-height, 0) * var(--layered-graph-unit));
+  }
+  /* The groups keep their list semantics and give up their boxes: a group's heading and nodes are
+     placed against the layer's list, so the groups line up with nothing between them. */
+  .layered-graph-group, .layered-graph-group-list { display: block; }
+  .layered-graph-item, .layered-graph-group-head {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: calc(var(--layered-graph-y, 0) * var(--layered-graph-unit));
+    block-size: calc(var(--layered-graph-h, 0) * var(--layered-graph-unit));
+    margin: 0;
+  }
+  .layered-graph-group-head { padding-block-end: var(--space-1); }
+  .layered-graph-group-head .layered-graph-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .layered-graph-node {
+    flex-wrap: nowrap;
+    block-size: 100%;
+    min-block-size: 0;
+    padding-block: 0;
+  }
+  .layered-graph-node[data-size="sm"] .layered-graph-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .layered-graph-node[data-size="md"] { padding-block: var(--space-2); }
+  .layered-graph-node[data-size="md"] .layered-graph-label {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+  .layered-graph-links { display: none; }
+}

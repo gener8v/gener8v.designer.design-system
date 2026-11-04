@@ -4,6 +4,61 @@ All four packages (`@gener8v/tokens`, `@gener8v/tailwind-preset`, `@gener8v/icon
 `@gener8v/ui`) release on one version. Entries before 0.58.0 are in the commit history and the
 pull requests behind each `Release x.y.z` commit.
 
+## 0.60.0
+
+One fix and three components the delivery record built for its Plan view, promoted and generalised.
+Additive apart from the dialog's layout, which renders the same where it already worked.
+
+### Fixed
+
+- **`Dialog` without a `tone` keeps its buttons.** The dialog's rows were `grid-template-rows: auto
+  auto minmax(0, 1fr) auto`, counting the tone band as the first row. Without a tone the body sat
+  in an `auto` row and the actions in the squeezable `1fr` one, so on a phone a long form pushed
+  its own buttons off the dialog. The record set `tone="accent"` on its form dialogs to get round
+  it. `.dialog` is now a flex column: the band, the title and the actions keep their size
+  (`flex: none`), and the body alone shrinks and scrolls (`flex: 0 1 auto; min-block-size: 0`),
+  with or without a tone. Also: `max-block-size` uses `100dvh` where supported, the actions wrap,
+  the body keeps room for a field's focus ring at its edge, and below 480px the space above the
+  actions is a step smaller. The record can drop the load-bearing `tone="accent"`.
+
+### Added
+
+- **`LayeredGraph`** (`layered-graph.css`), a coverage graph. Layers read left to right, with a
+  line for everything one layer's node covers in the next.
+  - `LayeredGraph({ layers, edges, 'aria-label', selected?, highlight?: 'uncovered' | string[],
+    onNodeOpen?(id), onAssign?(fromId, toId), assign?: { from, to }, readOnly?, assignKey? = 'a',
+    headings? = true, describe?(node, links), labels?, empty? })`.
+  - `LayeredLayer { id, label, nodes? | groups?: { label, nodes }[], ordered?, size?: 'sm' | 'md',
+    coverable?, width? }`, `LayeredNode { id, label, code?, meta?, variant?: 'terminal',
+    description? }`, `LayeredEdge { from, to, kind?: 'link' | 'sequence' }`.
+  - Nodes are real buttons in real lists (`ul`, `ol` for an ordered layer, a list of lists for a
+    grouped one), each named with what covers it ("REQ-002: Reconcile intercompany. Not
+    covered."). The svg lines are `aria-hidden`. Hover, focus or selection lights a node's lines.
+  - Drag a node from `assign.from` onto one in `assign.to` (by default the first two layers). The
+    keyboard twin: `A` picks up, Enter on a target puts down, Escape puts back. Each step is said
+    in a polite live region. A `terminal` node never takes a drop.
+  - In a `coverable` layer, a node with no `link` out is uncovered: dashed and tinted, and counted
+    in the layer's head and its group's. `highlight` rings the uncovered nodes or any given ids.
+  - Below 30rem of its own width (a container query) the layers stack, the drawing goes, and each
+    node shows its links as words: `In M1, M2`, `Not covered`.
+  - Helpers: `layoutGraph`, `edgePath`, `uncoveredIds`, `layerNodes`, `LAYERED_METRICS`.
+- **`ToolChip`** (`agent.css`): `{ label, result?, state?: 'running' | 'done' | 'refused' |
+  'failed', args?, detail?, open?, defaultOpen?, onOpenChange?, formatKey?, formatValue?, labels? }`.
+  While running it shows the label beside a pulse and says "running"; when done the result takes
+  the label's place. Refused and failed show a tag. The args and detail open on a press, and a chip
+  with nothing to open is not a button. `toolWords('list_requirements')` gives `List requirements`.
+- **`ConfirmCard`** (`agent.css`): `{ summary, values?: { label, value }[], tier?: 'confirm' |
+  'approval', spend?: boolean | ReactNode, state?: 'open' | 'confirmed' | 'cancelled' | 'failed',
+  problem?, onConfirm?, onCancel?, pending?, readOnly?, elsewhere?: { note, action? }, labels? }`.
+  The yes button says Confirm Change, Approve, or Approve Spend when the change costs money (a
+  `costs money` tag comes before it). Cancel is held while a returned promise settles. Once
+  answered, the buttons go and the answer stays in a polite status. If the pressed button took
+  the focus, the card takes it.
+
+Showcase: `components/coverage.html`, `components/agent.html`, and on `components/feedback.html` a
+long form at phone width with and without a tone. Forced colours, print and reduced motion are
+covered in `zz-adaptive`.
+
 ## 0.59.1
 
 Four fixes found adopting 0.59.0 in the delivery record. No API changes; the record can drop its

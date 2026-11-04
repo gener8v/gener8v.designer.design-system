@@ -167,7 +167,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.state` with `.state-icon`, `.state-title`, `.state-body`, `.state-actions`, `.state-detail` | The six states, tone via `data-tone` | components/states.html |
 | `.state-art` with `.state-art-mark` | A line drawing for an empty state — grid, history, library, inbox, search. `currentColor` plus one accent mark; hidden from assistive tech | components/states.html |
 | `.flow` shell: `.flow-rail`, `.flow-main`, `.flow-header`, `.flow-content`, `.flow-fields`, `.flow-footer` | The prescribed multi-step structure | templates/intake/ |
-| `.dialog-backdrop` + `.dialog` with `.dialog-title`, `.dialog-body`, `.dialog-actions` | Modal at the top elevation | components/feedback.html |
+| `.dialog-backdrop` + `.dialog` with `.dialog-title`, `.dialog-body`, `.dialog-actions` | Modal at the top elevation. A column: only the body scrolls, and the actions stay in view with or without a tone | components/feedback.html |
 | `.alert` with `.alert-title`, `.alert-body`, `.alert-actions` | Inline banner, tone via `data-tone` | components/feedback.html |
 | `.toast-region` + `.toast` with `.toast-title`, `.toast-body`, `.toast-close` | Transient notice in a live region | components/feedback.html |
 | `.tooltip`, `.callout` with `.callout-title` | Floating hint; a quiet aside in prose | components/feedback.html |
@@ -181,7 +181,9 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.avatar` (+ `-sm`, `-lg`, `.avatar-group`) | Person mark | components/data.html |
 | `.paper` with `.paper-ground`, `.paper-aside` | A sheet a document sits on, and the page behind it. Prose is read; a table is scanned — only the first gets a sheet, and navigation goes on the ground beside it | — |
 | `.shelf` with `.shelf-zone`, `.shelf-item`, `.shelf-grip` | Moving a thing between two places. Drag by the grip, or space/arrows/space by keyboard; the row itself opens the item | — |
-| `.conversation` with `.turn`, `.turn-body`, `.turn-meta`, `.turn-pending` | A person asking and a system answering — `data-side="sent"` is a bubble, `received` is prose at full measure | — |
+| `.conversation` with `.turn`, `.turn-body`, `.turn-meta`, `.turn-pending` | A person asking and a system answering — `data-side="sent"` is a bubble, `received` is prose at full measure | components/agent.html |
+| `.tool-chip` (`data-state`) with `.tool-chip-toggle`, `.tool-chip-caret`, `.tool-chip-label`, `.tool-chip-detail`, `.tool-chip-args`, `.tool-chip-more` | An agent's tool call as a chip: running, then its result; refused and failed in a tag; arguments a press away | components/agent.html |
+| `.confirm-card` (`data-tier`, `data-spend`, `data-state`) with `.confirm-card-flags`, `.confirm-card-spend`, `.confirm-card-summary`, `.confirm-card-values`, `.confirm-card-actions`, `.confirm-card-outcome`, `.confirm-card-problem` | A proposed change asking a person to confirm or approve it, inline in a conversation; stays as a record once answered | components/agent.html |
 | `.split` with `.split-aside`, `.split-handle`, `.split-main` | Reader-sized pane: drag the handle, click it to collapse. `role="separator"` | — |
 | `.combobox` with `.listbox`, `.listbox-option`, `.listbox-empty` | ARIA 1.2 combobox — focus stays in the input; `allowCustom` accepts a value the list does not hold | components/inputs.html |
 | `.slider` (+ `.slider-head`, `.slider-value`) | Native range; fill driven by `--slider-pct` | components/inputs.html |
@@ -199,6 +201,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 | `.checklist` with `.checklist-item`, `.checklist-text`, `.checklist-note` | Criteria; done items recede, never disappear | templates/work-item-close/ |
 | `.comment` with `.comment-head`, `.comment-text`, `.comment-compose` | Activity thread and composer | templates/work-item-close/ |
 | `.graph` with `.graph-canvas`, `.graph-node`, `.graph-edge`, `.graph-legend`, `.graph-index` | Knowledge graph — canvas, Barnes–Hut, radius by sqrt(degree) | components/graph.html |
+| `.layered-graph` with `.layered-graph-canvas`, `.layered-graph-edges`, `.layered-graph-layer`, `.layered-graph-head`, `.layered-graph-list`, `.layered-graph-group`, `.layered-graph-group-head`, `.layered-graph-node` (`data-size`, `data-variant`, `data-uncovered`), `.layered-graph-code`, `.layered-graph-label`, `.layered-graph-meta`, `.layered-graph-links` | Coverage graph — layers left to right, nodes as buttons in lists, lines drawn in svg and hidden; stacks with the lines as words below 30rem of its own width | components/coverage.html |
 | `.command-backdrop` + `.command` with `.command-search`, `.command-list`, `.command-item`, `.command-group`, `.command-footer` | Command palette — a dialog, not a dropdown | components/command.html |
 | `.tree` with `.tree-group`, `.tree-item`, `.tree-twisty`, `.tree-label`, `.tree-count` | Hierarchy — one Tab stop, arrows inside | components/command.html |
 | `.code` with `.code-head`, `.code-copy` | Code block; no bundled tokenizer | components/command.html |
@@ -244,6 +247,10 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - Do not use `.progress` for a level or `.meter` for a task. They mean different things.
 - Do not let a pulse, a lane's tint or a section's breathing be the only sign of live work. A word
   goes beside every one of them.
+- Do not let a line in a coverage graph be the only record of what covers what. The node's name says
+  it, and on a phone the line becomes those words.
+- Do not let an agent write a change a person has to answer without a confirm card. Nothing is
+  written until the yes, and a change that costs money says so before the button.
 - Do not tint a matrix cell or a diff without a mark or a line to go with it. Colour is the second
   signal, never the only one.
 - Do not pass a `Date` across a date-picker boundary. Calendar dates are `YYYY-MM-DD`
@@ -283,6 +290,8 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - `components/data.html` — stats, meters, description lists and avatars.
 - `components/inputs.html` — combobox, slider, file drop and the calendar.
 - `components/graph.html` — the knowledge graph, at readable and at corpus scale.
+- `components/coverage.html` — the coverage graph: a plan's layers, uncovered brought forward, a narrow pane.
+- `components/agent.html` — tool chips and confirm cards, in a conversation and on their own.
 - `components/command.html` — the command palette, the tree and the code block.
 - `components/charts.html` — bar, stacked, line and sparkline, with the series palette.
 - `components/library.html` — the document library: list, grid and preview panes.
