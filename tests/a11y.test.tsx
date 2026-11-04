@@ -124,7 +124,7 @@ describe('axe — every component family', () => {
             </tr></thead>
             <tbody><tr>
               <Td mono nowrap>G8V-2026-014</Td>
-              <Td>Commonwealth of Virginia</Td>
+              <Td>Ridgeway Transit Authority</Td>
               <Td numeric>1,240,000</Td>
             </tr></tbody>
           </Table>
@@ -262,7 +262,7 @@ describe('axe — every component family', () => {
         <Meter value={24} label="Evidence attached" tone="danger" />
         <DescriptionList>
           <dt>Code</dt><dd>G8V-2026-014</dd>
-          <dt>Client</dt><dd>Commonwealth of Virginia</dd>
+          <dt>Client</dt><dd>Ridgeway Transit Authority</dd>
         </DescriptionList>
         <AvatarGroup>
           <Avatar size="sm" name="Thomas E" />

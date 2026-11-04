@@ -6,6 +6,17 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+**Visual change, button:** `.btn.is-loading` now draws the system spinner, the same
+track-and-arc ring as `.spinner` (stroke = size / 8, a quarter arc, one turn in 800ms), centred in the
+label's place and in the label's colour. Before this it was a bordered circle with a gap, a different
+shape from every other spinner. `.btn-link.is-loading` now gets a spinner colour too. Width and label
+behaviour don't change.
+
+**Docs:** the example data on the preview pages, templates and tests uses only fictional
+organisations.
+
+## 0.62.0
+
 **Visual change, sidebar:** a collapsible group heading (`.sidebar-group-toggle`) now outranks its
 items — 14px at 600 in ink on the item's row and pill, with its items indented a step beneath it. It
 was the 12px muted label, smaller than the children it opens. Static `.sidebar-group` labels are
@@ -147,6 +158,11 @@ see it when they bump. No class, prop or markup is renamed or removed.
   (`.toast-action`) before the dismiss, announced with the toast and reached by Tab. A toast with
   an action defaults to `duration: 0`. Pressing it runs `onAction`, dismisses the toast and puts
   focus back where it came from. For Undo, not for a decision.
+
+## 0.61.0
+
+The repository and all four packages are public under MIT. They install from npm with no token.
+The example brand is `ledger` (fictional), with the same palette values as the brand it replaces.
 
 ## 0.60.0
 

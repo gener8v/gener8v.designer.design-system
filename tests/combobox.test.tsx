@@ -6,7 +6,7 @@ import { Combobox } from '../packages/ui/src/index.js';
 import type { ComboboxOption } from '../packages/ui/src/index.js';
 
 const OPTIONS: ComboboxOption[] = [
-  { value: 'va', label: 'Commonwealth of Virginia' },
+  { value: 'va', label: 'Ridgeway Transit Authority' },
   { value: 'nh', label: 'Northlake Health' },
   { value: 'mf', label: 'Meridian Financial', disabled: true },
   { value: 'al', label: 'Atlas Logistics' },
@@ -93,12 +93,12 @@ describe('Combobox — ARIA 1.2 pattern', () => {
     const u = userEvent.setup();
     render(<Harness />);
     await u.click(box());
-    await u.keyboard('{ArrowDown}{Enter}');            // commit Virginia
-    expect(box()).toHaveValue('Commonwealth of Virginia');
+    await u.keyboard('{ArrowDown}{Enter}');            // commit Ridgeway
+    expect(box()).toHaveValue('Ridgeway Transit Authority');
     await u.clear(box());
     await u.type(box(), 'xyz');
     await u.keyboard('{Escape}');
-    expect(box()).toHaveValue('Commonwealth of Virginia');   // draft discarded
+    expect(box()).toHaveValue('Ridgeway Transit Authority');   // draft discarded
   });
 
   it('Escape on a closed combobox clears the selection', async () => {

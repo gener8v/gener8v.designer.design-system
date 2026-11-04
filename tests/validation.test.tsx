@@ -67,7 +67,7 @@ describe('validation on advance', () => {
     const onAdvance = vi.fn();
     render(<Step onAdvance={onAdvance} />);
     await u.click(screen.getByText('Continue'));          // fails
-    await u.type(screen.getByLabelText('Client organisation'), 'Commonwealth of Virginia');
+    await u.type(screen.getByLabelText('Client organisation'), 'Ridgeway Transit Authority');
     await u.type(screen.getByLabelText('Contact email'), 'a@example.gov');
     await u.click(screen.getByText('Continue'));
     expect(onAdvance).toHaveBeenCalledTimes(1);

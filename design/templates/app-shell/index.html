@@ -13,9 +13,15 @@
   .shell { display: grid; grid-template-rows: auto minmax(0, 1fr); block-size: 100%; }
   .shell-body { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); min-block-size: 0; }
   .shell-rail { overflow-y: auto; }
-  .shell-main { overflow-y: auto; padding: var(--space-8); }
+  .shell-main { overflow-y: auto; padding: var(--space-8); container-type: inline-size; }
   .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--space-4); margin-block: var(--space-6); }
   .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: var(--space-6); align-items: start; }
+  /* The table needs ~40rem before its columns stop wrapping. Below that the side
+     column moves under it, and its cards sit side by side rather than stacked. */
+  @container (max-width: 68rem) {
+    .split { grid-template-columns: minmax(0, 1fr); }
+    .split > .stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); align-items: start; }
+  }
   @media (max-width: 900px) {
     .shell-body { grid-template-columns: minmax(0, 1fr); }
     .shell-rail { display: none; }
@@ -102,7 +108,7 @@
                 <th scope="col" data-numeric>Coverage</th>
               </tr></thead>
               <tbody>
-                <tr><td class="mono" data-nowrap>G8V-2026-014</td><td>Commonwealth of Virginia</td><td><span class="tag tag-success tag-dot">Live</span></td><td class="num">91%</td></tr>
+                <tr><td class="mono" data-nowrap>G8V-2026-014</td><td>Ridgeway Transit Authority</td><td><span class="tag tag-success tag-dot">Live</span></td><td class="num">91%</td></tr>
                 <tr><td class="mono" data-nowrap>G8V-2026-011</td><td>Northlake Health</td><td><span class="tag tag-accent">In review</span></td><td class="num">62%</td></tr>
                 <tr><td class="mono" data-nowrap>G8V-2025-208</td><td>Meridian Financial</td><td><span class="tag tag-warning tag-dot">Blocked</span></td><td class="num">59%</td></tr>
                 <tr><td class="mono" data-nowrap>G8V-2025-190</td><td>Atlas Logistics</td><td><span class="tag tag-outline">Archived</span></td><td class="num">100%</td></tr>
