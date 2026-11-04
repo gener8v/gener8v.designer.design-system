@@ -3,327 +3,375 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GENER8V — Design system</title>
+<title>GENER8V Design System</title>
+<meta name="description" content="Open-source tokens, React components and page templates for AI products in regulated, governed and auditable environments." />
 <link rel="stylesheet" href="styles.css" />
-<script>
-(function () {
-  try {
-    var g = localStorage.getItem('gener8v.lab.theme');
-    if (g === 'light' || g === 'dark') document.documentElement.setAttribute('data-theme', g);
-  } catch (e) { /* private windows throw on access; the OS preference still applies */ }
-})();
-</script>
+<script src="assets/docs.js"></script>
 <style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
 
-.lab-theme { position: fixed; inset-block-start: var(--space-4); inset-inline-end: var(--space-4); z-index: 90; }
-@media print { .lab-theme { display: none; } }
+html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
+.ov-wrap { max-inline-size: calc(var(--space-4) * 72); margin-inline: 0 auto; padding-inline: var(--space-6); }
+@media (min-width: 1280px) { .ov-wrap { margin-inline-start: var(--space-6); } }
+/* THE ATMOSPHERE gener8v.com wears: a light ground washed with soft blue and a little teal. */
+.ov-hero {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-20) var(--space-20);
+  background:
+    radial-gradient(60% 70% at 85% 10%, color-mix(in srgb, var(--color-accent-300) 45%, transparent), transparent 70%),
+    radial-gradient(50% 60% at 40% 90%, color-mix(in srgb, var(--color-accent-2-300) 30%, transparent), transparent 70%),
+    linear-gradient(180deg, color-mix(in srgb, var(--color-accent-100) 70%, var(--color-bg)), var(--color-bg));
+  border-block-end: 1px solid var(--color-divider);
+}
+.ov-hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+/* The heavy headline is gener8v.com's, and is this page's alone: the system's own headings stay at 500. */
+.ov-title { font-size: clamp(var(--text-4xl), 5vw, calc(var(--text-4xl) * 1.6)); font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; color: var(--color-neutral-900); }
+.ov-grad { background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-2-700)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ov-lede { margin-block-start: var(--space-6); font-size: var(--text-xl); line-height: 1.5; color: var(--color-neutral-700); max-inline-size: 34ch; }
+.ov-lede strong { color: var(--color-neutral-900); font-weight: 600; }
+.ov-ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-8); }
+.ov-install { display: inline-flex; align-items: center; gap: var(--space-3); margin-block-start: var(--space-6); padding: var(--space-2) var(--space-4); border: 1px solid var(--color-divider); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-bg) 70%, transparent); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-neutral-800); max-inline-size: 100%; overflow-x: auto; white-space: nowrap; }
+.ov-install span { color: var(--color-neutral-600); user-select: none; }
+.ov-specimen { box-shadow: var(--shadow-lg); background: var(--color-bg); }
+.ov-specimen .panel-body { display: grid; gap: var(--space-5); }
+.ov-specimen-actions { display: flex; justify-content: flex-end; gap: var(--space-3); flex-wrap: wrap; }
+.ov-caption { margin-block-start: var(--space-3); font-size: var(--text-xs); color: var(--color-neutral-600); text-align: end; }
+.ov-section { padding-block: var(--space-20) 0; }
+.ov-section h2 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -0.015em; }
+.ov-section-lede { margin-block-start: var(--space-3); color: var(--color-neutral-700); max-inline-size: 60ch; }
+.ov-reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); margin-block-start: var(--space-8); }
+.ov-reason svg { inline-size: var(--space-6); block-size: var(--space-6); color: var(--color-accent-700); }
+.ov-reason .card-title { margin-block-start: var(--space-4); font-size: var(--text-lg); }
+.ov-reason .card-body { margin-block-start: var(--space-2); }
+.ov-start { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
+.ov-browse h3 { font-size: var(--text-xl); margin-block: var(--space-12) var(--space-4); display: flex; align-items: baseline; gap: var(--space-3); }
+.ov-browse h3 .muted { font-size: var(--text-sm); font-weight: 400; }
+.ov-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--space-4); }
+.ov-grid .card-title { font-size: var(--text-base); }
+.ov-grid .card-body { margin-block-start: var(--space-1); font-size: var(--text-sm); }
+.ov-featured { grid-column: span 2; background: color-mix(in srgb, var(--color-accent-100) 55%, var(--color-bg)); }
+.ov-foot { margin-block-start: var(--space-24); padding-block: var(--space-8); border-block-start: 1px solid var(--color-divider); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.ov-foot a { color: var(--color-neutral-800); }
+@media (max-width: 1180px) {
+  .ov-hero-grid, .ov-start { grid-template-columns: minmax(0, 1fr); }
+  .ov-lede { max-inline-size: 48ch; }
+}
+@media (max-width: 1180px) { .ov-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 900px) { .ov-reasons { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 560px) {
+  .ov-hero { padding-block: var(--space-12); }
+  .ov-grid { grid-template-columns: minmax(0, 1fr); }
+  .ov-featured { grid-column: auto; }
+  .ov-specimen .table th, .ov-specimen .table td { padding-inline: var(--space-2); }
+  .ov-install { white-space: normal; border-radius: var(--radius-lg); font-size: var(--text-xs); overflow-x: visible; }
+}
 
-/* Page scaffolding only — every component below comes from styles.css. */
-.index-hero { border-block-end: 1px solid var(--color-neutral-200); }
-.index-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: var(--space-4); }
-.index-chip { forced-color-adjust: none; display: inline-block; inline-size: var(--space-6); block-size: var(--space-6); border-radius: var(--radius-xs); }
-.index-row { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
-.index-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-4); }
-.index-fact { padding: var(--space-4); border: 1px solid var(--color-neutral-200); border-radius: var(--radius-lg); }
-.index-fact-n { font-family: var(--font-mono); font-size: var(--text-2xl); color: var(--color-neutral-900); font-variant-numeric: tabular-nums; }
-.index-sec { margin-block-start: var(--space-16); }
 </style>
 </head>
 <body>
-
-<div class="lab-theme">
-  <div class="segmented" role="radiogroup" aria-label="Ground">
-    <button type="button" class="segmented-item" role="radio" data-ground="system">System</button>
-    <button type="button" class="segmented-item" role="radio" data-ground="light">Light</button>
-    <button type="button" class="segmented-item" role="radio" data-ground="dark">Dark</button>
-  </div>
-</div>
-<script>
-(function () {
-  var KEY = 'gener8v.lab.theme';
-  var root = document.documentElement;
-  var buttons = [].slice.call(document.querySelectorAll('[data-ground]'));
-  function read() { try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; } }
-  function paint(g) {
-    buttons.forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.ground === g)); });
-  }
-  function set(g) {
-    if (g === 'system') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', g);
-    try { g === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, g); } catch (e) {}
-    paint(g);
-  }
-  buttons.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.ground); }); });
-  paint(read());
-})();
-</script>
-<header class="index-hero bg-dot-grid">
-  <div class="container section-tight">
-    <h1>GENER8V</h1>
-    <p class="lede" style="margin-block-start:var(--space-4);max-inline-size:60ch">
-      A light, airy interface for delivering AI in regulated, governed and auditable
-      environments. One stylesheet, one token source, and the same class names in the
-      static HTML and in <code>@gener8v/ui</code>.
-    </p>
-    <div class="index-row" style="margin-block-start:var(--space-6)">
-      <a class="btn btn-primary" href="foundations/color.html">Foundations<svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
-      <a class="btn btn-secondary" href="#get-started">Get started</a>
-      <a class="btn btn-ghost" href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>
+<main class="ov">
+  <section class="ov-hero" aria-labelledby="ov-title">
+    <div class="ov-wrap ov-hero-grid">
+      <div>
+        <h1 class="ov-title" id="ov-title">GENER8V <span class="ov-grad">Design System</span></h1>
+        <p class="ov-lede">Open-source tokens, React components and page templates for AI products in
+          <strong>regulated, governed and auditable</strong> environments.</p>
+        <div class="ov-ctas">
+          <a class="btn btn-primary btn-lg" href="#components">Browse components<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+          <a class="btn btn-secondary btn-lg" href="get-started.html">Get started</a>
+        </div>
+        <p class="ov-install"><span aria-hidden="true">$</span><code>npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></p>
+      </div>
+      <figure>
+        <div class="panel ov-specimen" inert>
+        <div class="panel-header">
+          <span class="panel-title">Model release 4.2 — review</span>
+          <span class="tag tag-warning tag-dot">Awaiting sign-off</span>
+        </div>
+        <div class="panel-body">
+          <div class="stat-row">
+            <div class="stat"><p class="stat-value">48<span class="muted"> / 50</span></p><p class="stat-label">Evaluations passed</p></div>
+            <div class="stat"><p class="stat-value">2</p><p class="stat-label">Open findings</p></div>
+            <div class="stat"><p class="stat-value">3<span class="muted"> of 4</span></p><p class="stat-label">Approvers</p></div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-compact">
+              <thead><tr><th scope="col">Control</th><th scope="col">Owner</th><th scope="col">Status</th></tr></thead>
+              <tbody>
+                <tr><td>Bias and fairness suite</td><td>Model risk</td><td><span class="tag tag-success">Passed</span></td></tr>
+                <tr><td>Prompt-injection suite</td><td>Security</td><td><span class="tag tag-warning">2 findings</span></td></tr>
+                <tr><td>Data lineage evidence</td><td>Data governance</td><td><span class="tag tag-success">Evidenced</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="alert" data-tone="warning">
+            <svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z"/></svg>
+            <div class="alert-content"><p class="alert-title">Two findings have no owner</p><p class="alert-body">Assign them before release; they stay on the audit record either way.</p></div>
+          </div>
+          <div class="ov-specimen-actions">
+            <button type="button" class="btn btn-secondary">Request changes</button>
+            <button type="button" class="btn btn-primary">Approve release</button>
+          </div>
+        </div>
+      </div>
+        <figcaption class="ov-caption">Rendered live with the system's own classes — nothing on this panel is a picture.</figcaption>
+      </figure>
     </div>
-  </div>
-</header>
-
-<main class="container" style="padding-block:var(--space-12) var(--space-24)">
-
-  <div class="index-facts">
-    <div class="index-fact"><p class="index-fact-n">144</p><p class="label" style="margin-block-start:var(--space-1)">Tokens</p></div>
-    <div class="index-fact"><p class="index-fact-n">20</p><p class="label" style="margin-block-start:var(--space-1)">Component pages</p></div>
-    <div class="index-fact"><p class="index-fact-n">6</p><p class="label" style="margin-block-start:var(--space-1)">Foundations</p></div>
-    <div class="index-fact"><p class="index-fact-n">6px</p><p class="label" style="margin-block-start:var(--space-1)">Radius</p></div>
-  </div>
-
-  <section class="index-sec" id="get-started" aria-labelledby="get-started-title">
-    <p class="label" id="get-started-title">Get started</p>
-    <p class="muted" style="margin-block-start:var(--space-4);max-inline-size:60ch">
-      Open source under MIT. Four public packages on npm — no token, no account. Install them
-      and import one stylesheet.
-    </p>
-    <pre class="code" style="margin-block-start:var(--space-4)"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre>
-    <pre class="code" style="margin-block-start:var(--space-3)"><code data-language="tsx">import '@gener8v/ui/styles.css';
-import { Button, Table, Dialog } from '@gener8v/ui';</code></pre>
-    <div class="index-grid" style="margin-block-start:var(--space-6)">
-      <a class="card card-interactive card-pad-sm" href="https://github.com/gener8v/gener8v.designer.design-system">
-        <p class="card-kicker">Source</p><p class="card-title">GitHub repository</p>
-        <p class="card-body">Tokens, components, templates and the rules that gate them.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/ui">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/ui</p>
-        <p class="card-body">React components that render these exact class names.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tokens">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tokens</p>
-        <p class="card-body">One token source, as CSS, TypeScript and DTCG.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/icons">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/icons</p>
-        <p class="card-body">The icon subset the system uses, tree-shakeable.</p>
-      </a>
-      <a class="card card-interactive card-pad-sm" href="https://www.npmjs.com/package/@gener8v/tailwind-preset">
-        <p class="card-kicker">npm</p><p class="card-title">@gener8v/tailwind-preset</p>
-        <p class="card-body">Tailwind v4 theme over the same tokens.</p>
-      </a>
-    </div>
-    <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">
-      Building with Claude Code? <code>/plugin marketplace add gener8v/gener8v.designer.design-system</code>
-      teaches it the rules, the class names, the templates — and which component fits which job.
-    </p>
   </section>
 
-  <section class="index-sec">
-    <p class="label">At a glance</p>
-    <div class="stack" style="margin-block-start:var(--space-4);gap:var(--space-5)">
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Neutral</span>
-        <span class="index-chip" style="background:#F2F4F7" title="--color-neutral-100"></span><span class="index-chip" style="background:#E2E6ED" title="--color-neutral-200"></span><span class="index-chip" style="background:#CAD0DA" title="--color-neutral-300"></span><span class="index-chip" style="background:#ABB2C0" title="--color-neutral-400"></span><span class="index-chip" style="background:#8991A0" title="--color-neutral-500"></span><span class="index-chip" style="background:#697181" title="--color-neutral-600"></span><span class="index-chip" style="background:#4B5464" title="--color-neutral-700"></span><span class="index-chip" style="background:#2F3848" title="--color-neutral-800"></span><span class="index-chip" style="background:#182030" title="--color-neutral-900"></span>
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Accent</span>
-        <span class="index-chip" style="background:#EEF4FF" title="--color-accent-100"></span><span class="index-chip" style="background:#D9E6FF" title="--color-accent-200"></span><span class="index-chip" style="background:#B7D0FF" title="--color-accent-300"></span><span class="index-chip" style="background:#88B1FF" title="--color-accent-400"></span><span class="index-chip" style="background:#528AFF" title="--color-accent-500"></span><span class="index-chip" style="background:#2664EC" title="--color-accent-600"></span><span class="index-chip" style="background:#1547B7" title="--color-accent-700"></span><span class="index-chip" style="background:#0C307E" title="--color-accent-800"></span><span class="index-chip" style="background:#071C4A" title="--color-accent-900"></span>
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Action</span>
-        <span class="index-chip" style="background:#2664EC"></span>
-        <code style="font-size:var(--text-xs)">#2664EC</code>
-        <span class="muted" style="font-size:var(--text-xs)">fills a primary button — the accent stays for focus rings and links</span>
-      </div>
-      <div class="index-row">
-        <span class="muted" style="inline-size:9ch;font-size:var(--text-sm)">Type</span>
-        <span style="font-family:var(--font-heading);font-weight:var(--font-heading-weight);font-size:var(--text-2xl)">Inter 500</span>
-        <span class="mono" style="color:var(--color-neutral-600)">IBM Plex Mono</span>
+  <section class="ov-section" aria-labelledby="ov-why">
+    <div class="ov-wrap">
+      <span class="doc-rule" aria-hidden="true"></span>
+      <h2 id="ov-why">Why this system</h2>
+      <div class="ov-reasons">
+        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
+          <p class="card-title">Accessible by default</p>
+          <p class="card-body">Every text pair is measured for contrast in light and dark, and the components run under axe — both gate CI, so a regression fails the build rather than reaching a user.</p>
+        </div>
+        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg>
+          <p class="card-title">One token source</p>
+          <p class="card-body">Colour, type, space and motion are defined once and emitted as CSS variables, TypeScript, a Tailwind preset and DTCG for design tools.</p>
+        </div>
+        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/></svg>
+          <p class="card-title">Built for AI-assisted delivery</p>
+          <p class="card-body">A Claude Code plugin teaches the rules and the class names, and a which-component-for-which-job guide says what to reach for — and what not to.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <section class="index-sec">
-    <p class="label">Foundations</p>
-    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
+  <section class="ov-section" aria-labelledby="ov-start">
+    <div class="ov-wrap ov-start">
+      <div>
+        <span class="doc-rule" aria-hidden="true"></span>
+        <h2 id="ov-start">Get started</h2>
+        <ol class="doc-steps">
+          <li><div><h3>Install</h3><p>Public on npm under MIT. No token, no account.</p>
+            <pre class="code"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre></div></li>
+          <li><div><h3>Import</h3><p>One stylesheet first, then the components.</p>
+            <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';
+import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
+          <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
+            <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
+        </ol>
+        <p style="margin-block-start:var(--space-8)"><a class="btn btn-secondary" href="get-started.html">The full guide<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+      </div>
+      <div>
+        <h3 style="font-size:var(--text-lg)">Packages</h3>
+        <ul class="doc-pkgs" style="grid-template-columns:minmax(0,1fr)">
+          <li><a href="https://www.npmjs.com/package/@gener8v/ui">@gener8v/ui</a><p>React components that render the same class names as the HTML.</p></li>
+          <li><a href="https://www.npmjs.com/package/@gener8v/tokens">@gener8v/tokens</a><p>One token source: CSS variables, TypeScript and DTCG.</p></li>
+          <li><a href="https://www.npmjs.com/package/@gener8v/tailwind-preset">@gener8v/tailwind-preset</a><p>A Tailwind v4 theme over the same tokens.</p></li>
+          <li><a href="https://www.npmjs.com/package/@gener8v/icons">@gener8v/icons</a><p>The icon subset the system uses, tree-shakeable.</p></li>
+        </ul>
+        <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">Source, issues and releases on
+          <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>. Open source under the <a href="https://github.com/gener8v/gener8v.designer.design-system/blob/main/LICENSE">MIT licence</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="ov-section ov-browse" id="browse" aria-labelledby="ov-browse">
+    <div class="ov-wrap">
+      <span class="doc-rule" aria-hidden="true"></span>
+      <h2 id="ov-browse">Browse</h2>
+      <p class="ov-section-lede">Every page shows the real markup — view the source and copy it. The React components in <code>@gener8v/ui</code> render the same class names.</p>
+
+      <h3 id="foundations">Foundations <span class="muted">6</span></h3>
+      <div class="ov-grid" style="--cols:3">
   <a class="card card-interactive card-pad-sm" href="foundations/color.html">
-    <p class="card-kicker mono">foundations/color.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Color</p>
+    <p class="card-title">Color</p>
     <p class="card-body">Six roles, two working ramps, and status held to five steps — generated in OKLCH</p>
   </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/type.html">
+    <p class="card-title">Typography</p>
+    <p class="card-body">Inter at 500 for headings over Inter for body, with IBM Plex Mono as the technical voice</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="foundations/layout.html">
+    <p class="card-title">Spacing &amp; elevation</p>
+    <p class="card-body">A 4px spacing scale, 6px radius, and three soft elevation steps tuned for a light ground</p>
+  </a>
   <a class="card card-interactive card-pad-sm" href="foundations/icons.html">
-    <p class="card-kicker mono">foundations/icons.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Icons</p>
+    <p class="card-title">Icons</p>
     <p class="card-body">Phosphor, inline SVG on currentColor, sized in em so they track the type</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="foundations/image.html">
-    <p class="card-kicker mono">foundations/image.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Imagery</p>
+    <p class="card-title">Imagery</p>
     <p class="card-body">Figures sit on the ground with a hairline and a radius; atmosphere comes from dot grid and grain</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="foundations/language.html">
-    <p class="card-kicker mono">foundations/language.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Product language</p>
+    <p class="card-title">Product language</p>
     <p class="card-body">The grammatical form each surface takes, and the check that holds it</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/layout.html">
-    <p class="card-kicker mono">foundations/layout.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Spacing & elevation</p>
-    <p class="card-body">A 4px spacing scale, 6px radius, and three soft elevation steps tuned for a light ground</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/type.html">
-    <p class="card-kicker mono">foundations/type.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Typography</p>
-    <p class="card-body">Inter at 500 for headings over Inter for body, with IBM Plex Mono as the technical voice</p>
-  </a></div></div>
-  </section>
+  </a></div>
 
-  <section class="index-sec">
-    <p class="label">Components</p>
-    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
+      <h3 id="components">Components <span class="muted">20</span></h3>
+      <div class="ov-grid" style="--cols:4">
+  <a class="card card-interactive card-pad-sm" href="components/inputs.html">
+    <p class="card-title">Advanced inputs</p>
+    <p class="card-body">Combobox, slider, file drop and calendar — native controls wherever one exists</p>
+  </a>
   <a class="card card-interactive card-pad-sm" href="components/agent.html">
-    <p class="card-kicker mono">components/agent.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Agent work</p>
+    <p class="card-title">Agent work</p>
     <p class="card-body">Tool chips and confirm cards — what an agent did, and the change it wants a person to answer</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/buttons.html">
-    <p class="card-kicker mono">components/buttons.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Buttons</p>
+    <p class="card-title">Buttons</p>
     <p class="card-body">Six variants, five sizes, icon and loading states — solid primary on a near-white ground</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/cards.html">
-    <p class="card-kicker mono">components/cards.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Cards & tags</p>
+    <p class="card-title">Cards &amp; tags</p>
     <p class="card-body">Hairline surfaces with a mono kicker; tags carry status, never decoration</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/charts.html">
-    <p class="card-kicker mono">components/charts.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Charts</p>
+    <p class="card-title">Charts</p>
     <p class="card-body">Bar, stacked, line and sparkline — palette validated for colour-blind separation, table view always available</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/command.html">
-    <p class="card-kicker mono">components/command.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Command, tree & code</p>
+    <p class="card-title">Command, tree &amp; code</p>
     <p class="card-body">Command palette, hierarchy tree and code block — all keyboard-first</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/coverage.html">
-    <p class="card-kicker mono">components/coverage.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Coverage graph</p>
+    <p class="card-title">Coverage graph</p>
     <p class="card-body">Layers read left to right — requirements by capability, milestones in sequence, where the sequence ends — with a line for everything covered</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/data.html">
-    <p class="card-kicker mono">components/data.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Data display</p>
+    <p class="card-title">Data display</p>
     <p class="card-body">Stats, meters, description lists and avatars — tabular figures throughout</p>
   </a>
-  <a class="card card-interactive card-pad-sm" href="components/disclosure.html">
-    <p class="card-kicker mono">components/disclosure.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Menu & disclosure</p>
-    <p class="card-body">Dropdown menu, accordion and segmented control — open state carried by aria-expanded</p>
+  <a class="card card-interactive card-pad-sm" href="components/library.html">
+    <p class="card-title">Document library</p>
+    <p class="card-body">Browsing MD, PDF, XLSX and CSV — list, grid and preview panes</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/feedback.html">
-    <p class="card-kicker mono">components/feedback.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Feedback</p>
+    <p class="card-title">Feedback</p>
     <p class="card-body">Dialog, alerts, toast, tooltip and callout — one tone vocabulary shared with states</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/flow.html">
-    <p class="card-kicker mono">components/flow.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Flow controls</p>
+    <p class="card-title">Flow controls</p>
     <p class="card-body">Stepper, progress, timeline, pagination and skeletons — the parts a flow is built from</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/forms.html">
-    <p class="card-kicker mono">components/forms.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Forms</p>
+    <p class="card-title">Forms</p>
     <p class="card-body">Native controls on the shared control-height scale, so fields and buttons line up</p>
   </a>
-  <a class="card card-interactive card-pad-sm" href="components/graph.html">
-    <p class="card-kicker mono">components/graph.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Knowledge graph</p>
-    <p class="card-body">Canvas-rendered, Barnes-Hut layout — 1,000 nodes at 0.8ms per tick; radius is sqrt(degree)</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/inputs.html">
-    <p class="card-kicker mono">components/inputs.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Advanced inputs</p>
-    <p class="card-body">Combobox, slider, file drop and calendar — native controls wherever one exists</p>
-  </a>
   <a class="card card-interactive card-pad-sm" href="components/integrations.html">
-    <p class="card-kicker mono">components/integrations.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Integrations & keys</p>
+    <p class="card-title">Integrations &amp; keys</p>
     <p class="card-body">Connections, masked credentials, API key scopes and event rules</p>
   </a>
-  <a class="card card-interactive card-pad-sm" href="components/library.html">
-    <p class="card-kicker mono">components/library.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Document library</p>
-    <p class="card-body">Browsing MD, PDF, XLSX and CSV — list, grid and preview panes</p>
+  <a class="card card-interactive card-pad-sm" href="components/graph.html">
+    <p class="card-title">Knowledge graph</p>
+    <p class="card-body">Canvas-rendered, Barnes-Hut layout — 1,000 nodes at 0.8ms per tick; radius is sqrt(degree)</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/live.html">
-    <p class="card-kicker mono">components/live.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Live activity</p>
+    <p class="card-title">Live activity</p>
     <p class="card-body">Pulse, lanes, a row's progress and a section being written — work happening now, drawn where the work is</p>
   </a>
+  <a class="card card-interactive card-pad-sm" href="components/disclosure.html">
+    <p class="card-title">Menu &amp; disclosure</p>
+    <p class="card-body">Dropdown menu, accordion and segmented control — open state carried by aria-expanded</p>
+  </a>
   <a class="card card-interactive card-pad-sm" href="components/navigation.html">
-    <p class="card-kicker mono">components/navigation.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Navigation</p>
+    <p class="card-title">Navigation</p>
     <p class="card-body">Header, sidebar, tabs, breadcrumbs and the hamburger — active state keys off aria-current</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/reading.html">
-    <p class="card-kicker mono">components/reading.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Reading and review</p>
+    <p class="card-title">Reading and review</p>
     <p class="card-body">Contents with review marks, citations and their source card, a drawer that steps through sources, and keys</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/states.html">
-    <p class="card-kicker mono">components/states.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">States</p>
+    <p class="card-title">States</p>
     <p class="card-body">The six states every flow passes through — most systems ship only the first</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="components/table.html">
-    <p class="card-kicker mono">components/table.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Table</p>
+    <p class="card-title">Table</p>
     <p class="card-body">Hairline rules, mono headers, tabular figures — sort state carried by aria-sort</p>
-  </a></div></div>
-  </section>
+  </a></div>
 
-  <section class="index-sec">
-    <p class="label">Templates</p>
-    <div style="margin-block-start:var(--space-4)"><div class="index-grid">
-  <a class="card card-interactive card-pad-sm" href="templates/intake/index.html">
-    <p class="card-kicker mono">templates/intake/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Engagement intake</p>
-    <p class="card-body">The flow shell as a working four-step journey, with the vertical rail and a persistent footer</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/purchase/index.html">
-    <p class="card-kicker mono">templates/purchase/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Purchase a product</p>
-    <p class="card-body">Four-step buy flow — basket with quantity steppers, delivery radio cards, sticky order summary</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/work-item-create/index.html">
-    <p class="card-kicker mono">templates/work-item-create/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Create a work item</p>
-    <p class="card-body">Describe, label and attach — token input, segmented type, combobox owner, evidence drop</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/work-item-close/index.html">
-    <p class="card-kicker mono">templates/work-item-close/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Close a work item</p>
-    <p class="card-body">Acceptance checklist, resolution outcome, evidence, activity thread and an irreversible confirm</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/app-shell/index.html">
-    <p class="card-kicker mono">templates/app-shell/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Application shell</p>
+      <h3 id="templates">Templates <span class="muted">7 · open full screen</span></h3>
+      <div class="ov-grid" style="--cols:4">
+  <a class="card card-interactive card-pad-sm ov-featured" href="templates/app-shell/index.html">
+    <p class="card-title">Application shell</p>
     <p class="card-body">Header, rail, breadcrumbs, stat row and a data panel — the layout every client app starts from</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="templates/landing/index.html">
-    <p class="card-kicker mono">templates/landing/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Landing page</p>
+    <p class="card-title">Landing page</p>
     <p class="card-body">Hero, the one saturated stat band, feature cards and a close — the marketing voice</p>
   </a>
   <a class="card card-interactive card-pad-sm" href="templates/deck/index.html">
-    <p class="card-kicker mono">templates/deck/index.html</p>
-    <p class="card-title" style="font-size:var(--text-lg)">Presentation deck</p>
+    <p class="card-title">Presentation deck</p>
     <p class="card-body">Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected</p>
-  </a></div></div>
-  </section>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/intake/index.html">
+    <p class="card-title">Engagement intake</p>
+    <p class="card-body">The flow shell as a working four-step journey, with the vertical rail and a persistent footer</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/purchase/index.html">
+    <p class="card-title">Purchase a product</p>
+    <p class="card-body">Four-step buy flow — basket with quantity steppers, delivery radio cards, sticky order summary</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/work-item-create/index.html">
+    <p class="card-title">Create a work item</p>
+    <p class="card-body">Describe, label and attach — token input, segmented type, combobox owner, evidence drop</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="templates/work-item-close/index.html">
+    <p class="card-title">Close a work item</p>
+    <p class="card-body">Acceptance checklist, resolution outcome, evidence, activity thread and an irreversible confirm</p>
+  </a></div>
 
+      <h3 id="guidance">Guidance <span class="muted">which component for which job</span></h3>
+      <div class="ov-grid" style="--cols:4">
+  <a class="card card-interactive card-pad-sm" href="guidance/screens.html">
+    <p class="card-title">Screens</p>
+    <p class="card-body">Which component for a whole page, a shell, or the structure a page sits in</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/overlays.html">
+    <p class="card-title">Overlays</p>
+    <p class="card-body">Which component for something that floats above the page — a modal, a side panel, a hint, a preview</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/status-and-feedback.html">
+    <p class="card-title">Status and feedback</p>
+    <p class="card-body">Which component for telling someone what happened, what state a thing is in, or that it is loading</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/navigation.html">
+    <p class="card-title">Navigation</p>
+    <p class="card-body">Which component for moving between places, switching views, or narrowing what a list shows</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/data.html">
+    <p class="card-title">Data</p>
+    <p class="card-body">Which component for figures, tables, charts, lists of records, or history</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/input.html">
+    <p class="card-title">Input</p>
+    <p class="card-body">Which component for an action someone presses or a value someone enters or picks</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/reading.html">
+    <p class="card-title">Reading</p>
+    <p class="card-body">Which component for a document, prose, code, sources or type someone reads</p>
+  </a>
+  <a class="card card-interactive card-pad-sm" href="guidance/agents-and-live-work.html">
+    <p class="card-title">Agents and live work</p>
+    <p class="card-body">Which component for a conversation with an agent, or work that is running right now</p>
+  </a></div>
+
+      <footer class="ov-foot">GENER8V design system · <a href="https://www.gener8v.com/">gener8v.com</a> · <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a> · MIT</footer>
+    </div>
+  </section>
 </main>
 </body>
 </html>

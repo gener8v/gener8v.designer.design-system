@@ -12,6 +12,12 @@
   padding-inline: var(--space-6);
   background: var(--color-bg);
   border-block-end: 1px solid var(--color-neutral-200);
+  /* THE HEADER COLLAPSES BY ITS OWN WIDTH, NOT THE WINDOW'S.
+     A viewport breakpoint only knows the window: a header in a 600px pane of a
+     1440px screen kept its full link row and scrolled sideways, clipping the last
+     place. A header never scrolls sideways — it measures itself, and below the
+     threshold the links fold into `.nav-burger`. */
+  container: nav / inline-size;
 }
 
 .nav-brand {
@@ -34,23 +40,46 @@
 
 /* Shown only once the link row collapses. Hiding the links without providing
    this leaves a header with no navigation at all. */
-.nav-burger { display: none; }
+/* Two classes, so it outranks `.hamburger`'s own `display`, which comes later in the sheet — with
+   one class the burger showed beside a full link row. */
+.nav .nav-burger { display: none; }
 
 /* A full link row plus a call to action does not fit a phone, and shrinking
    both just makes each unusable. Below this the row collapses and the
    hamburger carries navigation. */
-@media (max-width: 720px) {
+@container nav (max-width: 720px) {
   .nav-links { display: none; }
-  .nav-burger { display: inline-grid; }
+  .nav .nav-burger { display: inline-grid; }
+}
+/* Narrower still, the call to action folds into the burger too: a brand, a button and a burger
+   do not fit a phone, and a header never scrolls sideways. Only when there is a burger to hold it. */
+@container nav (max-width: 480px) {
+  .nav:has(.nav-burger) > .btn { display: none; }
+}
+@media (max-width: 720px) {
   .nav { gap: var(--space-3); padding-inline: var(--space-4); }
+}
+
+/* ONE CUE FOR "YOU ARE HERE".
+ *
+ * The current place was a saturated fill, a 3px bar down its edge AND accent text — three signals
+ * for one fact, and in dark mode the blue text on a navy block fell to low contrast. It is now one
+ * soft tinted pill with the label in ink at a heavier weight, the same indicator in the header, the
+ * rail and the drawer. Hover is a lighter NEUTRAL tint, so it never reads as a second current
+ * place; focus stays the ring. Both tints are mixed from tokens over transparency, so they sit on
+ * the page ground and on the rail's surface alike, in either theme. */
+.nav-item, .sidebar-item {
+  --nav-hover: color-mix(in srgb, var(--color-text) 6%, transparent);
+  --nav-current: color-mix(in srgb, var(--color-accent-500) 14%, transparent);
+  --nav-current-hover: color-mix(in srgb, var(--color-accent-500) 20%, transparent);
 }
 
 .nav-item {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--color-neutral-700);
@@ -59,8 +88,9 @@
   transition: background-color var(--dur-fast) var(--ease-out),
               color var(--dur-fast) var(--ease-out);
 }
-.nav-item:hover { background: var(--color-neutral-100); color: var(--color-neutral-900); }
-.nav-item[aria-current] { color: var(--color-action); background: var(--color-accent-100); }
+.nav-item:hover { background: var(--nav-hover); color: var(--color-neutral-900); }
+.nav-item[aria-current] { color: var(--color-neutral-900); background: var(--nav-current); font-weight: 600; }
+.nav-item[aria-current]:hover { background: var(--nav-current-hover); }
 
 /* --- hamburger ------------------------------------------------------ */
 
@@ -133,7 +163,8 @@
   flex-direction: column;
   gap: var(--space-2);
 }
-.drawer-panel .nav-item { padding-block: var(--space-3); font-size: var(--text-base); }
+/* NO SIZE RULE FOR LINKS IN A DRAWER. They are the header's links, at the header's size and with
+   its indicator — a menu that grows its rows when it moves into a drawer reads as a different menu. */
 
 .drawer-close {
   position: absolute;
@@ -210,7 +241,6 @@
   background: transparent;
   transition: none;
 }
-.drawer-panel > .sidebar .sidebar-item { padding-block: var(--space-3); }
 
 /* --- sidebar -------------------------------------------------------- */
 
@@ -231,31 +261,20 @@
   transition: inline-size var(--dur-base) var(--ease-out);
 }
 .sidebar-group {
-  margin-block-start: var(--space-4);
-  padding-inline: var(--space-3);
-  padding-block-end: var(--space-2);
+  margin-block-start: var(--space-6);
+  padding-inline: var(--space-4);
+  padding-block-end: var(--space-1);
   /* THE BODY FAMILY. A rail whose group headings are mono and whose items are not is a navigation
      menu in two typefaces — and a group name is a category, not an identifier. */
   font-family: var(--font-body);
+  /* A QUIET LABEL, SEPARATED BY AIR.
+   *
+   * Uppercase, tracked, near-ink and ruled off underneath, every group heading was louder than the
+   * places it grouped and the rail read as a stack of dividers. A group name is a label: small,
+   * muted, in sentence case, and the space above it is what separates one group from the next. */
   font-size: var(--text-xs);
   font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  /* OUT-RANKS THE ITEMS IT LABELS.
-   *
-   * At neutral-600 the heading was 4.65:1 against the rail while an item was 7.61:1 — and it is
-   * 12px where an item is 14px. A label quieter and smaller than its own children inverts the
-   * hierarchy: the eye reads the items as the structure and the headings as chrome, which is the
-   * opposite of what a grouped rail is for.
-   *
-   * The rank comes from CONTRAST rather than size. Mono, uppercase and 12px is what says "this is
-   * a label, not a destination", and growing it would make it compete with the items instead of
-   * heading them. */
-  color: var(--color-neutral-800);
-  /* A rule under the label, so the group reads as a section rather than as a quieter item. The
-     heading already has `padding-block-end`, which becomes the space between the words and the
-     line. */
-  border-block-end: 1px solid var(--color-divider);
+  color: var(--color-neutral-600);
 }
 .sidebar-group:first-child { margin-block-start: 0; }
 
@@ -353,26 +372,26 @@
 .sidebar[data-narrow] .sidebar-count { display: none; }
 
 .sidebar-section { display: flex; flex-direction: column; gap: var(--space-1); }
-.sidebar-section + .sidebar-section { margin-block-start: var(--space-4); }
+.sidebar-section + .sidebar-section { margin-block-start: var(--space-6); }
 
 /* A GROUP THAT COLLAPSES.
  *
  * The heading becomes the control, so it carries a button reset on top of `.sidebar-group` and the
  * SAME chevron the accordion uses — one mechanism, so an expanded state looks the same wherever it
- * appears in the system. `border-block-end` is left alone deliberately: the rule under the label is
- * the group's, not the button's. */
+ * appears in the system. */
 .sidebar-group-toggle {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   inline-size: 100%;
+  min-block-size: var(--control-h-xs);
   background: none;
-  border-inline: 0;
-  border-block-start: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
   text-align: start;
   cursor: pointer;
 }
-.sidebar-group-toggle:hover { color: var(--color-action); }
+.sidebar-group-toggle:hover { color: var(--color-neutral-900); }
 .sidebar-group-toggle::after {
   content: "";
   margin-inline-start: auto;
@@ -396,21 +415,22 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-2) var(--space-3);
-  border-radius: var(--radius-md);
+  min-block-size: var(--control-h-md);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
   font-size: var(--text-sm);
   color: var(--color-neutral-700);
   text-decoration: none;
   transition: background-color var(--dur-fast) var(--ease-out),
               color var(--dur-fast) var(--ease-out);
 }
-.sidebar-item:hover { background: var(--color-neutral-200); color: var(--color-neutral-900); }
+.sidebar-item:hover { background: var(--nav-hover); color: var(--color-neutral-900); }
 .sidebar-item[aria-current] {
-  background: color-mix(in srgb, var(--color-action) 10%, transparent);
-  color: var(--color-action);
+  background: var(--nav-current);
+  color: var(--color-neutral-900);
   font-weight: 600;
-  box-shadow: inset 3px 0 0 var(--color-action);
 }
+.sidebar-item[aria-current]:hover { background: var(--nav-current-hover); }
 .sidebar-item svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; }
 
 /* A DESTINATION THAT IS NOT READY YET.
@@ -433,7 +453,7 @@
 .sidebar-item[data-waiting]:hover { color: var(--color-neutral-800); }
 .sidebar-item[data-waiting]:hover svg { opacity: 1; }
 /* Where you ARE always reads as where you are, ready or not. */
-.sidebar-item[data-waiting][aria-current] { color: var(--color-action); }
+.sidebar-item[data-waiting][aria-current] { color: var(--color-neutral-900); }
 .sidebar-item[data-waiting][aria-current] svg { opacity: 1; }
 /* The count stays MONO: it is a figure in a column of figures, and tabular digits
    are the whole reason. */
@@ -479,7 +499,9 @@
   transition: color var(--dur-fast) var(--ease-out);
 }
 .tab:hover { color: var(--color-neutral-900); }
-.tab[aria-selected="true"], .tab[aria-current] { color: var(--color-action); }
+/* The underline is the indicator; the label goes to ink, not to the accent, so "selected" is said
+   once rather than in two blues. */
+.tab[aria-selected="true"], .tab[aria-current] { color: var(--color-neutral-900); }
 /* A LABEL THAT NEEDS EXPLAINING SAYS SO.
  *
  * "Coverage" and "Library" are nouns, which is right, but a noun can still be opaque to somebody

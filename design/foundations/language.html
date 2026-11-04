@@ -6,12 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GENER8V — Product language</title>
 <link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
 <style>
-/* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: 620px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
-.demo-head { margin: var(--space-10) 0 var(--space-4); }
-.demo-head:first-child { margin-top: 0; }
-.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+/* Demo scaffolding only — everything visual comes from ../styles.css; the specimen column
+   (.demo, .demo-head, .note) is shared by every docs page and comes from ../assets/docs.js. */
 .ramp { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin-bottom: var(--space-2); }
 .ramp div { forced-color-adjust: none; aspect-ratio: 1 / 1.35; border-radius: var(--radius-xs); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-family: var(--font-mono); font-size: 9px; }
 .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
@@ -20,18 +18,10 @@
 .role .meta { padding: var(--space-2); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; }
 .kv { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-2) var(--space-4); font-family: var(--font-mono); font-size: var(--text-xs); align-items: center; }
 
-.lab-theme { position: fixed; inset-block-start: var(--space-4); inset-inline-end: var(--space-4); z-index: 90; }
-@media print { .lab-theme { display: none; } }
 </style>
-<script>
-(function () {
-  try {
-    var g = localStorage.getItem('gener8v.lab.theme');
-    if (g === 'light' || g === 'dark') document.documentElement.setAttribute('data-theme', g);
-  } catch (e) { /* private windows throw on access; the OS preference still applies */ }
-})();
-</script>
-<div class="demo">
+</head>
+<body>
+<main class="demo">
 
 <h1 class="demo-head" style="margin-top:0">Product language</h1>
 <p class="note">Rules for text inside the product: headings, buttons, actions, column headers and
@@ -40,7 +30,7 @@ reason. Rules 2, 3, 4, 5, 8, 9 and 11 are enforced by <code>problems(text, surfa
 label that breaks one fails a test rather than a review.</p>
 
 <h2 class="demo-head">1 — Match the form to the surface</h2>
-<table class="table table-compact">
+<div class="table-wrap"><table class="table table-compact">
 <thead><tr><th>Surface</th><th>Form</th><th>Yes</th><th>No</th></tr></thead>
 <tbody>
 <tr><td>Buttons, menu actions</td><td>Imperative, base form</td><td>Confirm Trial Balance</td><td>Confirming Trial Balance</td></tr>
@@ -50,10 +40,10 @@ label that breaks one fails a test rather than a review.</p>
 <tr><td>In-progress status</td><td>Gerund</td><td>Reconciling&hellip;</td><td>Reconcile in progress</td></tr>
 <tr><td>Completed status</td><td>Past participle</td><td>Report sent</td><td>Sends report</td></tr>
 </tbody>
-</table>
+</table></div>
 
 <h2 class="demo-head">2&ndash;9 — What a label may not do</h2>
-<table class="table table-compact">
+<div class="table-wrap"><table class="table table-compact">
 <thead><tr><th>Rule</th><th>Instead of</th><th>Write</th></tr></thead>
 <tbody>
 <tr><td>2 &middot; no gerund where somebody acts</td><td>Publishing Grades</td><td>Publish Grades</td></tr>
@@ -65,12 +55,12 @@ label that breaks one fails a test rather than a review.</p>
 <tr><td>8 &middot; no articles</td><td>Open the Gradebook</td><td>Open Gradebook</td></tr>
 <tr><td>9 &middot; verb + object, nothing more</td><td>Send Reminder to Students With Missing Work</td><td>Send Reminder</td></tr>
 </tbody>
-</table>
+</table></div>
 <p class="note">The article that hides is the one in the middle: &ldquo;Confirm the Trial
 Balance&rdquo; breaks rule 8 as surely as &ldquo;The Roster&rdquo; does.</p>
 
 <h2 class="demo-head">11 — Case</h2>
-<table class="table table-compact">
+<div class="table-wrap"><table class="table table-compact">
 <thead><tr><th>Surface</th><th>Case</th><th>Example</th></tr></thead>
 <tbody>
 <tr><td>Buttons, menu actions</td><td>Title Case</td><td>Confirm Trial Balance</td></tr>
@@ -80,7 +70,7 @@ Balance&rdquo; breaks rule 8 as surely as &ldquo;The Roster&rdquo; does.</p>
 <tr><td>Status text</td><td>Sentence case</td><td>Report sent</td></tr>
 <tr><td>Helper and body text</td><td>Sentence case</td><td>Entries post to the current period.</td></tr>
 </tbody>
-</table>
+</table></div>
 <p class="note">Inside Title Case, every word takes a capital except articles, coordinating
 conjunctions and prepositions of four letters or fewer &mdash; unless the word leads or closes.</p>
 
@@ -95,6 +85,6 @@ surface, and the distinguishing word landing first among siblings. Neither is vi
 string, so neither is enforced. A checker that skipped them while reporting &ldquo;passed&rdquo;
 would be worse than one that says what it looked at.</p>
 
-</div>
+</main>
 </body>
 </html>

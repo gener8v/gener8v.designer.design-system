@@ -6,13 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GENER8V — Integrations & keys</title>
 <link rel="stylesheet" href="../styles.css" />
-<style>/* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: 660px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
-.demo-head { margin: var(--space-10) 0 var(--space-4); }
-.demo-head:first-child { margin-top: 0; }
-.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+<script src="../assets/docs.js"></script>
+<style>/* Demo scaffolding only — everything visual comes from ../styles.css; the specimen column
+   (.demo, .demo-head, .note) is shared by every docs page and comes from ../assets/docs.js. */
 .pane { block-size: calc(var(--space-32) * 1.9); }
-.stack-4 { display: grid; gap: var(--space-4); }</style>
+.stack-4 { display: grid; gap: var(--space-4); }
+/* On a phone a row too wide to fit scrolls in its own frame rather than pushing the page. */
+.phone-scroll { overflow-x: auto; }
+.phone-scroll > * { min-inline-size: calc(var(--space-4) * 26); }</style>
 </head>
 <body>
 <main class="demo">
@@ -43,7 +44,7 @@
   <ul class="key-list"><li class="key-row"><span class="key-name">CI pipeline</span><span class="key-fingerprint">g8v_…4f2a</span><div class="scopes"><span class="scope">read:evidence</span><span data-write="true" class="scope">write:findings</span></div><span class="key-used">used 3 min ago</span></li><li data-expiring="true" class="key-row"><span class="key-name">Audit exporter</span><span class="key-fingerprint">g8v_…91c7</span><div class="scopes"><span class="scope">read:audit</span></div><span class="key-used">expires in 6 days</span></li><li data-expired="true" class="key-row"><span class="key-name">Legacy importer</span><span class="key-fingerprint">g8v_…0d13</span><div class="scopes"><span class="scope">read:*</span><span data-write="true" class="scope">write:*</span></div><span class="key-used">expired 2 Aug</span></li></ul>
 
   <p class="demo-head label">Event rules</p>
-  <div class="stack-4">
+  <div class="stack-4 phone-scroll">
     <div class="rule"><span class="rule-node"><span class="rule-label">GitHub<span class="rule-event"> · pull_request.merged</span></span></span><span class="rule-arrow" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></span><span class="rule-node"><span class="rule-label">Jira<span class="rule-event"> · transition to Done</span></span></span></div>
     <div class="rule"><span class="rule-node"><span class="rule-label">Jira<span class="rule-event"> · issue.blocked</span></span></span><span class="rule-arrow" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></span><span class="rule-node"><span class="rule-label">Slack<span class="rule-event"> · post to #delivery</span></span></span></div>
     <div class="rule"><span class="rule-node"><span class="rule-label">S3<span class="rule-event"> · object.created</span></span></span><span class="rule-arrow" aria-hidden="true"><svg viewBox="0 0 256 256" fill="currentColor"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"></path></svg></span><span class="rule-node"><span class="rule-label">Postgres<span class="rule-event"> · index evidence row</span></span></span></div>

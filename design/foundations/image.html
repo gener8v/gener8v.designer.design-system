@@ -6,12 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GENER8V — Imagery</title>
 <link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
 <style>
-/* Demo scaffolding only — everything visual comes from ../styles.css. */
-.demo { max-width: 620px; margin: 0 auto; padding: var(--space-8) var(--space-6) var(--space-16); }
-.demo-head { margin: var(--space-10) 0 var(--space-4); }
-.demo-head:first-child { margin-top: 0; }
-.note { font-size: var(--text-sm); color: var(--color-neutral-600); max-width: 58ch; margin-top: var(--space-4); }
+/* Demo scaffolding only — everything visual comes from ../styles.css. The specimen column
+   (.demo, .demo-head, .note) is shared by every docs page and lives in assets/docs.js. */
 .ramp { display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; margin-bottom: var(--space-2); }
 .ramp div { forced-color-adjust: none; aspect-ratio: 1 / 1.35; border-radius: var(--radius-xs); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 4px; font-family: var(--font-mono); font-size: 9px; }
 .roles { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); }
@@ -19,46 +17,9 @@
 .role .chip { height: 56px; forced-color-adjust: none; }
 .role .meta { padding: var(--space-2); font-family: var(--font-mono); font-size: 10px; line-height: 1.5; }
 .kv { display: grid; grid-template-columns: 8ch 1fr; gap: var(--space-2) var(--space-4); font-family: var(--font-mono); font-size: var(--text-xs); align-items: center; }
-
-.lab-theme { position: fixed; inset-block-start: var(--space-4); inset-inline-end: var(--space-4); z-index: 90; }
-@media print { .lab-theme { display: none; } }
 </style>
-<script>
-(function () {
-  try {
-    var g = localStorage.getItem('gener8v.lab.theme');
-    if (g === 'light' || g === 'dark') document.documentElement.setAttribute('data-theme', g);
-  } catch (e) { /* private windows throw on access; the OS preference still applies */ }
-})();
-</script>
 </head>
 <body>
-<div class="lab-theme">
-  <div class="segmented" role="radiogroup" aria-label="Ground">
-    <button type="button" class="segmented-item" role="radio" data-ground="system">System</button>
-    <button type="button" class="segmented-item" role="radio" data-ground="light">Light</button>
-    <button type="button" class="segmented-item" role="radio" data-ground="dark">Dark</button>
-  </div>
-</div>
-<script>
-(function () {
-  var KEY = 'gener8v.lab.theme';
-  var root = document.documentElement;
-  var buttons = [].slice.call(document.querySelectorAll('[data-ground]'));
-  function read() { try { return localStorage.getItem(KEY) || 'system'; } catch (e) { return 'system'; } }
-  function paint(g) {
-    buttons.forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.ground === g)); });
-  }
-  function set(g) {
-    if (g === 'system') root.removeAttribute('data-theme');
-    else root.setAttribute('data-theme', g);
-    try { g === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, g); } catch (e) {}
-    paint(g);
-  }
-  buttons.forEach(function (b) { b.addEventListener('click', function () { set(b.dataset.ground); }); });
-  paint(read());
-})();
-</script>
 <main class="demo">
 
   <p class="demo-head label">Figure treatment</p>

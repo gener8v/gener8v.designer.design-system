@@ -79,6 +79,27 @@ pairs.push(
   ['dark: text on the inverse panel', d('--color-on-inverse'), d('--color-inverse'),    4.5],
 );
 
+/* THE NAVIGATION INDICATOR, as nav.css paints it.
+ *
+ * The current place is one soft pill — `--color-accent-500` mixed over the ground at 14% (20% on
+ * hover) — with the label in `--color-neutral-900`. The mix is computed here the way `color-mix(in
+ * srgb …, transparent)` composites it, over both grounds a rail sits on (the page and the rail's
+ * surface), in both themes. The group heading is muted copy on the rail's surface. */
+const mix = (fg, bg, pct) => {
+  const h = (x) => [1, 3, 5].map((i) => parseInt(x.slice(i, i + 2), 16));
+  const [a, b] = [h(fg), h(bg)];
+  return '#' + a.map((v, i) => Math.round(v * pct + b[i] * (1 - pct)).toString(16).padStart(2, '0')).join('').toUpperCase();
+};
+for (const [theme, get] of [['light', t], ['dark', d]]) {
+  for (const ground of ['--color-bg', '--color-surface']) {
+    for (const pct of [0.14, 0.2]) {
+      pairs.push([`${theme}: nav current on ${ground.slice(8)} ${Math.round(pct * 100)}%`, get('--color-neutral-900'), mix(get('--color-accent-500'), get(ground), pct), 4.5]);
+    }
+  }
+  pairs.push([`${theme}: nav item on rail`, get('--color-neutral-700'), get('--color-surface'), 4.5]);
+  pairs.push([`${theme}: nav group label on rail`, get('--color-neutral-600'), get('--color-surface'), 4.5]);
+}
+
 /* ------------------------------------------------------------------ brands */
 
 /**

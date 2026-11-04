@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Overlays — Guidance — GENER8V Design System</title>
+<link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
+<style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
+
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; font-size: var(--text-sm); }
+.gd-table td:first-child { min-inline-size: 12ch; }
+.gd-table code { overflow-wrap: anywhere; }
+/* NARROW: EACH ROW A BLOCK. Five columns in a phone's width wrap one word to a line. Below 40rem of
+   the table's own room, each row stacks: the job as its lead line, then labelled lines. The explicit
+   ARIA roles keep the table semantics when the display changes; the header row stays for assistive
+   tech and leaves the screen. */
+.gd-wrap { container-type: inline-size; }
+@container (max-width: 40rem) {
+  .gd-table, .gd-table tbody, .gd-table tr, .gd-table td { display: block; inline-size: auto; }
+  .gd-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .gd-table tr { padding-block: var(--space-1) var(--space-3); }
+  .gd-table tr.gd-first { border-block-start: 1px solid var(--color-divider); padding-block-start: var(--space-4); }
+  .gd-table tr.gd-first:first-child { border-block-start: 0; padding-block-start: 0; }
+  .table.gd-table tbody td { padding: var(--space-1) 0; border: 0; min-inline-size: 0; background: none; }
+  .gd-table td.gd-lead { font-size: var(--text-base); font-weight: 500; color: var(--color-neutral-900); padding-block-end: var(--space-2); }
+  .gd-table td[data-label]::before { content: attr(data-label); display: block; font-size: var(--text-xs); color: var(--color-neutral-600); }
+}
+.gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
+.gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
+.gd-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-block-start: var(--space-5); }
+.gd-cols h3 { font-size: var(--text-sm); font-weight: 600; color: var(--color-neutral-900); }
+.gd-cols ul { margin: var(--space-2) 0 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-neutral-700); }
+.gd-meta { margin-block-start: var(--space-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.gd-meta code { font-size: var(--text-xs); }
+.gd-other { margin-block-start: var(--space-16); }
+@media (max-width: 720px) { .gd-cols { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<main class="doc">
+  <div class="docs-head">
+    <h1>Overlays</h1>
+    <p class="lede">Which component to use for something that floats above the page — a modal, a side panel, a hint, a preview. Find the job, take the component, and read the “not when” before you commit: it names the thing people reach for by mistake, and what to use instead.</p>
+  </div>
+
+  <section class="doc-section" aria-labelledby="at-a-glance">
+    <span class="doc-rule" aria-hidden="true"></span>
+    <h2 id="at-a-glance">At a glance</h2>
+    <div class="table-wrap gd-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table" role="table">
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Job</th><th scope="col" role="columnheader">Use</th><th scope="col" role="columnheader">Not when</th><th scope="col" role="columnheader">Instead</th><th scope="col" role="columnheader">Because</th></tr></thead>
+      <tbody role="rowgroup">
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="5">Stop the page for a decision the person has to make now</td><td role="cell" data-label="Use" rowspan="5"><a href="#dialog"><code>Dialog</code></a></td><td role="cell" data-label="Not when">A longer panel of detail or navigation that slides in beside the page</td><td role="cell" data-label="Instead"><a href="#drawer"><code>Drawer</code></a></td><td role="cell" data-label="Because">A drawer is a modal side panel with a pinned head and a scrolling body; a dialog is a centred decision.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A few controls anchored to a button, with the page still usable</td><td role="cell" data-label="Instead"><a href="#popover"><code>Popover</code></a></td><td role="cell" data-label="Because">A popover is non-modal and does not trap Tab; a dialog takes the page over.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">An agent proposes a change in a conversation and a person must approve it</td><td role="cell" data-label="Instead"><a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a></td><td role="cell" data-label="Because">The confirm card sits inline, stays as a record once answered, and states spend before the button.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Reporting something that needs no answer</td><td role="cell" data-label="Instead"><a href="status-and-feedback.html#alert"><code>Alert</code></a></td><td role="cell" data-label="Because">An alert can be read past; a dialog demands dismissal.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Searching for a command or place across the app</td><td role="cell" data-label="Instead"><a href="navigation.html#commandpalette"><code>CommandPalette</code></a></td><td role="cell" data-label="Because">The palette is a dialog built for typing and choosing; do not rebuild it from <code>Dialog</code>.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Slide a modal panel in from the side of the page</td><td role="cell" data-label="Use" rowspan="3"><a href="#drawer"><code>Drawer</code></a></td><td role="cell" data-label="Not when">A short decision that blocks the page</td><td role="cell" data-label="Instead"><a href="#dialog"><code>Dialog</code></a></td><td role="cell" data-label="Because">A dialog is a centred decision with actions; a drawer is a panel to read or move around in.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The side pane should stay open while the person works in the page</td><td role="cell" data-label="Instead"><a href="screens.html#split"><code>Split</code></a></td><td role="cell" data-label="Because">A split pane is part of the layout and does not trap focus; a drawer is modal.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A small panel anchored to the control that opened it</td><td role="cell" data-label="Instead"><a href="#popover"><code>Popover</code></a></td><td role="cell" data-label="Because">A popover floats beside its trigger and leaves the page usable.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Preview what a link, a name or an id leads to, on pointing or focus</td><td role="cell" data-label="Use" rowspan="3"><a href="#hovercard"><code>HoverCard</code></a></td><td role="cell" data-label="Not when">The person has to act inside the panel</td><td role="cell" data-label="Instead"><a href="#popover"><code>Popover</code></a></td><td role="cell" data-label="Because">Focus does not move into a hover card and Tab does not enter it; anything to press belongs in a popover.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">One line that describes a control</td><td role="cell" data-label="Instead"><a href="#tooltip"><code>Tooltip</code></a></td><td role="cell" data-label="Because">A tooltip is the control's description; a hover card is a preview of somewhere else.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A citation marker in prose</td><td role="cell" data-label="Instead"><a href="reading.html#citation"><code>Citation</code></a></td><td role="cell" data-label="Because">The citation draws the marker and its <code>SourceCard</code>; the hover card is only the surface it opens in.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Open a small panel of content or controls beside the button that opened it</td><td role="cell" data-label="Use" rowspan="4"><a href="#popover"><code>Popover</code></a></td><td role="cell" data-label="Not when">A list of actions or choices</td><td role="cell" data-label="Instead"><a href="input.html#menu"><code>Menu</code></a></td><td role="cell" data-label="Because">A menu has the menu-button keyboard contract and closes on choice; a popover is free content.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A preview that opens by pointing or focus and needs no action inside</td><td role="cell" data-label="Instead"><a href="#hovercard"><code>HoverCard</code></a></td><td role="cell" data-label="Because">A hover card opens on dwell and focus; a popover waits for a click.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">One line describing a control</td><td role="cell" data-label="Instead"><a href="#tooltip"><code>Tooltip</code></a></td><td role="cell" data-label="Because">A tooltip is a description wired by <code>aria-describedby</code>, not a panel.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The person must finish or cancel before going on</td><td role="cell" data-label="Instead"><a href="#dialog"><code>Dialog</code></a></td><td role="cell" data-label="Because">A popover you cannot Tab out of is a dialog wearing the wrong clothes.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Describe a control in a line, on hover or focus</td><td role="cell" data-label="Use" rowspan="4"><a href="#tooltip"><code>Tooltip</code></a></td><td role="cell" data-label="Not when">The words are the control's only name</td><td role="cell" data-label="Instead"><a href="input.html#button"><code>Button</code></a></td><td role="cell" data-label="Because">A tooltip describes via <code>aria-describedby</code>; an icon-only button needs its own <code>aria-label</code>.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The hint is load-bearing — something the person must read to fill a field</td><td role="cell" data-label="Instead"><a href="input.html#field"><code>Field</code></a></td><td role="cell" data-label="Because">A field hint is always on screen; a tooltip is only there for someone who points at it.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A preview of what a link or id leads to</td><td role="cell" data-label="Instead"><a href="#hovercard"><code>HoverCard</code></a></td><td role="cell" data-label="Because">A hover card holds a card of content; a tooltip holds a line.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Controls or a form inside the floating panel</td><td role="cell" data-label="Instead"><a href="#popover"><code>Popover</code></a></td><td role="cell" data-label="Because">Nothing in a tooltip can be pressed.</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="gd-entry" id="dialog" aria-labelledby="dialog-h">
+    <h2 id="dialog-h"><code>Dialog</code></h2>
+    <p>Stop the page for a decision the person has to make now.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A confirmation before something irreversible — list what it will write in the body, and turn <code>dismissOnBackdrop</code> off.</li><li>A short, self-contained task that must finish or be cancelled before the page is usable again.</li><li>Give it a <code>tone</code> when the decision is destructive, so the surface says so and not only the prose.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>A longer panel of detail or navigation that slides in beside the page → <a href="#drawer"><code>Drawer</code></a>. A drawer is a modal side panel with a pinned head and a scrolling body; a dialog is a centred decision.</li><li>A few controls anchored to a button, with the page still usable → <a href="#popover"><code>Popover</code></a>. A popover is non-modal and does not trap Tab; a dialog takes the page over.</li><li>An agent proposes a change in a conversation and a person must approve it → <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>. The confirm card sits inline, stays as a record once answered, and states spend before the button.</li><li>Reporting something that needs no answer → <a href="status-and-feedback.html#alert"><code>Alert</code></a>. An alert can be read past; a dialog demands dismissal.</li><li>Searching for a command or place across the app → <a href="navigation.html#commandpalette"><code>CommandPalette</code></a>. The palette is a dialog built for typing and choosing; do not rebuild it from <code>Dialog</code>.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#drawer"><code>Drawer</code></a>, <a href="#popover"><code>Popover</code></a>, <a href="agents-and-live-work.html#confirmcard"><code>ConfirmCard</code></a>, <a href="navigation.html#commandpalette"><code>CommandPalette</code></a></span><span>React <code>Dialog</code></span><span>Hooks <code>useModalBehavior</code></span><span>Classes <code>.dialog</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/feedback.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="drawer" aria-labelledby="drawer-h">
+    <h2 id="drawer-h"><code>Drawer</code></h2>
+    <p>Slide a modal panel in from the side of the page.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The site links behind a <code>Hamburger</code> on a phone (<code>side=&quot;end&quot;</code>), or a rail that becomes a drawer on small screens (<code>side=&quot;start&quot;</code>).</li><li>Detail about one item — a source, a finding, a transcript — read beside the page, with <code>header</code> pinned and a <code>PagerChip</code> to step through the set.</li><li><code>size=&quot;lg&quot;</code> for a reading width; it takes the whole screen on a phone.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>A short decision that blocks the page → <a href="#dialog"><code>Dialog</code></a>. A dialog is a centred decision with actions; a drawer is a panel to read or move around in.</li><li>The side pane should stay open while the person works in the page → <a href="screens.html#split"><code>Split</code></a>. A split pane is part of the layout and does not trap focus; a drawer is modal.</li><li>A small panel anchored to the control that opened it → <a href="#popover"><code>Popover</code></a>. A popover floats beside its trigger and leaves the page usable.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#dialog"><code>Dialog</code></a>, <a href="screens.html#split"><code>Split</code></a>, <a href="#popover"><code>Popover</code></a>, <a href="navigation.html#sidebar"><code>Sidebar</code></a></span><span>React <code>Drawer</code></span><span>Classes <code>.drawer-panel</code> <code>.drawer-scrim</code> <code>.drawer-head</code> <code>.drawer-body</code> <code>.drawer-close</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="hovercard" aria-labelledby="hovercard-h">
+    <h2 id="hovercard-h"><code>HoverCard</code></h2>
+    <p>Preview what a link, a name or an id leads to, on pointing or focus.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A glance at what is behind a reference — a person behind a name, a requirement behind an id, a source behind a citation.</li><li>Markers inside sanitised HTML you did not render in React: use <code>useDelegatedHoverCard</code> on the container.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The person has to act inside the panel → <a href="#popover"><code>Popover</code></a>. Focus does not move into a hover card and Tab does not enter it; anything to press belongs in a popover.</li><li>One line that describes a control → <a href="#tooltip"><code>Tooltip</code></a>. A tooltip is the control's description; a hover card is a preview of somewhere else.</li><li>A citation marker in prose → <a href="reading.html#citation"><code>Citation</code></a>. The citation draws the marker and its <code>SourceCard</code>; the hover card is only the surface it opens in.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#tooltip"><code>Tooltip</code></a>, <a href="#popover"><code>Popover</code></a>, <a href="reading.html#citation"><code>Citation</code></a></span><span>React <code>HoverCard</code></span><span>Hooks <code>useDelegatedHoverCard</code></span><span>Classes <code>.hover-card</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/live.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="popover" aria-labelledby="popover-h">
+    <h2 id="popover-h"><code>Popover</code></h2>
+    <p>Open a small panel of content or controls beside the button that opened it.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A click opens a few controls or a short form anchored to its trigger — a date, a share setting, a run's detail.</li><li>The page stays usable: Escape and a click outside close it, and Tab is not trapped.</li><li><code>size=&quot;lg&quot;</code> for a panel with a reading width of its own that scrolls inside itself.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>A list of actions or choices → <a href="input.html#menu"><code>Menu</code></a>. A menu has the menu-button keyboard contract and closes on choice; a popover is free content.</li><li>A preview that opens by pointing or focus and needs no action inside → <a href="#hovercard"><code>HoverCard</code></a>. A hover card opens on dwell and focus; a popover waits for a click.</li><li>One line describing a control → <a href="#tooltip"><code>Tooltip</code></a>. A tooltip is a description wired by <code>aria-describedby</code>, not a panel.</li><li>The person must finish or cancel before going on → <a href="#dialog"><code>Dialog</code></a>. A popover you cannot Tab out of is a dialog wearing the wrong clothes.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="input.html#menu"><code>Menu</code></a>, <a href="#hovercard"><code>HoverCard</code></a>, <a href="#tooltip"><code>Tooltip</code></a>, <a href="#dialog"><code>Dialog</code></a></span><span>React <code>Popover</code> <code>PopoverTitle</code> <code>PopoverActions</code></span><span>Hooks <code>useAnchoredPosition</code></span><span>Classes <code>.popover</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/live.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="tooltip" aria-labelledby="tooltip-h">
+    <h2 id="tooltip-h"><code>Tooltip</code></h2>
+    <p>Describe a control in a line, on hover or focus.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An icon button or a terse label needs a few words of description — &quot;Copy link&quot;, &quot;Last synced 4 minutes ago&quot;.</li><li>Instead of a <code>title</code> attribute, which the operating system draws and touch and keyboards never reach.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The words are the control's only name → <a href="input.html#button"><code>Button</code></a>. A tooltip describes via <code>aria-describedby</code>; an icon-only button needs its own <code>aria-label</code>.</li><li>The hint is load-bearing — something the person must read to fill a field → <a href="input.html#field"><code>Field</code></a>. A field hint is always on screen; a tooltip is only there for someone who points at it.</li><li>A preview of what a link or id leads to → <a href="#hovercard"><code>HoverCard</code></a>. A hover card holds a card of content; a tooltip holds a line.</li><li>Controls or a form inside the floating panel → <a href="#popover"><code>Popover</code></a>. Nothing in a tooltip can be pressed.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#hovercard"><code>HoverCard</code></a>, <a href="#popover"><code>Popover</code></a>, <a href="status-and-feedback.html#callout"><code>Callout</code></a>, <a href="input.html#field"><code>Field</code></a></span><span>React <code>Tooltip</code></span><span>Classes <code>.tooltip</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/feedback.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <p class="gd-other muted">Other guides: <a href="screens.html">Screens</a> · <a href="status-and-feedback.html">Status and feedback</a> · <a href="navigation.html">Navigation</a> · <a href="data.html">Data</a> · <a href="input.html">Input</a> · <a href="reading.html">Reading</a> · <a href="agents-and-live-work.html">Agents and live work</a></p>
+  <p class="muted" style="font-size:var(--text-sm);margin-block-start:var(--space-3)">Generated from the <code>when.ts</code> beside each component — the same data the Claude Code plugin reads.</p>
+</main>
+</body>
+</html>

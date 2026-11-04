@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Navigation — Guidance — GENER8V Design System</title>
+<link rel="stylesheet" href="../styles.css" />
+<script src="../assets/docs.js"></script>
+<style>
+/* Page scaffolding only — every component comes from styles.css. */
+.doc { max-inline-size: calc(var(--space-4) * 72); margin-inline: auto; padding: var(--space-10) var(--space-6) var(--space-24); }
+.doc-prose { max-inline-size: 68ch; }
+.doc-section { margin-block-start: var(--space-16); }
+.doc-section > h2 { font-size: var(--text-2xl); }
+.doc-rule { display: block; inline-size: var(--space-12); block-size: var(--space-1); margin-block-end: var(--space-4); border-radius: var(--radius-full); background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-500)); }
+.doc-steps { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.doc-steps > li { display: grid; grid-template-columns: var(--space-8) minmax(0, 1fr); gap: var(--space-4); counter-increment: step; }
+.doc-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-8); block-size: var(--space-8); border-radius: var(--radius-full); background: var(--color-accent-100); color: var(--color-accent-800); font-family: var(--font-mono); font-size: var(--text-sm); }
+.doc-steps h3 { font-size: var(--text-lg); }
+.doc-steps p { margin-block-start: var(--space-2); max-inline-size: 64ch; }
+.doc-steps .code { margin-block-start: var(--space-3); max-inline-size: calc(var(--space-4) * 45); }
+.doc-pkgs { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-block-start: 1px solid var(--color-divider); }
+.doc-pkgs li { padding: var(--space-4) var(--space-4) var(--space-4) 0; border-block-end: 1px solid var(--color-divider); }
+.doc-pkgs a { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-accent-700); }
+.doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+@media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
+
+.gd-table td, .gd-table th { white-space: normal; vertical-align: top; font-size: var(--text-sm); }
+.gd-table td:first-child { min-inline-size: 12ch; }
+.gd-table code { overflow-wrap: anywhere; }
+/* NARROW: EACH ROW A BLOCK. Five columns in a phone's width wrap one word to a line. Below 40rem of
+   the table's own room, each row stacks: the job as its lead line, then labelled lines. The explicit
+   ARIA roles keep the table semantics when the display changes; the header row stays for assistive
+   tech and leaves the screen. */
+.gd-wrap { container-type: inline-size; }
+@container (max-width: 40rem) {
+  .gd-table, .gd-table tbody, .gd-table tr, .gd-table td { display: block; inline-size: auto; }
+  .gd-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .gd-table tr { padding-block: var(--space-1) var(--space-3); }
+  .gd-table tr.gd-first { border-block-start: 1px solid var(--color-divider); padding-block-start: var(--space-4); }
+  .gd-table tr.gd-first:first-child { border-block-start: 0; padding-block-start: 0; }
+  .table.gd-table tbody td { padding: var(--space-1) 0; border: 0; min-inline-size: 0; background: none; }
+  .gd-table td.gd-lead { font-size: var(--text-base); font-weight: 500; color: var(--color-neutral-900); padding-block-end: var(--space-2); }
+  .gd-table td[data-label]::before { content: attr(data-label); display: block; font-size: var(--text-xs); color: var(--color-neutral-600); }
+}
+.gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
+.gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
+.gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
+.gd-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-block-start: var(--space-5); }
+.gd-cols h3 { font-size: var(--text-sm); font-weight: 600; color: var(--color-neutral-900); }
+.gd-cols ul { margin: var(--space-2) 0 0; padding-inline-start: var(--space-5); display: grid; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-neutral-700); }
+.gd-meta { margin-block-start: var(--space-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.gd-meta code { font-size: var(--text-xs); }
+.gd-other { margin-block-start: var(--space-16); }
+@media (max-width: 720px) { .gd-cols { grid-template-columns: minmax(0, 1fr); } }
+
+</style>
+</head>
+<body>
+<main class="doc">
+  <div class="docs-head">
+    <h1>Navigation</h1>
+    <p class="lede">Which component to use for moving between places, switching views, or narrowing what a list shows. Find the job, take the component, and read the “not when” before you commit: it names the thing people reach for by mistake, and what to use instead.</p>
+  </div>
+
+  <section class="doc-section" aria-labelledby="at-a-glance">
+    <span class="doc-rule" aria-hidden="true"></span>
+    <h2 id="at-a-glance">At a glance</h2>
+    <div class="table-wrap gd-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table" role="table">
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Job</th><th scope="col" role="columnheader">Use</th><th scope="col" role="columnheader">Not when</th><th scope="col" role="columnheader">Instead</th><th scope="col" role="columnheader">Because</th></tr></thead>
+      <tbody role="rowgroup">
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Show where this page sits in a hierarchy, with a way back up</td><td role="cell" data-label="Use" rowspan="3"><a href="#breadcrumbs"><code>Breadcrumbs</code></a></td><td role="cell" data-label="Not when">You need the list of places someone can go</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">Breadcrumbs show the path here, not the other places.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The path is a sequence of steps in a process</td><td role="cell" data-label="Instead"><a href="status-and-feedback.html#stepper"><code>Stepper</code></a></td><td role="cell" data-label="Because">A stepper shows position in a sequence; breadcrumbs show position in a hierarchy.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">You are stepping through items of a set in place</td><td role="cell" data-label="Instead"><a href="#pagerchip"><code>PagerChip</code></a></td><td role="cell" data-label="Because">The pager chip says &quot;4 of 19&quot; and moves to the next one without leaving.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Let someone type to find and run any command or go anywhere, from anywhere</td><td role="cell" data-label="Use" rowspan="4"><a href="#commandpalette"><code>CommandPalette</code></a></td><td role="cell" data-label="Not when">Someone is choosing a value for a field by typing</td><td role="cell" data-label="Instead"><a href="input.html#combobox"><code>Combobox</code></a></td><td role="cell" data-label="Because">A combobox fills a field in a form; a palette runs a command and closes.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">There are a few actions on one thing</td><td role="cell" data-label="Instead"><a href="input.html#menu"><code>Menu</code></a></td><td role="cell" data-label="Because">A menu button opens beside its trigger and does not take the page over.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">A frequent action wants one key of its own on one screen — J for next, E for done</td><td role="cell" data-label="Instead"><a href="input.html#shortcuts"><code>Shortcuts</code></a></td><td role="cell" data-label="Because">A single-key shortcut acts at once and has to be possible to turn off; the palette is a search opened by a chord.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The person is browsing places rather than searching</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">The rail shows every place at once; a palette shows only what matches.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Let a narrow column of long names be read by scrolling, one at a time</td><td role="cell" data-label="Use" rowspan="3"><a href="#dock"><code>Dock</code></a></td><td role="cell" data-label="Not when">The list is the app's places</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">A rail of places has short names and marks the current page.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">There is room for each row to show its name and a line of provenance</td><td role="cell" data-label="Instead"><a href="data.html#item"><code>Item</code></a></td><td role="cell" data-label="Because">An item list shows every row in full; a dock only grows the one in focus.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The column can simply be made wider by the reader</td><td role="cell" data-label="Instead"><a href="screens.html#split"><code>Split</code></a></td><td role="cell" data-label="Because">A resizable pane gives width persistently instead of momentarily.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="2">Show an attribute of a row, and narrow the list to it when pressed</td><td role="cell" data-label="Use" rowspan="2"><a href="#facet"><code>Facet</code></a></td><td role="cell" data-label="Not when">The value is a status — done, failed, at risk</td><td role="cell" data-label="Instead"><a href="status-and-feedback.html#tag"><code>Tag</code></a></td><td role="cell" data-label="Because">A tag reports a state in a reserved tone; a facet is a neutral name and value.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The dimension is not on the rows, or the reader needs every value listed</td><td role="cell" data-label="Instead"><a href="#filter"><code>Filter</code></a></td><td role="cell" data-label="Because">A filter lists the values of a dimension in a menu above the list.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Narrow a list by one dimension, beside the other dimensions</td><td role="cell" data-label="Use" rowspan="4"><a href="#filter"><code>Filter</code></a></td><td role="cell" data-label="Not when">The dimension is already printed on every row</td><td role="cell" data-label="Instead"><a href="#facet"><code>Facet</code></a></td><td role="cell" data-label="Because">The attribute on the row can be the control; there is no filter panel to go and find.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The choice is between two or three views of the same thing</td><td role="cell" data-label="Instead"><a href="#segmented"><code>Segmented</code></a></td><td role="cell" data-label="Because">Views are all present and equal; a filter removes rows.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The choice swaps the panel of content</td><td role="cell" data-label="Instead"><a href="#tabs"><code>Tabs</code></a></td><td role="cell" data-label="Because">Tabs swap panels; a filter narrows one list and can combine with others.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The person is entering a value on a form, not narrowing a list</td><td role="cell" data-label="Instead"><a href="input.html#select"><code>Select</code></a></td><td role="cell" data-label="Because">A filter has an &quot;any&quot; state and acts at once; a form field holds a value until submit.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="2">Open and close the navigation on a narrow screen</td><td role="cell" data-label="Use" rowspan="2"><a href="#hamburger"><code>Hamburger</code></a></td><td role="cell" data-label="Not when">The button opens a list of actions, not navigation</td><td role="cell" data-label="Instead"><a href="input.html#menu"><code>Menu</code></a></td><td role="cell" data-label="Because">A menu button opens a menu of actions with its own keyboard contract.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The screen is wide enough to show the links</td><td role="cell" data-label="Instead"><a href="#nav"><code>Nav</code></a></td><td role="cell" data-label="Because">Navigation that fits should be visible, not behind a button.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Put the product's name and its top-level places across the top of every page</td><td role="cell" data-label="Use" rowspan="4"><a href="#nav"><code>Nav</code></a></td><td role="cell" data-label="Not when">There are more places than fit across the top, or they fall into groups</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">A rail holds a long, grouped list of places down the side.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The options swap panels inside one page</td><td role="cell" data-label="Instead"><a href="#tabs"><code>Tabs</code></a></td><td role="cell" data-label="Because">Tabs are panels in one place; nav items are places with their own URLs.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The reader needs to see where this page sits in a hierarchy</td><td role="cell" data-label="Instead"><a href="#breadcrumbs"><code>Breadcrumbs</code></a></td><td role="cell" data-label="Because">Breadcrumbs show the path to here; the nav shows where you can go.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The header has to collapse on a phone</td><td role="cell" data-label="Instead"><a href="#hamburger"><code>Hamburger</code></a></td><td role="cell" data-label="Because">The hamburger is the button that opens the links in a drawer on a narrow screen.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Step through a set one item at a time without leaving the place you are in</td><td role="cell" data-label="Use" rowspan="3"><a href="#pagerchip"><code>PagerChip</code></a></td><td role="cell" data-label="Not when">Jumping to any page of a long list</td><td role="cell" data-label="Instead"><a href="#pagination"><code>Pagination</code></a></td><td role="cell" data-label="Because">Pagination draws the page numbers; the chip only steps to the neighbour.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Under a table, saying which rows are on show</td><td role="cell" data-label="Instead"><a href="data.html#tablepager"><code>TablePager</code></a></td><td role="cell" data-label="Because">The table pager carries the range and the pages for a table.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The person is moving through steps of a task</td><td role="cell" data-label="Instead"><a href="status-and-feedback.html#stepper"><code>Stepper</code></a></td><td role="cell" data-label="Because">A stepper says which steps are done; a pager chip has no notion of done.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Move between numbered pages of a long set</td><td role="cell" data-label="Use" rowspan="3"><a href="#pagination"><code>Pagination</code></a></td><td role="cell" data-label="Not when">Paging rows of a table</td><td role="cell" data-label="Instead"><a href="data.html#tablepager"><code>TablePager</code></a></td><td role="cell" data-label="Because">The table pager adds &quot;Showing 26–50 of 61&quot;, renders nothing for one page, and is wired to <code>usePagedTable</code>.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Stepping through a set one item at a time without leaving a pane</td><td role="cell" data-label="Instead"><a href="#pagerchip"><code>PagerChip</code></a></td><td role="cell" data-label="Because">&quot;4 of 19&quot; with previous and next is one control; a page list is many.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Showing position in a sequence of steps the person is working through</td><td role="cell" data-label="Instead"><a href="status-and-feedback.html#stepper"><code>Stepper</code></a></td><td role="cell" data-label="Because">Steps have state — done, current, failed; pages do not.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Pick one of two or three views of the same thing</td><td role="cell" data-label="Use" rowspan="4"><a href="#segmented"><code>Segmented</code></a></td><td role="cell" data-label="Not when">Each option shows a different panel of content</td><td role="cell" data-label="Instead"><a href="#tabs"><code>Tabs</code></a></td><td role="cell" data-label="Because">A segmented control is a radiogroup, not a tablist; it changes how one thing is shown, not which thing.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The options narrow a list, or there may be more than three values</td><td role="cell" data-label="Instead"><a href="#filter"><code>Filter</code></a></td><td role="cell" data-label="Because">A filter is a dimension with a value; spelled out as a strip it grows across the page and hides which dimensions exist.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">Each choice needs a description or a figure under it</td><td role="cell" data-label="Instead"><a href="input.html#radiocards"><code>RadioCards</code></a></td><td role="cell" data-label="Because">A radio card carries a title, a note and a figure, and the whole card is the hit target.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">There are more than a handful of options to pick from</td><td role="cell" data-label="Instead"><a href="input.html#select"><code>Select</code></a></td><td role="cell" data-label="Because">A long run of segments stops reading as one control; a select holds the list behind one field.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">List every place in an app down the side, grouped, with the current one marked</td><td role="cell" data-label="Use" rowspan="4"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Not when">The options are panels of one page</td><td role="cell" data-label="Instead"><a href="#tabs"><code>Tabs</code></a></td><td role="cell" data-label="Because">Tabs swap panels in place; a sidebar moves between pages.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The items are a nested hierarchy the reader opens and closes — folders, a taxonomy</td><td role="cell" data-label="Instead"><a href="#tree"><code>Tree</code></a></td><td role="cell" data-label="Because">A tree has the keyboard contract for expand and collapse at any depth; the rail is one level of places.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The column is a long list of records or documents, not places</td><td role="cell" data-label="Instead"><a href="#dock"><code>Dock</code></a></td><td role="cell" data-label="Because">A dock lets every name be read at the focus point in a narrow column; a sidebar truncates them.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The column is a document's own headings</td><td role="cell" data-label="Instead"><a href="reading.html#contents"><code>Contents</code></a></td><td role="cell" data-label="Because">Contents tracks where you are in the document as you scroll.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="4">Swap between panels of different content in one place</td><td role="cell" data-label="Use" rowspan="4"><a href="#tabs"><code>Tabs</code></a></td><td role="cell" data-label="Not when">The options are views of the same content — a range, a grouping, list or grid</td><td role="cell" data-label="Instead"><a href="#segmented"><code>Segmented</code></a></td><td role="cell" data-label="Because">A segmented control is a radiogroup that changes how one thing is shown; a tablist promises a different panel per tab.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The options narrow a list by a dimension — status, owner, type</td><td role="cell" data-label="Instead"><a href="#filter"><code>Filter</code></a></td><td role="cell" data-label="Because">A filter is a dimension with a value and sits beside other dimensions; tabs cannot combine.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The options are pages with their own URLs in an app</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">Places are navigation and take <code>aria-current=&quot;page&quot;</code>; tabs are panels inside one page.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The sections should be readable one after another, several open at once</td><td role="cell" data-label="Instead"><a href="reading.html#accordion"><code>Accordion</code></a></td><td role="cell" data-label="Because">An accordion keeps every section in reading order; tabs hide all but one.</td></tr>
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead" rowspan="3">Browse a nested hierarchy, opening and closing branches</td><td role="cell" data-label="Use" rowspan="3"><a href="#tree"><code>Tree</code></a></td><td role="cell" data-label="Not when">The hierarchy is the app's places, one level deep</td><td role="cell" data-label="Instead"><a href="#sidebar"><code>Sidebar</code></a></td><td role="cell" data-label="Because">A rail of places is links with <code>aria-current</code>, not a tree.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The sections are content to read, opened and closed in place</td><td role="cell" data-label="Instead"><a href="reading.html#accordion"><code>Accordion</code></a></td><td role="cell" data-label="Because">An accordion discloses content panels; a tree selects nodes in a hierarchy.</td></tr>
+        <tr role="row"><td role="cell" data-label="Not when">The structure is layers that cover one another — needs to tests, plan to milestones</td><td role="cell" data-label="Instead"><a href="data.html#layeredgraph"><code>LayeredGraph</code></a></td><td role="cell" data-label="Because">Coverage between layers is a graph, not a hierarchy.</td></tr>
+      </tbody></table></div>
+  </section>
+
+  <section class="gd-entry" id="breadcrumbs" aria-labelledby="breadcrumbs-h">
+    <h2 id="breadcrumbs-h"><code>Breadcrumbs</code></h2>
+    <p>Show where this page sits in a hierarchy, with a way back up.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A page several levels down — a work item inside a project inside a client — where going up a level is common.</li><li>The last crumb is the current page, rendered as text with <code>aria-current=&quot;page&quot;</code>; separators are added for you.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>You need the list of places someone can go → <a href="#sidebar"><code>Sidebar</code></a>. Breadcrumbs show the path here, not the other places.</li><li>The path is a sequence of steps in a process → <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>. A stepper shows position in a sequence; breadcrumbs show position in a hierarchy.</li><li>You are stepping through items of a set in place → <a href="#pagerchip"><code>PagerChip</code></a>. The pager chip says &quot;4 of 19&quot; and moves to the next one without leaving.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#sidebar"><code>Sidebar</code></a>, <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>, <a href="screens.html#pagehead"><code>PageHead</code></a></span><span>React <code>Breadcrumbs</code> <code>Breadcrumb</code></span><span>Classes <code>.breadcrumbs</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="commandpalette" aria-labelledby="commandpalette-h">
+    <h2 id="commandpalette-h"><code>CommandPalette</code></h2>
+    <p>Let someone type to find and run any command or go anywhere, from anywhere.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An app with many places and actions, where a keyboard user wants ⌘K / Ctrl+K and a search (<code>useCommandPalette</code> binds it).</li><li>It takes the page over as a modal: focus stays in the search, arrows move the highlight, Enter runs.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Someone is choosing a value for a field by typing → <a href="input.html#combobox"><code>Combobox</code></a>. A combobox fills a field in a form; a palette runs a command and closes.</li><li>There are a few actions on one thing → <a href="input.html#menu"><code>Menu</code></a>. A menu button opens beside its trigger and does not take the page over.</li><li>A frequent action wants one key of its own on one screen — J for next, E for done → <a href="input.html#shortcuts"><code>Shortcuts</code></a>. A single-key shortcut acts at once and has to be possible to turn off; the palette is a search opened by a chord.</li><li>The person is browsing places rather than searching → <a href="#sidebar"><code>Sidebar</code></a>. The rail shows every place at once; a palette shows only what matches.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="input.html#combobox"><code>Combobox</code></a>, <a href="input.html#menu"><code>Menu</code></a>, <a href="overlays.html#dialog"><code>Dialog</code></a>, <a href="reading.html#keys"><code>Keys</code></a>, <a href="input.html#shortcuts"><code>Shortcuts</code></a></span><span>React <code>CommandPalette</code></span><span>Hooks <code>useCommandPalette</code></span><span>Classes <code>.command</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/command.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="dock" aria-labelledby="dock-h">
+    <h2 id="dock-h"><code>Dock</code></h2>
+    <p>Let a narrow column of long names be read by scrolling, one at a time.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A long list of records in a narrow column, where every name would otherwise be truncated: the one at the focus point grows to be legible.</li><li>Reading must not open anything — <code>onSelect</code> fires on a click and on Enter, never on scroll or focus.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The list is the app's places → <a href="#sidebar"><code>Sidebar</code></a>. A rail of places has short names and marks the current page.</li><li>There is room for each row to show its name and a line of provenance → <a href="data.html#item"><code>Item</code></a>. An item list shows every row in full; a dock only grows the one in focus.</li><li>The column can simply be made wider by the reader → <a href="screens.html#split"><code>Split</code></a>. A resizable pane gives width persistently instead of momentarily.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#sidebar"><code>Sidebar</code></a>, <a href="data.html#item"><code>Item</code></a>, <a href="data.html#doclist"><code>DocList</code></a>, <a href="screens.html#split"><code>Split</code></a></span><span>React <code>Dock</code></span><span>Classes <code>.dock</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="facet" aria-labelledby="facet-h">
+    <h2 id="facet-h"><code>Facet</code></h2>
+    <p>Show an attribute of a row, and narrow the list to it when pressed.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A row carries a recorded fact — &quot;Owner · Dana&quot;, &quot;Against · ISO 27001&quot; — that a reader may want to filter by.</li><li>Showing an attribute plainly: without <code>onClick</code> it renders as a span, so a row does not change shape when the dimension becomes filterable.</li><li>A missing value: an empty one renders nothing; pass <code>muted</code> with the absence in words when you know why.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The value is a status — done, failed, at risk → <a href="status-and-feedback.html#tag"><code>Tag</code></a>. A tag reports a state in a reserved tone; a facet is a neutral name and value.</li><li>The dimension is not on the rows, or the reader needs every value listed → <a href="#filter"><code>Filter</code></a>. A filter lists the values of a dimension in a menu above the list.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="status-and-feedback.html#tag"><code>Tag</code></a>, <a href="#filter"><code>Filter</code></a></span><span>React <code>Facet</code> <code>Facets</code></span><span>Classes <code>.facet</code> <code>.facets</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="filter" aria-labelledby="filter-h">
+    <h2 id="filter-h"><code>Filter</code></h2>
+    <p>Narrow a list by one dimension, beside the other dimensions.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>A table or list can be narrowed by Type, Status or Owner; put one <code>Filter</code> per dimension in a <code>Filters</code> row.</li><li>The trigger reads as the dimension until it holds a value, so a row of them says what can be narrowed.</li><li>Several values of one dimension at once (&quot;gaps and conflicts&quot;) — pass <code>multiple</code>; values are OR-ed.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The dimension is already printed on every row → <a href="#facet"><code>Facet</code></a>. The attribute on the row can be the control; there is no filter panel to go and find.</li><li>The choice is between two or three views of the same thing → <a href="#segmented"><code>Segmented</code></a>. Views are all present and equal; a filter removes rows.</li><li>The choice swaps the panel of content → <a href="#tabs"><code>Tabs</code></a>. Tabs swap panels; a filter narrows one list and can combine with others.</li><li>The person is entering a value on a form, not narrowing a list → <a href="input.html#select"><code>Select</code></a>. A filter has an &quot;any&quot; state and acts at once; a form field holds a value until submit.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#facet"><code>Facet</code></a>, <a href="#segmented"><code>Segmented</code></a>, <a href="#tabs"><code>Tabs</code></a>, <a href="input.html#menu"><code>Menu</code></a>, <a href="input.html#select"><code>Select</code></a></span><span>React <code>Filter</code> <code>Filters</code></span><span>Classes <code>.filter</code> <code>.filters</code></span></p>
+    <p class="gd-meta"><span>No demo page yet.</span></p>
+  </section>
+  <section class="gd-entry" id="hamburger" aria-labelledby="hamburger-h">
+    <h2 id="hamburger-h"><code>Hamburger</code></h2>
+    <p>Open and close the navigation on a narrow screen.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The header's links do not fit on a phone; this button opens them, usually in a <code>Drawer</code>.</li><li>One button whose bars morph to an X, driven by <code>open</code> and announced through <code>aria-expanded</code>; <code>label</code> is required.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The button opens a list of actions, not navigation → <a href="input.html#menu"><code>Menu</code></a>. A menu button opens a menu of actions with its own keyboard contract.</li><li>The screen is wide enough to show the links → <a href="#nav"><code>Nav</code></a>. Navigation that fits should be visible, not behind a button.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="overlays.html#drawer"><code>Drawer</code></a>, <a href="#nav"><code>Nav</code></a>, <a href="input.html#menu"><code>Menu</code></a></span><span>React <code>Hamburger</code></span><span>Classes <code>.hamburger</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="nav" aria-labelledby="nav-h">
+    <h2 id="nav-h"><code>Nav</code></h2>
+    <p>Put the product's name and its top-level places across the top of every page.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The header bar of an app or a site: the brand on the left, a few top-level places, account controls at the end.</li><li>The current place is marked with <code>aria-current=&quot;page&quot;</code> (<code>NavItem current</code>), never a class.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>There are more places than fit across the top, or they fall into groups → <a href="#sidebar"><code>Sidebar</code></a>. A rail holds a long, grouped list of places down the side.</li><li>The options swap panels inside one page → <a href="#tabs"><code>Tabs</code></a>. Tabs are panels in one place; nav items are places with their own URLs.</li><li>The reader needs to see where this page sits in a hierarchy → <a href="#breadcrumbs"><code>Breadcrumbs</code></a>. Breadcrumbs show the path to here; the nav shows where you can go.</li><li>The header has to collapse on a phone → <a href="#hamburger"><code>Hamburger</code></a>. The hamburger is the button that opens the links in a drawer on a narrow screen.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#sidebar"><code>Sidebar</code></a>, <a href="#tabs"><code>Tabs</code></a>, <a href="#breadcrumbs"><code>Breadcrumbs</code></a>, <a href="#hamburger"><code>Hamburger</code></a></span><span>React <code>Nav</code> <code>NavBrand</code> <code>NavLinks</code> <code>NavItem</code></span><span>Classes <code>.nav</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="pagerchip" aria-labelledby="pagerchip-h">
+    <h2 id="pagerchip-h"><code>PagerChip</code></h2>
+    <p>Step through a set one item at a time without leaving the place you are in.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>The head of a side pane that walks a set in order — sources, open findings, attachments: <code>‹ S4 of 19 ›</code>.</li><li>In a <code>Drawer</code> header, so the way to the next item never scrolls away.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Jumping to any page of a long list → <a href="#pagination"><code>Pagination</code></a>. Pagination draws the page numbers; the chip only steps to the neighbour.</li><li>Under a table, saying which rows are on show → <a href="data.html#tablepager"><code>TablePager</code></a>. The table pager carries the range and the pages for a table.</li><li>The person is moving through steps of a task → <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>. A stepper says which steps are done; a pager chip has no notion of done.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#pagination"><code>Pagination</code></a>, <a href="data.html#tablepager"><code>TablePager</code></a>, <a href="overlays.html#drawer"><code>Drawer</code></a></span><span>React <code>PagerChip</code></span><span>Classes <code>.pager-chip</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/reading.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="pagination" aria-labelledby="pagination-h">
+    <h2 id="pagination-h"><code>Pagination</code></h2>
+    <p>Move between numbered pages of a long set.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Search results, a gallery or a feed served a page at a time, where the page number is a place.</li><li>Building your own pager: <code>PaginationItem</code> takes <code>aria-current=&quot;page&quot;</code>; <code>PaginationGap</code> is the elided run.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Paging rows of a table → <a href="data.html#tablepager"><code>TablePager</code></a>. The table pager adds &quot;Showing 26–50 of 61&quot;, renders nothing for one page, and is wired to <code>usePagedTable</code>.</li><li>Stepping through a set one item at a time without leaving a pane → <a href="#pagerchip"><code>PagerChip</code></a>. &quot;4 of 19&quot; with previous and next is one control; a page list is many.</li><li>Showing position in a sequence of steps the person is working through → <a href="status-and-feedback.html#stepper"><code>Stepper</code></a>. Steps have state — done, current, failed; pages do not.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="data.html#tablepager"><code>TablePager</code></a>, <a href="#pagerchip"><code>PagerChip</code></a>, <a href="status-and-feedback.html#stepper"><code>Stepper</code></a></span><span>React <code>Pagination</code> <code>PaginationItem</code> <code>PaginationGap</code></span><span>Classes <code>.pagination</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/flow.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="segmented" aria-labelledby="segmented-h">
+    <h2 id="segmented-h"><code>Segmented</code></h2>
+    <p>Pick one of two or three views of the same thing.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Two or three mutually exclusive views of one set — Week / Month / Quarter, List / Grid.</li><li>Seeing the alternatives side by side is the point, and the strip is only as wide as the choices.</li><li>A short either/or answer in a form, named with <code>label</code> so the group reads as a question.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>Each option shows a different panel of content → <a href="#tabs"><code>Tabs</code></a>. A segmented control is a radiogroup, not a tablist; it changes how one thing is shown, not which thing.</li><li>The options narrow a list, or there may be more than three values → <a href="#filter"><code>Filter</code></a>. A filter is a dimension with a value; spelled out as a strip it grows across the page and hides which dimensions exist.</li><li>Each choice needs a description or a figure under it → <a href="input.html#radiocards"><code>RadioCards</code></a>. A radio card carries a title, a note and a figure, and the whole card is the hit target.</li><li>There are more than a handful of options to pick from → <a href="input.html#select"><code>Select</code></a>. A long run of segments stops reading as one control; a select holds the list behind one field.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#tabs"><code>Tabs</code></a>, <a href="#filter"><code>Filter</code></a>, <a href="input.html#radiocards"><code>RadioCards</code></a>, <a href="input.html#buttongroup"><code>ButtonGroup</code></a></span><span>React <code>Segmented</code> <code>SegmentedItem</code></span><span>Classes <code>.segmented</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/disclosure.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="sidebar" aria-labelledby="sidebar-h">
+    <h2 id="sidebar-h"><code>Sidebar</code></h2>
+    <p>List every place in an app down the side, grouped, with the current one marked.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>An app with more places than fit in a header, in groups under mono headings (<code>SidebarGroup</code>).</li><li>Groups that come from data use <code>SidebarSection</code>, which can fold its items away when the rail is long.</li><li>A place that cannot hold anything yet stays a link, quieter, with why in its <code>title</code> — not disabled, not hidden.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The options are panels of one page → <a href="#tabs"><code>Tabs</code></a>. Tabs swap panels in place; a sidebar moves between pages.</li><li>The items are a nested hierarchy the reader opens and closes — folders, a taxonomy → <a href="#tree"><code>Tree</code></a>. A tree has the keyboard contract for expand and collapse at any depth; the rail is one level of places.</li><li>The column is a long list of records or documents, not places → <a href="#dock"><code>Dock</code></a>. A dock lets every name be read at the focus point in a narrow column; a sidebar truncates them.</li><li>The column is a document's own headings → <a href="reading.html#contents"><code>Contents</code></a>. Contents tracks where you are in the document as you scroll.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#nav"><code>Nav</code></a>, <a href="#tabs"><code>Tabs</code></a>, <a href="#tree"><code>Tree</code></a>, <a href="#dock"><code>Dock</code></a>, <a href="reading.html#contents"><code>Contents</code></a></span><span>React <code>Sidebar</code> <code>SidebarGroup</code> <code>SidebarSection</code> <code>SidebarItem</code> <code>SidebarCount</code></span><span>Classes <code>.sidebar</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="tabs" aria-labelledby="tabs-h">
+    <h2 id="tabs-h"><code>Tabs</code></h2>
+    <p>Swap between panels of different content in one place.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Each option shows a different panel — Overview, Activity, Settings — and only one is on screen at a time.</li><li>The panels are siblings of equal weight and the reader moves between them without leaving the page.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The options are views of the same content — a range, a grouping, list or grid → <a href="#segmented"><code>Segmented</code></a>. A segmented control is a radiogroup that changes how one thing is shown; a tablist promises a different panel per tab.</li><li>The options narrow a list by a dimension — status, owner, type → <a href="#filter"><code>Filter</code></a>. A filter is a dimension with a value and sits beside other dimensions; tabs cannot combine.</li><li>The options are pages with their own URLs in an app → <a href="#sidebar"><code>Sidebar</code></a>. Places are navigation and take <code>aria-current=&quot;page&quot;</code>; tabs are panels inside one page.</li><li>The sections should be readable one after another, several open at once → <a href="reading.html#accordion"><code>Accordion</code></a>. An accordion keeps every section in reading order; tabs hide all but one.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#segmented"><code>Segmented</code></a>, <a href="#filter"><code>Filter</code></a>, <a href="reading.html#accordion"><code>Accordion</code></a>, <a href="#sidebar"><code>Sidebar</code></a></span><span>React <code>Tabs</code> <code>Tab</code></span><span>Classes <code>.tabs</code> <code>.tab</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/navigation.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <section class="gd-entry" id="tree" aria-labelledby="tree-h">
+    <h2 id="tree-h"><code>Tree</code></h2>
+    <p>Browse a nested hierarchy, opening and closing branches.</p>
+    <div class="gd-cols">
+      <div><h3>Use when</h3><ul><li>Folders, a taxonomy, a nested set of requirements — any depth, with a count or size at the end of each row.</li><li>The whole tree is one Tab stop: Up/Down move through visible rows, Right expands then descends, Left collapses then rises.</li></ul></div>
+      <div><h3>Not when</h3><ul><li>The hierarchy is the app's places, one level deep → <a href="#sidebar"><code>Sidebar</code></a>. A rail of places is links with <code>aria-current</code>, not a tree.</li><li>The sections are content to read, opened and closed in place → <a href="reading.html#accordion"><code>Accordion</code></a>. An accordion discloses content panels; a tree selects nodes in a hierarchy.</li><li>The structure is layers that cover one another — needs to tests, plan to milestones → <a href="data.html#layeredgraph"><code>LayeredGraph</code></a>. Coverage between layers is a graph, not a hierarchy.</li></ul></div>
+    </div>
+    <p class="gd-meta"><span>Confused with <a href="#sidebar"><code>Sidebar</code></a>, <a href="reading.html#accordion"><code>Accordion</code></a>, <a href="data.html#doclist"><code>DocList</code></a></span><span>React <code>Tree</code></span><span>Classes <code>.tree</code></span></p>
+    <p class="gd-meta"><a class="btn btn-secondary btn-sm" href="../components/command.html">See it on the demo page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+  </section>
+  <p class="gd-other muted">Other guides: <a href="screens.html">Screens</a> · <a href="overlays.html">Overlays</a> · <a href="status-and-feedback.html">Status and feedback</a> · <a href="data.html">Data</a> · <a href="input.html">Input</a> · <a href="reading.html">Reading</a> · <a href="agents-and-live-work.html">Agents and live work</a></p>
+  <p class="muted" style="font-size:var(--text-sm);margin-block-start:var(--space-3)">Generated from the <code>when.ts</code> beside each component — the same data the Claude Code plugin reads.</p>
+</main>
+</body>
+</html>
