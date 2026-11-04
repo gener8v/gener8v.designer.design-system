@@ -38,6 +38,7 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | several values, each removable | `TokenInput` | tokens show each value as a removable chip; a combobox holds one. |
 |  |  | a list of actions or commands under a button | `Menu` | a menu runs something; a combobox sets a value. |
 |  |  | searching across the whole app for a command or a place | `CommandPalette` (navigation.md) | the palette is a dialog opened by ⌘K; a combobox is one field on a form. |
+|  |  | a list short enough to scan, opened from a button rather than typed into | `SelectMenu` | a select menu shows the value on a button and jumps on a letter; a combobox is a field that filters, which a short list does not need. |
 |  |  | a short native list in a plain form | `Select` | a native select needs no script, at the cost of an open list the platform draws. |
 | stack a label, a control and its hint or error as one form field | **`Field`** | a step has several errors and the reader needs to know how many and where | `ErrorSummary` | the summary sits at the top of the step, links to each field and takes focus; a field error only speaks for its own control. |
 |  |  | the problem is not about one control but about the whole form or page | `Alert` (status-and-feedback.md) | an alert is an inline banner for the region; a field error belongs under the control it is about. |
@@ -62,11 +63,17 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 | pick one option that needs a description and a figure to choose between | **`RadioCards`** | the options are short words that need no description | `Choice` | plain radios take a line each; cards for one-word options spend space on nothing. |
 |  |  | the choice switches how one thing is shown | `Segmented` (navigation.md) | a view switch is a compact strip, not a form answer. |
 |  |  | there are many options | `Select` | more than a handful of cards stops being a comparison. |
-| pick one value from a short fixed list in a form, with the native control | **`Select`** | the open list has to be on-brand, searchable, or usable the same way on touch and keyboard | `Combobox` | a native select's open list is drawn by the operating system and no token reaches it; the combobox is ours and filters as you type. |
+| pick one value from a short fixed list in a form, with the native control | **`Select`** | the open list has to look like the product, or an option needs a note, a group heading or a disabled state you can style | `SelectMenu` | a native select's open list is drawn by the operating system and no token reaches it; the select menu is the same choice in a list that is ours. |
+|  |  | the list is long enough that the person should type to narrow it | `Combobox` | the combobox filters as you type; a select, native or not, only jumps on a letter. |
 |  |  | two to five options that should all be visible, especially with a description each | `RadioCards` | showing the choices beats hiding them behind a click; a radio card carries a note and a figure. |
 |  |  | the list is of actions, or a choice that applies at once outside a form | `Menu` | a menu runs commands and closes on choice; a select holds a form value. |
 |  |  | narrowing a table or list by a dimension | `Filter` (navigation.md) | a filter reads as the dimension, has an "any" state and can hold several values. |
 |  |  | two or three views of the same thing | `Segmented` (navigation.md) | a segmented control shows every option at once. |
+| pick one value from a list that is short enough to scan, with a list drawn in the system | **`SelectMenu`** | too many options to scan, so the person needs to type to narrow them | `Combobox` | a combobox is a field that filters as you type; a select menu has no field, and a letter only jumps. |
+|  |  | a plain form where the platform's own picker is acceptable, or no script runs | `Select` | the native select needs no script and is the platform's control on touch devices; it costs a list no token reaches. |
+|  |  | two to five options that should all be visible, especially with a description each | `RadioCards` | showing the choices beats hiding them behind a click. |
+|  |  | a list of actions or commands under a button | `Menu` | a menu runs something and holds no value; a select menu sets one. |
+|  |  | several values, each removable | `TokenInput` | a select menu holds one value; tokens show each of several as a removable chip. |
 | move things between two places | **`Shelf`** | each item is simply on or off | `Choice` | a list of switches answers "is this on"; a shelf is for a movement the reader should see. |
 |  |  | items are ordered or grouped by state across more than two places | `Lanes` (agents-and-live-work.md) | lanes show work moving through states; a shelf has exactly two zones the person moves things between. |
 | bind page keys to actions, with an off-switch and one list of every key the page binds | **`Shortcuts`** | moving through a list of cards with J / K and arrows, with roving focus | `Keys` (reading.md) | `useListKeys` owns the focus and the tab stop in the list; bind the rest of the screen with this. |
@@ -209,7 +216,7 @@ Pick a value from a long list by typing to narrow it.
 
 - An owner from forty people, a code from hundreds — too many to scan, easy to type.
 - The list has to look like the rest of the system and work the same on keyboard and touch; focus stays in the input.
-- `allowCustom` when the person may enter a value the list does not hold. For a button that opens a list instead of a field you type in, `useListbox` gives the keyboard contract (type-ahead, no wrap, Tab closes) and you draw the markup.
+- `allowCustom` when the person may enter a value the list does not hold.
 
 **Not when**
 
@@ -217,11 +224,12 @@ Pick a value from a long list by typing to narrow it.
 - Several values, each removable → `TokenInput`. Tokens show each value as a removable chip; a combobox holds one.
 - A list of actions or commands under a button → `Menu`. A menu runs something; a combobox sets a value.
 - Searching across the whole app for a command or a place → `CommandPalette` (navigation.md). The palette is a dialog opened by ⌘K; a combobox is one field on a form.
+- A list short enough to scan, opened from a button rather than typed into → `SelectMenu`. A select menu shows the value on a button and jumps on a letter; a combobox is a field that filters, which a short list does not need.
 - A short native list in a plain form → `Select`. A native select needs no script, at the cost of an open list the platform draws.
 
-**Confused with** `Select`, `Menu`, `TokenInput`, `CommandPalette` (navigation.md)
+**Confused with** `SelectMenu`, `Select`, `Menu`, `TokenInput`, `CommandPalette` (navigation.md)
 
-React `Combobox` · hooks `useListbox` · classes `.combobox`, `.listbox` · shown in `design/components/inputs.html`
+React `Combobox` · classes `.combobox`, `.listbox` · shown in `design/components/inputs.html`
 
 ## Field
 
@@ -373,15 +381,38 @@ Pick one value from a short fixed list in a form, with the native control.
 
 **Not when**
 
-- The open list has to be on-brand, searchable, or usable the same way on touch and keyboard → `Combobox`. A native select's open list is drawn by the operating system and no token reaches it; the combobox is ours and filters as you type.
+- The open list has to look like the product, or an option needs a note, a group heading or a disabled state you can style → `SelectMenu`. A native select's open list is drawn by the operating system and no token reaches it; the select menu is the same choice in a list that is ours.
+- The list is long enough that the person should type to narrow it → `Combobox`. The combobox filters as you type; a select, native or not, only jumps on a letter.
 - Two to five options that should all be visible, especially with a description each → `RadioCards`. Showing the choices beats hiding them behind a click; a radio card carries a note and a figure.
 - The list is of actions, or a choice that applies at once outside a form → `Menu`. A menu runs commands and closes on choice; a select holds a form value.
 - Narrowing a table or list by a dimension → `Filter` (navigation.md). A filter reads as the dimension, has an "any" state and can hold several values.
 - Two or three views of the same thing → `Segmented` (navigation.md). A segmented control shows every option at once.
 
-**Confused with** `Combobox`, `Menu`, `RadioCards`, `Filter` (navigation.md), `Segmented` (navigation.md)
+**Confused with** `SelectMenu`, `Combobox`, `Menu`, `RadioCards`, `Filter` (navigation.md), `Segmented` (navigation.md)
 
 React `Select` · classes `.select` · shown in `design/components/forms.html`
+
+## SelectMenu
+
+Pick one value from a list that is short enough to scan, with a list drawn in the system.
+
+**Use when**
+
+- One value from a list of a few to a few dozen — a client, a status, a region — where the open list has to look like the rest of the product, not the operating system.
+- Options that need a note under them to be told apart, grouped options, or options that are there but cannot be chosen yet. A native select can carry none of these.
+- Keys: Enter, Space or ↓ open on the chosen option; a letter jumps to the option that starts with it; Escape closes with no change and focus goes back to the button. `name` submits the value with a native form.
+
+**Not when**
+
+- Too many options to scan, so the person needs to type to narrow them → `Combobox`. A combobox is a field that filters as you type; a select menu has no field, and a letter only jumps.
+- A plain form where the platform's own picker is acceptable, or no script runs → `Select`. The native select needs no script and is the platform's control on touch devices; it costs a list no token reaches.
+- Two to five options that should all be visible, especially with a description each → `RadioCards`. Showing the choices beats hiding them behind a click.
+- A list of actions or commands under a button → `Menu`. A menu runs something and holds no value; a select menu sets one.
+- Several values, each removable → `TokenInput`. A select menu holds one value; tokens show each of several as a removable chip.
+
+**Confused with** `Select`, `Combobox`, `Menu`, `RadioCards`
+
+React `SelectMenu` · hooks `useListbox` · classes `.select-menu` · shown in `design/components/inputs.html`
 
 ## Shelf
 

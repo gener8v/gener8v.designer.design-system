@@ -11,9 +11,14 @@ export const when = [
     ],
     not: [
       {
-        when: 'the open list has to be on-brand, searchable, or usable the same way on touch and keyboard',
+        when: 'the open list has to look like the product, or an option needs a note, a group heading or a disabled state you can style',
+        use: 'SelectMenu',
+        because: 'a native select\'s open list is drawn by the operating system and no token reaches it; the select menu is the same choice in a list that is ours.',
+      },
+      {
+        when: 'the list is long enough that the person should type to narrow it',
         use: 'Combobox',
-        because: 'a native select\'s open list is drawn by the operating system and no token reaches it; the combobox is ours and filters as you type.',
+        because: 'the combobox filters as you type; a select, native or not, only jumps on a letter.',
       },
       {
         when: 'two to five options that should all be visible, especially with a description each',
@@ -36,7 +41,7 @@ export const when = [
         because: 'a segmented control shows every option at once.',
       },
     ],
-    neighbours: ['Combobox', 'Menu', 'RadioCards', 'Filter', 'Segmented'],
+    neighbours: ['SelectMenu', 'Combobox', 'Menu', 'RadioCards', 'Filter', 'Segmented'],
     react: ['Select'],
     css: ['.select'],
     page: 'components/forms.html',

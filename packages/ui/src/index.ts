@@ -161,6 +161,10 @@ export { useListbox } from './Combobox/index.js';
 export type {
   Listbox, ListboxOptions, ListboxRef, ListboxRootProps, ListboxButtonProps, ListboxListProps, ListboxOptionProps,
 } from './Combobox/index.js';
+export { SelectMenu } from './SelectMenu/index.js';
+export type {
+  SelectMenuProps, SelectMenuOption, SelectMenuGroup, SelectMenuItem, SelectMenuSize,
+} from './SelectMenu/index.js';
 export { Calendar, toISO } from './Calendar/index.js';
 export type { CalendarProps, ISODate } from './Calendar/index.js';
 export { Quantity } from './Quantity/index.js';
