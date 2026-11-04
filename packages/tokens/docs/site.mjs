@@ -187,6 +187,7 @@ html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
   .ov-hero { padding-block: var(--space-12); }
   .ov-grid { grid-template-columns: minmax(0, 1fr); }
   .ov-featured { grid-column: auto; }
+  .ov-specimen .table th, .ov-specimen .table td { padding-inline: var(--space-2); }
   .ov-install { white-space: normal; border-radius: var(--radius-lg); font-size: var(--text-xs); overflow-x: visible; }
 }
 `;
@@ -380,6 +381,21 @@ const GUIDANCE_CSS = `
 .gd-table td, .gd-table th { white-space: normal; vertical-align: top; font-size: var(--text-sm); }
 .gd-table td:first-child { min-inline-size: 12ch; }
 .gd-table code { overflow-wrap: anywhere; }
+/* NARROW: EACH ROW A BLOCK. Five columns in a phone's width wrap one word to a line. Below 40rem of
+   the table's own room, each row stacks: the job as its lead line, then labelled lines. The explicit
+   ARIA roles keep the table semantics when the display changes; the header row stays for assistive
+   tech and leaves the screen. */
+.gd-wrap { container-type: inline-size; }
+@container (max-width: 40rem) {
+  .gd-table, .gd-table tbody, .gd-table tr, .gd-table td { display: block; inline-size: auto; }
+  .gd-table thead { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .gd-table tr { padding-block: var(--space-1) var(--space-3); }
+  .gd-table tr.gd-first { border-block-start: 1px solid var(--color-divider); padding-block-start: var(--space-4); }
+  .gd-table tr.gd-first:first-child { border-block-start: 0; padding-block-start: 0; }
+  .table.gd-table tbody td { padding: var(--space-1) 0; border: 0; min-inline-size: 0; background: none; }
+  .gd-table td.gd-lead { font-size: var(--text-base); font-weight: 500; color: var(--color-neutral-900); padding-block-end: var(--space-2); }
+  .gd-table td[data-label]::before { content: attr(data-label); display: block; font-size: var(--text-xs); color: var(--color-neutral-600); }
+}
 .gd-entry { margin-block-start: var(--space-12); padding-block-start: var(--space-8); border-block-start: 1px solid var(--color-divider); }
 .gd-entry h2 { font-size: var(--text-2xl); display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; }
 .gd-entry h2 + p { margin-block-start: var(--space-3); font-size: var(--text-lg); color: var(--color-neutral-800); max-inline-size: 64ch; }
@@ -410,15 +426,15 @@ export function guidancePages({ FAMILIES, entries, screens, themeName }) {
     <span class="doc-rule" aria-hidden="true"></span>
     <h2 id="screen-types">Screen types</h2>
     <p class="doc-prose" style="margin-block-start:var(--space-3)">Start a screen from a template, not from a blank file.</p>
-    <div class="table-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table">
-      <thead><tr><th scope="col">Screen</th><th scope="col">Start from</th><th scope="col">Uses</th><th scope="col">When</th></tr></thead>
-      <tbody>${screens.map((s) => `
-        <tr><td>${prose(cap(s.screen))}</td><td><a href="../${s.template}index.html">${esc(s.template.replace(/^templates\/|\/$/g, ''))}</a></td><td>${s.implies.map((i) => link(i, family)).join(', ')}</td><td>${prose(s.note)}</td></tr>`).join('')}
+    <div class="table-wrap gd-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table" role="table">
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Screen</th><th scope="col" role="columnheader">Start from</th><th scope="col" role="columnheader">Uses</th><th scope="col" role="columnheader">When</th></tr></thead>
+      <tbody role="rowgroup">${screens.map((s) => `
+        <tr role="row" class="gd-first"><td role="cell" class="gd-lead">${prose(cap(s.screen))}</td><td role="cell" data-label="Start from"><a href="../${s.template}index.html">${esc(s.template.replace(/^templates\/|\/$/g, ''))}</a></td><td role="cell" data-label="Uses">${s.implies.map((i) => link(i, family)).join(', ')}</td><td role="cell" data-label="When">${prose(s.note)}</td></tr>`).join('')}
       </tbody></table></div>
   </section>` : '';
 
     const glance = mine.flatMap((e) => e.not.map((n, i) => `
-        <tr>${i === 0 ? `<td rowspan="${e.not.length}">${prose(cap(e.job))}</td><td rowspan="${e.not.length}"><a href="#${slug(e.name)}"><code>${esc(e.name)}</code></a></td>` : ''}<td>${prose(cap(n.when))}</td><td>${link(n.use, family)}</td><td>${prose(cap(n.because))}</td></tr>`)).join('');
+        <tr role="row"${i === 0 ? ' class="gd-first"' : ''}>${i === 0 ? `<td role="cell" class="gd-lead" rowspan="${e.not.length}">${prose(cap(e.job))}</td><td role="cell" data-label="Use" rowspan="${e.not.length}"><a href="#${slug(e.name)}"><code>${esc(e.name)}</code></a></td>` : ''}<td role="cell" data-label="Not when">${prose(cap(n.when))}</td><td role="cell" data-label="Instead">${link(n.use, family)}</td><td role="cell" data-label="Because">${prose(cap(n.because))}</td></tr>`)).join('');
 
     const sections = mine.map((e) => {
       const parts = [];
@@ -453,9 +469,9 @@ ${screenTable}
   <section class="doc-section" aria-labelledby="at-a-glance">
     <span class="doc-rule" aria-hidden="true"></span>
     <h2 id="at-a-glance">At a glance</h2>
-    <div class="table-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table">
-      <thead><tr><th scope="col">Job</th><th scope="col">Use</th><th scope="col">Not when</th><th scope="col">Instead</th><th scope="col">Because</th></tr></thead>
-      <tbody>${glance}
+    <div class="table-wrap gd-wrap" style="margin-block-start:var(--space-5)"><table class="table gd-table" role="table">
+      <thead role="rowgroup"><tr role="row"><th scope="col" role="columnheader">Job</th><th scope="col" role="columnheader">Use</th><th scope="col" role="columnheader">Not when</th><th scope="col" role="columnheader">Instead</th><th scope="col" role="columnheader">Because</th></tr></thead>
+      <tbody role="rowgroup">${glance}
       </tbody></table></div>
   </section>
 ${sections}
