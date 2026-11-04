@@ -6,6 +6,9 @@ change the `when.ts` and run `pnpm build:choosing`.
 For something that floats above the page — a modal, a side panel, a hint, a preview. Find the job, take the component, and read the "not when" before you commit:
 it names the thing people reach for by mistake and what to use instead.
 
+`design/…` and `docs/…` paths here are in this plugin, not in your project: two directories up
+from the skill (`<skill base directory>/../../design/…`). Open them there.
+
 ## At a glance
 
 | Job | Use | Not when | Instead | Because |

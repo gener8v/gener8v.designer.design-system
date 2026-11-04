@@ -181,6 +181,9 @@ export function renderFamily(family, FAMILIES, entries, screens) {
     `For ${f.question}. Find the job, take the component, and read the "not when" before you commit:`,
     'it names the thing people reach for by mistake and what to use instead.',
     '',
+    '`design/…` and `docs/…` paths here are in this plugin, not in your project: two directories up',
+    'from the skill (`<skill base directory>/../../design/…`). Open them there.',
+    '',
   ];
 
   if (family === 'screens' && screens.length) {
@@ -224,6 +227,9 @@ export function renderRouter(FAMILIES, entries, screens) {
     '',
     'Pick the row, open the file. Each one opens with a table — job, component, when not, what',
     'instead — then a section per component. Read the "not when" before you choose.',
+    '',
+    'Then open the template the screen table names — `<skill base directory>/../../design/templates/…`.',
+    'Copying its structure beats composing a screen from the component list.',
     '',
     '| If you are building… | Read |',
     '| --- | --- |',
