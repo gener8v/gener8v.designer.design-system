@@ -93,6 +93,22 @@
     </div>
   </div>
 
+  <p class="demo-head label">Toast with an action</p>
+  <div class="stage" style="height:calc(var(--space-32) * 1.1)">
+    <div class="toast-region" role="region" aria-live="polite" aria-label="Notifications">
+      <div class="toast">
+        <div><p class="toast-title">Moved to the archive</p><p class="toast-body">3 reports</p></div>
+        <button type="button" class="btn btn-secondary btn-sm toast-action">Undo</button>
+        <button type="button" class="btn btn-ghost btn-icon btn-sm toast-close" aria-label="Dismiss">
+          <svg viewBox="0 0 256 256" fill="currentColor"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+  <p class="note">One action, for taking back what just happened — never a decision, which belongs
+  in a dialog. <code>toast({ title, action: { label: 'Undo', onAction } })</code> stays until it is
+  dismissed, pauses while hovered or focused, and its button is announced with it and reached by Tab.</p>
+
   <p class="demo-head label">Tooltip and callout</p>
   <div class="row" style="align-items:flex-start;gap:var(--space-6)">
     <span class="tooltip">Recorded as an unknown, not as compliant.</span>

@@ -24,6 +24,27 @@ paint should not announce.
 announced. `ToastClose` is a component rather than a class on a bare `Button` so the
 accessible name and icon cannot be forgotten at the call site.
 
+A toast may carry **one action**, for taking back what just happened: `ToastSpec.action =
+{ label, onAction }`, drawn by `ToastAction` before `ToastClose`.
+- It is a real button inside the live region, so it is announced with the toast and reached by Tab.
+- A toast with an action defaults to `duration: 0`: an action that leaves before somebody reaches
+  it is a broken promise. With a duration given, the timer pauses while the pointer is over the
+  region or keyboard focus is in it.
+- Pressing it runs `onAction` and dismisses the toast. Focus goes back to where it was before it
+  entered the region, not to the page.
+- Undo, never a decision. A toast is polite and can be missed; a decision goes in a `Dialog`, and
+  an agent's proposed change in a `ConfirmCard`.
+
+## ErrorBoundary
+Wraps a region — a routed page inside the app frame, a detail pane, a chart — and shows
+`State kind="error"` with `role="alert"` when what it wraps throws while rendering. The frame
+around it stays.
+- The error's own text is never shown. It goes to `onError(error, info)` for the log.
+- A new `resetKey` clears the error: the path for a page, the record id for a pane. No router is
+  assumed. "Try again" clears it in place; `fallback` replaces the whole state and is handed
+  `reset`.
+- Render errors only. A request that fails is a `State` the screen renders itself.
+
 ## Callout
 A rule, not a filled box. A box competes with the cards around it.
 

@@ -4,6 +4,50 @@ All four packages (`@gener8v/tokens`, `@gener8v/tailwind-preset`, `@gener8v/icon
 `@gener8v/ui`) release on one version. Entries before 0.58.0 are in the commit history and the
 pull requests behind each `Release x.y.z` commit.
 
+## Unreleased
+
+Four behaviours a product built for itself, promoted and made generic: a listbox keyboard
+contract, a keyboard-shortcut engine with an off-switch, an error boundary and an Undo action on a
+toast. All additive. Nothing existing changes its default, apart from one thing a toast now also
+does: it pauses its timer while keyboard focus is inside it, as it already did on hover.
+
+### Added
+
+- **`useListbox`** (with `Combobox`), the WAI-ARIA collapsible-listbox keyboard contract as a
+  hook. No markup and no class: the caller draws the button and the list, and positions it with
+  `useAnchoredPosition`. `SelectMenu` will be built on it.
+  - `useListbox({ count, open, onOpenChange, selectedIndex, textOf, onChoose, isDisabled?, idBase?,
+    typeaheadWindow? = 500 })` returns `{ active, setActive, optionId, openAt, close, choose,
+    buttonRef, listRef, rootProps(), buttonProps(), listProps(), optionProps(i) }`.
+  - ↓ / ↑ stop at the ends (no wrap); Home and End; every move skips disabled options. Type-ahead
+    jumps to the next match; pressing one letter again cycles through the options that start with
+    it; a word typed quickly matches the word. Enter, Space or a click choose. Escape closes
+    without a change and returns focus to the button.
+  - Tab closes the list synchronously (`flushSync`) and leaves focus on the button, so it carries
+    on to the next control and never drops to the page.
+  - The active option is kept in view by scrolling the list only, never the page.
+- **`Shortcuts`**, page keys with an off-switch and one list of them all.
+  - `useShortcuts(bindings, { enabled?, title? })`, each binding
+    `{ key: string | string[], run(e) => void | false, does?, keys?, when? }`. Single keys stand
+    down while typing in a field, with Ctrl, Meta or Alt held, under a modal dialog, and for Enter
+    or Space on a button. Escape still works in a field.
+  - `closeTopLayer([{ open, close }, …])`: Escape closes one thing per press, top-most first.
+  - `ShortcutsProvider({ storageKey? = 'g8v.shortcuts', defaultSingleKeys? = true })` keeps the
+    single-key switch (WCAG 2.1.4) in `localStorage`, every read and write inside try/catch, and
+    the registry each screen's `useShortcuts` adds to. Put the person's id in `storageKey` to keep
+    it per person. `useSingleKeyShortcuts()`, `useShortcutGroups()`, `readSingleKeys`,
+    `writeSingleKeys`.
+  - `ShortcutHelp({ groups?, toggle? = true, labels? })`: every registered key, by screen, drawn
+    with `ShortcutList`, and the switch. No new class.
+- **`ErrorBoundary`** `({ resetKey?, onError?, fallback?, labels?, tight? })`. A render error in
+  what it wraps shows `State kind="error"` in its place, inside the frame around it. The error's
+  text is never shown; `onError(error, info)` gets it. A new `resetKey` clears it; so does Try
+  again. No router assumed.
+- **Toast action.** `ToastSpec.action?: { label, onAction }` renders a `ToastAction` button
+  (`.toast-action`) before the dismiss, announced with the toast and reached by Tab. A toast with
+  an action defaults to `duration: 0`. Pressing it runs `onAction`, dismisses the toast and puts
+  focus back where it came from. For Undo, not for a decision.
+
 ## 0.60.0
 
 One fix and three components the delivery record built for its Plan view, promoted and generalised.

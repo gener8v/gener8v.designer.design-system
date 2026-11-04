@@ -70,6 +70,14 @@ export type {
 } from './Live/index.js';
 export { Kbd, ShortcutList, useListKeys, stepIndex, isTypingTarget } from './Keys/index.js';
 export type { Shortcut, ShortcutListProps, KeyChord, ListKeys, ListKeysOptions, ListKeyItemProps } from './Keys/index.js';
+export {
+  ShortcutsProvider, ShortcutHelp, useShortcuts, useSingleKeyShortcuts, useShortcutGroups,
+  closeTopLayer, readSingleKeys, writeSingleKeys, isSingleCharacter, SHORTCUTS_STORAGE_KEY,
+} from './Shortcuts/index.js';
+export type {
+  ShortcutsProviderProps, ShortcutHelpProps, ShortcutHelpLabels, ShortcutBinding, ShortcutsOptions,
+  ShortcutGroup, EscapeLayer,
+} from './Shortcuts/index.js';
 export { Contents } from './Contents/index.js';
 export type { ContentsProps, ContentsItem } from './Contents/index.js';
 export { PagerChip } from './Pager/index.js';
@@ -80,6 +88,8 @@ export { State, StateIcon, StateTitle, StateBody, StateActions, StateDetail } fr
 export type { StateProps, StateKind, StateTone } from './State/index.js';
 export { StateArt, STATE_ART } from './State/index.js';
 export type { StateArtName, StateArtProps } from './State/index.js';
+export { ErrorBoundary } from './ErrorBoundary/index.js';
+export type { ErrorBoundaryProps, ErrorBoundaryLabels } from './ErrorBoundary/index.js';
 export {
   Flow, FlowRail, FlowRailTitle, FlowMain, FlowHeader, FlowStepOf,
   FlowTitle, FlowLede, FlowContent, FlowFields, FlowFooter, FlowFooterStatus,
@@ -88,7 +98,7 @@ export { Dialog } from './Dialog/index.js';
 export type { DialogProps } from './Dialog/index.js';
 export { Alert, AlertTitle, AlertBody, AlertActions } from './Alert/index.js';
 export type { AlertProps, Tone } from './Alert/index.js';
-export { ToastRegion, Toast, ToastTitle, ToastBody, ToastClose } from './Toast/index.js';
+export { ToastRegion, Toast, ToastTitle, ToastBody, ToastAction, ToastClose } from './Toast/index.js';
 export type { ToastProps, ToastCloseProps } from './Toast/index.js';
 export { Claim, ClaimActions, ClaimBody, ClaimReason, ClaimStanding, ClaimText } from './Claim/index.js';
 export type { ClaimProps, ClaimReasonProps, ClaimStandingProps } from './Claim/index.js';
@@ -138,6 +148,10 @@ export { CodeEditor } from './CodeEditor/index.js';
 export type { CodeEditorProps } from './CodeEditor/index.js';
 export { Combobox } from './Combobox/index.js';
 export type { ComboboxProps, ComboboxOption } from './Combobox/index.js';
+export { useListbox } from './Combobox/index.js';
+export type {
+  Listbox, ListboxOptions, ListboxRef, ListboxRootProps, ListboxButtonProps, ListboxListProps, ListboxOptionProps,
+} from './Combobox/index.js';
 export { Calendar, toISO } from './Calendar/index.js';
 export type { CalendarProps, ISODate } from './Calendar/index.js';
 export { Quantity } from './Quantity/index.js';
@@ -169,7 +183,7 @@ export type {
   LayeredEdgeKind, LayeredLayout, PlacedLayer, PlacedNode, PlacedHead,
 } from './LayeredGraph/index.js';
 export { ToastProvider, useToast } from './ToastProvider/index.js';
-export type { ToastProviderProps, ToastSpec } from './ToastProvider/index.js';
+export type { ToastProviderProps, ToastSpec, ToastSpecAction } from './ToastProvider/index.js';
 export { CommandPalette, useCommandPalette } from './CommandPalette/index.js';
 export type { CommandPaletteProps, Command } from './CommandPalette/index.js';
 export { Tree } from './Tree/index.js';

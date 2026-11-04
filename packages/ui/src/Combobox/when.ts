@@ -8,7 +8,7 @@ export const when = [
     use: [
       'An owner from forty people, a code from hundreds — too many to scan, easy to type.',
       'The list has to look like the rest of the system and work the same on keyboard and touch; focus stays in the input.',
-      '`allowCustom` when the person may enter a value the list does not hold.',
+      '`allowCustom` when the person may enter a value the list does not hold. For a button that opens a list instead of a field you type in, `useListbox` gives the keyboard contract (type-ahead, no wrap, Tab closes) and you draw the markup.',
     ],
     not: [
       {
@@ -39,6 +39,7 @@ export const when = [
     ],
     neighbours: ['Select', 'Menu', 'TokenInput', 'CommandPalette'],
     react: ['Combobox'],
+    hooks: ['useListbox'],
     css: ['.combobox', '.listbox'],
     page: 'components/inputs.html',
   },

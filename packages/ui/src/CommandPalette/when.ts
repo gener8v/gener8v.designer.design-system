@@ -21,12 +21,17 @@ export const when = [
         because: 'a menu button opens beside its trigger and does not take the page over.',
       },
       {
+        when: 'a frequent action wants one key of its own on one screen — J for next, E for done',
+        use: 'Shortcuts',
+        because: 'a single-key shortcut acts at once and has to be possible to turn off; the palette is a search opened by a chord.',
+      },
+      {
         when: 'the person is browsing places rather than searching',
         use: 'Sidebar',
         because: 'the rail shows every place at once; a palette shows only what matches.',
       },
     ],
-    neighbours: ['Combobox', 'Menu', 'Dialog', 'Keys'],
+    neighbours: ['Combobox', 'Menu', 'Dialog', 'Keys', 'Shortcuts'],
     react: ['CommandPalette'],
     hooks: ['useCommandPalette'],
     css: ['.command'],
