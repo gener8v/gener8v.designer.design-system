@@ -81,7 +81,7 @@ export const LiveProgress = forwardRef<HTMLDivElement, LiveProgressProps>(functi
     <div {...rest} ref={ref} data-state="active" className={cx('live-progress', className)}>
       <Pulse />
       <span className="live-progress-where">{where || words.active}</span>
-      <Progress className="live-progress-bar"
+      <Progress className="live-progress-bar" size="sm"
         {...(known ? { value: Math.round((done / max) * 100) } : {})}
         aria-label={progressLabel ?? (known ? `${done} of ${max} ${noun} done` : `${noun} in progress`)} />
       {known && <span className="live-progress-count num">{done}/{max}</span>}

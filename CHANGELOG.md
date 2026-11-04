@@ -16,6 +16,71 @@ contract, a keyboard-shortcut engine with an off-switch, an error boundary and a
 toast. All additive. Nothing existing changes its default, apart from one thing a toast now also
 does: it pauses its timer while keyboard focus is inside it, as it already did on hover.
 
+### The progress family — one anatomy (VISUAL CHANGE)
+
+Every progress indicator is redrawn as one family. Class names and React APIs are unchanged and
+backward compatible; markup written against an earlier version gets the new look on this bump.
+**Expect visual diffs** in any screenshot test that shows a stepper, a bar, a ring or a spinner.
+
+- **Fixed: off-centre stepper glyphs.** The complete tick sat about 5–10px under its marker's
+  centre and the failed cross about 6–8px above it. The cause was structural: the hidden step
+  number (`font-size: 0`) was still a grid item, so the marker grid had two rows. The glyph is now
+  absolutely placed and centred by `inset: 0; margin: auto`; the hand-tuned
+  `translateY(-0.053em)` is gone. Measured ink-centre offset is now ≤ 0.5px in every state and size.
+- **Changed: one glyph set.** The tick, cross, dash and `!` are Phosphor Bold geometry, drawn as CSS
+  mask images (`--progress-glyph-check|cross|minus|alert`) with each viewBox centred on its ink.
+  Stepper markers, `.progress-mark`, lanes, `LiveMark`, `LiveProgress` and file rows all paint the
+  same glyph. The inline SVG ticks in `Live` are replaced by `<span class="progress-glyph">`.
+- **Changed: step markers are tonal.** Complete is a tick on the success tint (was a solid action
+  disc); failed is a cross on the danger tint (was a solid danger disc). The connector leaving a
+  complete step is `--color-success-300`. Current keeps the action ring. The rail form fills what
+  is behind with `--progress-fill-success` by default (was the action colour); `--stepper-complete`
+  still overrides it.
+- **Changed: shared anatomy tokens** `--progress-track`, `--progress-fill`,
+  `--progress-fill-success|warning|danger`, `--progress-h-sm|md|lg` (4/6/8px), `--progress-gap`,
+  `--progress-radius`, `--progress-circle-xs|sm|md|lg|xl` (16/24/32/48/64px). Every bar, ring,
+  spinner, rail and segment reads them.
+- **Changed: the default bar is 6px** (was 8px). `size="lg"` is the old 8px.
+- **Changed: the spinner is the indeterminate ring.** Same track and arc colour as `ProgressRing`,
+  stroke = diameter / 8. Sizes are now 16 / 24 / 32px (were 16 / 20 / 32), so the default spinner
+  is 4px larger.
+- **Changed: `ProgressRing` cuts its hole with a mask** instead of covering it with a
+  `--color-bg` disc, so it sits on a card, a tinted lane or a dark page.
+- **Changed: reduced motion.** An indeterminate bar now appears at the start, middle and end of the
+  track in turn (fading out between places) instead of breathing at full width, so it still reads
+  as progressing. The ring, the spinner and a running mark keep turning, slowly.
+- **Changed: forced colours.** Glyphs paint in `CanvasText`; rings, spinners and segments draw in
+  `Highlight` on `GrayText`.
+- **Added to `Stepper`:** `size="sm"` (24px markers), `Step description`, `Step stateLabel`, and
+  the states `stopped` and `skipped`. Each step says its state in words to assistive tech
+  (`Registered, complete`).
+- **Added to `Progress`:** `max`, `size`, `tone`, `label`, `helper`, `showValue`, `valueLabel`,
+  `valueText`, `layout="stacked" | "inline"`. `aria-label` is required only without `label`.
+- **Added to `ProgressRing`:** `size` (`xs`…`xl`, default `xl` = the old 64px), `tone`, `max`,
+  `label`, `helper`, indeterminate (omit `value`), and centre content (value, an icon, or `null`).
+- **Added `ProgressMark` and `ProgressGlyph`** (`.progress-mark`, `.progress-glyph`) and the
+  `ProgressState` vocabulary: `queued`, `current`, `complete`, `failed`, `stopped`, `skipped`.
+- **Added `SegmentedProgress`** (`.progress-segments`, `.progress-legend`): one track split by
+  status, with a legend and an `aria-valuetext` such as "6 done, 1 failed, 3 to go".
+- **Added `ProgressList`** (`.progress-list`): tasks with marks, descriptions and "3 of 7"; the
+  running task is a spinner, a failure and the end are announced.
+- **Added `FileProgress`** (`.file-progress`): a transfer row with name, percent, a 4px bar, size
+  or error, cancel, retry and remove.
+- `Lanes`: the default Skipped lane now marks its pills with a dash.
+- **Narrow containers.** A stepper measures its own width (`container: stepper`). Below 30rem the
+  marker stepper stacks vertically, so every label stays whole; above it, steps wrap rather than
+  clip. The rail keeps its row and shows only the current label. Both are CSS only, so a static
+  page and `<Stepper>` behave alike. A `.stepper` is a size container and must sit in a box with
+  a width (a block, or a flex item with a basis); it already filled its container. File names in
+  `FileProgress` wrap instead of clipping.
+- **Alignment.** Inline bars use fixed label and value columns (`--progress-label-w`,
+  `--progress-value-w`), so stacked bars start and end at one x. A `FileList` holding
+  `FileProgress` rows shares its action columns across rows (subgrid), so bars and statuses line up
+  whether or not a row has Retry. Status words (`Uploaded`, `Waiting`) use the body face
+  (`.progress-status`); figures stay mono. A ring's words are always a title line and one
+  supporting line, centred on the ring. A table row's active `LiveProgress` is four fixed columns,
+  so its bar starts at the same x in every row.
+
 ### Changed — visual (navigation)
 
 **A visual change on existing classes, shipped as the new default.** Consumers on `^0.61` will

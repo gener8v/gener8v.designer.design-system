@@ -24,13 +24,29 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 |  |  | a short status word | `Tag` | a status is one or two words in a tag, never a sentence. |
 | keep one broken region from blanking the app, and say plainly that it could not be shown | **`ErrorBoundary`** | a fetch failed or a source did not answer | `State` | a failed fetch is a state the screen expected and renders itself, with a retry; a boundary is for a render that threw. |
 |  |  | the content is there and something about it is wrong or stale | `Alert` | an alert sits above content that still shows; a boundary replaces content that could not be drawn. |
+| show one file on its way — how far, and cancel or retry | **`FileProgress`** | the file has been attached and nothing is moving | `FileUpload` (input.md) | `FileItem` lists what is attached; a transfer row exists only while bytes move or after they failed. |
+|  |  | one task that is not a file — an import, an export | `Progress` | a labelled bar carries the same layout without the file's size and actions. |
+|  |  | a batch of many files where only the totals matter | `SegmentedProgress` | forty rows is a wall; a segmented bar says how many arrived, failed and wait. |
 | show an integration and the state it is in, with the way to fix it | **`Connection`** | the status is not about an integration | `Tag` | a tag is the general status word; `ConnectionStatus` has only the integration states. |
 |  |  | the problem needs the reader to act before carrying on with the page | `Alert` | an alert is an inline banner with a title, body and action for one problem. |
 |  |  | the thing on the row is an API key or a secret | `KeyList` (data.md) | keys have a fingerprint, scopes, last use and expiry; a connection has none of those. |
-| show how far a task has got toward done | **`Progress`** | a level that is simply true — usage, capacity, a score against a target | `Meter` (data.md) | `role="meter"` reports a level; a progress bar says a task is advancing, and swapping them misreports what is happening. |
+| show how far one task has got toward done | **`Progress`** | a level that is simply true — usage, capacity, a score against a target | `Meter` (data.md) | `role="meter"` reports a level; a progress bar says a task is advancing, and swapping them misreports what is happening. |
+|  |  | many items, each finished one way or another — 6 done, 1 failed, 3 to go | `SegmentedProgress` | one fill cannot say how things finished; a segmented bar splits the track by state and says each count. |
+|  |  | the reader needs to see WHICH tasks are done, not just how many | `ProgressList` | a bar is a quantity; a checklist names each task and its state. |
 |  |  | one row's live work in a list or table, with where it is and a count | `LiveProgress` (agents-and-live-work.md) | live progress carries the pulse, the place being worked and the count, and turns into a tag when done or failed. |
+|  |  | a file being uploaded or downloaded | `FileProgress` | a transfer row carries the name, the size, cancel and retry around the same bar. |
 |  |  | the person is moving through named steps | `Stepper` | a stepper names each step and its state; a bar only says how much. |
 |  |  | a short wait inside a control with nothing to measure | `Spinner` | a spinner is the smallest "still working" and takes no room. |
+| mark one item's state with the progress family's disc or glyph | **`ProgressMark`** | a whole list of tasks with their states and a count | `ProgressList` | the checklist already lays out the marks, the labels and the count, and announces failures. |
+|  |  | a status word with a tint, standing alone | `Tag` | a tag is the status; a mark is decoration beside words and is hidden from assistive tech. |
+| show how a set of items is going, split by how each one finished | **`SegmentedProgress`** | one task with one fraction done | `Progress` | a single fill is clearer when there is only one way to finish. |
+|  |  | the reader needs each item by name | `ProgressList` | a segmented bar counts; a checklist names. |
+|  |  | the items move between states while the reader watches, by name | `Lanes` (agents-and-live-work.md) | lanes show each agent as a pill sliding between states; a segmented bar is the summary. |
+|  |  | parts of a whole that are not progress — a budget by category, a share of votes | `BarChart` (data.md) | a stacked bar chart is a composition; this is work advancing, coloured by state. |
+| show a list of tasks the system is working through, each with its state, and how many are done | **`ProgressList`** | the reader ticks the items off themselves | `Checklist` (input.md) | a checklist is checkboxes the reader owns; a progress list reports work the system does. |
+|  |  | steps of a form the reader moves through, one current, with back and next | `Stepper` | a stepper is a position in an order the reader walks; a progress list is work being done for them. |
+|  |  | many items, where only the counts matter | `SegmentedProgress` | naming a hundred items is a wall; a segmented bar says how many in each state. |
+|  |  | several agents running at once | `Lanes` (agents-and-live-work.md) | lanes show concurrency — who is waiting, working and done; a list is one sequence. |
 | hold the shape of content that is still being read | **`Skeleton`** | there is nothing to show | `State` | a skeleton means "still reading" and never "nothing here"; an empty state names the cause and the way out. |
 |  |  | the read failed | `State` | a skeleton never tells you it has finished; an error state says what went wrong. |
 |  |  | the wait is short and the layout is not known | `Spinner` | a spinner marks a brief wait without promising a shape. |
@@ -38,6 +54,7 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 | show that a short wait is under way, where its result will appear | **`Spinner`** | the shape of the content that is loading is known | `Skeleton` | a skeleton holds the layout so nothing jumps when the content lands. |
 |  |  | the work has a known amount done and to do | `Progress` | a progress bar says how far along it is; a spinner only says "busy". |
 |  |  | an agent or a run is working on something the reader is watching | `Live` (agents-and-live-work.md) | live work is drawn where the work is, with a word beside the pulse. |
+|  |  | a circular indicator with a known amount done | `Progress` | `ProgressRing` is the same ring with a value; the spinner is that ring when nothing can be measured. |
 |  |  | a button is submitting | `Button` (input.md) | the button has its own loading state (`.is-loading`) and keeps its label and width. |
 | stand in for content that is loading, empty, partial, failed, denied or done | **`State`** | the content is there and something about it needs saying | `Alert` | an alert sits above content that is still shown; a state replaces it. |
 |  |  | the region is still loading and its shape is known | `Skeleton` | a skeleton holds the layout while it reads; `State kind="loading"` is for when the shape is not known. |
@@ -46,6 +63,7 @@ from the skill (`<skill base directory>/../../design/…`). Open them there.
 | show where someone is in a named sequence of steps | **`Stepper`** | building the whole multi-step form, with back and forward | `Flow` (screens.md) | the flow shell already holds a vertical stepper, one content region and the footer. |
 |  |  | how much of one task is done, with no named steps | `Progress` | a bar says how much; a stepper says which. |
 |  |  | many agents or items moving through waiting, working and done at once | `Lanes` (agents-and-live-work.md) | lanes show many items by state; a stepper is one sequence. |
+|  |  | a list of tasks the system works through for the reader — setup, an agent's run | `ProgressList` | a stepper is a position the reader walks; a progress list reports work done for them, with a spinner on the running task. |
 |  |  | events that already happened, in order | `Timeline` (data.md) | a timeline is history; a stepper is position in a plan. |
 | say in one or two words what state a thing is in | **`Tag`** | the word is something the reader can press to do something | `Button` (input.md) | a status is a tag and an action is a button; where both sit on one row they must differ in shape, not only in colour. |
 |  |  | the value is a neutral attribute — an owner, a standard, a type — that may narrow the list | `Facet` (navigation.md) | a tag carries no status here and is decoration; a facet is a name and a value, and narrows when pressed. |
@@ -122,6 +140,25 @@ Keep one broken region from blanking the app, and say plainly that it could not 
 
 React `ErrorBoundary` · shown in `design/components/states.html`
 
+## FileProgress
+
+Show one file on its way — how far, and cancel or retry.
+
+**Use when**
+
+- An upload or download in a `FileList`: name and percent above a 4px bar, the size or the reason below, cancel while it moves and retry when it fails.
+- Arriving and failing are announced once; the percentage is never read aloud.
+
+**Not when**
+
+- The file has been attached and nothing is moving → `FileUpload` (input.md). `FileItem` lists what is attached; a transfer row exists only while bytes move or after they failed.
+- One task that is not a file — an import, an export → `Progress`. A labelled bar carries the same layout without the file's size and actions.
+- A batch of many files where only the totals matter → `SegmentedProgress`. Forty rows is a wall; a segmented bar says how many arrived, failed and wait.
+
+**Confused with** `FileUpload` (input.md), `Progress`, `SegmentedProgress`
+
+React `FileProgress` · classes `.file-progress` · shown in `design/components/flow.html`
+
 ## Connection
 
 Show an integration and the state it is in, with the way to fix it.
@@ -144,24 +181,85 @@ React `Connection`, `ConnectionMark`, `ConnectionBody`, `ConnectionName`, `Conne
 
 ## Progress
 
-Show how far a task has got toward done.
+Show how far one task has got toward done.
 
 **Use when**
 
-- An upload, an import or an export with a known fraction complete — pass `value` 0–100.
-- A task that is under way with no known fraction: omit `value` for the indeterminate bar.
-- `ProgressRing` where a bar does not fit — a compact figure beside a title.
+- An upload, an import or an export with a known fraction — `value` of `max`; `label`, `helper` and the value lay out by the family rule: label start, value end, helper under.
+- Under way with no known fraction: omit `value` for the indeterminate bar; `tone` only once it has ended (success, warning, danger).
+- `ProgressRing` where a bar does not fit — 16 to 64px, the value inside from 48px, an icon or nothing in the centre.
 
 **Not when**
 
 - A level that is simply true — usage, capacity, a score against a target → `Meter` (data.md). `role="meter"` reports a level; a progress bar says a task is advancing, and swapping them misreports what is happening.
+- Many items, each finished one way or another — 6 done, 1 failed, 3 to go → `SegmentedProgress`. One fill cannot say how things finished; a segmented bar splits the track by state and says each count.
+- The reader needs to see WHICH tasks are done, not just how many → `ProgressList`. A bar is a quantity; a checklist names each task and its state.
 - One row's live work in a list or table, with where it is and a count → `LiveProgress` (agents-and-live-work.md). Live progress carries the pulse, the place being worked and the count, and turns into a tag when done or failed.
+- A file being uploaded or downloaded → `FileProgress`. A transfer row carries the name, the size, cancel and retry around the same bar.
 - The person is moving through named steps → `Stepper`. A stepper names each step and its state; a bar only says how much.
 - A short wait inside a control with nothing to measure → `Spinner`. A spinner is the smallest "still working" and takes no room.
 
-**Confused with** `Meter` (data.md), `LiveProgress` (agents-and-live-work.md), `Stepper`, `Spinner`
+**Confused with** `Meter` (data.md), `SegmentedProgress`, `ProgressList`, `LiveProgress` (agents-and-live-work.md), `FileProgress`, `Stepper`, `Spinner`
 
-React `Progress`, `ProgressRing` · classes `.progress` · shown in `design/components/flow.html`
+React `Progress`, `ProgressRing` · classes `.progress`, `.progress-ring` · shown in `design/components/flow.html`
+
+## ProgressMark
+
+Mark one item's state with the progress family's disc or glyph.
+
+**Use when**
+
+- `ProgressMark` — a 24px (or 16px) disc in one of the six states: queued, current (a spinner), complete, failed, stopped, skipped. The same disc a stepper marker draws.
+- `ProgressGlyph` — the tick, cross, dash or `!` inline at 1em, beside a word that says the same thing.
+
+**Not when**
+
+- A whole list of tasks with their states and a count → `ProgressList`. The checklist already lays out the marks, the labels and the count, and announces failures.
+- A status word with a tint, standing alone → `Tag`. A tag is the status; a mark is decoration beside words and is hidden from assistive tech.
+
+**Confused with** `ProgressList`, `Tag`, `Stepper`
+
+React `ProgressMark`, `ProgressGlyph` · hooks `PROGRESS_STATE_WORDS`, `PROGRESS_STATE_GLYPH` · classes `.progress-mark`, `.progress-glyph` · shown in `design/components/flow.html`
+
+## SegmentedProgress
+
+Show how a set of items is going, split by how each one finished.
+
+**Use when**
+
+- A batch, a run or a set of checks: one track split into done, failed, stopped, skipped, running and to go, with a legend that says every count in words.
+- The value is how many have finished however they finished, and assistive tech hears the whole breakdown — "6 done, 1 failed, 3 to go".
+
+**Not when**
+
+- One task with one fraction done → `Progress`. A single fill is clearer when there is only one way to finish.
+- The reader needs each item by name → `ProgressList`. A segmented bar counts; a checklist names.
+- The items move between states while the reader watches, by name → `Lanes` (agents-and-live-work.md). Lanes show each agent as a pill sliding between states; a segmented bar is the summary.
+- Parts of a whole that are not progress — a budget by category, a share of votes → `BarChart` (data.md). A stacked bar chart is a composition; this is work advancing, coloured by state.
+
+**Confused with** `Progress`, `ProgressList`, `Lanes` (agents-and-live-work.md), `BarChart` (data.md)
+
+React `SegmentedProgress` · classes `.progress-segments`, `.progress-legend` · shown in `design/components/flow.html`
+
+## ProgressList
+
+Show a list of tasks the system is working through, each with its state, and how many are done.
+
+**Use when**
+
+- Setup, onboarding or an agent's run: each task with its mark, an optional description, and `3 of 7` with a 4px bar.
+- The running task's mark is the spinner and the list is `aria-busy`; a failure and the end of the list are announced, nothing else.
+
+**Not when**
+
+- The reader ticks the items off themselves → `Checklist` (input.md). A checklist is checkboxes the reader owns; a progress list reports work the system does.
+- Steps of a form the reader moves through, one current, with back and next → `Stepper`. A stepper is a position in an order the reader walks; a progress list is work being done for them.
+- Many items, where only the counts matter → `SegmentedProgress`. Naming a hundred items is a wall; a segmented bar says how many in each state.
+- Several agents running at once → `Lanes` (agents-and-live-work.md). Lanes show concurrency — who is waiting, working and done; a list is one sequence.
+
+**Confused with** `Checklist` (input.md), `Stepper`, `SegmentedProgress`, `Lanes` (agents-and-live-work.md)
+
+React `ProgressList` · classes `.progress-list` · shown in `design/components/flow.html`
 
 ## Skeleton
 
@@ -191,12 +289,14 @@ Show that a short wait is under way, where its result will appear.
 
 - A brief wait inside a control or a small region — a button submitting, a panel refreshing.
 - Decorative by default: the surrounding region carries `aria-busy`; pass `label` only when it stands alone.
+- It is the indeterminate ring of the progress family at 16, 24 and 32px — the same track, arc colour and stroke as `ProgressRing`.
 
 **Not when**
 
 - The shape of the content that is loading is known → `Skeleton`. A skeleton holds the layout so nothing jumps when the content lands.
 - The work has a known amount done and to do → `Progress`. A progress bar says how far along it is; a spinner only says "busy".
 - An agent or a run is working on something the reader is watching → `Live` (agents-and-live-work.md). Live work is drawn where the work is, with a word beside the pulse.
+- A circular indicator with a known amount done → `Progress`. `ProgressRing` is the same ring with a value; the spinner is that ring when nothing can be measured.
 - A button is submitting → `Button` (input.md). The button has its own loading state (`.is-loading`) and keeps its label and width.
 
 **Confused with** `Skeleton`, `Progress`, `Live` (agents-and-live-work.md), `Button` (input.md)
@@ -232,16 +332,17 @@ Show where someone is in a named sequence of steps.
 
 - A multi-step task where each step is an act the person performs — markers, one per step.
 - A sequence that is a position the work is somewhere in — `rail`, which fills what is behind.
-- A step that was refused or broke: `failed`, never left at current or marked complete.
+- A step that was refused (`failed`), interrupted (`stopped`) or passed over (`skipped`) — never left at current or marked complete. `size="sm"` and `description` for dense or explained steps.
 
 **Not when**
 
 - Building the whole multi-step form, with back and forward → `Flow` (screens.md). The flow shell already holds a vertical stepper, one content region and the footer.
 - How much of one task is done, with no named steps → `Progress`. A bar says how much; a stepper says which.
 - Many agents or items moving through waiting, working and done at once → `Lanes` (agents-and-live-work.md). Lanes show many items by state; a stepper is one sequence.
+- A list of tasks the system works through for the reader — setup, an agent's run → `ProgressList`. A stepper is a position the reader walks; a progress list reports work done for them, with a spinner on the running task.
 - Events that already happened, in order → `Timeline` (data.md). A timeline is history; a stepper is position in a plan.
 
-**Confused with** `Flow` (screens.md), `Progress`, `Lanes` (agents-and-live-work.md), `Timeline` (data.md), `Checklist` (input.md)
+**Confused with** `Flow` (screens.md), `Progress`, `ProgressList`, `Lanes` (agents-and-live-work.md), `Timeline` (data.md), `Checklist` (input.md)
 
 React `Stepper`, `Step` · classes `.stepper`, `.step` · shown in `design/components/flow.html`
 

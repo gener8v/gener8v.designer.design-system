@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cx } from '../cx.js';
+import { ProgressGlyph } from '../Progress/Mark.js';
 
 /**
  * WORK HAPPENING NOW, DRAWN WHERE THE WORK IS.
@@ -147,17 +148,10 @@ export function liveWhere(places: string[], prefix = '§'): string {
   return `${prefix}${now[0]}${now.length > 1 ? ` +${now.length - 1}` : ''}`;
 }
 
-/** The marks are drawn inline so the library takes no icon dependency. */
-export const Tick = () => (
-  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-    <path d="M3.5 8.5l3 3 6-7" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round"
-      strokeLinejoin="round" fill="none" />
-  </svg>
-);
-
-export const Cross = () => (
-  <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-    <path d="M4.5 4.5l7 7M11.5 4.5l-7 7" stroke="currentColor" strokeWidth="1.75"
-      strokeLinecap="round" fill="none" />
-  </svg>
-);
+/**
+ * The marks are the progress family's glyphs, drawn by the stylesheet — the same tick a stepper
+ * marker, a checklist task and a file row draw, at the same stroke.
+ */
+export const Tick = () => <ProgressGlyph glyph="check" />;
+export const Cross = () => <ProgressGlyph glyph="cross" />;
+export const Dash = () => <ProgressGlyph glyph="minus" />;

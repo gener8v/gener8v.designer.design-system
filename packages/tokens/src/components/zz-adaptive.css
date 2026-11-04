@@ -44,12 +44,38 @@
   /* Progress and steps are pure colour; Highlight is the only signal left. */
   .progress { border: 1px solid CanvasText; }
   .progress-bar, .switch:checked, .checkbox:checked, .radio:checked,
-  .step[data-state="complete"] .step-marker, .timeline-item[data-state="current"] .timeline-marker {
+  .timeline-item[data-state="current"] .timeline-marker {
     background: Highlight;
     forced-color-adjust: none;
   }
-  .progress-ring { forced-color-adjust: none; }
-  .step-marker { border: 1px solid CanvasText; }
+  .step-marker, .progress-mark { border: 1px solid CanvasText; }
+  /* The progress family's glyphs are masks painted in a background colour, which forced colours
+     would repaint as the page's own ground. They are drawn in the text colour instead, so a tick,
+     a cross, a dash and a `!` survive on every disc and beside every label. */
+  .step-marker::after, .progress-mark::after, .progress-glyph,
+  .stepper-rail .step[data-state] .step-label::before {
+    background: CanvasText !important;
+    forced-color-adjust: none;
+  }
+  /* Rings, spinners and running marks: the arc in the highlight, the track in grey text. */
+  .progress-ring, .progress-ring-field, .spinner, .progress-mark[data-state="current"] {
+    --progress-fill: Highlight !important;
+    --progress-tone: Highlight !important;
+    --progress-track: GrayText !important;
+    forced-color-adjust: none;
+  }
+  /* A rail and a segmented bar: every segment keeps an edge; done, current and ended ones fill. The
+     words under the rail and the legend's counts were always there. */
+  .stepper-rail .step-marker, .progress-segment, .progress-legend-swatch {
+    border: 1px solid CanvasText;
+    background: Canvas !important;
+    forced-color-adjust: none;
+  }
+  .stepper-rail .step[data-state] .step-marker, .stepper-rail .step[aria-current="step"] .step-marker,
+  .progress-segment[data-state]:not([data-state="queued"]),
+  .progress-legend-swatch[data-state]:not([data-state="queued"]),
+  .progress[data-tone] .progress-bar, .progress-field[data-tone] .progress-bar { background: Highlight !important; }
+  .file-progress { border-color: CanvasText; }
 
   /* Decoration carries no meaning and only adds noise here. */
   .bg-dot-grid, .bg-noise { background-image: none; }
@@ -165,16 +191,21 @@
  * without the sweep across a wide surface that the skeleton and the progress bar rely on. */
 @media (prefers-reduced-motion: reduce) {
   .spinner,
+  .progress-ring-indeterminate::before,
+  .progress-mark[data-state="current"],
   .btn.is-loading::after {
     animation-duration: 1.8s !important;
     animation-iteration-count: infinite !important;
   }
 
-  /* The bar slides across its whole track, which IS a wide-area sweep — so it pulses in place
-     instead. Still moving, still indeterminate, and going nowhere on purpose. */
+  /* The bar slides across its whole track, which IS a wide-area sweep. It used to breathe in place
+     at full width instead, which read as a pulse, not as progress. Now a third of the track
+     appears at the start, then the middle, then the end — it fades out, MOVES WHILE INVISIBLE, and
+     fades in one place further on. Nothing travels across the screen, and it still reads as
+     getting somewhere. */
   .progress-indeterminate .progress-bar {
-    animation: progress-breathe 2.4s var(--ease-in-out) infinite !important;
-    inline-size: 100%;
+    animation: progress-hop 2.4s linear infinite !important;
+    inline-size: calc(100% / 3);
   }
 
   /* A PULSE IS NOT ONE OF THE THREE. It always sits beside words that say the same thing, so it
@@ -191,4 +222,17 @@
      arrive. Nothing here indicates activity — a running tool call says so with a pulse and words. */
   .tool-chip-caret, .layered-graph-node { transition: none; }
 }
-@keyframes progress-breathe { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@keyframes progress-hop {
+  0%      { transform: translateX(0);    opacity: 0; }
+  8%      { opacity: 1; }
+  25%     { opacity: 1; }
+  33.32%  { transform: translateX(0);    opacity: 0; }
+  33.33%  { transform: translateX(100%); opacity: 0; }
+  41%     { opacity: 1; }
+  58%     { opacity: 1; }
+  66.65%  { transform: translateX(100%); opacity: 0; }
+  66.66%  { transform: translateX(200%); opacity: 0; }
+  75%     { opacity: 1; }
+  92%     { opacity: 1; }
+  100%    { transform: translateX(200%); opacity: 0; }
+}

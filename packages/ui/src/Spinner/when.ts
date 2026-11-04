@@ -8,6 +8,7 @@ export const when = [
     use: [
       'A brief wait inside a control or a small region — a button submitting, a panel refreshing.',
       'Decorative by default: the surrounding region carries `aria-busy`; pass `label` only when it stands alone.',
+      'It is the indeterminate ring of the progress family at 16, 24 and 32px — the same track, arc colour and stroke as `ProgressRing`.',
     ],
     not: [
       {
@@ -24,6 +25,11 @@ export const when = [
         when: 'an agent or a run is working on something the reader is watching',
         use: 'Live',
         because: 'live work is drawn where the work is, with a word beside the pulse.',
+      },
+      {
+        when: 'a circular indicator with a known amount done',
+        use: 'Progress',
+        because: '`ProgressRing` is the same ring with a value; the spinner is that ring when nothing can be measured.',
       },
       {
         when: 'a button is submitting',
