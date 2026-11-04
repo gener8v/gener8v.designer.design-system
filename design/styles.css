@@ -920,23 +920,36 @@ button.tool-chip-toggle:hover { border-color: var(--color-neutral-400); }
 .btn-icon { --btn-pad-x: var(--btn-pad-y); inline-size: var(--btn-h); min-inline-size: var(--btn-h); }
 .btn-block { display: flex; width: 100%; }
 
+/* A waiting button keeps its label's width and draws the DS spinner in the
+   label's place: the same track-and-arc ring as `.spinner` (stroke = size / 8,
+   a quarter arc, one turn in 800ms), in the colour the label would have been.
+   It used to be a bordered circle with a gap, which read as a different
+   control from every other spinner in the system. */
 .btn.is-loading { position: relative; color: transparent; pointer-events: none; }
 .btn.is-loading::after {
+  --ring-size: 1.125em;
+  --ring-stroke: max(2px, calc(var(--ring-size) / 8));
   content: "";
   position: absolute;
-  width: 1.1em;
-  height: 1.1em;
-  border: 2px solid currentColor;
-  border-top-color: transparent;
+  inset: 0;
+  margin: auto;
+  inline-size: var(--ring-size);
+  block-size: var(--ring-size);
   border-radius: var(--radius-full);
-  color: inherit;
-  animation: btn-spin 620ms linear infinite;
+  background: conic-gradient(
+    var(--btn-spin, var(--color-neutral-700)) 0 25%,
+    color-mix(in oklab, var(--btn-spin, var(--color-neutral-700)) 25%, transparent) 0
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-stroke) - 1px), black calc(100% - var(--ring-stroke)));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-stroke) - 1px), black calc(100% - var(--ring-stroke)));
+  animation: btn-spin 800ms linear infinite;
 }
-.btn-primary.is-loading::after,
-.btn-destructive.is-loading::after { border-color: #fff; border-top-color: transparent; }
-.btn-secondary.is-loading::after,
-.btn-ghost.is-loading::after { border-color: var(--color-neutral-700); border-top-color: transparent; }
-.btn-subtle.is-loading::after { border-color: var(--color-accent-800); border-top-color: transparent; }
+.btn-primary.is-loading,
+.btn-destructive.is-loading { --btn-spin: #fff; }
+.btn-secondary.is-loading,
+.btn-ghost.is-loading { --btn-spin: var(--color-neutral-700); }
+.btn-subtle.is-loading { --btn-spin: var(--color-accent-800); }
+.btn-link.is-loading { --btn-spin: var(--color-accent-700); }
 
 @keyframes btn-spin { to { transform: rotate(360deg); } }
 

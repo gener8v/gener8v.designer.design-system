@@ -10,7 +10,7 @@ import {
 import type { ComboboxOption } from '../packages/ui/src/index.js';
 
 const OPTIONS: ComboboxOption[] = [
-  { value: 'va', label: 'Commonwealth of Virginia', note: 'Government' },
+  { value: 'va', label: 'Ridgeway Transit Authority', note: 'Government' },
   { value: 'nh', label: 'Northlake Health', note: 'Healthcare' },
 ];
 
