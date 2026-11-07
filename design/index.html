@@ -4,7 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>GENER8V Design System</title>
-<meta name="description" content="Open-source tokens, React components and page templates for AI products in regulated, governed and auditable environments." />
+<meta name="description" content="Open-source tokens, React components and page templates for products in regulated, governed and auditable environments." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400..600&display=swap" />
 <link rel="stylesheet" href="styles.css" />
 <script src="assets/docs.js"></script>
 <style>
@@ -26,81 +29,207 @@
 .doc-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
 @media (max-width: 640px) { .doc-pkgs { grid-template-columns: minmax(0, 1fr); } }
 
+/* Geist across this page, the docs chrome included, so the frame and the page agree. */
+body:has(> main.ov) { font-family: "Geist", var(--font-body); }
+.ov code, .ov pre, .ov-mono { font-family: "Geist Mono", var(--font-mono); }
 html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
-.ov-wrap { max-inline-size: calc(var(--space-4) * 72); margin-inline: 0 auto; padding-inline: var(--space-6); }
+.ov-wrap { position: relative; max-inline-size: calc(var(--space-4) * 76); margin-inline: 0 auto; padding-inline: var(--space-6); }
 @media (min-width: 1280px) { .ov-wrap { margin-inline-start: var(--space-6); } }
-/* THE ATMOSPHERE gener8v.com wears: a light ground washed with soft blue and a little teal. */
+
+/* Square, everywhere this page draws its own surface. */
+.ov .code, .ov-install, .ov-btn, .ov-cell, .ov-frame { border-radius: 0; }
+
+/* --- hero: a frosted sky with the facets showing through ---------------------------------- */
 .ov-hero {
   position: relative;
   overflow: hidden;
-  padding-block: var(--space-20) var(--space-20);
-  background:
-    radial-gradient(60% 70% at 85% 10%, color-mix(in srgb, var(--color-accent-300) 45%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 40% 90%, color-mix(in srgb, var(--color-accent-2-300) 30%, transparent), transparent 70%),
-    linear-gradient(180deg, color-mix(in srgb, var(--color-accent-100) 70%, var(--color-bg)), var(--color-bg));
-  border-block-end: 1px solid var(--color-divider);
+  padding-block: var(--space-24) var(--space-20);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-200) 70%, var(--color-bg)),
+    var(--color-bg) 48%,
+    color-mix(in srgb, var(--color-accent-2-100) 80%, var(--color-bg)));
+  border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
 }
-.ov-hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-12); align-items: center; }
-/* The heavy headline is gener8v.com's, and is this page's alone: the system's own headings stay at 500. */
-.ov-title { font-size: clamp(var(--text-4xl), 5vw, calc(var(--text-4xl) * 1.6)); font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; color: var(--color-neutral-900); }
-.ov-grad { background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-2-700)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.ov-lede { margin-block-start: var(--space-6); font-size: var(--text-xl); line-height: 1.5; color: var(--color-neutral-700); max-inline-size: 34ch; }
+.ov-facets { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; opacity: 0.85; }
+.ov-facets path { stroke: var(--color-accent-300); stroke-opacity: 0.5; stroke-width: 1; }
+.ov-facets .t0 { fill: var(--color-bg); }
+.ov-facets .t1 { fill: var(--color-accent-100); }
+.ov-facets .t2 { fill: var(--color-accent-200); }
+.ov-facets .t3 { fill: var(--color-accent-2-100); }
+.ov-gridlines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-accent-300) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-accent-300) 22%, transparent) 1px, transparent 1px);
+  background-size: var(--space-16) var(--space-16);
+  mask-image: radial-gradient(ellipse 70% 80% at 30% 40%, #000, transparent 75%);
+}
+.ov-hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+.ov-title { font-size: clamp(var(--text-4xl), 5.2vw, calc(var(--text-4xl) * 1.95)); font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: var(--color-neutral-900); }
+.ov-title span { display: block; padding-block-end: 0.08em; }
+.ov-grad { background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-600)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ov-hairline { display: block; block-size: 1px; max-inline-size: calc(var(--space-4) * 36); margin-block: var(--space-8) var(--space-6);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent-600) 60%, transparent), color-mix(in srgb, var(--color-accent-300) 70%, transparent), transparent); }
+.ov-tagline { font-size: var(--text-2xl); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; color: var(--color-neutral-900); max-inline-size: 30ch; }
+.ov-tagline b { font-weight: 600; color: var(--color-accent-700); }
+.ov-lede { margin-block-start: var(--space-4); font-size: var(--text-lg); line-height: 1.6; color: var(--color-neutral-700); max-inline-size: 44ch; }
 .ov-lede strong { color: var(--color-neutral-900); font-weight: 600; }
 .ov-ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-8); }
-.ov-install { display: inline-flex; align-items: center; gap: var(--space-3); margin-block-start: var(--space-6); padding: var(--space-2) var(--space-4); border: 1px solid var(--color-divider); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-bg) 70%, transparent); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-neutral-800); max-inline-size: 100%; overflow-x: auto; white-space: nowrap; }
-.ov-install span { color: var(--color-neutral-600); user-select: none; }
-.ov-specimen { box-shadow: var(--shadow-lg); background: var(--color-bg); }
+.ov-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-block-size: var(--control-h-xl); padding-inline: var(--space-6);
+  font-weight: 600; font-size: var(--text-base); text-decoration: none; border: 1px solid transparent; transition: background-color .15s, border-color .15s, transform .15s; }
+.ov-btn svg { inline-size: 1em; block-size: 1em; transition: transform .15s; }
+.ov-btn:hover svg { transform: translateX(2px); }
+.ov-btn-primary { color: #fff; background: linear-gradient(135deg, var(--color-action), var(--color-action-hover)); box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--color-action) 70%, transparent); }
+.ov-btn-primary:hover { background: var(--color-action-hover); color: #fff; }
+.ov-btn-ghost { color: var(--color-neutral-900); background: color-mix(in srgb, var(--color-bg) 75%, transparent); border-color: color-mix(in srgb, var(--color-accent-300) 80%, transparent); }
+.ov-btn-ghost:hover { background: var(--color-bg); border-color: var(--color-accent-600); color: var(--color-neutral-900); }
+.ov-install { display: inline-flex; align-items: center; gap: var(--space-3); margin-block-start: var(--space-5); padding: var(--space-2) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-accent-300) 70%, transparent); background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  font-size: var(--text-sm); color: var(--color-neutral-800); max-inline-size: 100%; overflow-x: auto; white-space: nowrap; }
+.ov-install span { color: var(--color-accent-700); user-select: none; }
+
+/* The specimen sits in a frosted frame; the panel inside is the real component. */
+.ov-frame { position: relative; padding: var(--space-3); border: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 55%, transparent); backdrop-filter: blur(6px);
+  box-shadow: 0 40px 80px -50px color-mix(in srgb, var(--color-accent-700) 55%, transparent); }
+.ov-frame::before { content: ""; position: absolute; inset-inline: 0; inset-block-start: -1px; block-size: 1px; background: linear-gradient(90deg, transparent, var(--color-accent-600), transparent); }
+.ov-specimen { background: var(--color-bg); }
 .ov-specimen .panel-body { display: grid; gap: var(--space-5); }
 .ov-specimen-actions { display: flex; justify-content: flex-end; gap: var(--space-3); flex-wrap: wrap; }
 .ov-caption { margin-block-start: var(--space-3); font-size: var(--text-xs); color: var(--color-neutral-600); text-align: end; }
-.ov-section { padding-block: var(--space-20) 0; }
-.ov-section h2 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -0.015em; }
-.ov-section-lede { margin-block-start: var(--space-3); color: var(--color-neutral-700); max-inline-size: 60ch; }
-.ov-reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); margin-block-start: var(--space-8); }
-.ov-reason svg { inline-size: var(--space-6); block-size: var(--space-6); color: var(--color-accent-700); }
-.ov-reason .card-title { margin-block-start: var(--space-4); font-size: var(--text-lg); }
-.ov-reason .card-body { margin-block-start: var(--space-2); }
-.ov-start { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
-.ov-browse h3 { font-size: var(--text-xl); margin-block: var(--space-12) var(--space-4); display: flex; align-items: baseline; gap: var(--space-3); }
-.ov-browse h3 .muted { font-size: var(--text-sm); font-weight: 400; }
-.ov-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--space-4); }
-.ov-grid .card-title { font-size: var(--text-base); }
-.ov-grid .card-body { margin-block-start: var(--space-1); font-size: var(--text-sm); }
-.ov-featured { grid-column: span 2; background: color-mix(in srgb, var(--color-accent-100) 55%, var(--color-bg)); }
-.ov-foot { margin-block-start: var(--space-24); padding-block: var(--space-8); border-block-start: 1px solid var(--color-divider); font-size: var(--text-sm); color: var(--color-neutral-600); }
+
+/* --- the figures: drop caps set into their own sentences, on a frosted band ---------------- */
+.ov-figures { position: relative; overflow: hidden; margin-block-start: var(--space-16); border: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
+  background: linear-gradient(135deg, var(--color-accent-100), var(--color-bg) 50%, color-mix(in srgb, var(--color-accent-2-100) 80%, var(--color-bg))); }
+.ov-figures .ov-facets { opacity: 0.7; }
+.ov-figures ul { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ov-figures li { padding: var(--space-8); border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+.ov-figures li:nth-child(odd) { border-inline-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+.ov-figures li:nth-last-child(-n+2) { border-block-end: 0; }
+.ov-figures p { font-size: var(--text-lg); line-height: 1.7; color: var(--color-neutral-600); }
+.ov-figures strong { font-weight: 600; color: var(--color-neutral-900); }
+.ov-cap { float: left; margin-inline-end: var(--space-3); padding-block-start: 0.14em; margin-block-start: calc(-0.14em - var(--space-1)); font-size: calc(var(--text-5xl) * 1.55); font-weight: 700; line-height: 0.72; letter-spacing: -0.04em; }
+
+/* --- sections -------------------------------------------------------------------------- */
+.ov-section { padding-block: var(--space-24) 0; }
+.ov-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--space-6) var(--space-16); align-items: center; margin-block-end: var(--space-10); }
+.ov-section h2 { font-size: var(--text-5xl); font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; color: var(--color-neutral-900); }
+.ov-head p { font-size: var(--text-lg); line-height: 1.6; color: var(--color-neutral-600); }
+
+/* Cells on shared hairlines: the page's one card language. */
+.ov-cells { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 1px;
+  background: color-mix(in srgb, var(--color-neutral-900) 9%, transparent); border: 1px solid color-mix(in srgb, var(--color-neutral-900) 10%, transparent); }
+.ov-cell { position: relative; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); text-decoration: none; color: inherit;
+  background: color-mix(in srgb, var(--color-bg) 92%, var(--color-accent-100)); transition: background-color .2s; }
+.ov-cell::before { content: ""; position: absolute; inset-inline: 0; inset-block-start: 0; block-size: 2px; opacity: 0; transition: opacity .2s;
+  background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-600), transparent); }
+.ov-cell:hover { background: var(--color-bg); }
+.ov-cell:hover::before, .ov-cell:focus-visible::before { opacity: 1; }
+.ov-cell:focus-visible { outline: 2px solid var(--color-accent-600); outline-offset: -2px; }
+.ov-cell-title { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; color: var(--color-neutral-900); }
+.ov-cell-title svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: color-mix(in srgb, var(--color-accent-600) 55%, transparent); transition: transform .2s, color .2s; }
+.ov-cell:hover .ov-cell-title svg { transform: translateX(2px); color: var(--color-accent-600); }
+.ov-cell-body { font-size: var(--text-sm); line-height: 1.6; color: var(--color-neutral-600); }
+.ov-featured { grid-column: span 2; background: linear-gradient(135deg, var(--color-accent-100), var(--color-bg)); }
+
+/* Reasons: the icon sits beside its title as a marker, not above it as a header. */
+.ov-reason { padding: var(--space-8); }
+.ov-reason .ov-cell-title { justify-content: flex-start; font-size: var(--text-xl); }
+.ov-mark { display: inline-grid; place-items: center; inline-size: var(--space-10); block-size: var(--space-10); flex: none;
+  border: 1px solid color-mix(in srgb, var(--color-accent-2-600) 30%, transparent); background: var(--color-bg); color: var(--color-accent-2-700); }
+.ov-mark svg { inline-size: var(--space-5); block-size: var(--space-5); color: inherit; }
+.ov-reason .ov-cell-body { margin-block-start: var(--space-3); font-size: var(--text-base); }
+
+/* Get started */
+.ov-start { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-16); align-items: start; }
+.ov-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.ov-steps > li { display: grid; grid-template-columns: var(--space-10) minmax(0, 1fr); gap: var(--space-5); counter-increment: step; }
+.ov-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-10); block-size: var(--space-10);
+  border: 1px solid color-mix(in srgb, var(--color-accent-600) 35%, transparent); background: var(--color-accent-100); color: var(--color-accent-700); font-family: "Geist Mono", var(--font-mono); font-size: var(--text-sm); font-weight: 600; }
+.ov-steps h3 { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+.ov-steps p { margin-block-start: var(--space-1); color: var(--color-neutral-600); max-inline-size: 60ch; }
+.ov-steps .code { margin-block-start: var(--space-3); }
+.ov-pkgs { list-style: none; margin: 0; padding: 0; border-block-start: 1px solid var(--color-divider); }
+.ov-pkgs li { padding-block: var(--space-4); border-block-end: 1px solid var(--color-divider); }
+.ov-pkgs a { font-family: "Geist Mono", var(--font-mono); font-size: var(--text-sm); font-weight: 500; color: var(--color-accent-700); }
+.ov-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.ov-aside-title { font-size: var(--text-xl); font-weight: 600; margin-block-end: var(--space-4); }
+.ov-note { margin-block-start: var(--space-5); font-size: var(--text-sm); color: var(--color-neutral-600); }
+
+/* Browse */
+.ov-group { margin-block-start: var(--space-16); }
+.ov-group h3 { display: flex; align-items: baseline; gap: var(--space-3); margin-block-end: var(--space-4); font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; }
+.ov-group h3 .ov-mono { font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-600); }
+
+/* The close: the one deep band, which is dark in both themes. */
+.ov-close { position: relative; overflow: hidden; margin-block-start: var(--space-24); padding-block: var(--space-20); }
+.ov-close .ov-gridlines { mask-image: radial-gradient(ellipse 60% 90% at 80% 20%, #000, transparent 75%);
+  background-image: linear-gradient(to right, color-mix(in srgb, #fff 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, #fff 8%, transparent) 1px, transparent 1px); }
+.ov-close::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 90% at 0% 0%, color-mix(in srgb, var(--color-section-ghost) 70%, transparent), transparent 70%); }
+.ov-close .ov-wrap { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-10) var(--space-16); align-items: end; }
+.ov-close h2 { font-size: var(--text-5xl); font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; }
+.ov-close h2 span { color: color-mix(in srgb, #fff 70%, transparent); }
+.ov-close p { margin-block-start: var(--space-5); font-size: var(--text-lg); line-height: 1.6; max-inline-size: 52ch; }
+.ov-close .ov-ctas { margin: 0; justify-content: flex-end; }
+.ov-btn-light { color: var(--color-section); background: #fff; }
+.ov-btn-light:hover { background: color-mix(in srgb, #fff 88%, transparent); color: var(--color-section); }
+.ov-btn-line { color: #fff; border-color: color-mix(in srgb, #fff 40%, transparent); }
+.ov-btn-line:hover { border-color: #fff; color: #fff; background: color-mix(in srgb, #fff 8%, transparent); }
+.ov-foot { padding-block: var(--space-8); font-size: var(--text-sm); color: var(--color-neutral-600); }
 .ov-foot a { color: var(--color-neutral-800); }
+
 @media (max-width: 1180px) {
-  .ov-hero-grid, .ov-start { grid-template-columns: minmax(0, 1fr); }
-  .ov-lede { max-inline-size: 48ch; }
+  .ov-hero-grid, .ov-start, .ov-head, .ov-close .ov-wrap { grid-template-columns: minmax(0, 1fr); }
+  .ov-close .ov-ctas { justify-content: flex-start; }
+  .ov-cells { grid-template-columns: repeat(min(var(--cols), 2), minmax(0, 1fr)); }
 }
-@media (max-width: 1180px) { .ov-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 900px) { .ov-reasons { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .ov-figures ul { grid-template-columns: minmax(0, 1fr); }
+  .ov-figures li:nth-child(odd) { border-inline-end: 0; }
+  .ov-figures li:nth-last-child(2) { border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+  .ov-section h2, .ov-close h2 { font-size: var(--text-4xl); }
+}
 @media (max-width: 560px) {
-  .ov-hero { padding-block: var(--space-12); }
-  .ov-grid { grid-template-columns: minmax(0, 1fr); }
+  .ov-hero { padding-block: var(--space-16) var(--space-12); }
+  .ov-cells { grid-template-columns: minmax(0, 1fr); }
   .ov-featured { grid-column: auto; }
+  .ov-figures li { padding: var(--space-6); }
+  .ov-cap { font-size: calc(var(--text-5xl) * 1.3); }
+  .ov-btn { inline-size: 100%; }
   .ov-specimen .table th, .ov-specimen .table td { padding-inline: var(--space-2); }
-  .ov-install { white-space: normal; border-radius: var(--radius-lg); font-size: var(--text-xs); overflow-x: visible; }
+  .ov-install { white-space: normal; font-size: var(--text-xs); overflow-x: visible; }
 }
+@media (prefers-reduced-motion: reduce) { .ov-btn, .ov-btn svg, .ov-cell, .ov-cell::before, .ov-cell-title svg { transition: none; } }
 
 </style>
 </head>
 <body>
 <main class="ov">
   <section class="ov-hero" aria-labelledby="ov-title">
-    <div class="ov-wrap ov-hero-grid">
-      <div>
-        <h1 class="ov-title" id="ov-title">GENER8V <span class="ov-grad">Design System</span></h1>
-        <p class="ov-lede">Open-source tokens, React components and page templates for AI products in
-          <strong>regulated, governed and auditable</strong> environments.</p>
-        <div class="ov-ctas">
-          <a class="btn btn-primary btn-lg" href="#components">Browse components<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
-          <a class="btn btn-secondary btn-lg" href="get-started.html">Get started</a>
+    <svg class="ov-facets" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <defs><linearGradient id="ov-facet-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.15"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="ov-facet-fade"><rect width="1600" height="900" fill="url(#ov-facet-light)"/></mask></defs>
+      <g mask="url(#ov-facet-fade)"><path class="t3" d="M0.0 0.0 L177.8 0.0 L154.6 157.0 Z" fill-opacity="0.71"/><path class="t0" d="M0.0 0.0 L154.6 157.0 L0.0 180.0 Z" fill-opacity="0.63"/><path class="t0" d="M177.8 0.0 L355.6 0.0 L154.6 157.0 Z" fill-opacity="0.36"/><path class="t1" d="M355.6 0.0 L357.6 146.7 L154.6 157.0 Z" fill-opacity="0.44"/><path class="t2" d="M355.6 0.0 L533.3 0.0 L582.2 140.1 Z" fill-opacity="0.53"/><path class="t3" d="M355.6 0.0 L582.2 140.1 L357.6 146.7 Z" fill-opacity="0.41"/><path class="t1" d="M533.3 0.0 L711.1 0.0 L582.2 140.1 Z" fill-opacity="0.46"/><path class="t1" d="M711.1 0.0 L769.6 226.2 L582.2 140.1 Z" fill-opacity="0.26"/><path class="t0" d="M711.1 0.0 L888.9 0.0 L857.1 230.5 Z" fill-opacity="0.60"/><path class="t1" d="M711.1 0.0 L857.1 230.5 L769.6 226.2 Z" fill-opacity="0.29"/><path class="t0" d="M888.9 0.0 L1066.7 0.0 L857.1 230.5 Z" fill-opacity="0.38"/><path class="t1" d="M1066.7 0.0 L1100.7 160.2 L857.1 230.5 Z" fill-opacity="0.64"/><path class="t2" d="M1066.7 0.0 L1244.4 0.0 L1191.8 211.7 Z" fill-opacity="0.53"/><path class="t0" d="M1066.7 0.0 L1191.8 211.7 L1100.7 160.2 Z" fill-opacity="0.66"/><path class="t1" d="M1244.4 0.0 L1422.2 0.0 L1191.8 211.7 Z" fill-opacity="0.44"/><path class="t3" d="M1422.2 0.0 L1413.8 143.5 L1191.8 211.7 Z" fill-opacity="0.47"/><path class="t1" d="M1422.2 0.0 L1600.0 0.0 L1600.0 180.0 Z" fill-opacity="0.51"/><path class="t1" d="M1422.2 0.0 L1600.0 180.0 L1413.8 143.5 Z" fill-opacity="0.35"/><path class="t1" d="M0.0 180.0 L154.6 157.0 L0.0 360.0 Z" fill-opacity="0.51"/><path class="t2" d="M154.6 157.0 L205.3 385.4 L0.0 360.0 Z" fill-opacity="0.61"/><path class="t3" d="M154.6 157.0 L357.6 146.7 L327.5 307.5 Z" fill-opacity="0.59"/><path class="t1" d="M154.6 157.0 L327.5 307.5 L205.3 385.4 Z" fill-opacity="0.42"/><path class="t3" d="M357.6 146.7 L582.2 140.1 L327.5 307.5 Z" fill-opacity="0.73"/><path class="t1" d="M582.2 140.1 L511.7 395.1 L327.5 307.5 Z" fill-opacity="0.69"/><path class="t2" d="M582.2 140.1 L769.6 226.2 L676.1 337.0 Z" fill-opacity="0.29"/><path class="t1" d="M582.2 140.1 L676.1 337.0 L511.7 395.1 Z" fill-opacity="0.29"/><path class="t0" d="M769.6 226.2 L857.1 230.5 L676.1 337.0 Z" fill-opacity="0.66"/><path class="t2" d="M857.1 230.5 L873.7 311.3 L676.1 337.0 Z" fill-opacity="0.31"/><path class="t0" d="M857.1 230.5 L1100.7 160.2 L1069.3 338.8 Z" fill-opacity="0.69"/><path class="t1" d="M857.1 230.5 L1069.3 338.8 L873.7 311.3 Z" fill-opacity="0.37"/><path class="t1" d="M1100.7 160.2 L1191.8 211.7 L1069.3 338.8 Z" fill-opacity="0.37"/><path class="t2" d="M1191.8 211.7 L1285.6 338.5 L1069.3 338.8 Z" fill-opacity="0.50"/><path class="t1" d="M1191.8 211.7 L1413.8 143.5 L1396.0 330.9 Z" fill-opacity="0.68"/><path class="t3" d="M1191.8 211.7 L1396.0 330.9 L1285.6 338.5 Z" fill-opacity="0.60"/><path class="t3" d="M1413.8 143.5 L1600.0 180.0 L1396.0 330.9 Z" fill-opacity="0.52"/><path class="t2" d="M1600.0 180.0 L1600.0 360.0 L1396.0 330.9 Z" fill-opacity="0.32"/><path class="t1" d="M0.0 360.0 L205.3 385.4 L119.9 584.8 Z" fill-opacity="0.69"/><path class="t2" d="M0.0 360.0 L119.9 584.8 L0.0 540.0 Z" fill-opacity="0.63"/><path class="t0" d="M205.3 385.4 L327.5 307.5 L119.9 584.8 Z" fill-opacity="0.66"/><path class="t0" d="M327.5 307.5 L415.1 581.5 L119.9 584.8 Z" fill-opacity="0.67"/><path class="t2" d="M327.5 307.5 L511.7 395.1 L491.3 526.4 Z" fill-opacity="0.52"/><path class="t2" d="M327.5 307.5 L491.3 526.4 L415.1 581.5 Z" fill-opacity="0.28"/><path class="t2" d="M511.7 395.1 L676.1 337.0 L491.3 526.4 Z" fill-opacity="0.45"/><path class="t1" d="M676.1 337.0 L757.4 486.4 L491.3 526.4 Z" fill-opacity="0.60"/><path class="t2" d="M676.1 337.0 L873.7 311.3 L839.4 524.8 Z" fill-opacity="0.27"/><path class="t3" d="M676.1 337.0 L839.4 524.8 L757.4 486.4 Z" fill-opacity="0.29"/><path class="t2" d="M873.7 311.3 L1069.3 338.8 L839.4 524.8 Z" fill-opacity="0.34"/><path class="t2" d="M1069.3 338.8 L1092.5 498.0 L839.4 524.8 Z" fill-opacity="0.42"/><path class="t3" d="M1069.3 338.8 L1285.6 338.5 L1259.7 522.3 Z" fill-opacity="0.30"/><path class="t2" d="M1069.3 338.8 L1259.7 522.3 L1092.5 498.0 Z" fill-opacity="0.63"/><path class="t1" d="M1285.6 338.5 L1396.0 330.9 L1259.7 522.3 Z" fill-opacity="0.41"/><path class="t3" d="M1396.0 330.9 L1442.3 550.9 L1259.7 522.3 Z" fill-opacity="0.36"/><path class="t2" d="M1396.0 330.9 L1600.0 360.0 L1600.0 540.0 Z" fill-opacity="0.67"/><path class="t1" d="M1396.0 330.9 L1600.0 540.0 L1442.3 550.9 Z" fill-opacity="0.38"/><path class="t0" d="M0.0 540.0 L119.9 584.8 L0.0 720.0 Z" fill-opacity="0.31"/><path class="t0" d="M119.9 584.8 L223.2 716.2 L0.0 720.0 Z" fill-opacity="0.28"/><path class="t0" d="M119.9 584.8 L415.1 581.5 L385.6 701.1 Z" fill-opacity="0.60"/><path class="t3" d="M119.9 584.8 L385.6 701.1 L223.2 716.2 Z" fill-opacity="0.30"/><path class="t3" d="M415.1 581.5 L491.3 526.4 L385.6 701.1 Z" fill-opacity="0.51"/><path class="t0" d="M491.3 526.4 L477.7 695.9 L385.6 701.1 Z" fill-opacity="0.69"/><path class="t3" d="M491.3 526.4 L757.4 486.4 L694.6 745.7 Z" fill-opacity="0.49"/><path class="t2" d="M491.3 526.4 L694.6 745.7 L477.7 695.9 Z" fill-opacity="0.73"/><path class="t1" d="M757.4 486.4 L839.4 524.8 L694.6 745.7 Z" fill-opacity="0.50"/><path class="t2" d="M839.4 524.8 L913.4 670.4 L694.6 745.7 Z" fill-opacity="0.65"/><path class="t0" d="M839.4 524.8 L1092.5 498.0 L1098.4 767.3 Z" fill-opacity="0.46"/><path class="t3" d="M839.4 524.8 L1098.4 767.3 L913.4 670.4 Z" fill-opacity="0.42"/><path class="t0" d="M1092.5 498.0 L1259.7 522.3 L1098.4 767.3 Z" fill-opacity="0.49"/><path class="t2" d="M1259.7 522.3 L1295.7 743.7 L1098.4 767.3 Z" fill-opacity="0.55"/><path class="t1" d="M1259.7 522.3 L1442.3 550.9 L1431.1 753.7 Z" fill-opacity="0.42"/><path class="t2" d="M1259.7 522.3 L1431.1 753.7 L1295.7 743.7 Z" fill-opacity="0.57"/><path class="t2" d="M1442.3 550.9 L1600.0 540.0 L1431.1 753.7 Z" fill-opacity="0.53"/><path class="t3" d="M1600.0 540.0 L1600.0 720.0 L1431.1 753.7 Z" fill-opacity="0.73"/><path class="t0" d="M0.0 720.0 L223.2 716.2 L177.8 900.0 Z" fill-opacity="0.38"/><path class="t1" d="M0.0 720.0 L177.8 900.0 L0.0 900.0 Z" fill-opacity="0.74"/><path class="t0" d="M223.2 716.2 L385.6 701.1 L177.8 900.0 Z" fill-opacity="0.47"/><path class="t3" d="M385.6 701.1 L355.6 900.0 L177.8 900.0 Z" fill-opacity="0.69"/><path class="t0" d="M385.6 701.1 L477.7 695.9 L533.3 900.0 Z" fill-opacity="0.29"/><path class="t3" d="M385.6 701.1 L533.3 900.0 L355.6 900.0 Z" fill-opacity="0.33"/><path class="t2" d="M477.7 695.9 L694.6 745.7 L533.3 900.0 Z" fill-opacity="0.58"/><path class="t3" d="M694.6 745.7 L711.1 900.0 L533.3 900.0 Z" fill-opacity="0.68"/><path class="t2" d="M694.6 745.7 L913.4 670.4 L888.9 900.0 Z" fill-opacity="0.49"/><path class="t1" d="M694.6 745.7 L888.9 900.0 L711.1 900.0 Z" fill-opacity="0.26"/><path class="t0" d="M913.4 670.4 L1098.4 767.3 L888.9 900.0 Z" fill-opacity="0.37"/><path class="t3" d="M1098.4 767.3 L1066.7 900.0 L888.9 900.0 Z" fill-opacity="0.33"/><path class="t3" d="M1098.4 767.3 L1295.7 743.7 L1244.4 900.0 Z" fill-opacity="0.33"/><path class="t0" d="M1098.4 767.3 L1244.4 900.0 L1066.7 900.0 Z" fill-opacity="0.65"/><path class="t2" d="M1295.7 743.7 L1431.1 753.7 L1244.4 900.0 Z" fill-opacity="0.60"/><path class="t2" d="M1431.1 753.7 L1422.2 900.0 L1244.4 900.0 Z" fill-opacity="0.69"/><path class="t1" d="M1431.1 753.7 L1600.0 720.0 L1600.0 900.0 Z" fill-opacity="0.57"/><path class="t2" d="M1431.1 753.7 L1600.0 900.0 L1422.2 900.0 Z" fill-opacity="0.68"/></g>
+    </svg>
+    <div class="ov-gridlines" aria-hidden="true"></div>
+    <div class="ov-wrap">
+      <div class="ov-hero-grid">
+        <div>
+          <h1 class="ov-title" id="ov-title">GENER8V <span class="ov-grad">Design System</span></h1>
+          <span class="ov-hairline" aria-hidden="true"></span>
+          <p class="ov-tagline">Interfaces you can <b>rely on</b>, <b>audit</b> and <b>ship</b>.</p>
+          <p class="ov-lede">Open-source tokens, React components and page templates for products in
+            <strong>regulated, governed and auditable</strong> environments.</p>
+          <div class="ov-ctas">
+            <a class="ov-btn ov-btn-primary" href="#components">Browse components<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a>
+            <a class="ov-btn ov-btn-ghost" href="get-started.html">Get started</a>
+          </div>
+          <p class="ov-install ov-mono"><span aria-hidden="true">$</span><code>npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></p>
         </div>
-        <p class="ov-install"><span aria-hidden="true">$</span><code>npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></p>
-      </div>
-      <figure>
-        <div class="panel ov-specimen" inert>
+        <figure>
+          <div class="ov-frame">
+            <div class="panel ov-specimen" inert>
         <div class="panel-header">
           <span class="panel-title">Model release 4.2 — review</span>
           <span class="tag tag-warning tag-dot">Awaiting sign-off</span>
@@ -131,247 +260,282 @@ html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
           </div>
         </div>
       </div>
-        <figcaption class="ov-caption">Rendered live with the system's own classes — nothing on this panel is a picture.</figcaption>
-      </figure>
+          </div>
+          <figcaption class="ov-caption">Rendered live with the system's own classes — nothing on this panel is a picture.</figcaption>
+        </figure>
+      </div>
+
+      <section class="ov-figures" aria-label="The system in numbers">
+        <svg class="ov-facets" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <defs><linearGradient id="ov-facet-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.15"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="ov-facet-fade"><rect width="1600" height="900" fill="url(#ov-facet-light)"/></mask></defs>
+      <g mask="url(#ov-facet-fade)"><path class="t3" d="M0.0 0.0 L177.8 0.0 L154.6 157.0 Z" fill-opacity="0.71"/><path class="t0" d="M0.0 0.0 L154.6 157.0 L0.0 180.0 Z" fill-opacity="0.63"/><path class="t0" d="M177.8 0.0 L355.6 0.0 L154.6 157.0 Z" fill-opacity="0.36"/><path class="t1" d="M355.6 0.0 L357.6 146.7 L154.6 157.0 Z" fill-opacity="0.44"/><path class="t2" d="M355.6 0.0 L533.3 0.0 L582.2 140.1 Z" fill-opacity="0.53"/><path class="t3" d="M355.6 0.0 L582.2 140.1 L357.6 146.7 Z" fill-opacity="0.41"/><path class="t1" d="M533.3 0.0 L711.1 0.0 L582.2 140.1 Z" fill-opacity="0.46"/><path class="t1" d="M711.1 0.0 L769.6 226.2 L582.2 140.1 Z" fill-opacity="0.26"/><path class="t0" d="M711.1 0.0 L888.9 0.0 L857.1 230.5 Z" fill-opacity="0.60"/><path class="t1" d="M711.1 0.0 L857.1 230.5 L769.6 226.2 Z" fill-opacity="0.29"/><path class="t0" d="M888.9 0.0 L1066.7 0.0 L857.1 230.5 Z" fill-opacity="0.38"/><path class="t1" d="M1066.7 0.0 L1100.7 160.2 L857.1 230.5 Z" fill-opacity="0.64"/><path class="t2" d="M1066.7 0.0 L1244.4 0.0 L1191.8 211.7 Z" fill-opacity="0.53"/><path class="t0" d="M1066.7 0.0 L1191.8 211.7 L1100.7 160.2 Z" fill-opacity="0.66"/><path class="t1" d="M1244.4 0.0 L1422.2 0.0 L1191.8 211.7 Z" fill-opacity="0.44"/><path class="t3" d="M1422.2 0.0 L1413.8 143.5 L1191.8 211.7 Z" fill-opacity="0.47"/><path class="t1" d="M1422.2 0.0 L1600.0 0.0 L1600.0 180.0 Z" fill-opacity="0.51"/><path class="t1" d="M1422.2 0.0 L1600.0 180.0 L1413.8 143.5 Z" fill-opacity="0.35"/><path class="t1" d="M0.0 180.0 L154.6 157.0 L0.0 360.0 Z" fill-opacity="0.51"/><path class="t2" d="M154.6 157.0 L205.3 385.4 L0.0 360.0 Z" fill-opacity="0.61"/><path class="t3" d="M154.6 157.0 L357.6 146.7 L327.5 307.5 Z" fill-opacity="0.59"/><path class="t1" d="M154.6 157.0 L327.5 307.5 L205.3 385.4 Z" fill-opacity="0.42"/><path class="t3" d="M357.6 146.7 L582.2 140.1 L327.5 307.5 Z" fill-opacity="0.73"/><path class="t1" d="M582.2 140.1 L511.7 395.1 L327.5 307.5 Z" fill-opacity="0.69"/><path class="t2" d="M582.2 140.1 L769.6 226.2 L676.1 337.0 Z" fill-opacity="0.29"/><path class="t1" d="M582.2 140.1 L676.1 337.0 L511.7 395.1 Z" fill-opacity="0.29"/><path class="t0" d="M769.6 226.2 L857.1 230.5 L676.1 337.0 Z" fill-opacity="0.66"/><path class="t2" d="M857.1 230.5 L873.7 311.3 L676.1 337.0 Z" fill-opacity="0.31"/><path class="t0" d="M857.1 230.5 L1100.7 160.2 L1069.3 338.8 Z" fill-opacity="0.69"/><path class="t1" d="M857.1 230.5 L1069.3 338.8 L873.7 311.3 Z" fill-opacity="0.37"/><path class="t1" d="M1100.7 160.2 L1191.8 211.7 L1069.3 338.8 Z" fill-opacity="0.37"/><path class="t2" d="M1191.8 211.7 L1285.6 338.5 L1069.3 338.8 Z" fill-opacity="0.50"/><path class="t1" d="M1191.8 211.7 L1413.8 143.5 L1396.0 330.9 Z" fill-opacity="0.68"/><path class="t3" d="M1191.8 211.7 L1396.0 330.9 L1285.6 338.5 Z" fill-opacity="0.60"/><path class="t3" d="M1413.8 143.5 L1600.0 180.0 L1396.0 330.9 Z" fill-opacity="0.52"/><path class="t2" d="M1600.0 180.0 L1600.0 360.0 L1396.0 330.9 Z" fill-opacity="0.32"/><path class="t1" d="M0.0 360.0 L205.3 385.4 L119.9 584.8 Z" fill-opacity="0.69"/><path class="t2" d="M0.0 360.0 L119.9 584.8 L0.0 540.0 Z" fill-opacity="0.63"/><path class="t0" d="M205.3 385.4 L327.5 307.5 L119.9 584.8 Z" fill-opacity="0.66"/><path class="t0" d="M327.5 307.5 L415.1 581.5 L119.9 584.8 Z" fill-opacity="0.67"/><path class="t2" d="M327.5 307.5 L511.7 395.1 L491.3 526.4 Z" fill-opacity="0.52"/><path class="t2" d="M327.5 307.5 L491.3 526.4 L415.1 581.5 Z" fill-opacity="0.28"/><path class="t2" d="M511.7 395.1 L676.1 337.0 L491.3 526.4 Z" fill-opacity="0.45"/><path class="t1" d="M676.1 337.0 L757.4 486.4 L491.3 526.4 Z" fill-opacity="0.60"/><path class="t2" d="M676.1 337.0 L873.7 311.3 L839.4 524.8 Z" fill-opacity="0.27"/><path class="t3" d="M676.1 337.0 L839.4 524.8 L757.4 486.4 Z" fill-opacity="0.29"/><path class="t2" d="M873.7 311.3 L1069.3 338.8 L839.4 524.8 Z" fill-opacity="0.34"/><path class="t2" d="M1069.3 338.8 L1092.5 498.0 L839.4 524.8 Z" fill-opacity="0.42"/><path class="t3" d="M1069.3 338.8 L1285.6 338.5 L1259.7 522.3 Z" fill-opacity="0.30"/><path class="t2" d="M1069.3 338.8 L1259.7 522.3 L1092.5 498.0 Z" fill-opacity="0.63"/><path class="t1" d="M1285.6 338.5 L1396.0 330.9 L1259.7 522.3 Z" fill-opacity="0.41"/><path class="t3" d="M1396.0 330.9 L1442.3 550.9 L1259.7 522.3 Z" fill-opacity="0.36"/><path class="t2" d="M1396.0 330.9 L1600.0 360.0 L1600.0 540.0 Z" fill-opacity="0.67"/><path class="t1" d="M1396.0 330.9 L1600.0 540.0 L1442.3 550.9 Z" fill-opacity="0.38"/><path class="t0" d="M0.0 540.0 L119.9 584.8 L0.0 720.0 Z" fill-opacity="0.31"/><path class="t0" d="M119.9 584.8 L223.2 716.2 L0.0 720.0 Z" fill-opacity="0.28"/><path class="t0" d="M119.9 584.8 L415.1 581.5 L385.6 701.1 Z" fill-opacity="0.60"/><path class="t3" d="M119.9 584.8 L385.6 701.1 L223.2 716.2 Z" fill-opacity="0.30"/><path class="t3" d="M415.1 581.5 L491.3 526.4 L385.6 701.1 Z" fill-opacity="0.51"/><path class="t0" d="M491.3 526.4 L477.7 695.9 L385.6 701.1 Z" fill-opacity="0.69"/><path class="t3" d="M491.3 526.4 L757.4 486.4 L694.6 745.7 Z" fill-opacity="0.49"/><path class="t2" d="M491.3 526.4 L694.6 745.7 L477.7 695.9 Z" fill-opacity="0.73"/><path class="t1" d="M757.4 486.4 L839.4 524.8 L694.6 745.7 Z" fill-opacity="0.50"/><path class="t2" d="M839.4 524.8 L913.4 670.4 L694.6 745.7 Z" fill-opacity="0.65"/><path class="t0" d="M839.4 524.8 L1092.5 498.0 L1098.4 767.3 Z" fill-opacity="0.46"/><path class="t3" d="M839.4 524.8 L1098.4 767.3 L913.4 670.4 Z" fill-opacity="0.42"/><path class="t0" d="M1092.5 498.0 L1259.7 522.3 L1098.4 767.3 Z" fill-opacity="0.49"/><path class="t2" d="M1259.7 522.3 L1295.7 743.7 L1098.4 767.3 Z" fill-opacity="0.55"/><path class="t1" d="M1259.7 522.3 L1442.3 550.9 L1431.1 753.7 Z" fill-opacity="0.42"/><path class="t2" d="M1259.7 522.3 L1431.1 753.7 L1295.7 743.7 Z" fill-opacity="0.57"/><path class="t2" d="M1442.3 550.9 L1600.0 540.0 L1431.1 753.7 Z" fill-opacity="0.53"/><path class="t3" d="M1600.0 540.0 L1600.0 720.0 L1431.1 753.7 Z" fill-opacity="0.73"/><path class="t0" d="M0.0 720.0 L223.2 716.2 L177.8 900.0 Z" fill-opacity="0.38"/><path class="t1" d="M0.0 720.0 L177.8 900.0 L0.0 900.0 Z" fill-opacity="0.74"/><path class="t0" d="M223.2 716.2 L385.6 701.1 L177.8 900.0 Z" fill-opacity="0.47"/><path class="t3" d="M385.6 701.1 L355.6 900.0 L177.8 900.0 Z" fill-opacity="0.69"/><path class="t0" d="M385.6 701.1 L477.7 695.9 L533.3 900.0 Z" fill-opacity="0.29"/><path class="t3" d="M385.6 701.1 L533.3 900.0 L355.6 900.0 Z" fill-opacity="0.33"/><path class="t2" d="M477.7 695.9 L694.6 745.7 L533.3 900.0 Z" fill-opacity="0.58"/><path class="t3" d="M694.6 745.7 L711.1 900.0 L533.3 900.0 Z" fill-opacity="0.68"/><path class="t2" d="M694.6 745.7 L913.4 670.4 L888.9 900.0 Z" fill-opacity="0.49"/><path class="t1" d="M694.6 745.7 L888.9 900.0 L711.1 900.0 Z" fill-opacity="0.26"/><path class="t0" d="M913.4 670.4 L1098.4 767.3 L888.9 900.0 Z" fill-opacity="0.37"/><path class="t3" d="M1098.4 767.3 L1066.7 900.0 L888.9 900.0 Z" fill-opacity="0.33"/><path class="t3" d="M1098.4 767.3 L1295.7 743.7 L1244.4 900.0 Z" fill-opacity="0.33"/><path class="t0" d="M1098.4 767.3 L1244.4 900.0 L1066.7 900.0 Z" fill-opacity="0.65"/><path class="t2" d="M1295.7 743.7 L1431.1 753.7 L1244.4 900.0 Z" fill-opacity="0.60"/><path class="t2" d="M1431.1 753.7 L1422.2 900.0 L1244.4 900.0 Z" fill-opacity="0.69"/><path class="t1" d="M1431.1 753.7 L1600.0 720.0 L1600.0 900.0 Z" fill-opacity="0.57"/><path class="t2" d="M1431.1 753.7 L1600.0 900.0 L1422.2 900.0 Z" fill-opacity="0.68"/></g>
+    </svg>
+        <ul>
+          <li><p><span class="ov-cap ov-grad">20</span><strong>components</strong> rendered from one set of class names — copy the HTML, or import the React.</p></li>
+          <li><p><span class="ov-cap ov-grad">7</span><strong>templates</strong> to start a screen from: an application shell, a landing page, a deck and worked flows.</p></li>
+          <li><p><span class="ov-cap ov-grad">AA</span><strong>contrast on every text pair,</strong> measured in light and in dark. CI fails the build if one slips.</p></li>
+          <li><p><span class="ov-cap ov-grad">4</span><strong>packages, one version,</strong> public on npm under MIT. No token, no account.</p></li>
+        </ul>
+      </section>
     </div>
   </section>
 
   <section class="ov-section" aria-labelledby="ov-why">
     <div class="ov-wrap">
-      <span class="doc-rule" aria-hidden="true"></span>
-      <h2 id="ov-why">Why this system</h2>
-      <div class="ov-reasons">
-        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg>
-          <p class="card-title">Accessible by default</p>
-          <p class="card-body">Every text pair is measured for contrast in light and dark, and the components run under axe — both gate CI, so a regression fails the build rather than reaching a user.</p>
+      <div class="ov-head">
+        <h2 id="ov-why">Built to be <span class="ov-grad">relied on.</span></h2>
+        <p>Every rule is checked rather than assumed — so a product built on it inherits the checks, not just the look.</p>
+      </div>
+      <div class="ov-cells" style="--cols:3">
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/></svg></span>Accessible by default</p>
+          <p class="ov-cell-body">Every text pair is measured for contrast in light and dark, and the components run under axe — both gate CI, so a regression fails the build rather than reaching a user.</p>
         </div>
-        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg>
-          <p class="card-title">One token source</p>
-          <p class="card-body">Colour, type, space and motion are defined once and emitted as CSS variables, TypeScript, a Tailwind preset and DTCG for design tools.</p>
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M230.91,172A8,8,0,0,1,228,182.91l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,36,169.09l92,53.65,92-53.65A8,8,0,0,1,230.91,172ZM220,121.09l-92,53.65L36,121.09A8,8,0,0,0,28,134.91l96,56a8,8,0,0,0,8.06,0l96-56A8,8,0,1,0,220,121.09ZM24,80a8,8,0,0,1,4-6.91l96-56a8,8,0,0,1,8.06,0l96,56a8,8,0,0,1,0,13.82l-96,56a8,8,0,0,1-8.06,0l-96-56A8,8,0,0,1,24,80Zm23.88,0L128,126.74,208.12,80,128,33.26Z"/></svg></span>One token source</p>
+          <p class="ov-cell-body">Colour, type, space and motion are defined once and emitted as CSS variables, TypeScript, a Tailwind preset and DTCG for design tools.</p>
         </div>
-        <div class="card ov-reason"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/></svg>
-          <p class="card-title">Built for AI-assisted delivery</p>
-          <p class="card-body">A Claude Code plugin teaches the rules and the class names, and a which-component-for-which-job guide says what to reach for — and what not to.</p>
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark"><svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/></svg></span>Built for AI-assisted delivery</p>
+          <p class="ov-cell-body">A Claude Code plugin teaches the rules and the class names, and a which-component-for-which-job guide says what to reach for — and what not to.</p>
         </div>
       </div>
     </div>
   </section>
 
   <section class="ov-section" aria-labelledby="ov-start">
-    <div class="ov-wrap ov-start">
-      <div>
-        <span class="doc-rule" aria-hidden="true"></span>
-        <h2 id="ov-start">Get started</h2>
-        <ol class="doc-steps">
-          <li><div><h3>Install</h3><p>Public on npm under MIT. No token, no account.</p>
-            <pre class="code"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre></div></li>
-          <li><div><h3>Import</h3><p>One stylesheet first, then the components.</p>
-            <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';
-import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
-          <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
-            <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
-        </ol>
-        <p style="margin-block-start:var(--space-8)"><a class="btn btn-secondary" href="get-started.html">The full guide<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
-      </div>
-      <div>
-        <h3 style="font-size:var(--text-lg)">Packages</h3>
-        <ul class="doc-pkgs" style="grid-template-columns:minmax(0,1fr)">
-          <li><a href="https://www.npmjs.com/package/@gener8v/ui">@gener8v/ui</a><p>React components that render the same class names as the HTML.</p></li>
-          <li><a href="https://www.npmjs.com/package/@gener8v/tokens">@gener8v/tokens</a><p>One token source: CSS variables, TypeScript and DTCG.</p></li>
-          <li><a href="https://www.npmjs.com/package/@gener8v/tailwind-preset">@gener8v/tailwind-preset</a><p>A Tailwind v4 theme over the same tokens.</p></li>
-          <li><a href="https://www.npmjs.com/package/@gener8v/icons">@gener8v/icons</a><p>The icon subset the system uses, tree-shakeable.</p></li>
-        </ul>
-        <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">Source, issues and releases on
-          <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>. Open source under the <a href="https://github.com/gener8v/gener8v.designer.design-system/blob/main/LICENSE">MIT licence</a>.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="ov-section ov-browse" id="browse" aria-labelledby="ov-browse">
     <div class="ov-wrap">
-      <span class="doc-rule" aria-hidden="true"></span>
-      <h2 id="ov-browse">Browse</h2>
-      <p class="ov-section-lede">Every page shows the real markup — view the source and copy it. The React components in <code>@gener8v/ui</code> render the same class names.</p>
-
-      <h3 id="foundations">Foundations <span class="muted">6</span></h3>
-      <div class="ov-grid" style="--cols:3">
-  <a class="card card-interactive card-pad-sm" href="foundations/color.html">
-    <p class="card-title">Color</p>
-    <p class="card-body">Six roles, two working ramps, and status held to five steps — generated in OKLCH</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/type.html">
-    <p class="card-title">Typography</p>
-    <p class="card-body">Inter at 500 for headings over Inter for body, with IBM Plex Mono as the technical voice</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/layout.html">
-    <p class="card-title">Spacing &amp; elevation</p>
-    <p class="card-body">A 4px spacing scale, 6px radius, and three soft elevation steps tuned for a light ground</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/icons.html">
-    <p class="card-title">Icons</p>
-    <p class="card-body">Phosphor, inline SVG on currentColor, sized in em so they track the type</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/image.html">
-    <p class="card-title">Imagery</p>
-    <p class="card-body">Figures sit on the ground with a hairline and a radius; atmosphere comes from dot grid and grain</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="foundations/language.html">
-    <p class="card-title">Product language</p>
-    <p class="card-body">The grammatical form each surface takes, and the check that holds it</p>
-  </a></div>
-
-      <h3 id="components">Components <span class="muted">20</span></h3>
-      <div class="ov-grid" style="--cols:4">
-  <a class="card card-interactive card-pad-sm" href="components/inputs.html">
-    <p class="card-title">Advanced inputs</p>
-    <p class="card-body">Combobox, select menu, slider, file drop and calendar — native controls wherever one exists</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/agent.html">
-    <p class="card-title">Agent work</p>
-    <p class="card-body">Tool chips and confirm cards — what an agent did, and the change it wants a person to answer</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/buttons.html">
-    <p class="card-title">Buttons</p>
-    <p class="card-body">Six variants, five sizes, icon and loading states — solid primary on a near-white ground</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/cards.html">
-    <p class="card-title">Cards &amp; tags</p>
-    <p class="card-body">Hairline surfaces with a mono kicker; tags carry status, never decoration</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/charts.html">
-    <p class="card-title">Charts</p>
-    <p class="card-body">Bar, stacked, line and sparkline — palette validated for colour-blind separation, table view always available</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/command.html">
-    <p class="card-title">Command, tree &amp; code</p>
-    <p class="card-body">Command palette, hierarchy tree and code block — all keyboard-first</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/coverage.html">
-    <p class="card-title">Coverage graph</p>
-    <p class="card-body">Layers read left to right — requirements by capability, milestones in sequence, where the sequence ends — with a line for everything covered</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/data.html">
-    <p class="card-title">Data display</p>
-    <p class="card-body">Stats, meters, description lists and avatars — tabular figures throughout</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/library.html">
-    <p class="card-title">Document library</p>
-    <p class="card-body">Browsing MD, PDF, XLSX and CSV — list, grid and preview panes</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/feedback.html">
-    <p class="card-title">Feedback</p>
-    <p class="card-body">Dialog, alerts, toast, tooltip and callout — one tone vocabulary shared with states</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/flow.html">
-    <p class="card-title">Flow controls</p>
-    <p class="card-body">Stepper, progress, timeline, pagination and skeletons — the parts a flow is built from</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/forms.html">
-    <p class="card-title">Forms</p>
-    <p class="card-body">Native controls on the shared control-height scale, so fields and buttons line up</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/integrations.html">
-    <p class="card-title">Integrations &amp; keys</p>
-    <p class="card-body">Connections, masked credentials, API key scopes and event rules</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/graph.html">
-    <p class="card-title">Knowledge graph</p>
-    <p class="card-body">Canvas-rendered, Barnes-Hut layout — 1,000 nodes at 0.8ms per tick; radius is sqrt(degree)</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/live.html">
-    <p class="card-title">Live activity</p>
-    <p class="card-body">Pulse, lanes, a row's progress and a section being written — work happening now, drawn where the work is</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/disclosure.html">
-    <p class="card-title">Menu &amp; disclosure</p>
-    <p class="card-body">Dropdown menu, accordion and segmented control — open state carried by aria-expanded</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/navigation.html">
-    <p class="card-title">Navigation</p>
-    <p class="card-body">Header, sidebar, tabs, breadcrumbs and the hamburger — active state keys off aria-current</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/reading.html">
-    <p class="card-title">Reading and review</p>
-    <p class="card-body">Contents with review marks, citations and their source card, a drawer that steps through sources, and keys</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/states.html">
-    <p class="card-title">States</p>
-    <p class="card-body">The six states every flow passes through — most systems ship only the first</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="components/table.html">
-    <p class="card-title">Table</p>
-    <p class="card-body">Hairline rules, mono headers, tabular figures — sort state carried by aria-sort</p>
-  </a></div>
-
-      <h3 id="templates">Templates <span class="muted">7 · open full screen</span></h3>
-      <div class="ov-grid" style="--cols:4">
-  <a class="card card-interactive card-pad-sm ov-featured" href="templates/app-shell/index.html">
-    <p class="card-title">Application shell</p>
-    <p class="card-body">Header, rail, breadcrumbs, stat row and a data panel — the layout every client app starts from</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/landing/index.html">
-    <p class="card-title">Landing page</p>
-    <p class="card-body">Hero, the one saturated stat band, feature cards and a close — the marketing voice</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/deck/index.html">
-    <p class="card-title">Presentation deck</p>
-    <p class="card-body">Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/intake/index.html">
-    <p class="card-title">Engagement intake</p>
-    <p class="card-body">The flow shell as a working four-step journey, with the vertical rail and a persistent footer</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/purchase/index.html">
-    <p class="card-title">Purchase a product</p>
-    <p class="card-body">Four-step buy flow — basket with quantity steppers, delivery radio cards, sticky order summary</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/work-item-create/index.html">
-    <p class="card-title">Create a work item</p>
-    <p class="card-body">Describe, label and attach — token input, segmented type, combobox owner, evidence drop</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="templates/work-item-close/index.html">
-    <p class="card-title">Close a work item</p>
-    <p class="card-body">Acceptance checklist, resolution outcome, evidence, activity thread and an irreversible confirm</p>
-  </a></div>
-
-      <h3 id="guidance">Guidance <span class="muted">which component for which job</span></h3>
-      <div class="ov-grid" style="--cols:4">
-  <a class="card card-interactive card-pad-sm" href="guidance/screens.html">
-    <p class="card-title">Screens</p>
-    <p class="card-body">Which component for a whole page, a shell, or the structure a page sits in</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/overlays.html">
-    <p class="card-title">Overlays</p>
-    <p class="card-body">Which component for something that floats above the page — a modal, a side panel, a hint, a preview</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/status-and-feedback.html">
-    <p class="card-title">Status and feedback</p>
-    <p class="card-body">Which component for telling someone what happened, what state a thing is in, or that it is loading</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/navigation.html">
-    <p class="card-title">Navigation</p>
-    <p class="card-body">Which component for moving between places, switching views, or narrowing what a list shows</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/data.html">
-    <p class="card-title">Data</p>
-    <p class="card-body">Which component for figures, tables, charts, lists of records, or history</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/input.html">
-    <p class="card-title">Input</p>
-    <p class="card-body">Which component for an action someone presses or a value someone enters or picks</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/reading.html">
-    <p class="card-title">Reading</p>
-    <p class="card-body">Which component for a document, prose, code, sources or type someone reads</p>
-  </a>
-  <a class="card card-interactive card-pad-sm" href="guidance/agents-and-live-work.html">
-    <p class="card-title">Agents and live work</p>
-    <p class="card-body">Which component for a conversation with an agent, or work that is running right now</p>
-  </a></div>
-
-      <footer class="ov-foot">GENER8V design system · <a href="https://www.gener8v.com/">gener8v.com</a> · <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a> · MIT</footer>
+      <div class="ov-head">
+        <h2 id="ov-start">Three steps <span class="ov-grad">to the first screen.</span></h2>
+        <p>Install, import one stylesheet, and teach Claude Code the rules. Then start from a template rather than a blank file.</p>
+      </div>
+      <div class="ov-start">
+        <div>
+          <ol class="ov-steps">
+            <li><div><h3>Install</h3><p>Public on npm under MIT. No token, no account.</p>
+              <pre class="code"><code data-language="sh">npm i @gener8v/ui @gener8v/tokens @gener8v/icons</code></pre></div></li>
+            <li><div><h3>Import</h3><p>One stylesheet first, then the components.</p>
+              <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';
+import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
+            <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
+              <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
+          </ol>
+          <p style="margin-block-start:var(--space-8)"><a class="ov-btn ov-btn-ghost" href="get-started.html">The full guide<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></a></p>
+        </div>
+        <div>
+          <h3 class="ov-aside-title">Packages</h3>
+          <ul class="ov-pkgs">
+            <li><a href="https://www.npmjs.com/package/@gener8v/ui">@gener8v/ui</a><p>React components that render the same class names as the HTML.</p></li>
+            <li><a href="https://www.npmjs.com/package/@gener8v/tokens">@gener8v/tokens</a><p>One token source: CSS variables, TypeScript and DTCG.</p></li>
+            <li><a href="https://www.npmjs.com/package/@gener8v/tailwind-preset">@gener8v/tailwind-preset</a><p>A Tailwind v4 theme over the same tokens.</p></li>
+            <li><a href="https://www.npmjs.com/package/@gener8v/icons">@gener8v/icons</a><p>The icon subset the system uses, tree-shakeable.</p></li>
+          </ul>
+          <p class="ov-note">Source, issues and releases on <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a>. Open source under the <a href="https://github.com/gener8v/gener8v.designer.design-system/blob/main/LICENSE">MIT licence</a>.</p>
+        </div>
+      </div>
     </div>
   </section>
+
+  <section class="ov-section" id="browse" aria-labelledby="ov-browse">
+    <div class="ov-wrap">
+      <div class="ov-head">
+        <h2 id="ov-browse">Everything, <span class="ov-grad">in plain markup.</span></h2>
+        <p>Every page shows the real markup — view the source and copy it. The React components in <code>@gener8v/ui</code> render the same class names.</p>
+      </div>
+
+      <div class="ov-group"><h3 id="foundations">Foundations <span class="ov-mono">6</span></h3>
+      <div class="ov-cells" style="--cols:3">
+  <a class="ov-cell" href="foundations/color.html">
+    <span class="ov-cell-title">Color<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Six roles, two working ramps, and status held to five steps — generated in OKLCH</span>
+  </a>
+  <a class="ov-cell" href="foundations/type.html">
+    <span class="ov-cell-title">Typography<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Inter at 500 for headings over Inter for body, with IBM Plex Mono as the technical voice</span>
+  </a>
+  <a class="ov-cell" href="foundations/layout.html">
+    <span class="ov-cell-title">Spacing &amp; elevation<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">A 4px spacing scale, 6px radius, and three soft elevation steps tuned for a light ground</span>
+  </a>
+  <a class="ov-cell" href="foundations/icons.html">
+    <span class="ov-cell-title">Icons<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Phosphor, inline SVG on currentColor, sized in em so they track the type</span>
+  </a>
+  <a class="ov-cell" href="foundations/image.html">
+    <span class="ov-cell-title">Imagery<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Figures sit on the ground with a hairline and a radius; atmosphere comes from dot grid and grain</span>
+  </a>
+  <a class="ov-cell" href="foundations/language.html">
+    <span class="ov-cell-title">Product language<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">The grammatical form each surface takes, and the check that holds it</span>
+  </a></div></div>
+
+      <div class="ov-group"><h3 id="components">Components <span class="ov-mono">20</span></h3>
+      <div class="ov-cells" style="--cols:4">
+  <a class="ov-cell" href="components/inputs.html">
+    <span class="ov-cell-title">Advanced inputs<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Combobox, select menu, slider, file drop and calendar — native controls wherever one exists</span>
+  </a>
+  <a class="ov-cell" href="components/agent.html">
+    <span class="ov-cell-title">Agent work<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Tool chips and confirm cards — what an agent did, and the change it wants a person to answer</span>
+  </a>
+  <a class="ov-cell" href="components/buttons.html">
+    <span class="ov-cell-title">Buttons<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Six variants, five sizes, icon and loading states — solid primary on a near-white ground</span>
+  </a>
+  <a class="ov-cell" href="components/cards.html">
+    <span class="ov-cell-title">Cards &amp; tags<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Hairline surfaces with a mono kicker; tags carry status, never decoration</span>
+  </a>
+  <a class="ov-cell" href="components/charts.html">
+    <span class="ov-cell-title">Charts<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Bar, stacked, line and sparkline — palette validated for colour-blind separation, table view always available</span>
+  </a>
+  <a class="ov-cell" href="components/command.html">
+    <span class="ov-cell-title">Command, tree &amp; code<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Command palette, hierarchy tree and code block — all keyboard-first</span>
+  </a>
+  <a class="ov-cell" href="components/coverage.html">
+    <span class="ov-cell-title">Coverage graph<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Layers read left to right — requirements by capability, milestones in sequence, where the sequence ends — with a line for everything covered</span>
+  </a>
+  <a class="ov-cell" href="components/data.html">
+    <span class="ov-cell-title">Data display<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Stats, meters, description lists and avatars — tabular figures throughout</span>
+  </a>
+  <a class="ov-cell" href="components/library.html">
+    <span class="ov-cell-title">Document library<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Browsing MD, PDF, XLSX and CSV — list, grid and preview panes</span>
+  </a>
+  <a class="ov-cell" href="components/feedback.html">
+    <span class="ov-cell-title">Feedback<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Dialog, alerts, toast, tooltip and callout — one tone vocabulary shared with states</span>
+  </a>
+  <a class="ov-cell" href="components/flow.html">
+    <span class="ov-cell-title">Flow controls<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Stepper, progress, timeline, pagination and skeletons — the parts a flow is built from</span>
+  </a>
+  <a class="ov-cell" href="components/forms.html">
+    <span class="ov-cell-title">Forms<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Native controls on the shared control-height scale, so fields and buttons line up</span>
+  </a>
+  <a class="ov-cell" href="components/integrations.html">
+    <span class="ov-cell-title">Integrations &amp; keys<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Connections, masked credentials, API key scopes and event rules</span>
+  </a>
+  <a class="ov-cell" href="components/graph.html">
+    <span class="ov-cell-title">Knowledge graph<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Canvas-rendered, Barnes-Hut layout — 1,000 nodes at 0.8ms per tick; radius is sqrt(degree)</span>
+  </a>
+  <a class="ov-cell" href="components/live.html">
+    <span class="ov-cell-title">Live activity<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Pulse, lanes, a row's progress and a section being written — work happening now, drawn where the work is</span>
+  </a>
+  <a class="ov-cell" href="components/disclosure.html">
+    <span class="ov-cell-title">Menu &amp; disclosure<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Dropdown menu, accordion and segmented control — open state carried by aria-expanded</span>
+  </a>
+  <a class="ov-cell" href="components/navigation.html">
+    <span class="ov-cell-title">Navigation<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Header, sidebar, tabs, breadcrumbs and the hamburger — active state keys off aria-current</span>
+  </a>
+  <a class="ov-cell" href="components/reading.html">
+    <span class="ov-cell-title">Reading and review<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Contents with review marks, citations and their source card, a drawer that steps through sources, and keys</span>
+  </a>
+  <a class="ov-cell" href="components/states.html">
+    <span class="ov-cell-title">States<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">The six states every flow passes through — most systems ship only the first</span>
+  </a>
+  <a class="ov-cell" href="components/table.html">
+    <span class="ov-cell-title">Table<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Hairline rules, mono headers, tabular figures — sort state carried by aria-sort</span>
+  </a></div></div>
+
+      <div class="ov-group"><h3 id="templates">Templates <span class="ov-mono">7 · open full screen</span></h3>
+      <div class="ov-cells" style="--cols:4">
+  <a class="ov-cell ov-featured" href="templates/app-shell/index.html">
+    <span class="ov-cell-title">Application shell<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Header, rail, breadcrumbs, stat row and a data panel — the layout every client app starts from</span>
+  </a>
+  <a class="ov-cell" href="templates/landing/index.html">
+    <span class="ov-cell-title">Landing page<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Hero, the one saturated stat band, feature cards and a close — the marketing voice</span>
+  </a>
+  <a class="ov-cell" href="templates/deck/index.html">
+    <span class="ov-cell-title">Presentation deck<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Eight 16:9 slides sized in container units, so one deck reads the same in a grid or projected</span>
+  </a>
+  <a class="ov-cell" href="templates/intake/index.html">
+    <span class="ov-cell-title">Engagement intake<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">The flow shell as a working four-step journey, with the vertical rail and a persistent footer</span>
+  </a>
+  <a class="ov-cell" href="templates/purchase/index.html">
+    <span class="ov-cell-title">Purchase a product<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Four-step buy flow — basket with quantity steppers, delivery radio cards, sticky order summary</span>
+  </a>
+  <a class="ov-cell" href="templates/work-item-create/index.html">
+    <span class="ov-cell-title">Create a work item<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Describe, label and attach — token input, segmented type, combobox owner, evidence drop</span>
+  </a>
+  <a class="ov-cell" href="templates/work-item-close/index.html">
+    <span class="ov-cell-title">Close a work item<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Acceptance checklist, resolution outcome, evidence, activity thread and an irreversible confirm</span>
+  </a></div></div>
+
+      <div class="ov-group"><h3 id="guidance">Guidance <span class="ov-mono">which component for which job</span></h3>
+      <div class="ov-cells" style="--cols:4">
+  <a class="ov-cell" href="guidance/screens.html">
+    <span class="ov-cell-title">Screens<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for a whole page, a shell, or the structure a page sits in</span>
+  </a>
+  <a class="ov-cell" href="guidance/overlays.html">
+    <span class="ov-cell-title">Overlays<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for something that floats above the page — a modal, a side panel, a hint, a preview</span>
+  </a>
+  <a class="ov-cell" href="guidance/status-and-feedback.html">
+    <span class="ov-cell-title">Status and feedback<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for telling someone what happened, what state a thing is in, or that it is loading</span>
+  </a>
+  <a class="ov-cell" href="guidance/navigation.html">
+    <span class="ov-cell-title">Navigation<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for moving between places, switching views, or narrowing what a list shows</span>
+  </a>
+  <a class="ov-cell" href="guidance/data.html">
+    <span class="ov-cell-title">Data<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for figures, tables, charts, lists of records, or history</span>
+  </a>
+  <a class="ov-cell" href="guidance/input.html">
+    <span class="ov-cell-title">Input<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for an action someone presses or a value someone enters or picks</span>
+  </a>
+  <a class="ov-cell" href="guidance/reading.html">
+    <span class="ov-cell-title">Reading<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for a document, prose, code, sources or type someone reads</span>
+  </a>
+  <a class="ov-cell" href="guidance/agents-and-live-work.html">
+    <span class="ov-cell-title">Agents and live work<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></svg></span>
+    <span class="ov-cell-body">Which component for a conversation with an agent, or work that is running right now</span>
+  </a></div></div>
+    </div>
+  </section>
+
+  <section class="section-band ov-close" aria-labelledby="ov-close">
+    <div class="ov-gridlines" aria-hidden="true"></div>
+    <div class="ov-wrap">
+      <div>
+        <h2 id="ov-close">Built by GENER8V. <span>Used on our own work.</span></h2>
+        <p>The team behind this system builds and runs systems for international, heavily regulated businesses — a team you can rely on to deliver when it counts.</p>
+      </div>
+      <div class="ov-ctas">
+        <a class="ov-btn ov-btn-light" href="https://www.gener8v.com/">Visit gener8v.com<svg viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></svg></a>
+        <a class="ov-btn ov-btn-line" href="https://github.com/gener8v/gener8v.designer.design-system">Source on GitHub</a>
+      </div>
+    </div>
+  </section>
+  <footer class="ov-wrap ov-foot">GENER8V design system · <a href="https://www.gener8v.com/">gener8v.com</a> · <a href="https://github.com/gener8v/gener8v.designer.design-system">GitHub</a> · MIT</footer>
 </main>
 </body>
 </html>
