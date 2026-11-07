@@ -31,6 +31,9 @@
 
 /* Geist across this page, the docs chrome included, so the frame and the page agree. */
 body:has(> main.ov) { font-family: "Geist", var(--font-body); }
+/* Headings don't inherit the body face: base.css sets them to --font-heading (Inter). Without this
+   the page's headings drew in Inter at Geist's tight tracking, which crowds the letters. */
+.ov :is(h1, h2, h3, h4) { font-family: "Geist", var(--font-heading); }
 .ov code, .ov pre, .ov-mono { font-family: "Geist Mono", var(--font-mono); }
 html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
 .ov-wrap { position: relative; max-inline-size: calc(var(--space-4) * 76); margin-inline: 0 auto; padding-inline: var(--space-6); }
