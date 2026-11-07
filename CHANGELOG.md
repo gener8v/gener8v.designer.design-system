@@ -14,9 +14,14 @@ changes its glyph or export name.
 
 **Docs:** the Icons foundation page now shows every icon by group, with what each is for on hover.
 It showed eight. The `@gener8v/icons` README is rewritten around install, use, the grouped
-catalogue and adding an icon. Both catalogues are generated from the icon files by
-`pnpm build:icons`, and `pnpm lint:icons` (part of `pnpm check`) fails when either is stale. Each
-icon's doc comment now carries an `@group`.
+catalogue and adding an icon. Both catalogues are generated from the icon files by `pnpm build`,
+and `pnpm check` fails when either is stale. Each icon's doc comment now carries an `@group`.
+
+**Docs:** the overview page (the site's front door) takes gener8v.com's "Ice" look — Geist type,
+square corners, frosted blue-white surfaces with crystal facets, hairline-joined cells, drop-cap
+figures counted from the nav, and one deep closing band. It is page scaffolding built from the
+tokens, so it follows light and dark; no component, token or package changes. The live specimen in
+the hero is still the real `.panel`, `.table`, `.tag`, `.alert` and `.btn`.
 
 ## 0.63.0
 
