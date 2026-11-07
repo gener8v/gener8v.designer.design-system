@@ -10,6 +10,7 @@ import { docsScript, navData, docsAsset, overviewPage, getStartedPage, guidanceP
 import { theme, TYPE_SCALE, SPACE_BASE, SPACE_EXTRA, CONTROL_H } from './src/theme.mjs';
 import tokens from './dist/tokens.mjs';
 import { load as loadChoosing, indexRows, ownerOf } from '../../scripts/choosing.mjs';
+import { readIcons, renderPage as renderIconGrid } from '../../scripts/icons.mjs';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const write = (rel, body) => {
@@ -183,47 +184,44 @@ write('design/foundations/layout.html', page('layout', {
 
 /* ------------------------------------------------------------------- icons */
 
-const ICONS = {
-  'arrow-right': 'M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z',
-  plus: 'M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z',
-  check: 'M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z',
-  search: 'M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z',
-  'dots-three': 'M156,128a28,28,0,1,1-28-28A28,28,0,0,1,156,128ZM48,100a28,28,0,1,0,28,28A28,28,0,0,0,48,100Zm160,0a28,28,0,1,0,28,28A28,28,0,0,0,208,100Z',
-  download: 'M224,152v56a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V152a8,8,0,0,1,16,0v56H208V152a8,8,0,0,1,16,0Zm-101.66,5.66a8,8,0,0,0,11.32,0l40-40a8,8,0,0,0-11.32-11.32L136,132.69V40a8,8,0,0,0-16,0v92.69L93.66,106.34a8,8,0,0,0-11.32,11.32Z',
-  trash: 'M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z',
-  warning: 'M236.8,188.09,149.35,36.22h0a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM120,104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Zm8,88a12,12,0,1,1,12-12A12,12,0,0,1,128,192Z',
-};
-const svg = (n, size = 20) => `<svg width="${size}" height="${size}" viewBox="0 0 256 256" fill="currentColor"><path d="${ICONS[n]}"/></svg>`;
+// The set comes from the icon files themselves (scripts/icons.mjs reads them), so this page
+// shows every icon @gener8v/icons exports and cannot fall behind the package.
+const ICON_SET = readIcons();
+const svg = (name, size = 20) => `<svg width="${size}" height="${size}" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="${ICON_SET.find((i) => i.name === name).path}"/></svg>`;
+
+const ICON_CSS = `
+.icon-blurb { margin: 0 0 var(--space-3); color: var(--color-neutral-600); font-size: var(--text-sm); }
+.icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(136px, 1fr)); gap: var(--space-2); margin-bottom: var(--space-5); }
+.icon-cell { display: grid; justify-items: center; gap: var(--space-2); padding: var(--space-3) var(--space-2); border: 1px solid var(--color-divider); border-radius: var(--radius-sm); color: var(--color-neutral-700); }
+.icon-cell code { font-family: var(--font-mono); font-size: 11px; color: var(--color-neutral-600); background: none; padding: 0; overflow-wrap: anywhere; text-align: center; }
+`;
 
 write('design/foundations/icons.html', page('icons', {
   group: 'Foundations', name: 'Icons',
-  subtitle: 'Phosphor, inline SVG on currentColor, sized in em so they track the type',
+  subtitle: 'Every icon in @gener8v/icons by group, inline SVG on currentColor, sized in em so they track the type',
   viewport: '640x560',
 }, `
-  <p class="demo-head label">The set at 24px</p>
-  <div class="row" style="gap:var(--space-4);color:var(--color-neutral-700)">
-    ${Object.keys(ICONS).map((n) => `<span title="${n}">${svg(n, 24)}</span>`).join('')}
-  </div>
+${renderIconGrid(ICON_SET)}
 
   <p class="demo-head label">Interface sizes</p>
   <div class="row" style="gap:var(--space-5);color:var(--color-neutral-700);align-items:flex-end">
-    ${[16, 20, 24, 32].map((s) => `<span style="display:grid;gap:var(--space-2);justify-items:center">${svg('search', s)}<span class="label">${s}</span></span>`).join('')}
+    ${[16, 20, 24, 32].map((s) => `<span style="display:grid;gap:var(--space-2);justify-items:center">${svg('MagnifyingGlass', s)}<span class="label">${s}</span></span>`).join('')}
   </div>
 
   <p class="demo-head label">Inline and in buttons</p>
   <p>Icons inherit <code>currentColor</code> and sit on the text baseline
-    <span style="display:inline-flex;vertical-align:-0.15em">${svg('arrow-right', 16)}</span>
+    <span style="display:inline-flex;vertical-align:-0.15em">${svg('ArrowRight', 16)}</span>
     so they never need their own colour token.</p>
   <div class="row" style="margin-top:var(--space-4)">
-    <button type="button" class="btn btn-primary">Continue${svg('arrow-right', 16)}</button>
-    <button type="button" class="btn btn-secondary btn-icon" aria-label="Search">${svg('search')}</button>
-    <button type="button" class="btn btn-ghost btn-icon" aria-label="More">${svg('dots-three')}</button>
+    <button type="button" class="btn btn-primary">Continue${svg('ArrowRight', 16)}</button>
+    <button type="button" class="btn btn-secondary btn-icon" aria-label="Search">${svg('MagnifyingGlass')}</button>
+    <button type="button" class="btn btn-ghost btn-icon" aria-label="More">${svg('DotsThree')}</button>
   </div>
 
   <p class="note">Phosphor at <strong>regular</strong> weight. Inside <code>.btn</code> icons are sized
   in <code>em</code> (1.15em), so they scale with the button rather than needing a size per variant.
   Icon-only controls always carry an <code>aria-label</code>.</p>
-`));
+`, ICON_CSS));
 
 /* ----------------------------------------------------------------- imagery */
 

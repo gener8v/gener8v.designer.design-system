@@ -6,6 +6,18 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+**Icons:** 24 new icons, taking the set from 44 to 68 — `ArrowLeft`, `ArrowSquareOut`,
+`ArrowsDownUp`, `Bell`, `Buildings`, `CalendarBlank`, `ChartBar`, `ChatCircle`, `CheckCircle`,
+`CircleNotch`, `Clock`, `Copy`, `CaretUp`, `EnvelopeSimple`, `Funnel`, `House`, `List`, `Minus`,
+`Paperclip`, `PencilSimple`, `Question`, `Sparkle`, `Tag`, `XCircle`. All additive; no existing icon
+changes its glyph or export name.
+
+**Docs:** the Icons foundation page now shows every icon by group, with what each is for on hover.
+It showed eight. The `@gener8v/icons` README is rewritten around install, use, the grouped
+catalogue and adding an icon. Both catalogues are generated from the icon files by
+`pnpm build:icons`, and `pnpm lint:icons` (part of `pnpm check`) fails when either is stale. Each
+icon's doc comment now carries an `@group`.
+
 ## 0.63.0
 
 **Visual change, button:** `.btn.is-loading` now draws the system spinner, the same

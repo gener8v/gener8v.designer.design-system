@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `books` at regular weight. Sized in em so it tracks the type.
  *
- * A module: a governance library this project is measured against. */
+ * A module: a governance library this project is measured against.
+ *
+ * @group Records */
 export function Books(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

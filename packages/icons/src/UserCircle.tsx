@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `user-circle` at regular weight. Sized in em so it tracks the type.
  *
- * One person, where a name alone would not read as a person. */
+ * One person, where a name alone would not read as a person.
+ *
+ * @group People */
 export function UserCircle(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

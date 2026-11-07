@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `CaretLeft` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `caret-left` at regular weight. Sized in em so it tracks the type.
  *
- * Back, within a set — a page, a step. Never navigation out of a surface. */
+ * Back, within a set — a page, a step. Never navigation out of a surface.
+ *
+ * @group Navigation */
 export function CaretLeft(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

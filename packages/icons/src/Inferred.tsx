@@ -2,7 +2,10 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `lightbulb-filament` at regular weight. Sized in em so it tracks the type.
  *
- * Inferred: concluded from what was said. The grounds that must never lose its label. */
+ * Inferred: concluded from what was said. This label must stay attached
+ * wherever the observation goes.
+ *
+ * @group Grounds */
 export function Inferred(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

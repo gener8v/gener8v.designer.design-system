@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `sliders-horizontal` at regular weight. Sized in em so it tracks the type.
  *
- * How this console is wired, as against what the record holds. */
+ * Settings: how the product is configured, as against the content it holds.
+ *
+ * @group Navigation */
 export function Settings(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

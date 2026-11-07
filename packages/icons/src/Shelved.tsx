@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `bookmark-simple` at regular weight. Sized in em so it tracks the type.
  *
- * Prepared, not in force — on the shelf. */
+ * Prepared, not in force — on the shelf.
+ *
+ * @group Governance */
 export function Shelved(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

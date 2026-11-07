@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `sign-out` at regular weight. Sized in em so it tracks the type.
  *
- * Leaving deliberately, as against a session that expired — which is not this. */
+ * Signing out on purpose. Not for a session that expired.
+ *
+ * @group Access */
 export function SignOut(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

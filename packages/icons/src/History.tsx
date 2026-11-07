@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `clock-counter-clockwise` at regular weight. Sized in em so it tracks the type.
  *
- * How this project got that way, as against what is true now. */
+ * How this project got that way, as against what is true now.
+ *
+ * @group Records */
 export function History(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

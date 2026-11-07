@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `users` at regular weight. Sized in em so it tracks the type.
  *
- * The directory — the people this record can hold accountable. */
+ * A group of people — a team, a directory. One person is `UserCircle`.
+ *
+ * @group People */
 export function Users(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

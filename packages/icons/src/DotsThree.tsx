@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `DotsThree` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `dots-three` at regular weight. Sized in em so it tracks the type.
  *
- * More, where the more is a menu rather than a page. */
+ * More, where the more is a menu rather than a page.
+ *
+ * @group Actions */
 export function DotsThree(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

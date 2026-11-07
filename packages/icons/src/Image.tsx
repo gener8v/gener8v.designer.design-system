@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Image` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `image` at regular weight. Sized in em so it tracks the type.
  *
- * Evidence that is a picture — a screenshot, a diagram somebody sent. */
+ * Evidence that is a picture — a screenshot, a diagram somebody sent.
+ *
+ * @group Records */
 export function Image(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

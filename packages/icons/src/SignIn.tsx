@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `sign-in` at regular weight. Sized in em so it tracks the type.
  *
- * The way in. On the gate itself, where the product names what it is. */
+ * Signing in, on the sign-in screen and its button.
+ *
+ * @group Access */
 export function SignIn(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

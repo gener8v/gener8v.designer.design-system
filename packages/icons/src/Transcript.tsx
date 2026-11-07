@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `chat-teardrop-text` at regular weight. Sized in em so it tracks the type.
  *
- * What was said, written down — a coded session. */
+ * What was said, written down — a coded session.
+ *
+ * @group Communication */
 export function Transcript(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

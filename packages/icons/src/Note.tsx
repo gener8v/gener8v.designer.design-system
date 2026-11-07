@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `note-pencil` at regular weight. Sized in em so it tracks the type.
  *
- * Something a person wrote down, beside what was uploaded. */
+ * Something a person wrote down, beside what was uploaded.
+ *
+ * @group Records */
 export function Note(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

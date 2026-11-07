@@ -283,7 +283,7 @@ these heights so they line up in a row. `xs` and `sm` are for dense contexts onl
 - `foundations/color.html` — the roles, the six ramps, and measured contrast on the page ground.
 - `foundations/type.html` — the scale at real sizes, the pairing, and the mono voice.
 - `foundations/layout.html` — space, control heights, radius, elevation and the section rhythm.
-- `foundations/icons.html` — the icon set at interface sizes, inline and in buttons.
+- `foundations/icons.html` — every icon in `@gener8v/icons` by group, then interface sizes, inline and in buttons.
 - `foundations/image.html` — figure treatment and the atmosphere utilities.
 - `components/buttons.html` — every button variant, size and state.
 - `components/cards.html` — cards, the panel, and the status tags.

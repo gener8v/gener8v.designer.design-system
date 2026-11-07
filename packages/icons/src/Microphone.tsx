@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `microphone-stage` at regular weight. Sized in em so it tracks the type.
  *
- * A voice: an interview, a session, somebody speaking. */
+ * A voice: an interview, a session, somebody speaking.
+ *
+ * @group Communication */
 export function Microphone(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

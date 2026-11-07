@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `DownloadSimple` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `download-simple` at regular weight. Sized in em so it tracks the type.
  *
- * Taking something out of the record, as a file somebody keeps. */
+ * Taking something out of the record, as a file somebody keeps.
+ *
+ * @group Actions */
 export function DownloadSimple(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

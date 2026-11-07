@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `quotes` at regular weight. Sized in em so it tracks the type.
  *
- * Said: somebody stated it. One of the three grounds. */
+ * Said: somebody stated it. One of the three grounds.
+ *
+ * @group Grounds */
 export function Quotes(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

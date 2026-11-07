@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `flag-pennant` at regular weight. Sized in em so it tracks the type.
  *
- * Flagged rather than resolved — a contradiction, a held-open decision touched. */
+ * Flagged rather than resolved — a contradiction, a held-open decision touched.
+ *
+ * @group Status */
 export function Flag(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"
