@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `x` at regular weight. Sized in em so it tracks the type.
  *
- * Dismiss. Never delete — this product has no delete. */
+ * Close or dismiss. Never delete — that is `Trash`.
+ *
+ * @group Actions */
 export function X(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

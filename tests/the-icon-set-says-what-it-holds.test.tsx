@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+// @ts-expect-error -- plain .mjs script, no type declarations
+import { readIcons, renderPage, renderReadme, splice } from '../scripts/icons.mjs';
 
 const SRC = join(__dirname, '..', 'packages', 'icons', 'src');
 const INDEX = readFileSync(join(SRC, 'index.ts'), 'utf8');
 const README = readFileSync(join(SRC, '..', 'README.md'), 'utf8');
+const PAGE = readFileSync(join(__dirname, '..', 'design', 'foundations', 'icons.html'), 'utf8');
 
 const exported = [...INDEX.matchAll(/export \{ (\w+) \}/g)].map((m) => m[1]!);
 
@@ -18,24 +21,19 @@ describe('the icon set says what it holds', () => {
     expect(files.filter((f) => !exported.includes(f))).toEqual([]);
   });
 
-  it('lists every exported icon in the readme', () => {
-    // THE README STATED A COUNT AND NAMED ALL TWENTY-ONE. Adding icons left it describing a set
-    // that no longer existed — on the page somebody reads to find out what is available, so the
-    // cost of the staleness is that they add a second copy of something already here.
-    // THE LIST, not the prose. The paragraphs below it name several icons while explaining what
-    // they are for, so a whole-file search passes on a mention and the SCANNABLE list — the thing
-    // somebody actually reads to find out what is available — can quietly lose an entry.
-    const list = README.slice(
-      README.indexOf('`ArrowRight`'),
-      README.indexOf('## The set grew')
-    );
-    expect(list, 'the backticked list of names was not found').toContain('`ArrowRight`');
-    const missing = exported.filter((name) => !list.includes(`\`${name}\``));
-    expect(missing, `not in the readme list: ${missing.join(', ')}`).toEqual([]);
+  it('every icon has a meaning, a group and one path', () => {
+    // readIcons throws on an icon the catalogue cannot render, naming the file.
+    expect(readIcons().map((i) => i.name)).toEqual([...exported].sort((a, b) => a.localeCompare(b)));
   });
 
-  it('states the count it actually holds', () => {
-    expect(README).toContain(`${exported.length} icons, not 1,500`);
+  it('the readme and the demo page show the set the package holds', () => {
+    // THE README STATED A COUNT AND NAMED ALL TWENTY-ONE, and the demo page drew eight. Adding icons
+    // left both describing a set that no longer existed, on the pages somebody reads to find out
+    // what is available — so they add a second copy of something already here. Both are now
+    // rendered from the icon files: the README by `pnpm build:icons`, the page by `pnpm build`.
+    const icons = readIcons();
+    expect(README, 'README is stale: run pnpm build:icons').toBe(splice(README, renderReadme(icons), 'README'));
+    expect(PAGE.includes(renderPage(icons)), 'icons.html is stale: run pnpm build').toBe(true);
   });
 
   it('says what each one is FOR, not just what it is called', () => {

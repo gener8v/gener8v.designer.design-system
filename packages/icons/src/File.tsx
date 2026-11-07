@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `File` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `file` at regular weight. Sized in em so it tracks the type.
  *
- * A document on the record — uploaded, rendered, or cited. */
+ * A document on the record — uploaded, rendered, or cited.
+ *
+ * @group Records */
 export function File(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

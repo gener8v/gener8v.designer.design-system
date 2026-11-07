@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `list-checks` at regular weight. Sized in em so it tracks the type.
  *
- * What a standard requires, and what has been said about each of it. */
+ * What a standard requires, and how much of it is covered.
+ *
+ * @group Records */
 export function Coverage(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

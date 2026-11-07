@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `scales` at regular weight. Sized in em so it tracks the type.
  *
- * A judgement somebody made and can be held to. */
+ * A judgement made by weighing the evidence — an assessment, a ruling.
+ *
+ * @group Governance */
 export function Scales(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

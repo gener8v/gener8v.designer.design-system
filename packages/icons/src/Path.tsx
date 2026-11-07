@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `path` at regular weight. Sized in em so it tracks the type.
  *
- * A route through — a flow, a sequence of steps. */
+ * A route through — a flow, a sequence of steps.
+ *
+ * @group Records */
 export function Path(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Stamp` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `stamp` at regular weight. Sized in em so it tracks the type.
  *
- * Governance: an approval. Phosphor carries this one under the same name other sets use. */
+ * An approval: a named person signed off.
+ *
+ * @group Governance */
 export function Stamp(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `robot` at regular weight. Sized in em so it tracks the type.
  *
- * An agent. Distinct from a person, deliberately and everywhere. */
+ * An agent. Distinct from a person, deliberately and everywhere.
+ *
+ * @group People */
 export function Robot(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

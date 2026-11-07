@@ -6,6 +6,17 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+**Icons:** 24 new icons, taking the set from 44 to 68 — `ArrowLeft`, `ArrowSquareOut`,
+`ArrowsDownUp`, `Bell`, `Buildings`, `CalendarBlank`, `ChartBar`, `ChatCircle`, `CheckCircle`,
+`CircleNotch`, `Clock`, `Copy`, `CaretUp`, `EnvelopeSimple`, `Funnel`, `House`, `List`, `Minus`,
+`Paperclip`, `PencilSimple`, `Question`, `Sparkle`, `Tag`, `XCircle`. All additive; no existing icon
+changes its glyph or export name.
+
+**Docs:** the Icons foundation page now shows every icon by group, with what each is for on hover.
+It showed eight. The `@gener8v/icons` README is rewritten around install, use, the grouped
+catalogue and adding an icon. Both catalogues are generated from the icon files by `pnpm build`,
+and `pnpm check` fails when either is stale. Each icon's doc comment now carries an `@group`.
+
 **Docs:** the overview page (the site's front door) takes gener8v.com's "Ice" look — Geist type,
 square corners, frosted blue-white surfaces with crystal facets, hairline-joined cells, drop-cap
 figures counted from the nav, and one deep closing band. It is page scaffolding built from the

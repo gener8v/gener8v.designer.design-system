@@ -1,9 +1,11 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `ArrowsClockwise` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `arrows-clockwise` at regular weight. Sized in em so it tracks the type.
  *
- * Governance: work marked stale, waiting on a rebuild. Phosphor's name for what other sets call
- * `RefreshCw`. */
+ * Stale: work waiting on a rebuild because something it depends on changed. Other icon sets
+ * call this `RefreshCw`.
+ *
+ * @group Governance */
 export function ArrowsClockwise(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

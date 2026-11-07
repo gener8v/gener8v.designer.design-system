@@ -41,7 +41,7 @@ window.__DOCS_NAV__ = {
     },
     {
      "title": "Icons",
-     "subtitle": "Phosphor, inline SVG on currentColor, sized in em so they track the type",
+     "subtitle": "Every icon in @gener8v/icons by group, inline SVG on currentColor, sized in em so they track the type",
      "path": "foundations/icons.html"
     },
     {

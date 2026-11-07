@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `eye` at regular weight. Sized in em so it tracks the type.
  *
- * Observed: seen happening, or a document shows it. One of the three grounds. */
+ * Observed: seen happening, or a document shows it. One of the three grounds.
+ *
+ * @group Grounds */
 export function Eye(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

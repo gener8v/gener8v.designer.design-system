@@ -2,7 +2,9 @@ import type { SVGProps } from 'react';
 
 /** Phosphor `key` at regular weight. Sized in em so it tracks the type.
  *
- * A credential a script uses, where no person is signed in. */
+ * A credential a script uses, where no person is signed in.
+ *
+ * @group Access */
 export function Key(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

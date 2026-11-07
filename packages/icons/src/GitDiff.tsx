@@ -1,9 +1,11 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `GitDiff` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `git-diff` at regular weight. Sized in em so it tracks the type.
  *
- * Governance: a standard moved underneath a decision. Phosphor's name for what other sets call
- * `GitCompareArrows` — two lines compared, one of which changed. */
+ * A standard changed underneath a decision made against it. Other icon sets call this
+ * `GitCompareArrows`.
+ *
+ * @group Governance */
 export function GitDiff(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

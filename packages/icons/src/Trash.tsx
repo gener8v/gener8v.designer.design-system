@@ -1,8 +1,11 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `Trash` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `trash` at regular weight. Sized in em so it tracks the type.
  *
- * The one irreversible act a surface offers. Rare on purpose — this product supersedes. */
+ * Deleting something for good. A product that keeps history archives or supersedes instead,
+ * and does not offer this.
+ *
+ * @group Actions */
 export function Trash(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"

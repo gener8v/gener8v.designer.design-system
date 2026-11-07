@@ -1,8 +1,10 @@
 import type { SVGProps } from 'react';
 
-/** Phosphor `MagnifyingGlass` at regular weight. Sized in em so it tracks the type.
+/** Phosphor `magnifying-glass` at regular weight. Sized in em so it tracks the type.
  *
- * Finding something already here, as against asking a question of it. */
+ * Finding something already here, as against asking a question of it.
+ *
+ * @group Actions */
 export function MagnifyingGlass(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 256 256" fill="currentColor" width="1em" height="1em"
