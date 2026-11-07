@@ -6,6 +6,12 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+**Docs:** the overview page (the site's front door) takes gener8v.com's "Ice" look — Geist type,
+square corners, frosted blue-white surfaces with crystal facets, hairline-joined cells, drop-cap
+figures counted from the nav, and one deep closing band. It is page scaffolding built from the
+tokens, so it follows light and dark; no component, token or package changes. The live specimen in
+the hero is still the real `.panel`, `.table`, `.tag`, `.alert` and `.btn`.
+
 ## 0.63.0
 
 **Visual change, button:** `.btn.is-loading` now draws the system spinner, the same

@@ -83,14 +83,14 @@ ${client}`;
 /* ------------------------------------------------------------- page shell */
 
 /** A generated docs page. `prefix` is the path back to design/. */
-export function shell({ title, prefix, description, css = '', body }) {
+export function shell({ title, prefix, description, css = '', head = '', body }) {
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${esc(title)}</title>
-${description ? `<meta name="description" content="${esc(description)}" />\n` : ''}<link rel="stylesheet" href="${prefix}styles.css" />
+${description ? `<meta name="description" content="${esc(description)}" />\n` : ''}${head}<link rel="stylesheet" href="${prefix}styles.css" />
 ${docsScript(prefix)}
 <style>
 ${PAGE_CSS}${css}
@@ -125,71 +125,227 @@ const PAGE_CSS = `/* Page scaffolding only — every component comes from styles
 
 /* -------------------------------------------------------------- overview */
 
-/** Card grid. `cols` is the column count at full width; it halves, then goes to one. Every count
- *  used divides its list, or the first item is featured across two columns so the rows fill. */
-const cards = (items, cols, featured = false) => `<div class="ov-grid" style="--cols:${cols}">${items.map((c, i) => `
-  <a class="card card-interactive card-pad-sm${featured && i === 0 ? ' ov-featured' : ''}" href="${esc(c.path)}">
-    <p class="card-title">${esc(c.title)}</p>
-    <p class="card-body">${esc(c.subtitle)}</p>
+/* THE OVERVIEW WEARS GENER8V.COM'S "ICE" LOOK, AND ONLY THE OVERVIEW DOES.
+ *
+ * The front door matches the site it hangs off: Geist type, square corners, frosted blue-white
+ * surfaces with crystal facets, hairline-joined cells and one deep band. All of it is page
+ * scaffolding built from the system's tokens, so it follows light and dark like everything else.
+ * The components themselves are untouched — the live specimen in the hero is the real `.panel`,
+ * `.table`, `.tag`, `.alert` and `.btn`, rounded corners and all, so what the page shows is what
+ * the packages ship. */
+
+const DISPLAY_FONT = `<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400..800&family=Geist+Mono:wght@400..600&display=swap" />
+`;
+
+/** Crystal facets: a jittered triangular lattice, tinted from the accent ramps, fading out from the
+ *  top-left. Deterministic, so the generated page is reproducible byte for byte. */
+const FACETS = (() => {
+  const COLS = 9, ROWS = 5, W = 1600, H = 900;
+  const rand = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+  const pt = (c, r) => {
+    const j = c === 0 || c === COLS || r === 0 || r === ROWS ? 0 : 1;
+    return [(c / COLS) * W + (rand(c * 31 + r * 7) - 0.5) * 120 * j, (r / ROWS) * H + (rand(c * 13 + r * 29) - 0.5) * 110 * j];
+  };
+  const paths = [];
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const [a, b, d, e] = [pt(c, r), pt(c + 1, r), pt(c, r + 1), pt(c + 1, r + 1)];
+    const pair = (c + r) % 2 === 0 ? [[a, b, e], [a, e, d]] : [[a, b, d], [b, e, d]];
+    pair.forEach((tri, k) => {
+      const seed = c * 17 + r * 53 + k * 101;
+      const d = `M${tri.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join(' L')} Z`;
+      paths.push(`<path class="t${Math.floor(rand(seed) * 4)}" d="${d}" fill-opacity="${(0.25 + rand(seed + 7) * 0.5).toFixed(2)}"/>`);
+    });
+  }
+  return `<svg class="ov-facets" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <defs><linearGradient id="ov-facet-light" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="0.55" stop-color="#fff" stop-opacity="0.15"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <mask id="ov-facet-fade"><rect width="${W}" height="${H}" fill="url(#ov-facet-light)"/></mask></defs>
+      <g mask="url(#ov-facet-fade)">${paths.join('')}</g>
+    </svg>`;
+})();
+
+/** A grid of cells on shared hairlines. `cols` is the count at full width; it halves, then goes to
+ *  one. Every count used divides its list, or the first item is featured across two columns. */
+const cards = (items, cols, featured = false) => `<div class="ov-cells" style="--cols:${cols}">${items.map((c, i) => `
+  <a class="ov-cell${featured && i === 0 ? ' ov-featured' : ''}" href="${esc(c.path)}">
+    <span class="ov-cell-title">${esc(c.title)}${ICON.arrow}</span>
+    <span class="ov-cell-body">${esc(c.subtitle)}</span>
   </a>`).join('')}</div>`;
 
 const OVERVIEW_CSS = `
+/* Geist across this page, the docs chrome included, so the frame and the page agree. */
+body:has(> main.ov) { font-family: "Geist", var(--font-body); }
+.ov code, .ov pre, .ov-mono { font-family: "Geist Mono", var(--font-mono); }
 html[data-docs="page"] body > main.ov { margin: 0; max-inline-size: none; }
-.ov-wrap { max-inline-size: calc(var(--space-4) * 72); margin-inline: 0 auto; padding-inline: var(--space-6); }
+.ov-wrap { position: relative; max-inline-size: calc(var(--space-4) * 76); margin-inline: 0 auto; padding-inline: var(--space-6); }
 @media (min-width: 1280px) { .ov-wrap { margin-inline-start: var(--space-6); } }
-/* THE ATMOSPHERE gener8v.com wears: a light ground washed with soft blue and a little teal. */
+
+/* Square, everywhere this page draws its own surface. */
+.ov .code, .ov-install, .ov-btn, .ov-cell, .ov-frame { border-radius: 0; }
+
+/* --- hero: a frosted sky with the facets showing through ---------------------------------- */
 .ov-hero {
   position: relative;
   overflow: hidden;
-  padding-block: var(--space-20) var(--space-20);
-  background:
-    radial-gradient(60% 70% at 85% 10%, color-mix(in srgb, var(--color-accent-300) 45%, transparent), transparent 70%),
-    radial-gradient(50% 60% at 40% 90%, color-mix(in srgb, var(--color-accent-2-300) 30%, transparent), transparent 70%),
-    linear-gradient(180deg, color-mix(in srgb, var(--color-accent-100) 70%, var(--color-bg)), var(--color-bg));
-  border-block-end: 1px solid var(--color-divider);
+  padding-block: var(--space-24) var(--space-20);
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--color-accent-200) 70%, var(--color-bg)),
+    var(--color-bg) 48%,
+    color-mix(in srgb, var(--color-accent-2-100) 80%, var(--color-bg)));
+  border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
 }
-.ov-hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-12); align-items: center; }
-/* The heavy headline is gener8v.com's, and is this page's alone: the system's own headings stay at 500. */
-.ov-title { font-size: clamp(var(--text-4xl), 5vw, calc(var(--text-4xl) * 1.6)); font-weight: 600; letter-spacing: -0.025em; line-height: 1.05; color: var(--color-neutral-900); }
-.ov-grad { background: linear-gradient(90deg, var(--color-accent-700), var(--color-accent-2-700)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.ov-lede { margin-block-start: var(--space-6); font-size: var(--text-xl); line-height: 1.5; color: var(--color-neutral-700); max-inline-size: 34ch; }
+.ov-facets { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; opacity: 0.85; }
+.ov-facets path { stroke: var(--color-accent-300); stroke-opacity: 0.5; stroke-width: 1; }
+.ov-facets .t0 { fill: var(--color-bg); }
+.ov-facets .t1 { fill: var(--color-accent-100); }
+.ov-facets .t2 { fill: var(--color-accent-200); }
+.ov-facets .t3 { fill: var(--color-accent-2-100); }
+.ov-gridlines {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--color-accent-300) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--color-accent-300) 22%, transparent) 1px, transparent 1px);
+  background-size: var(--space-16) var(--space-16);
+  mask-image: radial-gradient(ellipse 70% 80% at 30% 40%, #000, transparent 75%);
+}
+.ov-hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--space-12); align-items: center; }
+.ov-title { font-size: clamp(var(--text-4xl), 5.2vw, calc(var(--text-4xl) * 1.95)); font-weight: 700; letter-spacing: -0.035em; line-height: 1; color: var(--color-neutral-900); }
+.ov-title span { display: block; padding-block-end: 0.08em; }
+.ov-grad { background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-600)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.ov-hairline { display: block; block-size: 1px; max-inline-size: calc(var(--space-4) * 36); margin-block: var(--space-8) var(--space-6);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent-600) 60%, transparent), color-mix(in srgb, var(--color-accent-300) 70%, transparent), transparent); }
+.ov-tagline { font-size: var(--text-2xl); font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; color: var(--color-neutral-900); max-inline-size: 30ch; }
+.ov-tagline b { font-weight: 600; color: var(--color-accent-700); }
+.ov-lede { margin-block-start: var(--space-4); font-size: var(--text-lg); line-height: 1.6; color: var(--color-neutral-700); max-inline-size: 44ch; }
 .ov-lede strong { color: var(--color-neutral-900); font-weight: 600; }
 .ov-ctas { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-block-start: var(--space-8); }
-.ov-install { display: inline-flex; align-items: center; gap: var(--space-3); margin-block-start: var(--space-6); padding: var(--space-2) var(--space-4); border: 1px solid var(--color-divider); border-radius: var(--radius-full); background: color-mix(in srgb, var(--color-bg) 70%, transparent); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-neutral-800); max-inline-size: 100%; overflow-x: auto; white-space: nowrap; }
-.ov-install span { color: var(--color-neutral-600); user-select: none; }
-.ov-specimen { box-shadow: var(--shadow-lg); background: var(--color-bg); }
+.ov-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-block-size: var(--control-h-xl); padding-inline: var(--space-6);
+  font-weight: 600; font-size: var(--text-base); text-decoration: none; border: 1px solid transparent; transition: background-color .15s, border-color .15s, transform .15s; }
+.ov-btn svg { inline-size: 1em; block-size: 1em; transition: transform .15s; }
+.ov-btn:hover svg { transform: translateX(2px); }
+.ov-btn-primary { color: #fff; background: linear-gradient(135deg, var(--color-action), var(--color-action-hover)); box-shadow: 0 14px 30px -14px color-mix(in srgb, var(--color-action) 70%, transparent); }
+.ov-btn-primary:hover { background: var(--color-action-hover); color: #fff; }
+.ov-btn-ghost { color: var(--color-neutral-900); background: color-mix(in srgb, var(--color-bg) 75%, transparent); border-color: color-mix(in srgb, var(--color-accent-300) 80%, transparent); }
+.ov-btn-ghost:hover { background: var(--color-bg); border-color: var(--color-accent-600); color: var(--color-neutral-900); }
+.ov-install { display: inline-flex; align-items: center; gap: var(--space-3); margin-block-start: var(--space-5); padding: var(--space-2) var(--space-4);
+  border: 1px solid color-mix(in srgb, var(--color-accent-300) 70%, transparent); background: color-mix(in srgb, var(--color-bg) 70%, transparent);
+  font-size: var(--text-sm); color: var(--color-neutral-800); max-inline-size: 100%; overflow-x: auto; white-space: nowrap; }
+.ov-install span { color: var(--color-accent-700); user-select: none; }
+
+/* The specimen sits in a frosted frame; the panel inside is the real component. */
+.ov-frame { position: relative; padding: var(--space-3); border: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
+  background: color-mix(in srgb, var(--color-bg) 55%, transparent); backdrop-filter: blur(6px);
+  box-shadow: 0 40px 80px -50px color-mix(in srgb, var(--color-accent-700) 55%, transparent); }
+.ov-frame::before { content: ""; position: absolute; inset-inline: 0; inset-block-start: -1px; block-size: 1px; background: linear-gradient(90deg, transparent, var(--color-accent-600), transparent); }
+.ov-specimen { background: var(--color-bg); }
 .ov-specimen .panel-body { display: grid; gap: var(--space-5); }
 .ov-specimen-actions { display: flex; justify-content: flex-end; gap: var(--space-3); flex-wrap: wrap; }
 .ov-caption { margin-block-start: var(--space-3); font-size: var(--text-xs); color: var(--color-neutral-600); text-align: end; }
-.ov-section { padding-block: var(--space-20) 0; }
-.ov-section h2 { font-size: var(--text-3xl); font-weight: 600; letter-spacing: -0.015em; }
-.ov-section-lede { margin-block-start: var(--space-3); color: var(--color-neutral-700); max-inline-size: 60ch; }
-.ov-reasons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); margin-block-start: var(--space-8); }
-.ov-reason svg { inline-size: var(--space-6); block-size: var(--space-6); color: var(--color-accent-700); }
-.ov-reason .card-title { margin-block-start: var(--space-4); font-size: var(--text-lg); }
-.ov-reason .card-body { margin-block-start: var(--space-2); }
-.ov-start { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-12); align-items: start; }
-.ov-browse h3 { font-size: var(--text-xl); margin-block: var(--space-12) var(--space-4); display: flex; align-items: baseline; gap: var(--space-3); }
-.ov-browse h3 .muted { font-size: var(--text-sm); font-weight: 400; }
-.ov-grid { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: var(--space-4); }
-.ov-grid .card-title { font-size: var(--text-base); }
-.ov-grid .card-body { margin-block-start: var(--space-1); font-size: var(--text-sm); }
-.ov-featured { grid-column: span 2; background: color-mix(in srgb, var(--color-accent-100) 55%, var(--color-bg)); }
-.ov-foot { margin-block-start: var(--space-24); padding-block: var(--space-8); border-block-start: 1px solid var(--color-divider); font-size: var(--text-sm); color: var(--color-neutral-600); }
+
+/* --- the figures: drop caps set into their own sentences, on a frosted band ---------------- */
+.ov-figures { position: relative; overflow: hidden; margin-block-start: var(--space-16); border: 1px solid color-mix(in srgb, var(--color-accent-300) 60%, transparent);
+  background: linear-gradient(135deg, var(--color-accent-100), var(--color-bg) 50%, color-mix(in srgb, var(--color-accent-2-100) 80%, var(--color-bg))); }
+.ov-figures .ov-facets { opacity: 0.7; }
+.ov-figures ul { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ov-figures li { padding: var(--space-8); border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+.ov-figures li:nth-child(odd) { border-inline-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+.ov-figures li:nth-last-child(-n+2) { border-block-end: 0; }
+.ov-figures p { font-size: var(--text-lg); line-height: 1.7; color: var(--color-neutral-600); }
+.ov-figures strong { font-weight: 600; color: var(--color-neutral-900); }
+.ov-cap { float: left; margin-inline-end: var(--space-3); padding-block-start: 0.14em; margin-block-start: calc(-0.14em - var(--space-1)); font-size: calc(var(--text-5xl) * 1.55); font-weight: 700; line-height: 0.72; letter-spacing: -0.04em; }
+
+/* --- sections -------------------------------------------------------------------------- */
+.ov-section { padding-block: var(--space-24) 0; }
+.ov-head { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--space-6) var(--space-16); align-items: center; margin-block-end: var(--space-10); }
+.ov-section h2 { font-size: var(--text-5xl); font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; color: var(--color-neutral-900); }
+.ov-head p { font-size: var(--text-lg); line-height: 1.6; color: var(--color-neutral-600); }
+
+/* Cells on shared hairlines: the page's one card language. */
+.ov-cells { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 1px;
+  background: color-mix(in srgb, var(--color-neutral-900) 9%, transparent); border: 1px solid color-mix(in srgb, var(--color-neutral-900) 10%, transparent); }
+.ov-cell { position: relative; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-6); text-decoration: none; color: inherit;
+  background: color-mix(in srgb, var(--color-bg) 92%, var(--color-accent-100)); transition: background-color .2s; }
+.ov-cell::before { content: ""; position: absolute; inset-inline: 0; inset-block-start: 0; block-size: 2px; opacity: 0; transition: opacity .2s;
+  background: linear-gradient(90deg, var(--color-accent-600), var(--color-accent-2-600), transparent); }
+.ov-cell:hover { background: var(--color-bg); }
+.ov-cell:hover::before, .ov-cell:focus-visible::before { opacity: 1; }
+.ov-cell:focus-visible { outline: 2px solid var(--color-accent-600); outline-offset: -2px; }
+.ov-cell-title { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.01em; color: var(--color-neutral-900); }
+.ov-cell-title svg { inline-size: var(--space-4); block-size: var(--space-4); flex: none; color: color-mix(in srgb, var(--color-accent-600) 55%, transparent); transition: transform .2s, color .2s; }
+.ov-cell:hover .ov-cell-title svg { transform: translateX(2px); color: var(--color-accent-600); }
+.ov-cell-body { font-size: var(--text-sm); line-height: 1.6; color: var(--color-neutral-600); }
+.ov-featured { grid-column: span 2; background: linear-gradient(135deg, var(--color-accent-100), var(--color-bg)); }
+
+/* Reasons: the icon sits beside its title as a marker, not above it as a header. */
+.ov-reason { padding: var(--space-8); }
+.ov-reason .ov-cell-title { justify-content: flex-start; font-size: var(--text-xl); }
+.ov-mark { display: inline-grid; place-items: center; inline-size: var(--space-10); block-size: var(--space-10); flex: none;
+  border: 1px solid color-mix(in srgb, var(--color-accent-2-600) 30%, transparent); background: var(--color-bg); color: var(--color-accent-2-700); }
+.ov-mark svg { inline-size: var(--space-5); block-size: var(--space-5); color: inherit; }
+.ov-reason .ov-cell-body { margin-block-start: var(--space-3); font-size: var(--text-base); }
+
+/* Get started */
+.ov-start { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--space-16); align-items: start; }
+.ov-steps { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-8); counter-reset: step; }
+.ov-steps > li { display: grid; grid-template-columns: var(--space-10) minmax(0, 1fr); gap: var(--space-5); counter-increment: step; }
+.ov-steps > li::before { content: counter(step); display: grid; place-items: center; inline-size: var(--space-10); block-size: var(--space-10);
+  border: 1px solid color-mix(in srgb, var(--color-accent-600) 35%, transparent); background: var(--color-accent-100); color: var(--color-accent-700); font-family: "Geist Mono", var(--font-mono); font-size: var(--text-sm); font-weight: 600; }
+.ov-steps h3 { font-size: var(--text-xl); font-weight: 600; letter-spacing: -0.01em; }
+.ov-steps p { margin-block-start: var(--space-1); color: var(--color-neutral-600); max-inline-size: 60ch; }
+.ov-steps .code { margin-block-start: var(--space-3); }
+.ov-pkgs { list-style: none; margin: 0; padding: 0; border-block-start: 1px solid var(--color-divider); }
+.ov-pkgs li { padding-block: var(--space-4); border-block-end: 1px solid var(--color-divider); }
+.ov-pkgs a { font-family: "Geist Mono", var(--font-mono); font-size: var(--text-sm); font-weight: 500; color: var(--color-accent-700); }
+.ov-pkgs p { margin-block-start: var(--space-1); font-size: var(--text-sm); color: var(--color-neutral-600); }
+.ov-aside-title { font-size: var(--text-xl); font-weight: 600; margin-block-end: var(--space-4); }
+.ov-note { margin-block-start: var(--space-5); font-size: var(--text-sm); color: var(--color-neutral-600); }
+
+/* Browse */
+.ov-group { margin-block-start: var(--space-16); }
+.ov-group h3 { display: flex; align-items: baseline; gap: var(--space-3); margin-block-end: var(--space-4); font-size: var(--text-2xl); font-weight: 700; letter-spacing: -0.02em; }
+.ov-group h3 .ov-mono { font-size: var(--text-sm); font-weight: 500; color: var(--color-neutral-600); }
+
+/* The close: the one deep band, which is dark in both themes. */
+.ov-close { position: relative; overflow: hidden; margin-block-start: var(--space-24); padding-block: var(--space-20); }
+.ov-close .ov-gridlines { mask-image: radial-gradient(ellipse 60% 90% at 80% 20%, #000, transparent 75%);
+  background-image: linear-gradient(to right, color-mix(in srgb, #fff 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in srgb, #fff 8%, transparent) 1px, transparent 1px); }
+.ov-close::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(60% 90% at 0% 0%, color-mix(in srgb, var(--color-section-ghost) 70%, transparent), transparent 70%); }
+.ov-close .ov-wrap { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: var(--space-10) var(--space-16); align-items: end; }
+.ov-close h2 { font-size: var(--text-5xl); font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; }
+.ov-close h2 span { color: color-mix(in srgb, #fff 70%, transparent); }
+.ov-close p { margin-block-start: var(--space-5); font-size: var(--text-lg); line-height: 1.6; max-inline-size: 52ch; }
+.ov-close .ov-ctas { margin: 0; justify-content: flex-end; }
+.ov-btn-light { color: var(--color-section); background: #fff; }
+.ov-btn-light:hover { background: color-mix(in srgb, #fff 88%, transparent); color: var(--color-section); }
+.ov-btn-line { color: #fff; border-color: color-mix(in srgb, #fff 40%, transparent); }
+.ov-btn-line:hover { border-color: #fff; color: #fff; background: color-mix(in srgb, #fff 8%, transparent); }
+.ov-foot { padding-block: var(--space-8); font-size: var(--text-sm); color: var(--color-neutral-600); }
 .ov-foot a { color: var(--color-neutral-800); }
+
 @media (max-width: 1180px) {
-  .ov-hero-grid, .ov-start { grid-template-columns: minmax(0, 1fr); }
-  .ov-lede { max-inline-size: 48ch; }
+  .ov-hero-grid, .ov-start, .ov-head, .ov-close .ov-wrap { grid-template-columns: minmax(0, 1fr); }
+  .ov-close .ov-ctas { justify-content: flex-start; }
+  .ov-cells { grid-template-columns: repeat(min(var(--cols), 2), minmax(0, 1fr)); }
 }
-@media (max-width: 1180px) { .ov-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-@media (max-width: 900px) { .ov-reasons { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) {
+  .ov-figures ul { grid-template-columns: minmax(0, 1fr); }
+  .ov-figures li:nth-child(odd) { border-inline-end: 0; }
+  .ov-figures li:nth-last-child(2) { border-block-end: 1px solid color-mix(in srgb, var(--color-accent-300) 50%, transparent); }
+  .ov-section h2, .ov-close h2 { font-size: var(--text-4xl); }
+}
 @media (max-width: 560px) {
-  .ov-hero { padding-block: var(--space-12); }
-  .ov-grid { grid-template-columns: minmax(0, 1fr); }
+  .ov-hero { padding-block: var(--space-16) var(--space-12); }
+  .ov-cells { grid-template-columns: minmax(0, 1fr); }
   .ov-featured { grid-column: auto; }
+  .ov-figures li { padding: var(--space-6); }
+  .ov-cap { font-size: calc(var(--text-5xl) * 1.3); }
+  .ov-btn { inline-size: 100%; }
   .ov-specimen .table th, .ov-specimen .table td { padding-inline: var(--space-2); }
-  .ov-install { white-space: normal; border-radius: var(--radius-lg); font-size: var(--text-xs); overflow-x: visible; }
+  .ov-install { white-space: normal; font-size: var(--text-xs); overflow-x: visible; }
 }
+@media (prefers-reduced-motion: reduce) { .ov-btn, .ov-btn svg, .ov-cell, .ov-cell::before, .ov-cell-title svg { transition: none; } }
 `;
 
 function specimen() {
@@ -232,100 +388,142 @@ export function overviewPage({ nav, themeName }) {
   const components = sec('components');
   const templates = sec('templates');
   const guidance = sec('guidance');
+  // The record, counted from the nav itself so a figure can never drift from the list it counts.
+  const figures = [
+    [components.length, 'components', 'rendered from one set of class names — copy the HTML, or import the React.'],
+    [templates.length, 'templates', 'to start a screen from: an application shell, a landing page, a deck and worked flows.'],
+    ['AA', 'contrast on every text pair,', 'measured in light and in dark. CI fails the build if one slips.'],
+    [PACKAGES.length, 'packages, one version,', 'public on npm under MIT. No token, no account.'],
+  ];
   return shell({
     title: `${themeName} Design System`,
     prefix: '',
-    description: 'Open-source tokens, React components and page templates for AI products in regulated, governed and auditable environments.',
+    description: 'Open-source tokens, React components and page templates for products in regulated, governed and auditable environments.',
+    head: DISPLAY_FONT,
     css: OVERVIEW_CSS,
     body: `<main class="ov">
   <section class="ov-hero" aria-labelledby="ov-title">
-    <div class="ov-wrap ov-hero-grid">
-      <div>
-        <h1 class="ov-title" id="ov-title">${themeName} <span class="ov-grad">Design System</span></h1>
-        <p class="ov-lede">Open-source tokens, React components and page templates for AI products in
-          <strong>regulated, governed and auditable</strong> environments.</p>
-        <div class="ov-ctas">
-          <a class="btn btn-primary btn-lg" href="#components">Browse components${ICON.arrow}</a>
-          <a class="btn btn-secondary btn-lg" href="get-started.html">Get started</a>
+    ${FACETS}
+    <div class="ov-gridlines" aria-hidden="true"></div>
+    <div class="ov-wrap">
+      <div class="ov-hero-grid">
+        <div>
+          <h1 class="ov-title" id="ov-title">${themeName} <span class="ov-grad">Design System</span></h1>
+          <span class="ov-hairline" aria-hidden="true"></span>
+          <p class="ov-tagline">Interfaces you can <b>rely on</b>, <b>audit</b> and <b>ship</b>.</p>
+          <p class="ov-lede">Open-source tokens, React components and page templates for products in
+            <strong>regulated, governed and auditable</strong> environments.</p>
+          <div class="ov-ctas">
+            <a class="ov-btn ov-btn-primary" href="#components">Browse components${ICON.arrow}</a>
+            <a class="ov-btn ov-btn-ghost" href="get-started.html">Get started</a>
+          </div>
+          <p class="ov-install ov-mono"><span aria-hidden="true">$</span><code>${INSTALL}</code></p>
         </div>
-        <p class="ov-install"><span aria-hidden="true">$</span><code>${INSTALL}</code></p>
+        <figure>
+          <div class="ov-frame">
+            ${specimen()}
+          </div>
+          <figcaption class="ov-caption">Rendered live with the system's own classes — nothing on this panel is a picture.</figcaption>
+        </figure>
       </div>
-      <figure>
-        ${specimen()}
-        <figcaption class="ov-caption">Rendered live with the system's own classes — nothing on this panel is a picture.</figcaption>
-      </figure>
+
+      <section class="ov-figures" aria-label="The system in numbers">
+        ${FACETS}
+        <ul>${figures.map(([n, lead, rest]) => `
+          <li><p><span class="ov-cap ov-grad">${n}</span><strong>${lead}</strong> ${rest}</p></li>`).join('')}
+        </ul>
+      </section>
     </div>
   </section>
 
   <section class="ov-section" aria-labelledby="ov-why">
     <div class="ov-wrap">
-      <span class="doc-rule" aria-hidden="true"></span>
-      <h2 id="ov-why">Why this system</h2>
-      <div class="ov-reasons">
-        <div class="card ov-reason">${ICON.access}
-          <p class="card-title">Accessible by default</p>
-          <p class="card-body">Every text pair is measured for contrast in light and dark, and the components run under axe — both gate CI, so a regression fails the build rather than reaching a user.</p>
+      <div class="ov-head">
+        <h2 id="ov-why">Built to be <span class="ov-grad">relied on.</span></h2>
+        <p>Every rule is checked rather than assumed — so a product built on it inherits the checks, not just the look.</p>
+      </div>
+      <div class="ov-cells" style="--cols:3">
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark">${ICON.access}</span>Accessible by default</p>
+          <p class="ov-cell-body">Every text pair is measured for contrast in light and dark, and the components run under axe — both gate CI, so a regression fails the build rather than reaching a user.</p>
         </div>
-        <div class="card ov-reason">${ICON.tokens}
-          <p class="card-title">One token source</p>
-          <p class="card-body">Colour, type, space and motion are defined once and emitted as CSS variables, TypeScript, a Tailwind preset and DTCG for design tools.</p>
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark">${ICON.tokens}</span>One token source</p>
+          <p class="ov-cell-body">Colour, type, space and motion are defined once and emitted as CSS variables, TypeScript, a Tailwind preset and DTCG for design tools.</p>
         </div>
-        <div class="card ov-reason">${ICON.agent}
-          <p class="card-title">Built for AI-assisted delivery</p>
-          <p class="card-body">A Claude Code plugin teaches the rules and the class names, and a which-component-for-which-job guide says what to reach for — and what not to.</p>
+        <div class="ov-cell ov-reason">
+          <p class="ov-cell-title"><span class="ov-mark">${ICON.agent}</span>Built for AI-assisted delivery</p>
+          <p class="ov-cell-body">A Claude Code plugin teaches the rules and the class names, and a which-component-for-which-job guide says what to reach for — and what not to.</p>
         </div>
       </div>
     </div>
   </section>
 
   <section class="ov-section" aria-labelledby="ov-start">
-    <div class="ov-wrap ov-start">
-      <div>
-        <span class="doc-rule" aria-hidden="true"></span>
-        <h2 id="ov-start">Get started</h2>
-        <ol class="doc-steps">
-          <li><div><h3>Install</h3><p>Public on npm under MIT. No token, no account.</p>
-            <pre class="code"><code data-language="sh">${INSTALL}</code></pre></div></li>
-          <li><div><h3>Import</h3><p>One stylesheet first, then the components.</p>
-            <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';
-import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
-          <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
-            <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
-        </ol>
-        <p style="margin-block-start:var(--space-8)"><a class="btn btn-secondary" href="get-started.html">The full guide${ICON.arrow}</a></p>
-      </div>
-      <div>
-        <h3 style="font-size:var(--text-lg)">Packages</h3>
-        <ul class="doc-pkgs" style="grid-template-columns:minmax(0,1fr)">${PACKAGES.map(([n, d]) => `
-          <li><a href="https://www.npmjs.com/package/${n}">${n}</a><p>${d}</p></li>`).join('')}
-        </ul>
-        <p class="muted" style="margin-block-start:var(--space-6);font-size:var(--text-sm)">Source, issues and releases on
-          <a href="${LINKS.github}">GitHub</a>. Open source under the <a href="${LINKS.license}">MIT licence</a>.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="ov-section ov-browse" id="browse" aria-labelledby="ov-browse">
     <div class="ov-wrap">
-      <span class="doc-rule" aria-hidden="true"></span>
-      <h2 id="ov-browse">Browse</h2>
-      <p class="ov-section-lede">Every page shows the real markup — view the source and copy it. The React components in <code>@gener8v/ui</code> render the same class names.</p>
-
-      <h3 id="foundations">Foundations <span class="muted">${foundations.length}</span></h3>
-      ${cards(foundations, 3)}
-
-      <h3 id="components">Components <span class="muted">${components.length}</span></h3>
-      ${cards(components, 4)}
-
-      <h3 id="templates">Templates <span class="muted">${templates.length} · open full screen</span></h3>
-      ${cards(templates, 4, true)}
-
-      <h3 id="guidance">Guidance <span class="muted">which component for which job</span></h3>
-      ${cards(guidance, 4)}
-
-      <footer class="ov-foot">${themeName} design system · <a href="${LINKS.site}">gener8v.com</a> · <a href="${LINKS.github}">GitHub</a> · MIT</footer>
+      <div class="ov-head">
+        <h2 id="ov-start">Three steps <span class="ov-grad">to the first screen.</span></h2>
+        <p>Install, import one stylesheet, and teach Claude Code the rules. Then start from a template rather than a blank file.</p>
+      </div>
+      <div class="ov-start">
+        <div>
+          <ol class="ov-steps">
+            <li><div><h3>Install</h3><p>Public on npm under MIT. No token, no account.</p>
+              <pre class="code"><code data-language="sh">${INSTALL}</code></pre></div></li>
+            <li><div><h3>Import</h3><p>One stylesheet first, then the components.</p>
+              <pre class="code"><code data-language="tsx">import '@gener8v/ui/styles.css';
+import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
+            <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
+              <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
+          </ol>
+          <p style="margin-block-start:var(--space-8)"><a class="ov-btn ov-btn-ghost" href="get-started.html">The full guide${ICON.arrow}</a></p>
+        </div>
+        <div>
+          <h3 class="ov-aside-title">Packages</h3>
+          <ul class="ov-pkgs">${PACKAGES.map(([n, d]) => `
+            <li><a href="https://www.npmjs.com/package/${n}">${n}</a><p>${d}</p></li>`).join('')}
+          </ul>
+          <p class="ov-note">Source, issues and releases on <a href="${LINKS.github}">GitHub</a>. Open source under the <a href="${LINKS.license}">MIT licence</a>.</p>
+        </div>
+      </div>
     </div>
   </section>
+
+  <section class="ov-section" id="browse" aria-labelledby="ov-browse">
+    <div class="ov-wrap">
+      <div class="ov-head">
+        <h2 id="ov-browse">Everything, <span class="ov-grad">in plain markup.</span></h2>
+        <p>Every page shows the real markup — view the source and copy it. The React components in <code>@gener8v/ui</code> render the same class names.</p>
+      </div>
+
+      <div class="ov-group"><h3 id="foundations">Foundations <span class="ov-mono">${foundations.length}</span></h3>
+      ${cards(foundations, 3)}</div>
+
+      <div class="ov-group"><h3 id="components">Components <span class="ov-mono">${components.length}</span></h3>
+      ${cards(components, 4)}</div>
+
+      <div class="ov-group"><h3 id="templates">Templates <span class="ov-mono">${templates.length} · open full screen</span></h3>
+      ${cards(templates, 4, true)}</div>
+
+      <div class="ov-group"><h3 id="guidance">Guidance <span class="ov-mono">which component for which job</span></h3>
+      ${cards(guidance, 4)}</div>
+    </div>
+  </section>
+
+  <section class="section-band ov-close" aria-labelledby="ov-close">
+    <div class="ov-gridlines" aria-hidden="true"></div>
+    <div class="ov-wrap">
+      <div>
+        <h2 id="ov-close">Built by ${themeName}. <span>Used on our own work.</span></h2>
+        <p>The team behind this system builds and runs systems for international, heavily regulated businesses — a team you can rely on to deliver when it counts.</p>
+      </div>
+      <div class="ov-ctas">
+        <a class="ov-btn ov-btn-light" href="${LINKS.site}">Visit gener8v.com${ICON.out}</a>
+        <a class="ov-btn ov-btn-line" href="${LINKS.github}">Source on GitHub</a>
+      </div>
+    </div>
+  </section>
+  <footer class="ov-wrap ov-foot">${themeName} design system · <a href="${LINKS.site}">gener8v.com</a> · <a href="${LINKS.github}">GitHub</a> · MIT</footer>
 </main>`,
   });
 }
