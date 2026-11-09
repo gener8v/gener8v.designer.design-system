@@ -6,6 +6,8 @@ pull requests behind each `Release x.y.z` commit.
 
 ## Unreleased
 
+## 0.64.0
+
 **Icons:** 24 new icons, taking the set from 44 to 68 — `ArrowLeft`, `ArrowSquareOut`,
 `ArrowsDownUp`, `Bell`, `Buildings`, `CalendarBlank`, `ChartBar`, `ChatCircle`, `CheckCircle`,
 `CircleNotch`, `Clock`, `Copy`, `CaretUp`, `EnvelopeSimple`, `Funnel`, `House`, `List`, `Minus`,
