@@ -378,8 +378,8 @@ function specimen() {
             <div class="alert-content"><p class="alert-title">Two findings have no owner</p><p class="alert-body">Assign them before release; they stay on the audit record either way.</p></div>
           </div>
           <div class="ov-specimen-actions">
-            <button type="button" class="btn btn-secondary">Request changes</button>
-            <button type="button" class="btn btn-primary">Approve release</button>
+            <button type="button" class="btn btn-secondary">Request Changes</button>
+            <button type="button" class="btn btn-primary">Approve Release</button>
           </div>
         </div>
       </div>`;
@@ -417,8 +417,8 @@ export function overviewPage({ nav, themeName }) {
           <p class="ov-lede">Open-source tokens, React components and page templates for products in
             <strong>regulated, governed and auditable</strong> environments.</p>
           <div class="ov-ctas">
-            <a class="ov-btn ov-btn-primary" href="#components">Browse components${ICON.arrow}</a>
-            <a class="ov-btn ov-btn-ghost" href="get-started.html">Get started</a>
+            <a class="ov-btn ov-btn-primary" href="#components">Browse Components${ICON.arrow}</a>
+            <a class="ov-btn ov-btn-ghost" href="get-started.html">Get Started</a>
           </div>
           <p class="ov-install ov-mono"><span aria-hidden="true">$</span><code>${INSTALL}</code></p>
         </div>
@@ -479,7 +479,7 @@ import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
             <li><div><h3>Add the Claude Code plugin</h3><p>It teaches Claude the rules, the class names, the templates and which component fits which job.</p>
               <pre class="code"><code data-language="sh">/plugin marketplace add gener8v/gener8v.designer.design-system</code></pre></div></li>
           </ol>
-          <p style="margin-block-start:var(--space-8)"><a class="ov-btn ov-btn-ghost" href="get-started.html">The full guide${ICON.arrow}</a></p>
+          <p style="margin-block-start:var(--space-8)"><a class="ov-btn ov-btn-ghost" href="get-started.html">The Full Guide${ICON.arrow}</a></p>
         </div>
         <div>
           <h3 class="ov-aside-title">Packages</h3>
@@ -518,7 +518,7 @@ import { Button, Table, Dialog } from '@gener8v/ui';</code></pre></div></li>
     <div class="ov-wrap">
       <div>
         <h2 id="ov-close">Built by ${themeName}. <span>Used on our own work.</span></h2>
-        <p>The team behind this system builds and runs systems for international, heavily regulated businesses — a team you can rely on to deliver when it counts.</p>
+        <p>The team behind this system builds and runs systems for international, heavily regulated businesses — the team you rely on to deliver when it counts.</p>
       </div>
       <div class="ov-ctas">
         <a class="ov-btn ov-btn-light" href="${LINKS.site}">Visit gener8v.com${ICON.out}</a>
